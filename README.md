@@ -28,6 +28,8 @@ PbootCMS是翱云科技开发的全新内核的开源企业建站系统，
 
 技术交流群：137083872
 
-官方网站：www.pbootcms.com
+官方网站：http://wwww.pbootcms.com/
 
-码云地址：https://gitee.com/hnaoyun/PbootCMS
+演示网站：http://demo.pbootcms.com/
+
+码云地址：https://gitee.com/hnaoyun/PbootCMS 
