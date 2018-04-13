@@ -1,0 +1,78 @@
+{include file='common/head.html'}
+
+<div class="container">
+	{if([$list])}
+	<div class="panel panel-default">
+        <div class="panel-heading">
+        	<i class="fa fa-list" aria-hidden="true"></i> 留言列表
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+            	<thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>联系人</th>
+                        <th>电话</th>
+                        <th>内容</th>
+                        <th>时间</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach $messages(key,value,num)}
+                    <tr>
+                        <td>[num]</td>
+                        <td>[value->contacts]</td>
+                        <td>[value->mobile]</td>
+                        <td>[value->content]</td>
+                        <td>[value->create_time]</td>
+                        <td>
+                            {if($value->status)}
+                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击前端隐藏"></i></a>
+                            {else}
+                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击前端显示"></i></a>
+                            {/if}
+                        </td>
+                        <td>
+                            {fun=get_btn_del($value->id)}
+                            {fun=get_btn_mod($value->id)}
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+     </div>
+	<div class="page">{$pagebar}</div>
+	{/if}
+	
+	{if([$mod])}
+	 <div class="panel panel-default">
+     	<div class="panel-heading">
+        	<i class="fa fa-list" aria-hidden="true"></i> 留言修改 
+        	<span class="pull-right">{fun=get_btn_back()}</span>
+        </div>
+        <div class="panel-body">
+            <form action="{url./admin/Message/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="col-sm-6">
+                <div class="form-group">
+                	<label for="mobile">回复内容</label>
+                    <textarea name="recontent"  class="form-control checknone">{$message->recontent}</textarea>
+                </div>
+                <div class="form-group">
+                	<label>状态</label>
+                    <div>
+                    	<label class="radio-inline"><input type="radio" name="status" value="0" {if([$message->status]==0)} checked="checked"{/if}>不显示</label>
+                    	<label class="radio-inline"><input type="radio" name="status" value="1" {if([$message->status]==1)} checked="checked"{/if}>显示</label>
+                    </div>
+                </div>
+ 				<button type="submit"  class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
+            </form>
+       </div>
+    </div>
+   
+	{/if} 
+	
+</div>
+
+{include file='common/foot.html'}

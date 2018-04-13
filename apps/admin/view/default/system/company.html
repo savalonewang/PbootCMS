@@ -1,0 +1,92 @@
+{include file='common/head.html'}
+
+<div class="container">
+	<div class="panel panel-default">
+        <div class="panel-heading"><i class="fa fa-list" aria-hidden="true"></i> 公司信息</div>
+        <div class="panel-body">    
+            <form action="{url./admin/company/mod}" method="post">
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="name">公司名称</label>
+                        <input type="text" name="name" class="form-control" id="name" value="{$companys->name}" placeholder="请输入公司名称">
+                    </div>
+                    
+                    <div class="form-group col-sm-6">
+                         <label for="address">公司地址</label>
+                        <input type="text" name="address" class="form-control" id="address" value="{$companys->address}" placeholder="请输入公司地址">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="postcode">邮政编码</label>
+                        <input type="text" name="postcode" class="form-control" id="postcode" value="{$companys->postcode}" placeholder="请输入邮政编码">
+                    </div>
+                    
+                    <div class="form-group col-sm-6">
+                         <label for="contact">联系人</label>
+                        <input type="text" name="contact" class="form-control" id="contact" value="{$companys->contact}" placeholder="请输入联系人">
+                    </div>
+                </div>
+                
+               <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="mobile">手机</label>
+                        <input type="text" name="mobile" class="form-control" id="mobile" value="{$companys->mobile}" placeholder="请输入手机号码">
+                    </div>
+                    
+                    <div class="form-group col-sm-6">
+                         <label for="phone">电话</label>
+                        <input type="text" name="phone" class="form-control" id="phone" value="{$companys->phone}" placeholder="请输入电话号码">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="fax">传真</label>
+                        <input type="text" name="fax" class="form-control" id="fax" value="{$companys->fax}" placeholder="请输入传真">
+                    </div>
+                    
+                    <div class="form-group col-sm-6">
+                         <label for="email">邮箱</label>
+                        <input type="text" name="email" class="form-control" id="email" value="{$companys->email}" placeholder="请输入邮箱">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label for="qq">QQ</label>
+                        <input type="text" name="qq" class="form-control" id="qq" value="{$companys->qq}" placeholder="请输入QQ号码">
+                    </div>
+                   	                
+	                <div class="form-group col-sm-6">
+	               		 <label for="weixin">微信图标</label>
+	               		 <div class="input-group">
+		               		 <input type="text" name="weixin" id="weixin" value="{$companys->weixin}" class="form-control">  
+		               		 <div class="input-group-btn">
+		               		 	<button type="button" class="btn btn-primary upload" data-target="#weixin">重新上传</button>
+		               		</div>
+	               		</div>
+	                </div>
+                </div>
+                
+                 <div class="row">
+                 	<div class="form-group col-sm-6">
+                        <label for="blicense">营业执照代码</label>
+                        <input type="text" name="blicense" class="form-control" id="blicense" value="{$companys->blicense}" placeholder="请输入营业执照代码">
+                    </div>
+                    
+                    <div class="form-group col-sm-6">
+                        <label for="blicense">其它信息</label>
+                        <input type="text" name="other" class="form-control" id="other" value="{$companys->other}" placeholder="请输入其它需要的信息">
+                    </div>
+                 </div>
+                
+                <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
+            </form>
+         </div>
+     </div>
+</div>
+
+{include file='common/upload.html'}
+{include file='common/foot.html'}

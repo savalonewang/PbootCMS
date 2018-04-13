@@ -1,0 +1,22 @@
+﻿ {include file=head.html}
+ 
+ <div class="uk-container uk-container-center">
+ 	<p></p>
+ 	<h1>{sort:name}</h1>
+ 	
+	{pboot:list num=9 order=date}
+		<a href="[list:link]">
+			<div class="uk-thumbnail uk-thumbnail-small" style="margin:10px;">
+		    	<img src="[list:ico]" alt="[list:title]">
+		    	<div class="uk-thumbnail-caption">
+		    		[list:title] &nbsp;&nbsp;￥[list:ext_price]
+		    	</div>
+			</div>
+		</a>
+	{/pboot:list}
+	
+	<div class="page">{page:bar}</div>
+
+ </div>
+ 
+ {include file=foot.html}

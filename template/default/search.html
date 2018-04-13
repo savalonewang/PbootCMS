@@ -1,0 +1,12 @@
+﻿ {include file=head.html}
+ 
+<div class="uk-container uk-container-center">
+ 	<p></p>
+ 	<h1>{sort:name}</h1>
+ 	{pboot:search num=10 order=date}
+ 		<p><a href="[search:link]">【[search:sortname]】[search:title]</a></p>
+ 	{/pboot:search}
+ 	<div class="page">{page:bar}</div>
+ </div>
+ 
+ {include file=foot.html}

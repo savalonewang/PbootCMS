@@ -1,0 +1,220 @@
+/*尾部*/
+a{
+	color:#333;
+}
+
+a:hover{
+	text-decoration:none;
+}
+
+.padding-5{
+	padding-left:5px;
+	padding-right:5px;
+}
+
+.padding-10{
+	padding-left:10px;
+	padding-right:10px;
+}
+
+.navbar-brand{
+	font-size:22px;
+}
+
+.list-input{
+	display: block;
+	width: 50px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	padding:0px 5px;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+	-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.btn-fun{
+	margin-left:10px;
+	margin-bottom:5px;
+	margin-top:-10px;
+}
+
+.foot {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+	z-index:1030;
+    height: 30px;
+    line-height: 30px;
+    color: #777;
+    width: 100%;
+    padding: 0px 10px;
+    text-align: center;
+	background:#f8f8f8;
+	border-top:1px solid #e7e7e7;
+}
+
+@media (max-width: 768px) {
+  .foot {
+  	font-size:12px;
+  }
+}
+
+/*桌面快捷图标*/
+.deskbox {
+    height: 80px;
+    max-width: 120px;
+	border-radius:5px;
+	color: #fff;
+    text-align: center;
+}
+
+.deskbox dd {
+    font-size: 30px;
+    line-height: 50px;
+}
+
+
+/*分页样式*/
+.page {
+    clear: both;
+    margin-top: -10px;
+    text-align: center;
+    line-height: 2;
+}
+
+.page span {
+    margin: 0px 5px;
+}
+
+.page .pagenum {
+    border: 1px dotted #ccc;
+    background: #f2f2f2;
+    padding: 1px 5px;
+}
+
+.page .absolutepage {
+    border: 1px dotted #ccc;
+    background: #ffffff;
+    padding: 1px 5px;
+}
+
+.page select{
+	border: 1px dotted #ccc;
+	padding:0px 5px;
+}
+
+.btn-del,.btn-add,.btn-mod{
+	padding:0px 5px;
+}
+
+/*蓝色导航栏*/
+.navbar-blue {
+  color:#fff;
+  background: #0078d7; 
+  background-image: -webkit-linear-gradient(left, #0078d7, #00b4aa); /* Safari 5.1+, Chrome 10+ */
+  background-image: -moz-linear-gradient(left, #0078d7, #00b4aa); /* Firefox 3.6+ */
+  background-image: linear-gradient(to right, #0078d7, #00b4aa);
+  border-color: #e7e7e7;
+}
+.navbar-blue .navbar-brand {
+  color: #fff;
+}
+.navbar-blue .navbar-brand:hover,
+.navbar-blue .navbar-brand:focus {
+  color: #fff;
+  background-color: transparent;
+}
+.navbar-blue .navbar-text {
+  color: #fff;
+}
+.navbar-blue .navbar-nav > li > a {
+  color: #fff;
+}
+.navbar-blue .navbar-nav > li > a:hover,
+.navbar-blue .navbar-nav > li > a:focus {
+  color: #fff;
+  background-color: transparent;
+}
+.navbar-blue .navbar-nav > .active > a,
+.navbar-blue .navbar-nav > .active > a:hover,
+.navbar-blue .navbar-nav > .active > a:focus {
+  color: #fff;
+  background-color: #0099CC;
+}
+.navbar-blue .navbar-nav > .disabled > a,
+.navbar-blue .navbar-nav > .disabled > a:hover,
+.navbar-blue .navbar-nav > .disabled > a:focus {
+  color: #ccc;
+  background-color: transparent;
+}
+.navbar-blue .navbar-toggle {
+  border-color: #fff;
+}
+.navbar-blue .navbar-toggle:hover,
+.navbar-blue .navbar-toggle:focus {
+  background-color: #0099CC;
+}
+.navbar-blue .navbar-toggle .icon-bar {
+  background-color: #fff;
+}
+.navbar-blue .navbar-collapse,
+.navbar-blue .navbar-form {
+  border-color: #e7e7e7;
+}
+.navbar-blue .navbar-nav > .open > a,
+.navbar-blue .navbar-nav > .open > a:hover,
+.navbar-blue .navbar-nav > .open > a:focus {
+  color: #fff;
+  background-color: #0099CC;
+}
+@media (max-width: 767px) {
+  .navbar-blue .navbar-nav .open .dropdown-menu > li > a {
+    color: #fff;
+  }
+  .navbar-blue .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-blue .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #fff;
+    background-color: transparent;
+  }
+  .navbar-blue .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-blue .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-blue .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #fff;
+    background-color: #e7e7e7;
+  }
+  .navbar-blue .navbar-nav .open .dropdown-menu > .disabled > a,
+  .navbar-blue .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+  .navbar-blue .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+    color: #ccc;
+    background-color: transparent;
+  }
+}
+.navbar-blue .navbar-link {
+  color: #333;
+}
+.navbar-blue .navbar-link:hover {
+  color: #333;
+}
+.navbar-blue .btn-link {
+  color: #333;
+}
+.navbar-blue .btn-link:hover,
+.navbar-blue .btn-link:focus {
+  color: #333;
+}
+.navbar-blue .btn-link[disabled]:hover,
+	fieldset[disabled] .navbar-blue .btn-link:hover,
+	.navbar-blue .btn-link[disabled]:focus,
+	fieldset[disabled] .navbar-blue .btn-link:focus {
+	  color: #ccc;
+}
+.nav-tabs{
+	margin-bottom:20px;
+}

@@ -1,0 +1,14 @@
+﻿ {include file=head.html}
+ 
+<div class="uk-container uk-container-center">
+ 	<p></p>
+ 	<h1>{sort:name}</h1>
+ 	<ul class="uk-list uk-list-space uk-list-line">
+ 		{pboot:list num=10 order=date}
+ 			<li>[list:i]、<a href="[list:link]">[list:title]</a><span class="uk-float-right">[list:date style=Y-m-d]</span></li>
+ 		{/pboot:list}
+	</ul>
+	<div class="page">{page:bar}</div>
+</div>
+ 
+ {include file=foot.html}

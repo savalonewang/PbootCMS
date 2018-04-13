@@ -1,0 +1,106 @@
+{include file='common/head.html'}
+
+<div class="container">
+	{if([$basic])}
+     <div class="panel panel-default">
+     	<div class="panel-heading">
+        	<i class="fa fa-list" aria-hidden="true"></i> 配置信息
+        </div>
+		<div class="panel-body">
+            <form action="{url./admin/Config/index}" method="post" class="col-sm-6">
+           	   
+           	   <div class="form-group">
+                	<label>手机版</label>
+                    <div>
+                    	<label class="radio-inline"><input type="radio" name="open_wap" value="1" {if([$configs['open_wap']['value']]==1)} checked="checked" {/if}>开</label>
+                    	<label class="radio-inline"><input type="radio" name="open_wap" value="0" {if([$configs['open_wap']['value']]==0)} checked="checked" {/if}>关</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                	<label>留言验证码</label>
+                    <div>
+                    	<label class="radio-inline"><input type="radio" name="message_check_code" value="1" {if([$configs['message_check_code']['value']]==1)} checked="checked" {/if}>开</label>
+                    	<label class="radio-inline"><input type="radio" name="message_check_code" value="0" {if([$configs['message_check_code']['value']]==0)} checked="checked" {/if}>关</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                	<label>留言发送邮件</label>
+                    <div>
+                    	<label class="radio-inline"><input type="radio" name="message_send_mail" value="1" {if([$configs['message_send_mail']['value']]==1)} checked="checked" {/if}>开</label>
+                    	<label class="radio-inline"><input type="radio" name="message_send_mail" value="0" {if([$configs['message_send_mail']['value']]==0)} checked="checked" {/if}>关</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+					<label for="name">留言发送到邮箱</label>
+					<input type="text" id="weixin_appid" name="message_send_to" value="{$configs['message_send_to']['value']}"  class="form-control" placeholder="支持多个邮箱用逗号隔开！"> 
+				</div>
+
+               <div class="form-group">
+                	<label>后台验证码</label>
+                    <div>
+                    	<label class="radio-inline"><input type="radio" name="admin_check_code" value="1" {if([$configs['admin_check_code']['value']]==1)} checked="checked" {/if}>开</label>
+                    	<label class="radio-inline"><input type="radio" name="admin_check_code" value="0" {if([$configs['admin_check_code']['value']]==0)} checked="checked" {/if}>关</label>
+                    </div>
+                </div>
+                <!-- 
+                <div class="form-group">
+					<label for="name">微信APPID</label>
+					<input type="text" id="weixin_appid" name="weixin_appid" value="{$configs['weixin_appid']['value']}"  class="form-control"> 
+				</div>
+                  
+				<div class="form-group">
+					<label for="name">微信SECRET</label>
+					<input type="text" id="weixin_secret" name="weixin_secret" value="{$configs['weixin_secret']['value']}"  class="form-control"> 
+				</div>
+				 -->
+				<button type="submit"  class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
+            </form>
+         </div>
+    </div>
+    {/if}
+    
+    {if([$email])}
+     <div class="panel panel-default">
+     	<div class="panel-heading">
+        	<i class="fa fa-list" aria-hidden="true"></i> 邮件配置
+        </div>
+		<div class="panel-body">
+            <form action="{url./admin/Config/email}" method="post" class="col-sm-6">
+				<div class="form-group">
+					<label for="name">SMTP服务器</label>
+					<input type="text" id="smtp_server" name="smtp_server" value="{$configs['smtp_server']['value']}"  class="form-control"> 
+				</div>
+				
+				<div class="form-group">
+					<label for="name">SMTP端口</label>
+					<input type="text" id="smtp_port" name="smtp_port" value="{$configs['smtp_port']['value']}"  class="form-control"> 
+				</div>
+				
+				<div class="form-group">
+					<label>是否安全连接</label>
+					<div>
+						<label class="radio-inline"><input type="radio" name="smtp_ssl" value="1" {if([$configs['smtp_ssl']['value']]==1)} checked="checked" {/if}>是</label>
+						<label class="radio-inline"><input type="radio" name="smtp_ssl" value="0" {if([$configs['smtp_ssl']['value']]==0)} checked="checked" {/if}>否</label>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label for="name">邮箱账号</label>
+					<input type="text" id="smtp_username" name="smtp_username" value="{$configs['smtp_username']['value']}"  class="form-control"> 
+				</div>
+				
+				<div class="form-group">
+					<label for="name">邮箱密码</label>
+					<input type="text" id="smtp_password" name="smtp_password" value="{$configs['smtp_password']['value']}"  class="form-control"> 
+				</div>
+				<button type="submit"  class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
+            </form>
+         </div>
+    </div>
+    {/if}
+</div>
+
+{include file='common/foot.html'}

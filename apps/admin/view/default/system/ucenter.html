@@ -1,0 +1,44 @@
+{include file='common/head.html'}
+
+<div class="container">
+	<div class="panel panel-default">
+        <div class="panel-heading">个人中心</div>
+        <div class="panel-body">
+            <form action="{URL}" method="post" class="col-xs-6">
+            	<div class="form-group">
+                	<label>用户编号</label>
+                    <input type="text"  value="{$session.ucode}" readonly class="readonly form-control">
+                </div>
+                
+                <div class="form-group">
+                	<label for="username">登陆账号</label>
+                    <input type="text" name="username" id="username" value="{$session.username}" class="form-control checknone">
+                </div>
+                
+                <div class="form-group">
+                	<label for="realname">真实姓名</label>
+                    <input type="text" name="realname" id="realname" value="{$session.realname}" class="form-control checknone">
+                </div>
+                
+                <div class="form-group">
+                	<label for="cpassword">当前密码</label>
+                    <input type="password" name="cpassword" id="cpassword"  class="form-control checknone">
+                </div>
+                
+                <div class="form-group">
+                	<label for="password">修改密码</label>
+                    <input type="password" name="password" id="password"  class="form-control">
+                </div>
+                
+                <div class="form-group">
+                	<label for="rpassword">确认密码</label>
+                    <input type="password" name="rpassword" id="rpassword" class="form-control">
+                </div>
+                
+                 <button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
+            </form>
+         </div>
+      </div>
+</div>
+
+{include file='common/foot.html'}

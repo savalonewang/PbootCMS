@@ -1,0 +1,53 @@
+.content-box{
+  		min-height:500px;
+  	}
+  	.uk-navbar-nav > li > a{
+  		color:#ccc;
+  	}
+  	.uk-navbar-brand{
+  		color:#fafafa;
+  	}
+  	
+  	.servers .title .subject{
+	margin:40px 0 10px 0;
+	font-size:25px;
+}
+
+.servers .title .subtitle{
+	margin:0px 0 20px 0;
+}
+
+.servers .box i{
+	font-size:100px;
+	color:#ccc;
+}
+
+.servers .box{
+	border:1px solid #eee;
+	padding:20px;
+	margin-bottom:30px;
+}
+
+.servers .box .subject{
+	font-size:23px;
+	margin:10px 0;
+	color:#333;
+}
+
+.servers .box .info{
+	color:#999;
+}
+.page{
+	margin:20px 0;
+	text-align:center;
+	color:#666;
+}
+.page a{
+	color:#666;
+}
+.page span{
+	margin:0 3px;
+}
+.uk-list a{ 
+	color:#666;
+}

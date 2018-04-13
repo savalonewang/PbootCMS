@@ -1,0 +1,40 @@
+﻿ {include file=head.html}
+ 
+<div class="uk-container uk-container-center">
+ 	<p></p>
+ 	<h1>{sort:name}</h1>
+ 	<div>
+		<form action="{pboot:msgaction}"  method="post" class="uk-form">
+			<div class="uk-form-row">联系人：<input type="text" name="contacts" style="width:300px;" ></div>
+			<div class="uk-form-row">手　机：<input type="text" name="mobile" style="width:300px;" ></div>
+			<div class="uk-form-row">
+				内　容：<textarea name="content" style="width:300px;" ></textarea>
+			</div>
+			<div class="uk-form-row">
+				验证码：<input type="text" name="checkcode" >
+				<img title="点击刷新" style="height:30px;" src="{pboot:checkcode}" onclick="this.src='{pboot:checkcode}?'+Math.round(Math.random()*10);" />
+			</div>
+			<div class="uk-form-row"><button type="submit" class="uk-button">提交</button></div>
+		</form>
+	</div>
+	
+	<ul class="uk-comment-list">
+		{pboot:message num=2}
+	    <li style="border:1px solid #ccc;padding:5px;">
+	        <article class="uk-comment">
+			    <header class="uk-comment-header">
+			        <img class="uk-comment-avatar" src="" alt="">
+			        <h4 class="uk-comment-title">[message:contacts] | [message:mobile substr=1,3]****[message:mobile substr=8]</h4>
+			        <div class="uk-comment-meta">[message:ip] | [message:os] | [message:bs] | [message:askdate]</div>
+			    </header>
+			    <div class="uk-comment-body">用　户：[message:content]</div>
+			    <div class="uk-comment-body">管理员：[message:recontent] [message:replydate]</div>
+			</article>
+	    </li>
+	    {/pboot:message}
+	</ul>
+	<div class="page">{page:bar}</div>
+	
+</div>
+ 
+ {include file=foot.html}

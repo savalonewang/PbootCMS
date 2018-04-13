@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{pboot:if('{sort:name}'!='')}{sort:name}-{/pboot:if}{pboot:sitetitle}-{pboot:sitesubtitle}</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="author" content="XingMeng">
+	<meta name="keywords" content="{pboot:sitekeywords}">
+	<meta name="description" content="{pboot:sitedescription}">
+    <link rel="stylesheet" href="{pboot:sitetplpath}/uikit-2.25.0/css/uikit.min.css" />
+    <link rel="stylesheet" href="{pboot:sitetplpath}/uikit-2.25.0/css/uikit.docs.min.css" />
+    <link rel="stylesheet" href="{pboot:sitetplpath}/uikit-2.25.0/css/docs.css" />
+    <link rel="stylesheet" href="{pboot:sitetplpath}/uikit-2.25.0/css/components/slideshow.css" />
+    <link rel="stylesheet" href="{pboot:sitetplpath}/css/css.css" />
+    <link rel="stylesheet" href="{pboot:sitetplpath}/font-awesome-4.7.0/css/font-awesome.min.css" />
+    <script src="{pboot:sitetplpath}/uikit-2.25.0/js/jquery-2.2.4.min.js"></script>
+    <script src="{pboot:sitetplpath}/uikit-2.25.0/js/uikit.min.js"></script>
+    <script src="{pboot:sitetplpath}/uikit-2.25.0/js/components/slideshow.js"></script>
+</head>
+<body>
+
+
+
+<nav class="tm-navbar uk-navbar uk-navbar-attached">
+     <div class="uk-container uk-container-center">
+         <a class="uk-navbar-brand uk-hidden-small" href="{pboot:sitepath}/">
+        	 PbootCMS
+         </a>
+
+         <ul class="uk-navbar-nav uk-hidden-small">
+         	{pboot:nav}
+         		<li><a href="[nav:link]">[nav:name]</a></li>
+         	{/pboot:nav}
+         	
+         	<!--  
+         	<li><a href="{pboot:lgpath}?lg=cn">切换中文</a></li>
+         	<li><a href="{pboot:lgpath}?lg=en">切换英文</a></li>
+         	-->
+         	
+         </ul>
+
+         <a href="#tm-offcanvas" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
+   
+         <a class="uk-navbar-brand uk-navbar-center uk-visible-small" href="{pboot:sitepath}/">PbootCMS</a>
+        
+		
+     </div>
+ </nav>
+ 
+<div id="tm-offcanvas" class="uk-offcanvas">
+     <div class="uk-offcanvas-bar">
+         <ul class="uk-nav uk-nav-offcanvas uk-nav-parent-icon">
+         	{pboot:nav}
+            	<li><a href="[nav:link]">[nav:name]</a></li>
+            {/pboot:nav}
+         </ul>
+     </div>
+ </div>
+
+<div class="content-box">	    
+
+

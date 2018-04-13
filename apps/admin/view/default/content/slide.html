@@ -1,0 +1,137 @@
+{include file='common/head.html'}
+
+<div class="container">
+	{if([$list])}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+        	<i class="fa fa-list" aria-hidden="true"></i> <a href="{url./admin/Slide/index}">轮播图列表</a> 
+            <span class="pull-right">{fun=get_btn_add()}</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+            	<thead>
+                    <tr>
+                    	<th>序号</th>
+                    	<th>分组</th>
+                        <th>轮播图片</th>
+                        <th>跳转链接</th>
+                        <th>描述文本</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach $slides(key,value)}
+                    <tr>
+                    	<td>[num]</td>
+                    	<td>分组[value->gid]</td>
+                        <td><img src="{SITE_DIR}[value->pic]" style="height:30px;"></td>
+                        <td>[value->link]</td>
+                        <td>[value->title]</td>
+                        <td>
+                            {fun=get_btn_del($value->id)}
+                            {fun=get_btn_mod($value->id)}
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+     </div>
+	<div class="page">{$pagebar}</div>
+	{/if} 
+	
+	{if([$add])}
+    <div class="panel panel-default">
+     	<div class="panel-heading">
+        	<i class="fa fa-list" aria-hidden="true"></i> 轮播图新增 
+        	<span class="pull-right">{fun=get_btn_back()}</span>
+        </div>
+        <div class="panel-body">
+            <form action="{url./admin/Slide/add}" method="post" class="col-sm-6">
+            	<div class="form-group">
+                	<label for="gid">分组</label>
+                	<select class="form-control" name="gid">	
+                		<option value="1">分组1</option>
+                		<option value="2">分组2</option>
+                		<option value="3">分组3</option>
+                		<option value="4">分组4</option>
+                		<option value="5">分组5</option>
+                	</select>
+                </div>
+                
+                <div class="form-group">
+               		 <label for="pic">轮播图片</label>
+               		 <div class="input-group">
+	               		 <input type="text" name="pic" id="pic"  class="form-control">  
+	               		 <div class="input-group-btn">
+	               		 	<button type="button" class="btn btn-primary upload" data-target="#pic">选择图片</button>
+	               		</div>
+               		</div>
+                </div>
+            	
+            	<div class="form-group">
+                	<label for="link">跳转链接</label>
+                    <input type="text" name="link" class="form-control">
+                </div>
+                
+				<div class="form-group">
+                	<label for="title">描述文本</label>
+                    <input type="text" name="title" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> 新 增</button>
+            </form>
+        </div>
+    </div>
+	{/if}
+	
+	{if([$mod])}
+    <div class="panel panel-default">
+     	<div class="panel-heading">
+        	<i class="fa fa-list" aria-hidden="true"></i> 轮播图修改 
+        	<span class="pull-right">{fun=get_btn_back()}</span>
+        </div>
+        <div class="panel-body">
+            <form action="{url./admin/Slide/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="col-sm-6">
+            	<div class="form-group">
+                	<label for="gid">分组</label>
+                	<select class="form-control" name="gid">	
+                		<option value="1" {if([$slide->gid]==1)}selected{/if}>分组1</option>
+                		<option value="2" {if([$slide->gid]==2)}selected{/if}>分组2</option>
+                		<option value="3" {if([$slide->gid]==3)}selected{/if}>分组3</option>
+                		<option value="4" {if([$slide->gid]==4)}selected{/if}>分组4</option>
+                		<option value="5" {if([$slide->gid]==5)}selected{/if}>分组5</option>
+                	</select>
+                </div>
+                
+                <div class="form-group">
+               		 <label for="pic">轮播图片</label>
+               		 <div class="input-group">
+	               		 <input type="text" name="pic" id="pic" value="{$slide->pic}" class="form-control">  
+	               		 <div class="input-group-btn">
+	               		 	<button type="button" class="btn btn-primary upload" data-target="#pic">选择图片</button>
+	               		</div>
+               		</div>
+                </div>
+            	
+            	<div class="form-group">
+                	<label for="link">跳转链接</label>
+                    <input type="text" name="link" value="{$slide->link}" class="form-control">
+                </div>
+                
+				<div class="form-group">
+                	<label for="title">描述文本</label>
+                    <input type="text" name="title" value="{$slide->title}" class="form-control">
+                </div>
+            	
+ 				<button type="submit"  class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
+            </form>
+       </div>
+    </div>
+	{/if} 
+
+</div>
+
+{include file='common/upload.html'}
+{include file='common/foot.html'}
