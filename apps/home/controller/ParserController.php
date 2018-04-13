@@ -84,10 +84,6 @@ class ParserController extends Controller
             $data = $this->model->getSite();
             $count = count($matches[0]);
             for ($i = 0; $i < $count; $i ++) {
-                if (! $data) { // 无数据时直接替换为空
-                    $content = str_replace($matches[0][$i], '', $content);
-                    continue;
-                }
                 $params = $this->parserParam($matches[2][$i]);
                 switch ($matches[1][$i]) {
                     case 'index':
@@ -103,12 +99,22 @@ class ParserController extends Controller
                         $content = str_replace($matches[0][$i], session('lg'), $content);
                         break;
                     case 'statistical':
-                        $content = str_replace($matches[0][$i], decode_string($data->statistical), $content);
+                        if (isset($data->statistical)) {
+                            $content = str_replace($matches[0][$i], decode_string($data->statistical), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
+                        }
                     case 'copyright':
-                        $content = str_replace($matches[0][$i], decode_string($data->copyright), $content);
+                        if (isset($data->copyright)) {
+                            $content = str_replace($matches[0][$i], decode_string($data->copyright), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
+                        }
                     default:
                         if (isset($data->{$matches[1][$i]})) {
                             $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data->{$matches[1][$i]}), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
                         }
                 }
             }
@@ -1066,6 +1072,9 @@ class ParserController extends Controller
                         switch ($matches2[1][$j]) {
                             case 'i':
                                 $one_html = str_replace($matches2[0][$j], $key, $one_html);
+                                break;
+                            case 'logo':
+                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->logo, $one_html);
                                 break;
                             default:
                                 if (isset($value->{$matches2[1][$j]})) {

@@ -57,13 +57,18 @@ class AreaModel extends Model
     // 添加区域
     public function addArea(array $data)
     {
+        if ($data['is_default']) {
+            $this->unsetDefault($data['acode']);
+        }
         return parent::table('ay_area')->autoTime()->insert($data);
     }
 
     // 删除区域
     public function delArea($acode)
     {
-        return parent::table('ay_area')->where("acode='$acode' OR pcode='$acode'")->delete();
+        return parent::table('ay_area')->where("acode='$acode' OR pcode='$acode'")
+            ->where('is_default=0')
+            ->delete();
     }
 
     // 修改区域资料

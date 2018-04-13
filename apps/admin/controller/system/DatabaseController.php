@@ -213,7 +213,7 @@ class DatabaseController extends Controller
             $sql .= $brackets;
             $comma = "";
             for ($i = 0; $i < $fieldNnum; $i ++) {
-                $sql .= ($comma . "'" . escape_string($value[$i]) . "'");
+                $sql .= ($comma . "'" . decode_string($value[$i]) . "'");
                 $comma = ",";
             }
             $sql .= ")";

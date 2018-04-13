@@ -11,16 +11,13 @@ class HomeController extends Controller
         $model = new HomeModel();
         
         // 获取默认区域
-        if (! isset($_SESSION['lg'])) {
-            $area = $model->getArea();
+        $area = $model->getArea();
+        if (session('lgs') != $area) {
             if (isset($area[0])) {
                 session('lg', $area[0]->acode);
                 session('lgs', $area);
             } else {
-                session('lg', 'cn');
-                session('lgs', array(
-                    'cn'
-                ));
+                error('系统没有任何可用区域，请核对后再试！');
             }
         }
         
@@ -34,7 +31,9 @@ class HomeController extends Controller
         if (session('config.open_wap') && is_mobile()) {
             $this->setTheme($theme . '/wap'); // 移动端主题
         } else {
-            $this->setTheme($theme);
+            if ($theme) {
+                $this->setTheme($theme);
+            }
         }
     }
 }

@@ -174,12 +174,18 @@ class AreaController extends Controller
         if (! $acode = get('acode', 'var')) {
             error('传递的参数值错误！', - 1);
         }
+        
+        if ($acode == 'cn') {
+            error('系统内置区域不允许删除！', - 1);
+        }
+        
         if ($this->model->delArea($acode)) {
             $this->log('删除数据区域' . $acode . '成功！');
-            success('删除成功！', - 1);
+            session_unset();
+            success('删除成功,请重新登陆', url('/admin/index/index'));
         } else {
             $this->log('删除数据区域' . $acode . '失败！');
-            error('删除失败！', - 1);
+            error('删除失败，请核对是否为默认区域！', - 1);
         }
     }
 
@@ -197,6 +203,10 @@ class AreaController extends Controller
             $pcode = post('pcode', 'var');
             $name = post('name');
             $is_default = post('is_default');
+            
+            if ($acode == 'cn') {
+                $acode_new = 'cn';
+            }
             
             if (! $acode_new) {
                 alert_back('编码不能为空！');

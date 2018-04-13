@@ -119,7 +119,7 @@
                 
                 <div class="form-group">
                      <label for="acode">区域编码</label>
-                     <input type="text" name="acode" id="acode"  value="{$area->acode}"  class="checknone form-control">
+                     <input type="text" name="acode" id="acode"  value="{$area->acode}" {if([$area->acode]=='cn')}readonly{/if}  class="checknone form-control">
                 </div>
                 
                 <div class="form-group">

@@ -27,12 +27,17 @@ class DoController extends Controller
     {
         $lg = post('lg') ?: get('lg');
         if ($lg) {
-            foreach (session('lgs') as $value) {
+            $lgs = session('lgs');
+            foreach ($lgs as $value) {
                 if ($value->acode == $lg) {
                     session('lg', $lg);
                 }
             }
-            location('-1');
+            if (isset($_SERVER['HTTP_REFERER'])) {
+                location('-1');
+            } else {
+                location(url('home/index/index'));
+            }
         }
     }
 
