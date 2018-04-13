@@ -1,6 +1,6 @@
 -- Online Database Management SQL Dump
 -- 数据库名: pbootcms
--- 生成日期: 2018-04-13 15:15:03
+-- 生成日期: 2018-04-13 16:15:33
 -- PHP 版本: 5.6.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -317,7 +317,7 @@ CREATE TABLE `ay_label` (
 --
 
 INSERT INTO `ay_label` (`id`,`name`,`value`,`type`,`description`,`create_user`,`update_user`,`create_time`,`update_time`) VALUES
-('1','downlink','http://www.pbootcms.com/down/PbootCMSV1.0.0.zip','1','下载地址','admin','admin','2018-04-11 16:52:19','2018-04-12 17:49:18');
+('1','downlink','https://gitee.com/hnaoyun/PbootCMS/','1','下载地址','admin','admin','2018-04-11 16:52:19','2018-04-13 16:15:25');
 
 -- --------------------------------------------------------
 
@@ -806,7 +806,7 @@ CREATE TABLE `ay_syslog` (
   `create_user` varchar(30) NOT NULL COMMENT '创建人员',
   `create_time` datetime NOT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_syslog`
@@ -815,7 +815,8 @@ CREATE TABLE `ay_syslog` (
 INSERT INTO `ay_syslog` (`id`,`level`,`event`,`user_ip`,`user_os`,`user_bs`,`create_user`,`create_time`) VALUES
 ('1','info','备份数据库成功！','2130706433','Windows 10','Firefox','admin','2018-04-13 12:01:36'),
 ('2','info','登陆成功!','2130706433','Windows 10','Firefox','admin','2018-04-13 15:13:51'),
-('3','info','登陆成功!','2130706433','Windows 10','Firefox','admin','2018-04-13 15:14:58');
+('3','info','登陆成功!','2130706433','Windows 10','Firefox','admin','2018-04-13 15:14:58'),
+('4','info','备份数据库成功！','2130706433','Windows 10','Firefox','admin','2018-04-13 15:15:03');
 
 -- --------------------------------------------------------
 
