@@ -457,7 +457,20 @@ class ParserController extends Controller
                             $num = $value;
                             break;
                         case 'order':
-                            $order = $value . ' DESC';
+                            switch ($value) {
+                                case 'date':
+                                case 'istop':
+                                case 'isrecommend':
+                                case 'isheadline':
+                                case 'visits':
+                                case 'likes':
+                                case 'oppose':
+                                    $order = $value . ' DESC';
+                                    break;
+                                default:
+                                    $order = $value . ' ASC';
+                            }
+                            $order .= ",sorting ASC,id DESC";
                             break;
                     }
                 }
@@ -578,7 +591,20 @@ class ParserController extends Controller
                             $num = $value;
                             break;
                         case 'order':
-                            $order = $value . ' DESC';
+                            switch ($value) {
+                                case 'date':
+                                case 'istop':
+                                case 'isrecommend':
+                                case 'isheadline':
+                                case 'visits':
+                                case 'likes':
+                                case 'oppose':
+                                    $order = $value . ' DESC';
+                                    break;
+                                default:
+                                    $order = $value . ' ASC';
+                            }
+                            $order .= ",sorting ASC,id DESC";
                             break;
                         case 'filter':
                             $filter = $value;
@@ -1194,7 +1220,20 @@ class ParserController extends Controller
                             $num = $value;
                             break;
                         case 'order':
-                            $order = $value . ' DESC';
+                            switch ($value) {
+                                case 'date':
+                                case 'istop':
+                                case 'isrecommend':
+                                case 'isheadline':
+                                case 'visits':
+                                case 'likes':
+                                case 'oppose':
+                                    $order = $value . ' DESC';
+                                    break;
+                                default:
+                                    $order = $value . ' ASC';
+                            }
+                            $order .= ",sorting ASC,id DESC";
                             break;
                     }
                 }

@@ -4,8 +4,12 @@
  	<p></p>
  	<h1>{sort:name}</h1>
  	<ul class="uk-list uk-list-space uk-list-line">
- 		{pboot:list num=10 order=date}
- 			<li>[list:i]、<a href="[list:link]">[list:title]</a><span class="uk-float-right">[list:date style=Y-m-d]</span></li>
+ 		{pboot:list num=10 order=isrecommend}
+ 			<li>
+ 			[list:i]、<a href="[list:link]">[list:title]</a>
+ 			{pboot:if('[list:isrecommend]'==1)}<div class="uk-badge">推荐</div>{/pboot:if}
+ 			<span class="uk-float-right">[list:date style=Y-m-d]</span>
+ 			</li>
  		{/pboot:list}
 	</ul>
 	<div class="page">{page:bar}</div>

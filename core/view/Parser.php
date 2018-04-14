@@ -22,8 +22,8 @@ class Parser
     public static function compile($tplPath, $content)
     {
         self::$tplPath = $tplPath;
-        self::$content = trim($content, "\xEF\xBB\xBF"); // 去除内容Bom信息;
-                                                         
+        self::$content = ltrim($content, "\xEF\xBB\xBF"); // 去除内容Bom信息;
+                                                          
         // =====以下为直接输出方法=========
         self::parInclude(); // 文件应用，必须先引进外部文件
         self::parOutputUrl(); // 输出地址输出
@@ -79,10 +79,11 @@ class Parser
                 if (! file_exists($incfile)) {
                     error('包含文件' . $brr[$i] . '不存在！');
                 } else {
-                    if (! $temp_content = file_get_contents($incfile)) {
+                    if (! $inc_content = file_get_contents($incfile)) {
                         error('包含的模板文件' . $brr[$i] . '读取错误！');
                     } else {
-                        self::$content = str_replace($arr[$i], $temp_content, self::$content);
+                        $inc_content = ltrim($inc_content, "\xEF\xBB\xBF"); // 去除内容Bom信息;
+                        self::$content = str_replace($arr[$i], $inc_content, self::$content);
                     }
                 }
             }
