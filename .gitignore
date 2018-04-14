@@ -3,6 +3,7 @@
 ###############
 runtime/
 config/
+data/
 
 ###############
 #  fixed file #
