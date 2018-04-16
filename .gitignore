@@ -2,8 +2,6 @@
 #    folder   #
 ###############
 /runtime
-/config
-/data
 
 ###############
 #  fixed file #
