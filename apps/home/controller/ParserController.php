@@ -963,7 +963,7 @@ class ParserController extends Controller
                     $key1 ++;
                     $key2 ++;
                     $out_html .= $one_html;
-                    if (isset($num) && $key > $num) {
+                    if (isset($num) && $key2 > $num) {
                         break;
                     }
                 }
