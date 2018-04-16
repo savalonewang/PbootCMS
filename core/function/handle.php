@@ -445,15 +445,17 @@ function result_value_search($needle, $result, $key)
 // 多维数组合并
 function mult_array_merge($array1, $array2)
 {
-    foreach ($array2 as $key => $value) {
-        if (is_array($value)) {
-            if (array_key_exists($key, $array1)) {
-                $array1[$key] = mult_array_merge($array1[$key], $value);
+    if (is_array($array2)) {
+        foreach ($array2 as $key => $value) {
+            if (is_array($value)) {
+                if (array_key_exists($key, $array1)) {
+                    $array1[$key] = mult_array_merge($array1[$key], $value);
+                } else {
+                    $array1[$key] = $value;
+                }
             } else {
                 $array1[$key] = $value;
             }
-        } else {
-            $array1[$key] = $value;
         }
     }
     return $array1;

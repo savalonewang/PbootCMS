@@ -114,6 +114,7 @@ class Config
                 $configs = mult_array_merge($configs, $config);
             }
         }
+        @ob_clean(); // 避免配置文件出现Bom时影响显示
         return $configs;
     }
 

@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Shanghai');
 
 // 定义站点虚拟目录（自适应获取多级目录），此处保证DOCUMENT_ROOT、 __DIR__路径的一致性
 if (isset($_SERVER['PATH_INFO'])) {
-    $_SERVER['SCRIPT_NAME'] = str_replace($_SERVER['PATH_INFO'], '', $_SERVER['SCRIPT_NAME']); // 替换掉PATH_INFO,避免部分服务商路径不对
+    $_SERVER['SCRIPT_NAME'] = preg_replace('{' . $_SERVER['PATH_INFO'] . '$}', '', $_SERVER['SCRIPT_NAME']); // 替换掉PATH_INFO,避免部分服务商路径不对
 }
 $script_path = explode('/', $_SERVER['SCRIPT_NAME']); // 当前执行文件路径
 $file_path = str_replace('\\', '/', dirname(__DIR__)); // 系统部署路径
