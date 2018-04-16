@@ -1,9 +1,9 @@
 ###############
 #    folder   #
 ###############
-runtime
-config
-data
+/runtime
+/config
+/data
 
 ###############
 #  fixed file #
