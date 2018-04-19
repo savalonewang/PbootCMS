@@ -112,14 +112,18 @@ class Paging
     // 过滤分页，避免异常翻页URL
     private function getPreUrl()
     {
-        if (! $this->preUrl && URL) {
+        if (! isset($this->preUrl) && URL) {
             $url = parse_url(URL);
             $path = preg_replace('/\/page\/[0-9]+/', '', $url['path']);
             $url_html_suffix = Config::get('url_suffix');
             if (substr($path, - strlen($url_html_suffix)) == $url_html_suffix) {
                 $path = substr($path, 0, - strlen($url_html_suffix));
             }
-            $this->preUrl = $path;
+            if ($path == '/') {
+                $this->preUrl = url('home/index/index', false);
+            } else {
+                $this->preUrl = $path;
+            }
         }
         return $this->preUrl;
     }

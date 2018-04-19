@@ -14,7 +14,14 @@ use core\basic\Model;
 class ParserModel extends Model
 {
 
+    // 存储分类及子编码
     protected $scodes = array();
+
+    // 存储分类查询数据
+    protected $sorts;
+
+    // 存储栏目位置
+    protected $position = array();
 
     // 站点配置信息
     public function getSite()
@@ -109,18 +116,59 @@ class ParserModel extends Model
     // 分类顶级编码
     public function getSortTopScode($scode)
     {
-        $fields = array(
-            'id',
-            'pcode',
-            'scode'
-        );
-        $result = parent::table('ay_content_sort')->where("acode='" . session('lg') . "'")->column($fields, 'scode');
+        if (! isset($this->sorts)) {
+            $fields = array(
+                'a.id',
+                'a.pcode',
+                'a.scode',
+                'a.name',
+                'b.type'
+            );
+            $join = array(
+                'ay_model b',
+                'a.mcode=b.mcode',
+                'LEFT'
+            );
+            $this->sorts = parent::table('ay_content_sort a')->where("a.acode='" . session('lg') . "'")
+                ->join($join)
+                ->column($fields, 'scode');
+        }
+        $result = $this->sorts;
         return $this->getTopParent($scode, $result);
     }
 
-    // 分类顶级编码
+    // 获取位置
+    public function getPosition($scode)
+    {
+        if (! isset($this->sorts)) {
+            $fields = array(
+                'a.id',
+                'a.pcode',
+                'a.scode',
+                'a.name',
+                'b.type'
+            );
+            $join = array(
+                'ay_model b',
+                'a.mcode=b.mcode',
+                'LEFT'
+            );
+            $this->sorts = parent::table('ay_content_sort a')->where("a.acode='" . session('lg') . "'")
+                ->join($join)
+                ->column($fields, 'scode');
+        }
+        $result = $this->sorts;
+        $this->getTopParent($scode, $result);
+        return array_reverse($this->position);
+    }
+
+    // 分类顶级编码及栏目树
     private function getTopParent($scode, $sorts)
     {
+        if (! $scode) {
+            return;
+        }
+        $this->position[] = $sorts[$scode];
         if ($sorts[$scode]['pcode']) {
             return $this->getTopParent($sorts[$scode]['pcode'], $sorts);
         } else {
@@ -145,9 +193,9 @@ class ParserModel extends Model
     }
 
     // 列表内容
-    public function getList($scode, $num, $order)
+    public function getList($scode, $num, $order, $field, $keyword)
     {
-        $field = array(
+        $fields = array(
             'a.*',
             'b.name as sortname',
             'c.name as subsortname',
@@ -176,13 +224,14 @@ class ParserModel extends Model
                 'LEFT'
             )
         );
-        $this->scodes = array();
+        $this->scodes = array(); // 先清空
         $scodes = $this->getSubScodes($scode);
-        return parent::table('ay_content a')->field($field)
+        return parent::table('ay_content a')->field($fields)
             ->in('a.scode', $scodes)
             ->where("a.acode='" . session('lg') . "'")
             ->where('a.status=1')
             ->where('d.type=2')
+            ->like('a.' . $field, $keyword)
             ->join($join)
             ->order($order)
             ->page(1, $num)
@@ -229,7 +278,7 @@ class ParserModel extends Model
             ->where("a.acode='" . session('lg') . "'")
             ->where('a.status=1')
             ->where('d.type=2')
-            ->like($field, $keyword)
+            ->like('a.' . $field, $keyword)
             ->join($join)
             ->order($order)
             ->limit($num)

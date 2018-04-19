@@ -26,7 +26,7 @@ class Check
     public static function checkGo()
     {
         if (! extension_loaded('gd')) {
-            error('您的服务器环境不支持GO扩展,将无法使用验证码！');
+            error('您的服务器环境不支持gd扩展,将无法使用验证码！');
         }
     }
 

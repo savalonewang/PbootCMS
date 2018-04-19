@@ -27,6 +27,7 @@ return array(
         'admin/Link' => 'admin/content.Link',
         
         // =======前端路由============为前端美观，此处用小写
+        'home/index' => 'home/index/index',
         'home/list' => 'home/list/index/scode',
         'home/about' => 'home/about/index/scode',
         'home/content' => 'home/content/index/id'

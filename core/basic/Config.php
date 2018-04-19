@@ -95,26 +95,33 @@ class Config
             $configs = mult_array_merge($configs, $config);
         }
         
-        if (function_exists('scandir')) {
-            $files = scandir(CONF_PATH);
+        // 载入用户主配置文件
+        if (file_exists(CONF_PATH . '/config.php')) {
+            $config = require CONF_PATH . '/config.php';
+            $configs = mult_array_merge($configs, $config);
+        }
+        
+        // 载入用户数据库配置文件
+        if (file_exists(CONF_PATH . '/database.php')) {
+            $config = require CONF_PATH . '/database.php';
+            $configs = mult_array_merge($configs, $config);
+        }
+        
+        // 载入扩展的配置文件
+        $ext_path = CONF_PATH . '/ext';
+        if (function_exists('scandir') && is_dir($ext_path)) {
+            $files = scandir($ext_path);
             for ($i = 0; $i < count($files); $i ++) {
-                $dir = CONF_PATH . '/' . $files[$i];
-                if (is_file($dir)) {
-                    $config = require CONF_PATH . '/' . $files[$i];
+                $file = $ext_path . '/' . $files[$i];
+                if (is_file($file)) {
+                    $config = require $file;
                     $configs = mult_array_merge($configs, $config);
                 }
             }
-        } else { // 如果PHP禁用了scandir函数，则手动加载主要配置文件，避免系统错误
-            if (file_exists(CONF_PATH . '/config.php')) {
-                $config = require CONF_PATH . '/config.php';
-                $configs = mult_array_merge($configs, $config);
-            }
-            if (file_exists(CONF_PATH . '/database.php')) {
-                $config = require CONF_PATH . '/database.php';
-                $configs = mult_array_merge($configs, $config);
-            }
         }
-        @ob_clean(); // 避免配置文件出现Bom时影响显示
+        
+        // 清理缓冲区，避免配置文件出现Bom时影响显示
+        @ob_clean();
         return $configs;
     }
 

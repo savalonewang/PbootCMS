@@ -282,6 +282,42 @@ class ParserController extends Controller
         return $content;
     }
 
+    // 解析当前位置
+    public function parserPosition($content, $scode)
+    {
+        $pattern = '/\{pboot:position(\s+[^}]+)?\}/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            $separator = '>>';
+            for ($i = 0; $i < $count; $i ++) {
+                $params = $this->parserParam($matches[1][$i]);
+                
+                // 分离参数
+                foreach ($params as $key => $value) {
+                    switch ($key) {
+                        case 'separator':
+                            $separator = $value;
+                            break;
+                    }
+                }
+                
+                $data = $this->model->getPosition($scode);
+                $out_html = '<a href="' . SITE_DIR . '/">首页</a>';
+                foreach ($data as $key => $value) {
+                    if ($value['type'] == 1) {
+                        $out_html .= $separator . '<a href="' . url('/home/about/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
+                    } elseif ($value['type'] == 2) {
+                        $out_html .= $separator . '<a href="' . url('/home/list/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
+                    }
+                }
+                
+                // 执行内容替换
+                $content = str_replace($matches[0][$i], $out_html, $content);
+            }
+        }
+        return $content;
+    }
+
     // 解析当前分类标签
     public function parserSortLabel($content, $sort)
     {
@@ -444,6 +480,7 @@ class ParserController extends Controller
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize');
                 $order = 'date DESC';
+                $filter = '';
                 
                 // 跳过带scode的指定列表
                 if (array_key_exists('scode', $params)) {
@@ -472,12 +509,26 @@ class ParserController extends Controller
                             }
                             $order .= ",sorting ASC,id DESC";
                             break;
+                        case 'filter':
+                            $filter = $value;
+                            break;
+                    }
+                }
+                
+                // 内容过滤筛选
+                $filter_field = '';
+                $filter_keyword = '';
+                if ($filter) {
+                    $filter = explode('|', $filter);
+                    if (count($filter) == 2) {
+                        $filter_field = $filter[0];
+                        $filter_keyword = $filter[1];
                     }
                 }
                 
                 // 读取数据
                 if (! isset($data)) { // 避免同页面多次调用无分类参数列表出现分页错误，多次调用取相同数据
-                    $data = $this->model->getList($scode, $num, $order);
+                    $data = $this->model->getList($scode, $num, $order, $filter_field, $filter_keyword);
                 }
                 
                 // 无数据直接替换
@@ -575,7 +626,8 @@ class ParserController extends Controller
                 $order = 'date DESC';
                 $scode = - 1;
                 $filter = '';
-                
+                $page = 0; // 默认不执行分页
+                           
                 // 跳过未指定scode的列表
                 if (! array_key_exists('scode', $params)) {
                     continue;
@@ -609,6 +661,8 @@ class ParserController extends Controller
                         case 'filter':
                             $filter = $value;
                             break;
+                        case 'page':
+                            $page = $value;
                     }
                 }
                 
@@ -629,7 +683,14 @@ class ParserController extends Controller
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getSpecifyList($scode, $num, $order, $filter_field, $filter_keyword)) {
+                if ($page) {
+                    $data = $this->model->getList($scode, $num, $order, $filter_field, $filter_keyword);
+                } else {
+                    $data = $this->model->getSpecifyList($scode, $num, $order, $filter_field, $filter_keyword);
+                }
+                
+                // 无数据直接替换为空
+                if (! $data) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -984,7 +1045,7 @@ class ParserController extends Controller
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $gid = 1;
-                $num = 2;
+                $num = 3;
                 
                 // 跳过未指定gid的列表
                 if (! array_key_exists('gid', $params)) {

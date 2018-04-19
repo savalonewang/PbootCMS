@@ -32,6 +32,7 @@ class ListController extends Controller
             if (! ! $sort = $this->model->getSort($scode)) {
                 if ($sort->listtpl) {
                     $content = parent::parser($sort->listtpl); // 框架标签解析
+                    $content = $this->parser->parserPosition($content, $scode); // CMS当前位置标签解析
                     $content = $this->parser->parserSortLabel($content, $sort); // CMS分类信息标签解析
                     $content = $this->parser->parserListLabel($content, $scode); // CMS分类列表标签解析
                     $content = $this->parser->parserCommom($content); // CMS公共标签解析
