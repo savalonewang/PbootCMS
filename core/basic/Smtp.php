@@ -515,6 +515,9 @@ class Smtp
     protected function socket()
     {
         // 创建socket资源
+        if (! extension_loaded('sockets')) {
+            error('您的服务器未开启php_sockets扩展，无法正常发信！');
+        }
         $this->socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
         if (! $this->socket) {
             $this->errorMessage = socket_strerror(socket_last_error());
