@@ -261,7 +261,7 @@ class Paging
     // URL查询字符
     private function queryString()
     {
-        if (! ! $qs = $_SERVER["QUERY_STRING"]) {
+        if (isset($_SERVER["QUERY_STRING"]) && ! ! $qs = $_SERVER["QUERY_STRING"]) {
             return '?' . $qs;
         }
     }

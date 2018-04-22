@@ -28,7 +28,19 @@ class ConfigController extends Controller
         // 修改参数配置
         if ($_POST) {
             foreach ($_POST as $key => $value) {
-                $this->model->modValue($key, post($key));
+                if ($this->model->checkConfig("name='$key'")) {
+                    $this->model->modValue($key, post($key));
+                } else {
+                    // 自动新增配置项
+                    $data = array(
+                        'name' => $key,
+                        'value' => post($key),
+                        'type' => 2,
+                        'sorting' => 255,
+                        'description' => ''
+                    );
+                    $this->model->addConfig($data);
+                }
             }
             $this->log('修改参数配置成功！');
             success('修改成功！', url('admin/Config/index'));

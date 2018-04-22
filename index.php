@@ -8,15 +8,13 @@
  *  用户前端入口文件
  */
 
-// 设置输出编码
-header('Content-Type:text/html; charset=utf-8');
-
 // 入口文件地址绑定
 define('URL_BLIND', 'home');
 
 // PHP版本检测
 if (PHP_VERSION < '5.3') {
-    exit('您服务器的PHP版本太低，本程序要求版本不小于5.3');
+    header('Content-Type:text/html; charset=utf-8');
+    exit('您服务器PHP的版本太低，程序要求PHP版本不少于5.3');
 }
 
 // 引用内核启动文件

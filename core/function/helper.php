@@ -446,6 +446,39 @@ function post($name, $type = null, $require = false, $vartext = null, $default =
 }
 
 /**
+ * * 获取参数，post或get
+ *
+ * @param string $name
+ *            参数名称
+ * @param mixed $type
+ *            数据类型
+ * @param string $require
+ *            是否为必须，为true是，如果不满足条件直接错误
+ * @param string $vartext
+ *            变量描述文本
+ * @param string $default
+ *            在非必需情况下默认值
+ * @return mixed
+ */
+function request($name, $type = null, $require = false, $vartext = null, $default = null)
+{
+    if ($_POST[$name]) {
+        $d_source = 'post';
+    } else {
+        $d_source = 'get';
+    }
+    $condition = array(
+        'd_source' => $d_source,
+        'd_type' => $type,
+        'd_require' => $require,
+        $name => $vartext,
+        'd_default' => $default
+    
+    );
+    return filter($name, $condition);
+}
+
+/**
  * 读取或写入Cookie信息
  *
  * @param string $name

@@ -45,17 +45,48 @@
                     	<label class="radio-inline"><input type="radio" name="admin_check_code" value="0" {if([$configs['admin_check_code']['value']]==0)} checked="checked" {/if}>关</label>
                     </div>
                 </div>
+                
+                <hr>
+                
+                <div class="form-group">
+					<label>API开关</label>
+					 <div>
+                    	<label class="radio-inline"><input type="radio" name="api_open" value="1" {if(@[$configs['api_open']['value']]==1)} checked="checked" {/if}>开</label>
+                    	<label class="radio-inline"><input type="radio" name="api_open" value="0" {if(@[$configs['api_open']['value']]==0)} checked="checked" {/if}>关</label>
+                    </div>
+				</div>
+				
+				<div class="form-group">
+					<label>API强制认证</label>
+					 <div>
+                    	<label class="radio-inline"><input type="radio" name="api_auth" value="1" {if(@[$configs['api_auth']['value']]==1)} checked="checked" {/if}>开</label>
+                    	<label class="radio-inline"><input type="radio" name="api_auth" value="0" {if(@[$configs['api_auth']['value']]==0)} checked="checked" {/if}>关</label>
+                    </div>
+				</div>
+				
+				<div class="form-group">
+					<label>API认证用户</label>
+                    <input type="text" id="api_appid" name="api_appid" value="{$configs['api_appid']['value']}"  class="form-control"> 
+				</div>
+				
+				<div class="form-group">
+					<label>API认证密钥</label>
+                    <input type="password" id="api_secret" name="api_secret" value="{$configs['api_secret']['value']}"  class="form-control"> 
+				</div>
+				
+				<hr>
                 <!-- 
                 <div class="form-group">
-					<label for="name">微信APPID</label>
+					<label>微信APPID</label>
 					<input type="text" id="weixin_appid" name="weixin_appid" value="{$configs['weixin_appid']['value']}"  class="form-control"> 
 				</div>
                   
 				<div class="form-group">
-					<label for="name">微信SECRET</label>
+					<label>微信SECRET</label>
 					<input type="text" id="weixin_secret" name="weixin_secret" value="{$configs['weixin_secret']['value']}"  class="form-control"> 
 				</div>
 				 -->
+				 
 				<button type="submit"  class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
             </form>
          </div>

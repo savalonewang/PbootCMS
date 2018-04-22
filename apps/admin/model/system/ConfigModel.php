@@ -17,7 +17,7 @@ class ConfigModel extends Model
     // 获取应用配置列表
     public function getList()
     {
-        return parent::table('ay_config')->column('name,value,type,description', 'name');
+        return parent::table('ay_config')->order('sorting,id')->column('name,value,type,description', 'name');
     }
 
     // 检查应用配置

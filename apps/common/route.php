@@ -26,11 +26,16 @@ return array(
         'admin/Slide' => 'admin/content.Slide',
         'admin/Link' => 'admin/content.Link',
         
-        // =======前端路由============为前端美观，此处用小写
+        // =======前端路由============为前端美观，使用了小写URL，此处也用小写
         'home/index' => 'home/index/index',
         'home/list' => 'home/list/index/scode',
         'home/about' => 'home/about/index/scode',
-        'home/content' => 'home/content/index/id'
+        'home/content' => 'home/content/index/id',
+        
+        // =======接口路由============API路径统一小写URL，此处也用小写
+        'api/list' => 'api/list/index/scode',
+        'api/content' => 'api/content/index/id',
+        'api/search' => 'api/search/index'
     
     )
 );

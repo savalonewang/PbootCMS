@@ -11,13 +11,10 @@ return array(
     'sn' => '',
     
     // 内核版本
-    'core_version' => '1.2.8',
+    'core_version' => '1.2.9',
     
     // 配置模块
-    'public_app' => 'home,admin',
-    
-    // 远程请求需要认证应用
-    'auth_app' => 'api',
+    'public_app' => 'home,admin,api',
     
     // 设置URL模式,1、基本模式,2、伪静态模式，3、兼容模式
     'url_type' => 1,
@@ -110,7 +107,7 @@ return array(
         'auth_user' => array( // 认证用户表
             'admin' => array(
                 'permitip' => '127.0.0.1', // 限制接入IP,如为空则自适应同服务器，可以为数组允许一组地址
-                'secret' => 'admin', // 认证密钥
+                'secret' => '123456', // 认证密钥
                 'level' => '' // 采用all或功能模块数组 array('/admin/Index/login')
             )
         )

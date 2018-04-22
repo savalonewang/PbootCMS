@@ -92,6 +92,13 @@ class ParserController extends Controller
                     case 'path':
                         $content = str_replace($matches[0][$i], SITE_DIR, $content);
                         break;
+                    case 'logo':
+                        if (isset($data->logo)) {
+                            $content = str_replace($matches[0][$i], SITE_DIR . $data->logo, $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
+                        }
+                        break;
                     case 'tplpath':
                         $content = str_replace($matches[0][$i], APP_THEME_DIR, $content);
                         break;
