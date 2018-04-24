@@ -229,14 +229,18 @@ class ContentSortController extends Controller
             switch ($submit) {
                 case 'sorting': // 修改列表排序
                     $listall = post('listall');
-                    $sorting = post('sorting');
-                    foreach ($listall as $key => $value) {
-                        if ($sorting[$key] === '' || ! is_numeric($sorting[$key]))
-                            $sorting[$key] = 255;
-                        $this->model->modSortSorting($value, "sorting=" . $sorting[$key]);
+                    if ($listall) {
+                        $sorting = post('sorting');
+                        foreach ($listall as $key => $value) {
+                            if ($sorting[$key] === '' || ! is_numeric($sorting[$key]))
+                                $sorting[$key] = 255;
+                            $this->model->modSortSorting($value, "sorting=" . $sorting[$key]);
+                        }
+                        $this->log('批量修改栏目排序成功！');
+                        success('修改成功！', - 1);
+                    } else {
+                        alert_back('排序失败，无任何内容！');
                     }
-                    $this->log('批量修改栏目排序成功！');
-                    success('修改成功！', - 1);
                     break;
             }
             exit();
