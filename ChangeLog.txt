@@ -1,4 +1,7 @@
-﻿PbootCMS V1.0.6 build 2018-04-24
+﻿PbootCMS V1.0.7 build 2018-04-xx
+1、测试
+
+PbootCMS V1.0.6 build 2018-04-24
 1、修复无任何内容执行排序报错；
 2、修复可能存在的跨站请求伪造漏洞；
 
