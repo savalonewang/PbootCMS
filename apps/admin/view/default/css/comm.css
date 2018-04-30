@@ -3,7 +3,7 @@
 	height:50px;
 }
 .layui-body{
-	padding:0px 15px;
+	padding:10px 15px;
 }
 .layui-layout-admin .layui-body{
 	top:50px;
@@ -154,8 +154,14 @@
     width:110px;
 }
 
-.btn-del,.btn-add,.btn-mod{
-	padding:0px 5px;
+.fa-toggle-on{
+	font-size:20px;
+	color:#5FB878;
+}
+
+.fa-toggle-off{
+	font-size:20px;
+	color:#d2d2d2;
 }
 
 @media only screen and (max-width: 750px) {

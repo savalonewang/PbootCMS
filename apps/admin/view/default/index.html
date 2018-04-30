@@ -29,6 +29,7 @@
 					<label class="user-login-icon layui-icon layui-icon-password"></label>
 					<input name="password" id="password" type="password" lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
 				</div>
+				{if(session('config.admin_check_code'))}
 				<div class="layui-form-item">
 					<div class="layui-row">
 						<div class="layui-col-xs7 layui-col-sm8">
@@ -42,6 +43,7 @@
 						</div>
 					</div>
 				</div>
+				{/if}
 				<div class="layui-form-item">
 					<button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login-submit" >登 入</button>
 				</div>

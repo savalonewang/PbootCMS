@@ -38,7 +38,7 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">留言接收邮箱</label>
 	                     <div class="layui-input-block">
-	                     	<input type="text" name="message_send_to" value="{$configs['message_send_to']['value']}" placeholder="请输入留言接收邮箱"  class="layui-input">
+	                     	<input type="text" name="message_send_to"  value="{$configs['message_send_to']['value']}" placeholder="请输入留言接收邮箱"  class="layui-input">
 	                     </div>
 	                </div>
 	                
@@ -139,7 +139,7 @@
 	   			<div class="layui-form-item">
 	                  <label class="layui-form-label">邮箱账号</label>
 	                 <div class="layui-input-block">
-	                 	<input type="text" name="smtp_username" value="{$configs['smtp_username']['value']}" placeholder="请输入邮箱账号" class="layui-input">
+	                 	<input type="text" name="smtp_username" lay-verify="email" value="{$configs['smtp_username']['value']}" placeholder="请输入邮箱账号" class="layui-input">
 	                 </div>
 	            </div>
 	   

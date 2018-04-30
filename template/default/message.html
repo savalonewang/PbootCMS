@@ -10,11 +10,14 @@
 			<div class="uk-form-row">
 				内　容：<textarea name="content" style="width:300px;" ></textarea>
 			</div>
+			<!-- 此标签语句为框架语句，非CMS标签，不懂的直接套用就可以 -->
+			{if(session('config.message_check_code'))}
 			<div class="uk-form-row">
 				验证码：<input type="text" name="checkcode" >
 				<img title="点击刷新" style="height:30px;" src="{pboot:checkcode}" onclick="this.src='{pboot:checkcode}?'+Math.round(Math.random()*10);" />
 			</div>
-			<div class="uk-form-row"><button type="submit" class="uk-button">提交</button></div>
+			{/if}
+			<div class="uk-form-row" ><button type="submit" class="uk-button" style="margin-left:60px;">提交</button></div>
 		</form>
 	</div>
 	
