@@ -257,9 +257,11 @@
 		                     <label class="layui-form-label">列表页模板</label>
 		                     <div class="layui-input-block">
 			                     <select name="listtpl" id="listtpl">
-			                     	 <option value="{$sort->listtpl}">{$sort->listtpl}</option>
+			                     	<option value="{$sort->listtpl}">{$sort->listtpl}</option>
 			                     	{foreach $tpls(key,value)}
-			                        	<option value="[value]">[value]</option>
+			                     		{if($value!=[$sort->listtpl])}
+			                        		<option value="[value]">[value]</option>
+			                        	{/if}
 			                        {/foreach}
 			                     </select>
 		                     </div>
@@ -271,7 +273,9 @@
 			                     <select name="contenttpl" id="contenttpl" >
 			                     	<option value="{$sort->contenttpl}">{$sort->contenttpl}</option>
 			                     	{foreach $tpls(key,value)}
-			                        	<option value="[value]">[value]</option>
+			                     		{if($value!=[$sort->contenttpl])}
+			                        		<option value="[value]">[value]</option>
+			                        	{/if}
 			                        {/foreach}
 			                     </select>
 		                     </div>

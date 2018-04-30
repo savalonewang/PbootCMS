@@ -95,7 +95,7 @@ class Check
         $user_bs = get_user_bs();
         // 如果在黑名单则直接拒绝
         if (in_array($user_bs, $deny_bs)) {
-            error('本站点设置了不允许' . $user_bs . '内核浏览器访问,请使用其它浏览器！如果是360浏览器，请使用极速模式！');
+            error('本站点设置了不允许' . $user_bs . '内核浏览器访问,请使用其它版本IE、火狐、谷歌等，国产浏览器请使用极速模式！');
         } elseif ($allow_bs && ! in_array($user_bs, $allow_bs)) {
             error('本站点设置了只允许' . implode(',', $allow_bs) . '内核浏览器访问,请使用这些浏览器！');
         }

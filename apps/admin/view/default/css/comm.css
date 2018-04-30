@@ -5,6 +5,9 @@
 .layui-body{
 	padding:0px 15px;
 }
+.layui-layout-admin .layui-body{
+	top:50px;
+}
 .layui-layout-admin .layui-logo{
 	color:#fff;
 	font-size:28px;
@@ -34,6 +37,20 @@
 	margin-left: 130px;
 }
 
+.layui-layout-left{
+	left:220px;
+}
+
+.layui-btn{
+	margin-bottom:5px;
+}
+
+.layui-form-select dl{
+	z-index:9999;
+	max-height:250px;
+}
+
+/*菜单显示按钮*/
 .menu {
     position: absolute !important;
     left :210px;
@@ -55,18 +72,6 @@
 	font-size:23px;
 	cursor:pointer;
 }
-
-.layui-layout-left{
-	left:220px;
-}
-
-.layui-btn{
-	margin-bottom:5px;
-}
-.layui-form-select dl{
-	z-index:9999;
-}
-
 
 /*桌面快捷图标*/
 .deskbox {
