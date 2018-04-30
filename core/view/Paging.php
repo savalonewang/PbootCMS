@@ -20,6 +20,9 @@ class Paging
     // 当前页码
     public $page;
 
+    // 数字条数量
+    public $num = 5;
+
     // 总记录
     private $rowTotal = 0;
 
@@ -199,14 +202,16 @@ class Paging
         return '<a href="' . $this->getPreUrl() . '/page/' . $this->pageCount . Config::get('url_suffix') . $this->queryString() . '">尾页</a>';
     }
 
-    // 数字分页
+    // 数字分页,要修改数字显示的条数，请修改类头部num属性值
     private function pageNumBar()
     {
         if (! $this->pageCount)
             return;
         $num_html = '';
-        if ($this->page < 6 || $this->pageCount < 11) { // 当前页小于6或总页数小于11
-            for ($i = 1; $i <= 11; $i ++) {
+        $total = $this->num;
+        $half = intval($total / 2);
+        if ($this->page <= $half || $this->pageCount < $total) { // 当前页小于一半或页数小于总数
+            for ($i = 1; $i <= $total; $i ++) {
                 if ($i > $this->pageCount)
                     break;
                 if ($this->page == $i) {
@@ -215,12 +220,12 @@ class Paging
                     $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="pagenum">' . $i . '</a> ';
                 }
             }
-            // if ($this->pageCount > 11)
-            // $num_html .= '<span>···</span>';
-        } elseif ($this->page + 5 >= $this->pageCount) { // 当前页小于为倒数5页以内
-                                                         // if ($this->pageCount > 11)
-                                                         // $num_html .= '<span>···</span>';
-            for ($i = $this->pageCount - 10; $i <= $this->pageCount; $i ++) {
+            if ($this->pageCount > $total)
+                $num_html .= '<span>···</span>';
+        } elseif ($this->page + $half >= $this->pageCount) { // 当前页为倒数页以内
+            if ($this->pageCount > $total)
+                $num_html .= '<span>···</span>';
+            for ($i = $this->pageCount - $total + 1; $i <= $this->pageCount; $i ++) {
                 if ($this->page == $i) {
                     $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="absolutepage">' . $i . '</a> ';
                 } else {
@@ -228,15 +233,15 @@ class Paging
                 }
             }
         } else { // 正常的前后各5页
-                 // $num_html .= '<span>···</span>';
-            for ($i = $this->page - 5; $i <= $this->page + 5; $i ++) {
+            $num_html .= '<span>···</span>';
+            for ($i = $this->page - $half; $i <= $this->page + $half; $i ++) {
                 if ($this->page == $i) {
                     $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="absolutepage">' . $i . '</a> ';
                 } else {
                     $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="pagenum">' . $i . '</a> ';
                 }
             }
-            // $num_html .= '<span>···</span>';
+            $num_html .= '<span>···</span>';
         }
         return $num_html;
     }

@@ -19,6 +19,7 @@
 	                        <th>父编码</th>
 	                        <th>排序</th>
 	                        <th>URL</th>
+	                        <th>桌面</th>
 	                        <th>状态</th>
 	                        <th>操作</th>
 	                    </tr>
@@ -29,23 +30,28 @@
 	                        <td>[num]</td>
 	                        <td>
 	                            [value->blank]
-	                            {if($value->son)}
-	                                <i class="fa fa-folder-open-o" aria-hidden="true"></i>
-	                            {else}
-	                                <i class="fa fa-folder-o" aria-hidden="true"></i>
-	                            {/if}
+	                            <i class="fa [value->ico]" aria-hidden="true"></i> 
 	                            [value->name]</td>
 	                        <td>[value->mcode]</td>
 	                        <td>[value->pcode]</td>
 	                        <td>[value->sorting]</td>
 	                        <td>[value->url]</td>
 	                        <td>
-	                            {if($value->status)}
-	                            <a href="{url./admin/'.C.'/mod/mcode/'.$value->mcode.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击关闭"></i></a>
+	                            {if($value->shortcut)}
+	                            <a href="{url./admin/'.C.'/mod/mcode/'.$value->mcode.'/field/shortcut/value/0}"><i class='fa fa-toggle-on' title="点击关闭显示"></i></a>
 	                            {else}
-	                            <a href="{url./admin/'.C.'/mod/mcode/'.$value->mcode.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击开启"></i></a>
+	                            <a href="{url./admin/'.C.'/mod/mcode/'.$value->mcode.'/field/shortcut/value/1}"><i class='fa fa-toggle-off' title="点击开启显示"></i></a>
 	                            {/if}
 	                        </td>
+	                        
+	                        <td>
+	                            {if($value->status)}
+	                            <a href="{url./admin/'.C.'/mod/mcode/'.$value->mcode.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击关闭显示"></i></a>
+	                            {else}
+	                            <a href="{url./admin/'.C.'/mod/mcode/'.$value->mcode.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击开启显示"></i></a>
+	                            {/if}
+	                        </td>
+	                        
 	                        <td>
 	                            {fun=get_btn_del($value->mcode,'mcode')}
 	                            {fun=get_btn_mod($value->mcode,'mcode')}

@@ -61,7 +61,7 @@ class CmsController extends Controller
     {
         // 获取全部或指定自定义标签
         if (! $name = get('name')) {
-            $data = $this->model->getAllLabel();
+            $data = $this->model->getLabelAll();
         } else {
             $data = $this->model->getLabel($name);
         }
