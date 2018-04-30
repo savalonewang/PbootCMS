@@ -72,10 +72,11 @@ function light_nav(){
 	//二级菜单标记当前栏目
     var url = $('#url').data('url').toLowerCase();
     var controller = $('#controller').data('controller').toLowerCase();
+    var aobj= $('#nav .nav-item').find('a');
     var flag = false;
    
     //第一种情况，url完全一致
-    $('#nav').find('a').each(function (index, element) {
+    aobj.each(function (index, element) {
         var aUrl = $(element).attr('href').toLowerCase();
         if (url==aUrl) {
             $(element).parent("dd").addClass("layui-this");
@@ -89,7 +90,7 @@ function light_nav(){
     url = url.replace('.html','');
     //第二种情况，菜单的子页面，如翻页
     if(!flag){
-        $('#nav').find('a').each(function (index, element) {
+    	aobj.find('a').each(function (index, element) {
             var aUrl = $(element).attr('href').toLowerCase();
             aUrl = aUrl.replace('.html','');
             if (url.indexOf(aUrl)>-1) {
@@ -104,7 +105,7 @@ function light_nav(){
 	
 	//第三种情况，只匹配到控制器，如增、改、删的操作页面
     if(!flag){
-        $('#nav').find('a').each(function (index, element) {
+    	aobj.each(function (index, element) {
             var aUrl = $(element).attr("href").toLowerCase();
             if (aUrl.indexOf('/'+controller+'/')==0||aUrl.indexOf('.php/'+controller+'/')>-1) {
             	$(element).parent("dd").addClass("layui-this");
@@ -117,7 +118,7 @@ function light_nav(){
     }
 	
 	if(!flag){
-		$('#nav').find('li').first().addClass('layui-nav-itemed');
+		$('#nav').find('.nav-item').first().addClass('layui-nav-itemed');
 	}
     
 }

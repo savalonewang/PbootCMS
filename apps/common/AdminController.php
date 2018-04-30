@@ -26,11 +26,12 @@ class AdminController extends Controller
             $this->assign('menu_tree', session('menu_tree')); // 注入菜单树
             $this->assign('menu_html', session('menu_html')); // 菜单HTML数
             
-            if (session('area_tree') && count(session('area_tree')) > 1) {
+            if (session('area_tree')) {
                 $area_html = make_area_Select(session('area_tree'), session('acode'));
                 $this->assign('area_html', $area_html);
-            } elseif (session('area_tree')) {
-                $this->assign('hide_area', true);
+                if (count(session('area_tree')) == 1) {
+                    $this->assign('one_area', true);
+                }
             } else {
                 session_unset();
                 error('您账号的区域权限设置有误，无法正常登陆！', url('/admin/index/index'), 10);

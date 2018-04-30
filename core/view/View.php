@@ -102,8 +102,8 @@ class View
         file_exists($tplFile) ?: error('模板文件' . $file . '不存在！');
         $tplcFile = $this->tplcPath . '/' . md5($tplFile) . '.php'; // 编译文件
                                                                     
-        // 当编译文件不存在，或者模板文件修改过，或者调试模式，则重新生成编译文件
-        if (! file_exists($tplcFile) || filemtime($tplcFile) < filemtime($tplFile) || ! Config::get('tpl_parser_cache') || Config::get('debug')) {
+        // 当编译文件不存在，或者模板文件修改过，或者调试模式，则重新生成编译文件, //Config::get('debug')
+        if (! file_exists($tplcFile) || filemtime($tplcFile) < filemtime($tplFile) || ! Config::get('tpl_parser_cache')) {
             $content = file_get_contents($tplFile) ?: error('模板文件' . $file . '读取错误！'); // 读取模板
             $content = Parser::compile($this->tplPath, $content); // 解析模板
             file_put_contents($tplcFile, $content) ?: error('编译文件' . $tplcFile . '生成出错！请检查目录是否有可写权限！'); // 写入编译文件

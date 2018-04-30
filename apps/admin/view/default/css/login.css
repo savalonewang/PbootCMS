@@ -16,8 +16,8 @@ body{
 	width: 375px;
 	margin: 0 auto;
 	box-sizing: border-box;
-	background: #999;
-	background-color: rgba(153, 153, 153,0.7);
+	background: #ccc; 
+	background-color: rgba(248,248,255,0.5);
 	border-radius: 5px;
 }
 
@@ -28,8 +28,9 @@ body{
 .user-login-header h2 {
 	margin-bottom: 10px;
 	font-weight: 300;
-	font-size: 30px;
+	font-size: 25px;
 	color: #fff;
+	font-weight:bold;
 }
 .user-login-header p {
 	font-weight: 300;

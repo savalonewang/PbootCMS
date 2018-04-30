@@ -2,7 +2,7 @@
 return array(
     
     // 调试模式
-    'debug' => true,
+    'debug' => false,
     
     // 授权码
     'sn' => '382B4E6010',

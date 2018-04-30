@@ -24,22 +24,45 @@
     <ul class="menu">
     	<li class="menu-ico" title="显示或隐藏侧边栏"><i class="fa fa-bars" aria-hidden="true"></i></li>
 	</ul>
-    
-    <ul class="layui-nav layui-layout-left layui-hide-xs">
-    	 <li class="layui-nav-item"><a href="{SITE_DIR}/" target="_blank"><i class="fa fa-home" aria-hidden="true"></i> 网站主页</a></li>
-    </ul>
+	{if(![$one_area])}
+	<form method="post" action="{url./admin/index/area}" class="area-select">
+		<div class="layui-col-xs8">
+		   <select name="acode">
+		       {$area_html}
+		   </select>
+		</div>
+		<div class="layui-col-xs4">
+		 	<button type="submit" class="layui-btn layui-btn-sm">切换</button>
+		</div>
+   	</form>
+ 	{/if}
+
     <ul class="layui-nav layui-layout-right">
-      <li class="layui-nav-item">
-        <a href="javascript:;">
-          <i class="fa fa-user-circle-o" aria-hidden="true"></i> {$session.realname}
-        </a>
-        <dl class="layui-nav-child">
-		  <dd><a href="{url./admin/Index/ucenter}"><i class="fa fa-address-card-o" aria-hidden="true"></i> 资料修改</a></dd>
-		  {if(session('id')==1)}
-		  <dd><a href="{url./admin/Index/clearCache}"><i class="fa fa-trash-o" aria-hidden="true"></i> 清理缓存</a></dd>
-		  {/if}
-		  <dd><a href="{url./admin/Index/loginOut}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出登陆</a></dd>
-        </dl>
+    
+       <li class="layui-nav-item layui-hide-xs">
+      	 <a href="{SITE_DIR}/" target="_blank"><i class="fa fa-home" aria-hidden="true"></i> 网站主页</a>
+       </li>
+
+       <li class="layui-nav-item layui-hide-xs">
+       		<a href="{url./admin/Index/clearCache}"><i class="fa fa-trash-o" aria-hidden="true"></i> 清理缓存</a>
+       </li>
+       
+       {if([$one_area])}
+	       	<li class="layui-nav-item">
+	       		<a href="{url./admin/Index/loginOut}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出登陆</a>
+	       	</li>
+       {else}
+	       	<li class="layui-nav-item layui-hide-xs">
+	       		<a href="{url./admin/Index/loginOut}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出登陆</a>
+	       	</li>
+       {/if}
+       <li class="layui-nav-item layui-hide-xs">
+	        <a href="javascript:;">
+	          <i class="fa fa-user-circle-o" aria-hidden="true"></i> {$session.realname}
+	        </a>
+	        <dl class="layui-nav-child">
+	          <dd><a href="{url./admin/Index/ucenter}"><i class="fa fa-address-card-o" aria-hidden="true"></i> 资料修改</a></dd>
+	        </dl>
       </li>
     </ul>
   </div>
@@ -49,7 +72,7 @@
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree" id="nav" lay-shrink="all">
 	   {foreach $menu_tree(key,value)}
-        <li class="layui-nav-item">
+        <li class="layui-nav-item nav-item">
           <a class="" href="javascript:;"><i class="fa [value->ico]" aria-hidden="true"></i>[value->name]</a>
           <dl class="layui-nav-child">
 			{foreach $value->son(key2,value2,num2)}
@@ -63,6 +86,22 @@
           </dl>
         </li>
 		{/foreach}
+		
+		<li style="height:1px;background:#666" class="layui-hide-sm"></li>
+		
+		<li class="layui-nav-item layui-hide-sm">
+          <a href="{url./admin/Index/ucenter}"><i class="fa fa-address-card-o" aria-hidden="true"></i> 资料修改</a>
+        </li>
+        
+        <li class="layui-nav-item layui-hide-sm">
+         <a href="{url./admin/Index/clearCache}"><i class="fa fa-trash-o" aria-hidden="true"></i> 清理缓存</a>
+        </li>
+        
+        {if(![$one_area])}
+        <li class="layui-nav-item layui-hide-sm">
+         <a href="{url./admin/Index/loginOut}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出登陆</a>
+        </li>
+        {/if}
       </ul>
     </div>
   </div>
