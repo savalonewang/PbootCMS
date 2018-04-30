@@ -16,8 +16,6 @@
 	                        <th>角色名称</th>
 	                        <th>角色编码</th>
 	                        <th>角色描述</th>
-	                        <th>添加人员</th>
-	                        <th>修改人员</th>
 	                        <th>添加时间</th>
 	                        <th>修改时间</th>
 	                        <th>操作</th>
@@ -30,12 +28,12 @@
 	                        <td>[value->name]</td>
 	                        <td>[value->rcode]</td>
 	                        <td>[value->description]</td>
-	                        <td>[value->create_user]</td>
-	                        <td>[value->update_user]</td>
 	                        <td>[value->create_time]</td>
 	                        <td>[value->update_time]</td>
 	                        <td>
-	                            {fun=get_btn_del($value->rcode,'rcode')}
+	                        	{if($value->id!=1)}
+	                           		{fun=get_btn_del($value->rcode,'rcode')}
+	                            {/if}
 	                            {fun=get_btn_mod($value->rcode,'rcode')}
 	                        </td>
 	                    </tr>

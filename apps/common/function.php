@@ -137,44 +137,44 @@ function get_btn_add($btnName = '新 增')
     $user_level = session('levels');
     if (! in_array('/' . M . '/' . C . '/add', $user_level) && session('id') != 1)
         return;
-    $btn_html = "<a href='" . url("/" . M . '/' . C . "/add") . "?backurl=" . URL . "' class='btn-add'><i class='fa fa-plus' aria-hidden='true'></i> $btnName</a>";
+    $btn_html = "<a href='" . url("/" . M . '/' . C . "/add") . "?backurl=" . URL . "' class='layui-btn layui-btn-primary'>$btnName</a>";
     return $btn_html;
 }
 
 // 获取更多按钮
-function get_btn_more($idValue, $id = 'id', $btnName = '查看详情')
+function get_btn_more($idValue, $id = 'id', $btnName = '详情')
 {
-    $btn_html = "<a href='" . url("/" . M . '/' . C . "/index/$id/$idValue") . "' class='btn-more' title='$btnName'><i class='fa fa-info-circle' aria-hidden='true'></i></a>";
+    $btn_html = "<a href='" . url("/" . M . '/' . C . "/index/$id/$idValue") . "' class='layui-btn layui-btn-xs layui-btn-primary' title='$btnName'>$btnName</a>";
     return $btn_html;
 }
 
 // 获取删除按钮
-function get_btn_del($idValue, $id = 'id', $btnName = '删除该条')
+function get_btn_del($idValue, $id = 'id', $btnName = '删除')
 {
     $user_level = session('levels');
     if (! in_array('/' . M . '/' . C . '/del', $user_level) && session('id') != 1)
         return;
-    $btn_html = "<a href='" . url('/' . M . '/' . C . "/del/$id/$idValue") . "' onclick='return confirm(\"您确定要删除么？\")' class='btn-del' title='$btnName'><i class='fa fa-trash' aria-hidden='true'></i></a>";
+    $btn_html = "<a href='" . url('/' . M . '/' . C . "/del/$id/$idValue") . "' onclick='return confirm(\"您确定要删除么？\")' class='layui-btn layui-btn-xs layui-btn-danger' title='$btnName'>$btnName</a>";
     return $btn_html;
 }
 
 // 获取修改按钮
-function get_btn_mod($idValue, $id = 'id', $btnName = '修改内容')
+function get_btn_mod($idValue, $id = 'id', $btnName = '修改')
 {
     $user_level = session('levels');
     if (! in_array('/' . M . '/' . C . '/mod', $user_level) && session('id') != 1)
         return;
-    $btn_html = "<a href='" . url("/" . M . '/' . C . "/mod/$id/$idValue") . "?backurl=" . URL . "'  class='btn-mod' title='$btnName'><i class='fa fa-pencil-square-o' aria-hidden='true'></i></a>";
+    $btn_html = "<a href='" . url("/" . M . '/' . C . "/mod/$id/$idValue") . "?backurl=" . URL . "'  class='layui-btn layui-btn-xs'>$btnName</a>";
     return $btn_html;
 }
 
 // 获取其它按钮
-function get_btn($btnName, $ico, $btnAction, $idValue, $id = 'id')
+function get_btn($btnName, $theme, $btnAction, $idValue, $id = 'id')
 {
     $user_level = session('levels');
     if (! in_array('/' . M . '/' . C . '/' . $btnAction, $user_level) && session('id') != 1)
         return;
-    $btn_html = "<a href='" . url("/" . M . '/' . C . "/$btnAction/$id/$idValue") . "'  class='btn-other' title='$btnName'><i class='fa $ico'></i></a>";
+    $btn_html = "<a href='" . url("/" . M . '/' . C . "/$btnAction/$id/$idValue") . "'  class='layui-btn layui-btn-xs $theme'>$btnName</a>";
     return $btn_html;
 }
 

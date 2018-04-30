@@ -90,7 +90,7 @@ class UserModel extends Model
     // 添加用户
     public function addUser(array $data, array $roles)
     {
-        $result = parent::table('ay_user')->autoTime()->insert($data);
+        $result = parent::table('ay_user')->insert($data);
         if ($result && $roles) {
             $this->addUserRole($data['ucode'], $roles);
         }
@@ -110,9 +110,7 @@ class UserModel extends Model
     // 修改用户资料
     public function modUser($ucode, $data, array $roles = null)
     {
-        $result = parent::table('ay_user')->where("ucode='$ucode'")
-            ->autoTime()
-            ->update($data);
+        $result = parent::table('ay_user')->where("ucode='$ucode'")->update($data);
         if ($result) {
             if (is_array($roles)) {
                 $this->delUserRole($ucode);

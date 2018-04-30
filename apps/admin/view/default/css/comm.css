@@ -145,6 +145,15 @@
 	color:#666;
 }
 
+.table-two tbody td{
+	text-align:left;
+} 
+
+.table-two tbody th {
+    text-align:right;
+    width:110px;
+}
+
 .btn-del,.btn-add,.btn-mod{
 	padding:0px 5px;
 }

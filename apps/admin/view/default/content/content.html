@@ -73,9 +73,9 @@
 			                    </td>
 			                    <td>[value->visits]</td>
 		                        <td>
-		                        	<a href="{SITE_DIR}/index.php/content/[value->id].html" class="btn-more" title="浏览内容" target="_blank"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+		                        	<a href="{SITE_DIR}/index.php/content/[value->id].html" class="layui-btn layui-btn-xs layui-btn-primary"  target="_blank">查看</a>
 		                            {fun=get_btn_del($value->id)}
-		                            <a href="{url./admin/Content/mod/mcode/'.get('mcode').'/id/'.$value->id.'}?backurl={URL}" class="btn-mod" title="修改内容"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+		                            <a href="{url./admin/Content/mod/mcode/'.get('mcode').'/id/'.$value->id.'}?backurl={URL}" class="layui-btn layui-btn-xs" >修改</a>
 		                        </td>
 		                    </tr>
 		                    {/foreach}

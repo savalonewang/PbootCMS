@@ -7,117 +7,121 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
-				<table class="layui-table">
+				<table class="layui-table table-two">
 				   <thead>
 					    <tr>
-			               <th width="150px">参数项目</th>
-			               <th>参数值</th>
+			               <th colspan=2>服务器基本信息</th>
 					    </tr> 
 				   </thead>
 				   <tbody>
 						<tr>
-							<td>应用版本</td>
+							<th>应用版本</th>
 							<td>{APP_VERSION}</td>
 						   </tr>
 						   <tr>
-							<td>框架版本</td>
+							<th>框架版本</th>
 							<td>{CORE_VERSION}</td>
 						</tr>
 						<tr>
-							<td>主机系统</td>
+							<th>主机系统</th>
 							<td>{$server->php_os}</td>
 						</tr>
 						<tr>
-						      <td>访问地址</td>
+						      <th>访问地址</th>
 						      <td>{$server->http_host}</td>
 						  </tr>
 						  <tr>
-						      <td>主机名称</td>
+						      <th>主机名称</th>
 						      <td>{$server->server_name}</td>
 						  </tr>
 						
 						  <tr>
-						       <td>主机地址</td>
+						       <th>主机地址</th>
 						       <td>{$server->server_addr}</td>
 						  </tr>
 						  <tr>
-						      <td>主机端口</td>
+						      <th>主机端口</th>
 						      <td>{$server->server_port}</td>
 						  </tr>
 						
 						 <tr>
-						      <td>WEB软件</td>
+						      <th>WEB软件</th>
 						      <td>{$server->server_software}</td>
 						  </tr>	  
 						  
 						  <tr>
-						     <td>PHP版</td>
+						     <th>PHP版</th>
 						     <td>{$server->php_version}</td>
 						 </tr>
 						
 						<tr>
-						     <td>数据库驱动</td>
+						     <th>数据库驱动</th>
 						     <td>{$server->db_driver}</td>
 						 </tr>
 						
 						
 						<tr>
-						     <td>文件上传限制</td>
+						     <th>文件上传限制</th>
 						     <td>{$server->upload_max_filesize}</td>
 						</tr>
 						   
 						<tr>
-						    <td>表单提交限制</td>
+						    <th>表单提交限制</th>
 						    <td>{$server->post_max_size}</td>
 						</tr>
 						
 						<tr>
-						     <td>最大提交数量</td>
+						     <th>最大提交数量</th>
 						     <td>{$server->max_file_uploads}</td>
 						</tr>
 						
 						<tr>
-						     <td>分配内存限制</td>
+						     <th>分配内存限制</th>
 						     <td>{$server->memory_limit}</td>
 						</tr>
 						
 						<tr>
-						     <td>GD库支持</td>
+						     <th>GD库支持</th>
 						     <td>{$server->gd}</td>
 						</tr>
 						
 						<tr>
-						    <td>IMAP支持</td>
+						    <th>Imap支持</th>
+						    <td>{$server->imap}</td>
+						</tr>
+						
+						<tr>
+						    <th>Sockets支持</th>
 						    <td>{$server->imap}</td>
 						</tr>
 						
 						 <tr>
-						     <td>SendMail支持</td>
+						     <th>SendMail支持</th>
 						     <td>{$server->standard}</td>
 						</tr>
 						   
 						<tr>
-						    <td>Curl支持</td>
+						    <th>Curl支持</th>
 						    <td>{$server->curl}</td>
 						</tr>
 						
 						<tr>
-						    <td>站点目录</td>
+						    <th>站点目录</th>
 						    <td>{$server->document_root}</td>
 						</tr>
 						
 						<tr>
-						    <td>PHP配置文件</td>
+						    <th>PHP配置文件</th>
 						    <td>{$server->php_ini}</td>
 						</tr>
 						
 						<tr>
-						    <td>会话路径</td>
+						    <th>会话路径</th>
 						    <td>{$server->session_save_path}</td>
 						</tr>
 						
 						<tr>
-						   <td>加速模块支持</td>
+						   <th>加速模块支持</th>
 						    <td>
 						          pthreads：{$server->pthreads}；
 						          XCache：{$server->xcache}；
@@ -131,7 +135,7 @@
 						</tr>
 						
 						<tr>
-						    <td>已加载模块</td>
+						    <th>已加载模块</th>
 						    <td>{$server->extensions}</td>
 						</tr>               
 					</tbody>

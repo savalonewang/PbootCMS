@@ -585,11 +585,13 @@ function get_server_info()
     $data['max_file_uploads'] = ini_get('max_file_uploads');
     // 内存限制
     $data['memory_limit'] = ini_get('memory_limit');
-    // 检测gd库是否存在
+    // 检测gd扩展
     $data['gd'] = extension_loaded('gd') ? YES : NO;
-    // 检测imap库是否存在
+    // 检测imap扩展
     $data['imap'] = extension_loaded('imap') ? YES : NO;
-    // 检测imap库是否存在
+    // 检测socket扩展
+    $data['sockets'] = extension_loaded('sockets') ? YES : NO;
+    // 检测curl扩展
     $data['curl'] = extension_loaded('curl') ? YES : NO;
     // 会话保存路径
     $data['session_save_path'] = session_save_path();

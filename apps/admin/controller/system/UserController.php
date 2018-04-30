@@ -91,7 +91,9 @@ class UserController extends Controller
                 'login_count' => 0,
                 'last_login_ip' => 0,
                 'create_user' => session('username'),
-                'update_user' => session('username')
+                'update_user' => session('username'),
+                'create_time' => get_datetime(),
+                'update_time' => '0000-00-00 00:00:00'
             );
             
             // 执行添加

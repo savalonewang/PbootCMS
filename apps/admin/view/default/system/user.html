@@ -36,9 +36,7 @@
 	                    <th>用户角色</th>
 	                    <th>登录次数</th>
 	                    <th>最后登录IP</th>
-	                    <th>添加人员</th>
-	                    <th>修改人员</th>
-	                    <th>添加时间</th>
+	                    <th>最后登陆时间</th>
 	                    <th>操作</th>
 	                </tr>
 	                
@@ -58,11 +56,11 @@
 	                    <td>[value->rolename]</td>
 	                    <td>[value->login_count]</td>
 	                    <td>{fun=@long2ip($value->last_login_ip)}</td>
-	                    <td>[value->create_user]</td>
-	                    <td>[value->update_user]</td>
-	                    <td>[value->create_time]</td>
+	                    <td>[value->update_time]</td>
 	                    <td>
-	                        {fun=get_btn_del($value->ucode,'ucode')}
+	                    	{if($value->id!=1)}
+	                        	{fun=get_btn_del($value->ucode,'ucode')}
+	                        {/if}
 	                        {fun=get_btn_mod($value->ucode,'ucode')}
 	                    </td>
 	                </tr>
