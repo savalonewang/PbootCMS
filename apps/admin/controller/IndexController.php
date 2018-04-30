@@ -97,10 +97,10 @@ class IndexController extends Controller
             session('area_map', $login->area_map); // 区域代码名称映射表
             session('area_tree', $login->area_tree); // 用户区域树
             
-            $this->log('登陆成功!');
+            $this->log('登入成功!');
             json(1, url('admin/Index/home'));
         } else {
-            $this->log('登陆失败!');
+            $this->log('登入失败!');
             json(0, '用户名或密码错误！');
         }
     }
@@ -148,12 +148,12 @@ class IndexController extends Controller
                 if ($this->model->modUserInfo($data)) {
                     session('username', post('username'));
                     session('realname', post('realname'));
-                    $this->log('用户修改密码成功！');
-                    success('用户密码修改成功！', - 1);
+                    $this->log('用户资料成功！');
+                    success('用户资料修改成功！', - 1);
                 }
             } else {
-                $this->log('用户修改密码失败！');
-                alert_back('当前密码错误！');
+                $this->log('用户资料修改时当前密码错误！');
+                alert_location('当前密码错误！', - 1);
             }
         }
         $this->display('system/ucenter.html');

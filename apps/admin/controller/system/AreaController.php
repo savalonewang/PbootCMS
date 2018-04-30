@@ -35,6 +35,12 @@ class AreaController extends Controller
         $area_tree = $this->model->getList();
         $areas = $this->makeAreaList($area_tree);
         $this->assign('areas', $areas);
+        
+        // 区域下拉表
+        $area_tree = $this->model->getSelect();
+        $area_select = $this->makeAreaSelect($area_tree);
+        $this->assign('area_select', $area_select);
+        
         $this->display('system/area.html');
     }
 
@@ -155,7 +161,7 @@ class AreaController extends Controller
                 $select = '';
             }
             if (get('acode') != $value->acode) { // 不显示本身，避免出现自身为自己的父节点
-                $list_html .= "<option value='{$value->acode}' $select>{$this->blank}{$value->acode} {$value->name}";
+                $list_html .= "<option value='{$value->acode}' $select>{$this->blank}{$value->acode} {$value->name}</option>";
             }
             // 子菜单处理
             if ($value->son) {

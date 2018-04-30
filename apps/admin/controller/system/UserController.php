@@ -32,6 +32,10 @@ class UserController extends Controller
             $result = $this->model->getList();
         }
         $this->assign('users', $result);
+        // 角色列表
+        $role_model = model('admin.system.Role');
+        $this->assign('roles', $role_model->getSelect());
+        
         $this->display('system/user.html');
     }
 

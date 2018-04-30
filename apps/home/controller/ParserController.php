@@ -1446,6 +1446,10 @@ class ParserController extends Controller
             for ($i = 0; $i < $count; $i ++) {
                 $flag = '';
                 $out_html = '';
+                // 对于无参数函数不执行解析工作
+                if (preg_match('/[\w]+\(\)/', $matches[1][$i])) {
+                    continue;
+                }
                 eval('if(' . $matches[1][$i] . '){$flag="if";}else{$flag="else";}');
                 if (preg_match('/([\s\S]*)?\{else\}([\s\S]*)?/', $matches[2][$i], $matches2)) { // 判断是否存在else
                     switch ($flag) {

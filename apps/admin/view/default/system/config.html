@@ -1,136 +1,167 @@
 {include file='common/head.html'}
 
-<div class="container">
+<div class="layui-body">
 	{if([$basic])}
-     <div class="panel panel-default">
-     	<div class="panel-heading">
-        	<i class="fa fa-list" aria-hidden="true"></i> 配置信息
-        </div>
-		<div class="panel-body">
-            <form action="{url./admin/Config/index}" method="post" class="col-sm-6">
-           	   
-           	   <div class="form-group">
-                	<label>手机版</label>
-                    <div>
-                    	<label class="radio-inline"><input type="radio" name="open_wap" value="1" {if([$configs['open_wap']['value']]==1)} checked="checked" {/if}>开</label>
-                    	<label class="radio-inline"><input type="radio" name="open_wap" value="0" {if([$configs['open_wap']['value']]==0)} checked="checked" {/if}>关</label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                	<label>留言验证码</label>
-                    <div>
-                    	<label class="radio-inline"><input type="radio" name="message_check_code" value="1" {if([$configs['message_check_code']['value']]==1)} checked="checked" {/if}>开</label>
-                    	<label class="radio-inline"><input type="radio" name="message_check_code" value="0" {if([$configs['message_check_code']['value']]==0)} checked="checked" {/if}>关</label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                	<label>留言发送邮件</label>
-                    <div>
-                    	<label class="radio-inline"><input type="radio" name="message_send_mail" value="1" {if([$configs['message_send_mail']['value']]==1)} checked="checked" {/if}>开</label>
-                    	<label class="radio-inline"><input type="radio" name="message_send_mail" value="0" {if([$configs['message_send_mail']['value']]==0)} checked="checked" {/if}>关</label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-					<label for="name">留言发送到邮箱</label>
-					<input type="text" id="weixin_appid" name="message_send_to" value="{$configs['message_send_to']['value']}"  class="form-control" placeholder="支持多个邮箱用逗号隔开！"> 
-				</div>
-
-               <div class="form-group">
-                	<label>后台验证码</label>
-                    <div>
-                    	<label class="radio-inline"><input type="radio" name="admin_check_code" value="1" {if([$configs['admin_check_code']['value']]==1)} checked="checked" {/if}>开</label>
-                    	<label class="radio-inline"><input type="radio" name="admin_check_code" value="0" {if([$configs['admin_check_code']['value']]==0)} checked="checked" {/if}>关</label>
-                    </div>
-                </div>
-                
-                <hr>
-                
-                <div class="form-group">
-					<label>API开关</label>
-					 <div>
-                    	<label class="radio-inline"><input type="radio" name="api_open" value="1" {if(@[$configs['api_open']['value']]==1)} checked="checked" {/if}>开</label>
-                    	<label class="radio-inline"><input type="radio" name="api_open" value="0" {if(@[$configs['api_open']['value']]==0)} checked="checked" {/if}>关</label>
-                    </div>
-				</div>
-				
-				<div class="form-group">
-					<label>API强制认证</label>
-					 <div>
-                    	<label class="radio-inline"><input type="radio" name="api_auth" value="1" {if(@[$configs['api_auth']['value']]==1)} checked="checked" {/if}>开</label>
-                    	<label class="radio-inline"><input type="radio" name="api_auth" value="0" {if(@[$configs['api_auth']['value']]==0)} checked="checked" {/if}>关</label>
-                    </div>
-				</div>
-				
-				<div class="form-group">
-					<label>API认证用户</label>
-                    <input type="text" id="api_appid" name="api_appid" value="{$configs['api_appid']['value']}"  class="form-control"> 
-				</div>
-				
-				<div class="form-group">
-					<label>API认证密钥</label>
-                    <input type="password" id="api_secret" name="api_secret" value="{$configs['api_secret']['value']}"  class="form-control"> 
-				</div>
-				
-				<hr>
-                <!-- 
-                <div class="form-group">
-					<label>微信APPID</label>
-					<input type="text" id="weixin_appid" name="weixin_appid" value="{$configs['weixin_appid']['value']}"  class="form-control"> 
-				</div>
-                  
-				<div class="form-group">
-					<label>微信SECRET</label>
-					<input type="text" id="weixin_secret" name="weixin_secret" value="{$configs['weixin_secret']['value']}"  class="form-control"> 
-				</div>
-				 -->
-				 
-				<button type="submit"  class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
-            </form>
-         </div>
-    </div>
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">基本配置</li>
+	    <li  lay-id="t2">API认证</li>
+	  </ul>
+		  <div class="layui-tab-content">
+		  	   <div class="layui-tab-item layui-show">
+		  	   	   <form action="{url./admin/Config/index}" method="post" class="layui-form">
+		  	   	   
+	  	   		 	<div class="layui-form-item">
+	                     <label class="layui-form-label">独立手机版</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="open_wap" value="1" {if([$configs['open_wap']['value']]==1)} checked="checked" {/if} title="启用">
+							<input type="radio" name="open_wap" value="0" {if([$configs['open_wap']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">留言验证码</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="message_check_code" value="1" {if([$configs['message_check_code']['value']]==1)} checked="checked" {/if} title="启用">
+							<input type="radio" name="message_check_code" value="0" {if([$configs['message_check_code']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">留言发送邮件</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="message_send_mail" value="1" {if([$configs['message_send_mail']['value']]==1)} checked="checked" {/if} title="启用">
+							<input type="radio" name="message_send_mail" value="0" {if([$configs['message_send_mail']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">留言接收邮箱</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="message_send_to" value="{$configs['message_send_to']['value']}" placeholder="请输入留言接收邮箱"  class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">后台验证码</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="admin_check_code" value="1" {if([$configs['admin_check_code']['value']]==1)} checked="checked" {/if} title="启用">
+							<input type="radio" name="admin_check_code" value="0" {if([$configs['admin_check_code']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit name="submit" value="basic">立即提交</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						 </div>
+					</div>
+	              </form>
+		  	   </div>
+		  	   
+		  	   <div class="layui-tab-item">
+		  	   	  <form action="{url./admin/Config/index}" method="post" class="layui-form">
+		  	   		<div class="layui-form-item">
+	                     <label class="layui-form-label">API状态</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="api_open" value="1" {if(@[$configs['api_open']['value']]==1)} checked="checked" {/if} title="启用">
+							<input type="radio" name="api_open" value="0" {if(@[$configs['api_open']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">API强制认证</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="api_auth" value="1" {if(@[$configs['api_auth']['value']]==1)} checked="checked" {/if} title="启用">
+							<input type="radio" name="api_auth" value="0" {if(@[$configs['api_auth']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                      <label class="layui-form-label">API认证用户</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="api_appid" value="{$configs['api_appid']['value']}" placeholder="请输入API认证用户名" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                 <div class="layui-form-item">
+	                      <label class="layui-form-label">API认证密钥</label>
+	                     <div class="layui-input-block">
+	                     	<input type="password" name="api_secret" value="{$configs['api_secret']['value']}" placeholder="请输入API认证密钥"  class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit name="submit" value="api">立即提交</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						 </div>
+					</div>
+				 </form>
+		  	   </div> 
+		  </div>
+	 </div>
     {/if}
     
     {if([$email])}
-     <div class="panel panel-default">
-     	<div class="panel-heading">
-        	<i class="fa fa-list" aria-hidden="true"></i> 邮件配置
-        </div>
-		<div class="panel-body">
-            <form action="{url./admin/Config/email}" method="post" class="col-sm-6">
-				<div class="form-group">
-					<label for="name">SMTP服务器</label>
-					<input type="text" id="smtp_server" name="smtp_server" value="{$configs['smtp_server']['value']}"  class="form-control"> 
+    
+    <div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">邮箱配置</li>
+	  </ul>
+	  
+	  <div class="layui-tab-content">
+	  	<div class="layui-tab-item layui-show">
+	  		<form action="{url./admin/Config/email}" method="post" class="layui-form">
+	 	   		<div class="layui-form-item">
+	                    <label class="layui-form-label">SMTP服务器</label>
+	                   <div class="layui-input-block">
+	                   	<input type="text" name="smtp_server" value="{$configs['smtp_server']['value']}" placeholder="请输入SMTP服务器" class="layui-input">
+	                   </div>
+	             </div>
+		  	   
+	
+	  	   		<div class="layui-form-item">
+	                    <label class="layui-form-label">SMTP端口</label>
+	                   <div class="layui-input-block">
+	                   	<input type="text" name="smtp_port" value="{$configs['smtp_port']['value']}" placeholder="请输入SMTP端口" class="layui-input">
+	                   </div>
+	             </div>
+		  	   
+		  	    <div class="layui-form-item">
+	                <label class="layui-form-label">是否为SSL</label>
+	                <div class="layui-input-block">
+	                   	<input type="radio" name="smtp_ssl" value="1" {if([$configs['smtp_ssl']['value']]==1)} checked="checked" {/if} title="是">
+						<input type="radio" name="smtp_ssl" value="0" {if([$configs['smtp_ssl']['value']]==0)} checked="checked" {/if} title="否">
+	           		</div>
+	           </div>
+	           
+	   			<div class="layui-form-item">
+	                  <label class="layui-form-label">邮箱账号</label>
+	                 <div class="layui-input-block">
+	                 	<input type="text" name="smtp_username" value="{$configs['smtp_username']['value']}" placeholder="请输入邮箱账号" class="layui-input">
+	                 </div>
+	            </div>
+	   
+	
+	   			<div class="layui-form-item">
+	                  <label class="layui-form-label">邮箱密码</label>
+	                 <div class="layui-input-block">
+	                 	<input type="text" name="smtp_password" value="{$configs['smtp_password']['value']}" placeholder="请输入邮箱密码" class="layui-input">
+	                 </div>
+	            </div>
+		
+		  	   
+		  	   <div class="layui-form-item">
+					 <div class="layui-input-block">
+					    <button class="layui-btn" lay-submit>立即提交</button>
+					    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					 </div>
 				</div>
-				
-				<div class="form-group">
-					<label for="name">SMTP端口</label>
-					<input type="text" id="smtp_port" name="smtp_port" value="{$configs['smtp_port']['value']}"  class="form-control"> 
-				</div>
-				
-				<div class="form-group">
-					<label>是否安全连接</label>
-					<div>
-						<label class="radio-inline"><input type="radio" name="smtp_ssl" value="1" {if([$configs['smtp_ssl']['value']]==1)} checked="checked" {/if}>是</label>
-						<label class="radio-inline"><input type="radio" name="smtp_ssl" value="0" {if([$configs['smtp_ssl']['value']]==0)} checked="checked" {/if}>否</label>
-					</div>
-				</div>
-				
-				<div class="form-group">
-					<label for="name">邮箱账号</label>
-					<input type="text" id="smtp_username" name="smtp_username" value="{$configs['smtp_username']['value']}"  class="form-control"> 
-				</div>
-				
-				<div class="form-group">
-					<label for="name">邮箱密码</label>
-					<input type="text" id="smtp_password" name="smtp_password" value="{$configs['smtp_password']['value']}"  class="form-control"> 
-				</div>
-				<button type="submit"  class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
-            </form>
-         </div>
-    </div>
+          	</form> 
+          </div>
+	  </div>
+	</div>
     {/if}
 </div>
 

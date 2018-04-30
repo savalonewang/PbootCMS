@@ -14,7 +14,7 @@ define('URL_BLIND', 'home');
 // PHP版本检测
 if (PHP_VERSION < '5.3') {
     header('Content-Type:text/html; charset=utf-8');
-    exit('您服务器PHP的版本太低，程序要求PHP版本不少于5.3');
+    exit('您服务器PHP的版本太低，程序要求PHP版本不小于5.3');
 }
 
 // 引用内核启动文件

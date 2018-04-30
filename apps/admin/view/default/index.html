@@ -1,86 +1,70 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>PbootCMS-管理中心-V{APP_VERSION}</title>
-<meta name="keywords" content="{$site->keywords}">
-<meta name="description" content="{$site->description}">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link type="text/css" href="{APP_THEME_DIR}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<script type="text/javascript" src="{APP_THEME_DIR}/bootstrap/js/jquery.min.js"></script>
-
-<style>
-    body {
-      padding-top: 40px;
-      padding-bottom: 40px;
-	  background: #eee;
-    }
-    .form-signin {
-      max-width: 400px;
-      padding: 15px;
-      margin: 0 auto;
-    }
-	.form-signin-heading{
-		font-size:28px;
-	}
-	.copyright{
-		text-align:center;
-		color:#999;
-		font-size:12px;
-	}
-</style>
-
+<link rel="stylesheet" href="{APP_THEME_DIR}/layui/css/layui.css">
+<link rel="stylesheet" href="{APP_THEME_DIR}/font-awesome/css/font-awesome.min.css" type="text/css">
+<link rel="stylesheet" href="{APP_THEME_DIR}/css/login.css">
+<script type="text/javascript" src="{APP_THEME_DIR}/js/jquery-1.9.1.min.js"></script>
 </head>
+
 <body>
-
-<div class="container">
-	<form action="{url./admin/Index/login}" method="post" class="form-signin"  role="form" id="dologin">
-       
-       	  <h2 class="form-signin-heading text-center">PbootCMS-管理中心</h2>
-          <div class="form-group">
-          		<label for="username" class="sr-only">用户名</label>
-          		<input type="text" name="username" id="username" class="form-control input-lg" placeholder="请输入用户名" required>
-           </div>
-           
-           <div class="form-group">
-           		<label for="password" class="sr-only">密码</label>
-           		<input type="password" name="password" id="password" class="form-control input-lg" placeholder="请输入密码" required>
-           </div>
-           
-           {if(session('config.admin_check_code'))}
-           <div class="form-group">
-	           	<div class="row">
-	               	<div class="col-xs-7" style="padding-right:0px;">
-	                   	<label for="checkcode" class="sr-only">验证码</label>
-	                   	<input type="text" id="checkcode" name="checkcode" class="form-control col-sm-4 text-uppercase  input-lg" placeholder="请输入验证码" required> 
-	               	</div>
-	               	<div class="col-xs-5" style="padding-left:5px;">
-	                   <img title="点击刷新" class="img-responsive"  src="{CORE_DIR}/code.php" onclick="this.src='{CORE_DIR}/code.php?'+Math.round(Math.random()*10);"></img>
-	               	</div>
-	          	</div>
-           </div>
-           {/if}
-           
-           <div class="form-group">
-           		<button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
-           </div>
-          
-           <div class="copyright">
-	           	Copyright &copy; 2018-2019 PbootCMS All Rights Reserved.
-           	</div>
-           
-           
-	</form>
+	
+<div class="user-login" >
+	<div class="user-login-main">
+		<div class="user-login-header">
+			<h2>PbootCMS</h2>
+			<p>高效、简洁、强悍的PHP企业网站管理系统</p>
+		</div>
+		
+		<form action="{url./admin/Index/login}" method="post" class="layui-form" id="dologin">
+			<div class="user-login-box">
+				<div class="layui-form-item">
+					<label class="user-login-icon layui-icon layui-icon-username"></label>
+					<input name="username" id="username" type="text" lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-form-item">
+					<label class="user-login-icon layui-icon layui-icon-password"></label>
+					<input name="password" id="password" type="password" lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-row">
+						<div class="layui-col-xs7 layui-col-sm8">
+							<label class="user-login-icon layui-icon layui-icon-vercode" ></label>
+							<input name="checkcode" id="checkcode" type="text" lay-verify="required" placeholder="验证码" autocomplete="off" class="layui-input">
+						</div>
+						<div class="layui-col-xs5 layui-col-sm4">
+							<div style="margin-left: 10px;"> 
+								<img title="点击刷新"  src="{CORE_DIR}/code.php" class="user-login-codeimg" onclick="this.src='{CORE_DIR}/code.php?'+Math.round(Math.random()*10);"></img> 
+						    </div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login-submit" >登 入</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	<div class="layui-trans user-login-footer">
+		<p>© 2018 <a href="http://www.pbootcms.com/" target="_blank">pbootcms.com</a></p>
+		<p> <span><a href="http://www.hnaoyun.com" target="_blank">翱云科技</a></span> <span><a href="http://demo.pbootcms.com" target="_blank">在线演示</a></span> <span><a href="http://www.pbootcms.com" target="_blank">前往官网</a></span> </p>
+	</div>
+	
 </div>
+	
+	
+<script type="text/javascript" src="{APP_THEME_DIR}/layui/layui.all.js"></script> 
+<script type="text/javascript" src="{APP_THEME_DIR}/js/mylayui.js"></script> 
 
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 --> 
 <!--[if lt IE 9]>
-  <script src="{APP_THEME_DIR}/bootstrap/js/html5shiv.min.js"></script>
-  <script src="{APP_THEME_DIR}/bootstrap/js/respond.min.js"></script>
-<![endif]-->
-<script type="text/javascript" src="{APP_THEME_DIR}/bootstrap/js/bootstrap.min.js"></script>
-<!-- Bootstrap End-->
-<script type="text/javascript" src="{APP_THEME_DIR}/js/login.js"></script>
+  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]--> 
 
 <script>
 var _hmt = _hmt || [];(function() {
@@ -89,6 +73,5 @@ var _hmt = _hmt || [];(function() {
 	var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);
 })();
 </script>
-
 </body>
 </html>

@@ -1,161 +1,144 @@
 {include file='common/head.html'}
 
-<div class="container">
-	<div class="panel panel-default">
-    	<div class="panel-heading"><i class="fa fa-list" aria-hidden="true"></i> 服务器基本信息</div>
-        <div class="panel-body">
-        	<div class="row">
-        		<dl class="dl-horizontal col-sm-6">
-                    <dt>应用版本：</dt>
-                    <dd>{APP_VERSION}</dd>
-                </dl>
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>框架版本：</dt>
-                    <dd>{CORE_VERSION}</dd>
-                </dl>
-            </div>
-            <div class="row">
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>主机系统：</dt>
-                    <dd>{$server->php_os}</dd>
-                </dl>
-            
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>访问地址：</dt>
-                    <dd>{$server->http_host}</dd>
-                </dl>
-            </div>
-
-            <div class="row">
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>主机名称：</dt>
-                     <dd>{$server->server_name}</dd>
-                 </dl>
-             
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>主机地址：</dt>
-                     <dd>{$server->server_addr}</dd>
-                 </dl>
-            </div>
-            
-            <div class="row">
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>主机端口：</dt>
-                    <dd>{$server->server_port}</dd>
-                </dl>
-            
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>WEB软件：</dt>
-                    <dd>{$server->server_software}</dd>
-                </dl>
-            </div>
-            
-            <div class="row">
-               <dl class="dl-horizontal col-sm-6">
-                   <dt>PHP版：</dt>
-                   <dd>{$server->php_version}</dd>
-               </dl>
-           
-               <dl class="dl-horizontal col-sm-6">
-                   <dt>数据库驱动：</dt>
-                   <dd>{$server->db_driver}</dd>
-               </dl>
-            </div>
-
-            <div class="row">
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>文件上传限制：</dt>
-                     <dd>{$server->upload_max_filesize}</dd>
-                 </dl>
-                 
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>表单提交限制：</dt>
-                     <dd>{$server->post_max_size}</dd>
-                 </dl>
-            </div>
-            
-            <div class="row">
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>最大提交数量：</dt>
-                     <dd>{$server->max_file_uploads}</dd>
-                 </dl>
-
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>分配内存限制：</dt>
-                     <dd>{$server->memory_limit}</dd>
-                 </dl>
-            </div>
-            
-            <div class="row">
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>GD库支持：</dt>
-                    <dd>{$server->gd}</dd>
-                </dl>
-            
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>IMAP支持：</dt>
-                    <dd>{$server->imap}</dd>
-                </dl>
-            </div>
-            
-            <div class="row">
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>SendMail支持：</dt>
-                     <dd>{$server->standard}</dd>
-                 </dl>
-                 
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>Curl支持：</dt>
-                     <dd>{$server->curl}</dd>
-                 </dl>
-            </div>
-            
-           <div class="row">
-                <dl class="dl-horizontal col-sm-12">
-                    <dt>站点目录：</dt>
-                    <dd>{$server->document_root}</dd>
-                </dl>
-            </div>
-            
-            <div class="row">
-                <dl class="dl-horizontal col-sm-12">
-                    <dt>PHP配置文件：</dt>
-                    <dd>{$server->php_ini}</dd>
-                </dl>
-            </div>
-            
-            <div class="row">
-                <dl class="dl-horizontal col-sm-12">
-                    <dt>会话路径：</dt>
-                    <dd>{$server->session_save_path}</dd>
-                </dl>
-            </div>
-            
-            <hr>
-            <div class="row">
-                <dl class="dl-horizontal col-xs-12">
-                    <dt>加速模块支持：</dt>
-                    <dd>
-                        pthreads：{$server->pthreads}；
-                        XCache：{$server->xcache}；
-                        APC：{$server->apc}； 
-                        eAccelerator：{$server->eaccelerator}； 
-                        WinCache：{$server->wincache}； 
-                        ZendOPcache：{$server->zendopcache}；
-                        Memcache：{$server->memcache}； 
-                        Memcached：{$server->memcached}；
-                    </dd>
-                </dl>
-            </div>
-            
-            <div class="row">
-                <dl class="dl-horizontal col-xs-12">
-                    <dt>已加载模块：</dt>
-                    <dd>{$server->extensions}</dd>
-                </dl>
-            </div>
-        </div>
-    </div>
+<div class="layui-body">
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">服务器基本信息</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+				<table class="layui-table">
+				   <thead>
+					    <tr>
+			               <th width="150px">参数项目</th>
+			               <th>参数值</th>
+					    </tr> 
+				   </thead>
+				   <tbody>
+						<tr>
+							<td>应用版本</td>
+							<td>{APP_VERSION}</td>
+						   </tr>
+						   <tr>
+							<td>框架版本</td>
+							<td>{CORE_VERSION}</td>
+						</tr>
+						<tr>
+							<td>主机系统</td>
+							<td>{$server->php_os}</td>
+						</tr>
+						<tr>
+						      <td>访问地址</td>
+						      <td>{$server->http_host}</td>
+						  </tr>
+						  <tr>
+						      <td>主机名称</td>
+						      <td>{$server->server_name}</td>
+						  </tr>
+						
+						  <tr>
+						       <td>主机地址</td>
+						       <td>{$server->server_addr}</td>
+						  </tr>
+						  <tr>
+						      <td>主机端口</td>
+						      <td>{$server->server_port}</td>
+						  </tr>
+						
+						 <tr>
+						      <td>WEB软件</td>
+						      <td>{$server->server_software}</td>
+						  </tr>	  
+						  
+						  <tr>
+						     <td>PHP版</td>
+						     <td>{$server->php_version}</td>
+						 </tr>
+						
+						<tr>
+						     <td>数据库驱动</td>
+						     <td>{$server->db_driver}</td>
+						 </tr>
+						
+						
+						<tr>
+						     <td>文件上传限制</td>
+						     <td>{$server->upload_max_filesize}</td>
+						</tr>
+						   
+						<tr>
+						    <td>表单提交限制</td>
+						    <td>{$server->post_max_size}</td>
+						</tr>
+						
+						<tr>
+						     <td>最大提交数量</td>
+						     <td>{$server->max_file_uploads}</td>
+						</tr>
+						
+						<tr>
+						     <td>分配内存限制</td>
+						     <td>{$server->memory_limit}</td>
+						</tr>
+						
+						<tr>
+						     <td>GD库支持</td>
+						     <td>{$server->gd}</td>
+						</tr>
+						
+						<tr>
+						    <td>IMAP支持</td>
+						    <td>{$server->imap}</td>
+						</tr>
+						
+						 <tr>
+						     <td>SendMail支持</td>
+						     <td>{$server->standard}</td>
+						</tr>
+						   
+						<tr>
+						    <td>Curl支持</td>
+						    <td>{$server->curl}</td>
+						</tr>
+						
+						<tr>
+						    <td>站点目录</td>
+						    <td>{$server->document_root}</td>
+						</tr>
+						
+						<tr>
+						    <td>PHP配置文件</td>
+						    <td>{$server->php_ini}</td>
+						</tr>
+						
+						<tr>
+						    <td>会话路径</td>
+						    <td>{$server->session_save_path}</td>
+						</tr>
+						
+						<tr>
+						   <td>加速模块支持</td>
+						    <td>
+						          pthreads：{$server->pthreads}；
+						          XCache：{$server->xcache}；
+						          APC：{$server->apc}； 
+						          eAccelerator：{$server->eaccelerator}； 
+						          WinCache：{$server->wincache}； 
+						          ZendOPcache：{$server->zendopcache}；
+						          Memcache：{$server->memcache}； 
+						          Memcached：{$server->memcached}；
+						    </td>
+						</tr>
+						
+						<tr>
+						    <td>已加载模块</td>
+						    <td>{$server->extensions}</td>
+						</tr>               
+					</tbody>
+				</table>
+		    </div>
+	  </div>
+	</div>
 </div>
 
 {include file='common/foot.html'}

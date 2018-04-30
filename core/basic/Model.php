@@ -58,7 +58,7 @@ class Model
     private $selectSql = "SELECT %distinct% %field% FROM %table% %join% %where% %group% %having% %order% %limit% %union%";
 
     // 计数语句
-    private $countSql = "SELECT %distinct% COUNT(*) AS sum FROM %table% %join% %where% %group% %having% %limit%";
+    private $countSql = "SELECT %distinct% COUNT(*) AS sum FROM %table% %join% %where% %having% %limit%";
 
     // 插入语句
     private $insertSql = "INSERT INTO %table% %field% VALUES %value%";

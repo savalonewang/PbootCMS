@@ -33,6 +33,10 @@ class TypeController extends Controller
         }
         
         $this->assign('types', $result);
+        
+        // 类型选择
+        $this->assign('type_select', $this->model->getSelect());
+        
         $this->display('system/type.html');
     }
 

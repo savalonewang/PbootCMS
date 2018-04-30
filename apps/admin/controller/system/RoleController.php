@@ -29,6 +29,20 @@ class RoleController extends Controller
     {
         $this->assign('list', true);
         $this->assign('roles', $this->model->getList());
+        
+        // 数据区域选择
+        $area_model = model('admin.system.Area');
+        $area_tree = $area_model->getSelect();
+        $area_checkbox = $this->makeAreaCheckbox($area_tree);
+        $this->assign('area_checkbox', $area_checkbox);
+        
+        // 菜单权限表
+        $menu_model = model('admin.system.Menu');
+        $menu_level = $menu_model->getMenuLevel();
+        $menus = $menu_model->getSelect();
+        $menu_list = $this->makeLevelList($menus, $menu_level);
+        $this->assign('menu_list', $menu_list);
+        
         $this->display('system/role.html');
     }
 
@@ -82,7 +96,7 @@ class RoleController extends Controller
             
             // 数据区域选择
             $area_model = model('admin.system.Area');
-            $area_tree = $area_model->getList();
+            $area_tree = $area_model->getSelect();
             $area_checkbox = $this->makeAreaCheckbox($area_tree);
             $this->assign('area_checkbox', $area_checkbox);
             
@@ -108,15 +122,11 @@ class RoleController extends Controller
                 $checked = '';
             }
             if (! $values->son) { // 没有子类才显示选择框
-                $list_html .= "<label class='checkbox-inline'>{$this->blank}<input type='checkbox' $checked name='acodes[]' value='{$values->acode}'>{$values->acode} {$values->name}</label> ";
+                $list_html .= "<input type='checkbox' $checked name='acodes[]' value='{$values->acode}' title='{$values->acode}-{$values->name}'>";
             } else {
-                $this->blank .= '　　';
-                $list_html .= "<div>{$values->acode} {$values->name}</div> ";
                 $list_html .= $this->makeAreaCheckbox($values->son, $checkeds);
             }
         }
-        // 循环完后回归位置
-        $this->blank = substr($this->blank, 0, - 6);
         return $list_html;
     }
 
@@ -147,7 +157,7 @@ class RoleController extends Controller
                 error('"' . $value->name . '"菜单地址为空，请核对！');
             }
             
-            $string = "<label class='checkbox-inline'><input type='checkbox' $checked class='checkbox' name='levels[]' value='" . $value->url . "' id='{$value->mcode}'>浏览</label> ";
+            $string = "<input type='checkbox' $checked class='checkbox' lay-skin='primary'  name='levels[]' value='" . $value->url . "' title='浏览'>";
             $mcode = $value->mcode;
             if (array_key_exists($mcode, $menu_level)) {
                 foreach ($menu_level[$mcode] as $key2 => $value2) {
@@ -157,12 +167,12 @@ class RoleController extends Controller
                     } else {
                         $checked = '';
                     }
-                    $string .= "<label class='checkbox-inline'><input type='checkbox' $checked class='checkbox' name='levels[]' value='$url' id='{$mcode}-{$value2->value}'>{$value2->item} </label>";
+                    $string .= "<input type='checkbox' $checked class='checkbox'lay-skin='primary' name='levels[]' value='$url' title='{$value2->item}'>";
                 }
             }
             
             // 生成菜单html
-            $menu_html .= "<div class='row'><p class='col-xs-6'>{$this->blank} $ico {$value->name}</p><p class='col-xs-6'>$string</p></div>";
+            $menu_html .= "<div class='layui-row'><div class='layui-col-md3 layui-col-lg2' style='margin-top:10px;'>{$this->blank} $ico {$value->name}</div><div class='layui-col-md9'>$string</div></div>";
             
             // 子菜单处理
             if ($value->son) {

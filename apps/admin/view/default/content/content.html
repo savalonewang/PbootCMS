@@ -1,797 +1,619 @@
 {include file='common/head.html'}
 
-<div class="container">
+<div class="layui-body">
 	{if([$list])}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-        	<i class="fa fa-list" aria-hidden="true"></i> <a href="{url./admin/Content/index/mcode/'.get('mcode').'}">{$model_name}内容列表</a> 
-            <span class="pull-right">
-            	<a href="{url./admin/Content/add/mcode/'.get('mcode').'}?backurl={URL}" class="btn-add"><i class="fa fa-plus" aria-hidden="true"></i> 新 增</a>
-            </span>
-        </div>
-        
-        <div class="panel-body">
-        	<form action="{url./admin/Content/index/mcode/'.get('mcode').'}" method="get" class="col-sm-6">
-        		<div class="input-group"> 
-        			<div class="input-group-btn">
-                         <select name="scode" class="form-control input-sm" style="width:auto;">
-                         		<option value="">全部栏目</option>
-                                {$sort_select}
-                        </select>
-                    </div>
-                    <input type="text" name="keyword" class="form-control input-sm"  value="{$get.keyword}" placeholder="请输入要查找的标题内容,可为空！" >
-                    <div class="input-group-btn">
-                     	<button type="submit" class="btn btn-default btn-sm">查找</button>
-                    </div>
-        		</div>
-            </form>
-        </div>
-		
-		<form action="{url./admin/Content/mod}" method="post">
-        <div class="table-responsive">
-            <table class="table table-striped">
-            	<thead>
-                    <tr>
-                    	 <th><input type="checkbox" class="checkbox" id="checkall" title="全选"></th>
-                    	<th>内容ID</th>
-                        <th>栏目</th>
-                        <th>标题</th>
-                        <th>发布时间</th>
-                        <th>排序</th>
-                        <th>状态</th>
-                        <th>访问量</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foreach $contents(key,value)}
-                    <tr>
-                    	<td>
-                    		<input type="checkbox" class="checkbox checkitem" name="list[]" value="[value->id]">
-                    		<input type="hidden" name="listall[]" value="[value->id]">
-                    	</td>
-                    	<td>[value->id]</td>
-                        <td title="[value->scode]">[value->sort_name]</td>
-                        <td>
-                        [value->title]
-                        {if($value->istop)}
-                        	<span class="badge">置顶</span>
-                        {/if}
-                        {if($value->isrecommend)}
-                        	<span class="badge">推荐</span>
-                        {/if}
-                        {if($value->isheadline)}
-                        	<span class="badge">头条</span>
-                        {/if}
-                        </td>
-                        <td>[value->date]</td>
-                        <td><input type="text" class="list-input" name="sorting[]" value="[value->sorting]"></td>
-                        <td>
-                        {if($value->status)}
-	                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击关闭"></i></a>
-	                        {else}
-	                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击开启"></i></a>
-	                    {/if}
-	                    </td>
-	                    <td>[value->visits]</td>
-                        <td>
-                        	{fun=get_btn_more($value->id)}
-                            {fun=get_btn_del($value->id)}
-                            <a href="{url./admin/Content/mod/mcode/'.get('mcode').'/id/'.$value->id.'}?backurl={URL}" class="btn-mod" title="修改内容"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                        </td>
-                    </tr>
-                    {/foreach}
-                </tbody>
-            </table>
-        </div>
-     	<button type="submit" name="submit" value="sorting" class="btn btn-primary btn-fun"><i class="fa fa-save" aria-hidden="true"></i> 保存排序</button>
-        </form>
-     </div>
-	<div class="page">{$pagebar}</div>
-	{/if} 
-	
-	{if([$more])}
-		<div class="panel panel-default">
-	     	<div class="panel-heading">
-	        	<i class="fa fa-list" aria-hidden="true"></i> 内容详情 
-	        	<span class="pull-right">{fun=get_btn_back()}</span>
-	        </div>
-	        <div class="panel-body">
-	        	<div class="row">
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>栏目：</dt>
-		        		<dd>{$content->sort_name}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>副栏目：</dt>
-		        		<dd>{$content->subsort_name}</dd>
-		        	</dl>
-	        	</div>
-	        	
-	        	<div class="row">
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>标题：</dt>
-		        		<dd>{$content->title}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>标题颜色：</dt>
-		        		<dd>{$content->titlecolor}</dd>
-		        	</dl>
-	        	</div>
-	        	
-	        	<div class="row">
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>副标题：</dt>
-		        		<dd>{$content->subtitle}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>自定义路径名：</dt>
-		        		<dd>{$content->filename}</dd>
-		        	</dl>
-		        	
-	        	</div>
-	        	
-	        	<div class="row">
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>作者：</dt>
-		        		<dd>{$content->author}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>来源：</dt>
-		        		<dd>{$content->source}</dd>
-		        	</dl>
-	        	</div>
-	        	
-	        	<div class="row">
-	        		<dl class="dl-horizontal col-sm-6">
-		        		<dt>转外链接：</dt>
-		        		<dd>{$content->outlink}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>发布时间：</dt>
-		        		<dd>{$content->date}</dd>
-		        	</dl>
-		        	
-	        	</div>
-	        	
-	        	<div class="row">
-	        		<dl class="dl-horizontal col-sm-6">
-		        		<dt>缩略图：</dt>
-		        		<dd>{$content->ico}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>图片：</dt>
-		        		<dd>{$content->pics}</dd>
-		        	</dl>
-	        	</div>
-
-	        	<div class="row">
-	        		<dl class="dl-horizontal col-sm-6">
-		        		<dt>附件：</dt>
-		        		<dd>{$content->enclosure}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>关键字：</dt>
-		        		<dd>{$content->keywords}</dd>
-		        	</dl>
-	        	</div>
-	        	
-	        	<div class="row">
-		        	<dl class="dl-horizontal col-sm-12">
-		        		<dt>描述：</dt>
-		        		<dd>{$content->description}</dd>
-		        	</dl>
-	        	</div>
-	        	
-	        	<div class="row">
-	        		<dl class="dl-horizontal col-sm-6">
-		        		<dt>状态：</dt>
-		        		<dd>{if([$content->status])}启用{else}禁用{/if}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>置顶：</dt>
-		        		<dd>{if([$content->istop])}是{else}否{/if}</dd>
-		        	</dl>
-	        	</div>
-	        	
-	        	<div class="row">
-	        		<dl class="dl-horizontal col-sm-6">
-		        		<dt>推荐：</dt>
-		        		<dd>{if([$content->isrecommend])}是{else}否{/if}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>头条：</dt>
-		        		<dd>{if([$content->isheadline])}是{else}否{/if}</dd>
-		        	</dl>
-	        	</div>
-	        	
-	        	<div class="row">
-	        		<dl class="dl-horizontal col-sm-6">
-		        		<dt>访问量：</dt>
-		        		<dd>{$content->visits}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>支持数/反对数：</dt>
-		        		<dd>{$content->likes}/{$content->oppose}</dd>
-		        	</dl>
-	        	</div>
-	        	
-	        	<div class="row">
-	        		<dl class="dl-horizontal col-sm-6">
-		        		<dt>创建人员：</dt>
-		        		<dd>{$content->create_user}</dd>
-		        	</dl>
-	        		<dl class="dl-horizontal col-sm-6">
-		        		<dt>更新人员：</dt>
-		        		<dd>{$content->update_user}</dd>
-		        	</dl>
-	        	</div>
-	        	
-	        	<div class="row">
-	        		<dl class="dl-horizontal col-sm-6">
-		        		<dt>创建时间：</dt>
-		        		<dd>{$content->create_time}</dd>
-		        	</dl>
-		        	<dl class="dl-horizontal col-sm-6">
-		        		<dt>更新时间：</dt>
-		        		<dd>{$content->update_time}</dd>
-		        	</dl>
-	        	</div>
-	        </div>
-        </div>
-	{/if} 
-	
-	{if([$add])}
-    <div class="panel panel-default">
-     	<div class="panel-heading">
-        	<i class="fa fa-list" aria-hidden="true"></i> 内容新增 
-        	<span class="pull-right">{fun=get_btn_back()}</span>
-        </div>
-        <div class="panel-body">
-        	<ul class="nav nav-tabs" role="tablist">
-			    <li role="presentation" class="active"><a href="#basic" role="tab" data-toggle="tab">基本内容</a></li>
-			    <li role="presentation"><a href="#senior" role="tab" data-toggle="tab">高级内容</a></li>
-			</ul>
-			
-            <form action="{url./admin/Content/add}?{$server.QUERY_STRING}" method="post" id="edit">
-				<div class="tab-content">
-				    <div role="tabpanel" class="tab-pane active" id="basic">
-				    
-				    	<div class="row">
-							<div class="form-group col-sm-6">
-			                	<label>文章栏目</label>
-			                    <select name="scode" class="form-control checknone">
-			                    	<option value="">请选择栏目</option>
-			                        {$sort_select}
-			                    </select>
-			                </div>
-		                </div>	
-		                
-		                <div class="row">
-			                <div class="form-group col-sm-6">
-			                	<label for="title">标题</label>
-			                    <input type="text" name="title" class="form-control checknone">
-			                </div>
-		                </div>
-		                
-		                {foreach $extfield(key,value)}
-		                	{if($value->type==1)}
-		                	<div class="row">
-		                		<div class="form-group col-sm-6">
-			                		<label for="title">[value->description]</label>
-			                    	<input type="text" name="[value->name]" class="form-control">
-			                	</div>
-			                </div>
-		                	{/if}
-		                	
-		                	{if($value->type==2)}
-		                	<div class="row">
-		                		<div class="form-group col-sm-6">
-			                		<label for="title">[value->description]</label>
-			                		<textarea name="[value->name]" class="form-control"></textarea>
-			                	</div>
-			                </div>
-		                	{/if}
-		                	
-		                    {if($value->type==3)}
-		                	<div class="row">
-		                		<div class="form-group col-sm-6">
-			                		<label for="title">[value->description]</label>
-			                		<div>
-			                			{php}
-			                				$radios=explode(',',$value->value);
-			                				foreach ($radios as $value2) {
-                								echo '<label class="radio-inline"><input type="radio" name="'.$value->name.'" value="'.$value2.'">'.$value2.'</label>';
-            								}
-            						     {/php}
-				                    </div>
-			                	</div>
-			                </div>
-		                	{/if}
-		                	
-		                    {if($value->type==4)}
-		                	<div class="row">
-		                		<div class="form-group col-sm-6">
-			                		<label for="title">[value->description]</label>
-			                		<div>
-			                			{php}
-			                				$checkboxs=explode(',',$value->value);
-			                				foreach ($checkboxs as $value2) {
-            									echo '<label class="checkbox-inline"><input type="checkbox" name="'.$value->name.'[]" value="'.$value2.'">'.$value2.'</label>';
-            								}
-            						     {/php}
-				                    </div>
-			                	</div>
-			                </div>
-		                	{/if}
-		                	
-		                	{if($value->type==5)}
-		                	<div class="row">
-			                	 <div class="form-group col-sm-6">
-				               		 <label for="ico">[value->description]</label>
-				               		 <div class="input-group">
-					               		 <input type="text" name="[value->name]" id="[value->name]"  class="form-control">  
-					               		 <div class="input-group-btn">
-					               		 	<button type="button" class="btn btn-primary upload" data-target="#[value->name]">选择图片</button>
-					               		</div>
-				               		</div>
-				                </div>
-			                </div>
-		                	{/if}
-		                	
-		                	{if($value->type==6)}
-		                	<div class="row">
-			                	 <div class="form-group col-sm-6">
-				               		 <label for="ico">[value->description]</label>
-				               		 <div class="input-group">
-					               		 <input type="text" name="[value->name]" id="[value->name]"  class="form-control">  
-					               		 <div class="input-group-btn">
-					               		 	<button type="button" class="btn btn-primary file" data-target="#[value->name]">选择文件</button>
-					               		</div>
-				               		</div>
-				                </div>
-			                </div>
-		                	{/if}
-		                	
-		                	{if($value->type==7)}
-		                	<div class="row">
-			                	 <div class="form-group col-sm-6">
-				               		<label for="ico">[value->description]</label>
-				               		<div class="input-group date form_datetime"  data-link-field="[value->name]">
-					                    <input class="form-control" size="16" type="text" value="{fun=date('Y-m-d H:i:s')}" readonly>
-					                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-										<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-					                </div>
-									<input type="hidden" id="[value->name]" name="[value->name]" value="{fun=date('Y-m-d H:i:s')}" />
-				                </div>
-			                </div>
-		                	{/if}
-		                	
-		                {/foreach}
-
-		                <div class="row">
-			                <div class="form-group col-xs-12">
-			                	<label for="content">内容</label>
-			                	<script type="text/plain" id="editor" name="content" style="width:100%;height:240px;"></script>
-			                </div>
-		                </div>
-		                
-	                	 <div class="row">
-			                <div class="form-group col-sm-6">
-			                	<label for="author">作者</label>
-			                    <input type="text" name="author" value="{$session.username}" class="form-control">
-			                </div>
-		 
-			                <div class="form-group col-sm-6">
-			                	<label for="source">来源</label>
-			                    <input type="text" name="source" value="本站" class="form-control">
-			                </div>
-		                </div>
-
-		                <div class="row">
-		                	 <div class="form-group col-sm-6">
-			               		 <label for="ico">缩略图</label>
-			               		 <div class="input-group">
-				               		 <input type="text" name="ico" id="ico"  class="form-control">  
-				               		 <div class="input-group-btn">
-				               		 	<button type="button" class="btn btn-primary upload" data-target="#ico">选择图片</button>
-				               		</div>
-			               		</div>
-			                </div>
-			                <div class="form-group col-sm-6">
-			               		 <label for="pics">轮播多图</label>
-			               		 <div class="input-group">
-				               		 <input type="text" name="pics" id="pics"  class="form-control">  
-				               		 <div class="input-group-btn">
-				               		 	<button type="button" class="btn btn-primary uploads" data-target="#pics">选择图片</button>
-				               		</div>
-			               		</div>
-			                </div>
-		                </div>
-				    </div>
-				    
-				    <div role="tabpanel" class="tab-pane" id="senior">
-				    	<div class="row">
-		                	 <div class="form-group col-sm-6">
-			                	<label>文章副栏目</label>
-			                    <select name="subscode" class="form-control">
-			                    	<option value=''>无</option>
-			                        {$subsort_select}
-			                    </select>
-			                </div>
-			                <div class="form-group col-sm-6">
-			                	<label for="titlecolor">标题颜色</label>
-			                	<div class="color input-group colorpicker-component" data-color="#333333">
-									<input type="text" value="#333333" name="titlecolor" class="form-control"/>
-									<span class="input-group-addon"><i></i></span>
-								</div>
-			                </div>
-		                </div>
-		                
-		                <div class="row">
-			                <div class="form-group col-sm-6">
-			                	<label for="subtitle">副标题</label>
-			                    <input type="text" name="subtitle" class="form-control">
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">{$model_name}列表</li>
+	    <li lay-id="t2">{$model_name}新增</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+	  	   		<form action="{url./admin/Content/index/mcode/'.get('mcode').'}" method="get" class="layui-form">
+		  	   		<div class="layui-form-item">
+		  	   			<div class="layui-input-inline">
+					       <select name="scode">
+	                          	<option value="">全部栏目</option>
+                                {$search_select}
+	                       </select>
+					    </div>
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="keyword"  value="{$get.keyword}"  placeholder="请输入搜索关键字" class="layui-input">
+	                     </div>
+	                     <div class="layui-input-inline">
+	                     	<button class="layui-btn" lay-submit>搜索</button>
+	                     </div>
+	                </div>
+                </form>
+                
+	  	   		<form action="{url./admin/Content/mod}" method="post">
+		            <table class="layui-table">
+		            	<thead>
+		                    <tr>
+		                    	<th><input type="checkbox" class="checkbox" lay-ignore id="checkall" title="全选"></th>
+		                    	<th>内容ID</th>
+		                        <th>栏目</th>
+		                        <th>标题</th>
+		                        <th>发布时间</th>
+		                        <th>排序</th>
+		                        <th>状态</th>
+		                        <th>访问量</th>
+		                        <th>操作</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    {foreach $contents(key,value)}
+		                    <tr>
+		                    	<td>
+		                    		<input type="checkbox" class="checkbox checkitem" lay-ignore name="list[]" value="[value->id]">
+		                    		<input type="hidden" name="listall[]" value="[value->id]">
+		                    	</td>
+		                    	<td>[value->id]</td>
+		                        <td title="[value->scode]">[value->sort_name]</td>
+		                        <td>
+		                        [value->title]
+		                        {if($value->istop)}
+		                        	<span class="layui-badge layui-bg-green">置顶</span>
+		                        {/if}
+		                        {if($value->isrecommend)}
+		                        	<span class="layui-badge layui-bg-cyan">推荐</span>
+		                        {/if}
+		                        {if($value->isheadline)}
+		                        	<span class="layui-badge layui-bg-blue">头条</span>
+		                        {/if}
+		                        </td>
+		                        <td>[value->date]</td>
+		                        <td class="table-input"><input type="text" class="layui-input" name="sorting[]" value="[value->sorting]"></td>
+		                        <td>
+		                        {if($value->status)}
+			                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击关闭"></i></a>
+			                        {else}
+			                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击开启"></i></a>
+			                    {/if}
+			                    </td>
+			                    <td>[value->visits]</td>
+		                        <td>
+		                        	<a href="{SITE_DIR}/index.php/content/[value->id].html" class="btn-more" title="浏览内容" target="_blank"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+		                            {fun=get_btn_del($value->id)}
+		                            <a href="{url./admin/Content/mod/mcode/'.get('mcode').'/id/'.$value->id.'}?backurl={URL}" class="btn-mod" title="修改内容"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+		                        </td>
+		                    </tr>
+		                    {/foreach}
+		                </tbody>
+		            </table>
+			        <div class="page">{$pagebar}</div>
+			     	<button type="submit" name="submit" value="sorting" class="layui-btn">保存排序</button>
+			      </form> 
+	  	   </div>
+	  	   
+	  	   <div class="layui-tab-item">
+	  	  		<form action="{url./admin/Content/add/mcode/'.get('mcode').'}?{$server.QUERY_STRING}" method="post" class="layui-form" lay-filter="content">
+		  	     	<div class="layui-tab">
+					  <ul class="layui-tab-title">
+					    <li class="layui-this">基本内容</li>
+					    <li>高级内容</li>
+					  </ul>
+					  <div class="layui-tab-content">
+					    <div class="layui-tab-item layui-show">
+					    	<div class="layui-form-item">
+			                     <label class="layui-form-label">内容栏目</label>
+			                     <div class="layui-input-block">
+			                     	<select name="scode" lay-verify="required">
+				                        <option value="">请选择内容栏目</option>
+			                        	{$sort_select}
+				                    </select>
+			                     </div>
 			                </div>
 			                
-			                <div class="form-group col-sm-6">
-			                	<label for="subtitle">自定义路径名</label>
-			                    <input type="text" name="filename"  class="form-control" placeholder="如输入：test">
-			                </div> 
-		                </div>
-		                
-		               
-		                
-		                <div class="row">
-			                <div class="form-group col-sm-6">
-			                	<label for="outlink">转外链接</label>
-			                    <input type="text" name="outlink" class="form-control">
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">内容标题</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="title" required lay-verify="required" placeholder="请输入内容标题" class="layui-input">
+			                     </div>
 			                </div>
-		               		<div class="form-group col-sm-6">
-				                <label for="date">发布时间</label>
-				                <div class="input-group date form_datetime"  data-link-field="date">
-				                    <input class="form-control" size="16" type="text" value="{fun=date('Y-m-d H:i:s')}" readonly>
-				                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			                
+			                 {foreach $extfield(key,value)}
+			                	{if($value->type==1)} <!-- 单行文本 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+				                    	<input type="text" name="[value->name]"  placeholder="请输入[value->description]"  class="layui-input">
+				                	</div>
 				                </div>
-								<input type="hidden" id="date" name="date" value="{fun=date('Y-m-d H:i:s')}" />
-				            </div>
-		                </div>
-		                
-		    			<div class="row">
-		    				<div class="form-group col-sm-6">
-			               		 <label for="enclosure">附件</label>
-			               		 <div class="input-group">
-				               		 <input type="text" name="enclosure" id="enclosure"  class="form-control">  
-				               		 <div class="input-group-btn">
-				               		 	<button type="button" class="btn btn-primary file" data-target="#enclosure">选择附件</button>
-				               		</div>
-			               		</div>
+			                	{/if}
+			                	
+			                	{if($value->type==2)}<!-- 多行文本 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+				                		<textarea name="[value->name]" class="layui-textarea" placeholder="请输入[value->description]"></textarea>
+				                	</div>
+				                </div>
+			                	{/if}
+			                	
+			                    {if($value->type==3)}<!-- 单选 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+				                		<div>
+				                			{php}
+				                				$radios=explode(',',$value->value);
+				                				foreach ($radios as $value2) {
+	                								echo '<input type="radio" name="'.$value->name.'" value="'.$value2.'" title="'.$value2.'">';
+	            								}
+	            						     {/php}
+					                    </div>
+				                	</div>
+				                </div>
+			                	{/if}
+			                	
+			                    {if($value->type==4)}<!-- 多选 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+				                		<div>
+				                			{php}
+				                				$checkboxs=explode(',',$value->value);
+				                				foreach ($checkboxs as $value2) {
+	            									echo '<input type="checkbox" name="'.$value->name.'[]" value="'.$value2.'" title="'.$value2.'">';
+	            								}
+	            						     {/php}
+					                    </div>
+				                	</div>
+				                </div>
+			                	{/if}
+			                	
+			                	{if($value->type==5)}<!-- 图片 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-inline">
+				                     	<input type="text" name="[value->name]" id="[value->name]" placeholder="请上传[value->description]"  class="layui-input">
+				                     </div>
+				                     <button type="button" class="layui-btn upload" data-des="[value->name]">
+									 	 <i class="layui-icon">&#xe67c;</i>上传图片
+									 </button>
+				                </div>
+			                	{/if}
+			                	
+			                	{if($value->type==6)}<!-- 文件 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-inline">
+				                     	<input type="text" name="[value->name]" id="[value->name]" placeholder="请上传[value->description]"  class="layui-input">
+				                     </div>
+				                     <button type="button" class="layui-btn file" data-des="[value->name]">
+									 	 <i class="layui-icon">&#xe67c;</i>上传文件
+									 </button>
+				                </div>
+			                	{/if}
+			                	
+			                	{if($value->type==7)}<!-- 日期 -->
+				                <div class="layui-form-item">
+				                     <label class="layui-form-label">[value->description]</label>
+				                     <div class="layui-input-block">
+				                     	<input type="text" name="[value->name]" readonly placeholder="请选择[value->description]"  class="layui-input datetime">
+				                     </div>
+				                </div>
+			                	{/if}
+			                {/foreach}
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">内容</label>
+			                     <div class="layui-input-block">
+			                     	<script type="text/plain" id="editor" name="content" style="width:100%;height:240px;"></script>
+			                     </div>
 			                </div>
-			                <div class="form-group col-sm-6">
-			                	<label for="keywords">关键字</label>
-			                    <input type="text" name="keywords" class="form-control">
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">作者</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="author" placeholder="请输入作者" value="{$session.username}" class="layui-input">
+			                     </div>
 			                </div>
-		                </div>
-		                
-		                <div class="row">
-			                <div class="form-group col-xs-12">
-			                	<label for="description">描述</label>
-			                	<textarea name="description"  class="form-control"></textarea>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">来源</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="source" placeholder="请输入来源" value="本站" class="layui-input">
+			                     </div>
 			                </div>
-		                </div>
-		                
-		                <div class="row">
-		                	<div class="form-group col-sm-6">
-			                	<label>状态</label>
-			                    <div>
-			                    	<label class="radio-inline"><input type="radio" name="status" value="1" checked="checked">发布</label>
-			                    	<label class="radio-inline"><input type="radio" name="status" value="0">不发布</label>
-			                    </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">缩略图</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="ico" id="ico" placeholder="请上传缩略图"  class="layui-input">
+			                     </div>
+			                     <button type="button" class="layui-btn upload" data-des="ico">
+								 	 <i class="layui-icon">&#xe67c;</i>上传图片
+								 </button>
 			                </div>
-			                <div class="form-group col-sm-6">
-			                	<label>参数</label>
-			                    <div>
-			                    	<label class="checkbox-inline"><input type="checkbox" name="istop" value="1">置顶</label>
-			                    	<label class="checkbox-inline"><input type="checkbox" name="isrecommend" value="1" >推荐</label>
-			                    	<label class="checkbox-inline"><input type="checkbox" name="isheadline" value="1" >头条</label>
-			                    </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">轮播多图</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="pics" id="pics" placeholder="请上传轮播多图"  class="layui-input">
+			                     </div>
+			                     <button type="button" class="layui-btn uploads" data-des="pics">
+								 	 <i class="layui-icon">&#xe67c;</i>上传多图
+								 </button>
 			                </div>
-		                </div>
-				    </div>
-				</div>
-                <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> 新 增</button>
-            </form>
-        </div>
-    </div>
-	{/if}
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">参数</label>
+			                     <div class="layui-input-block">
+									<input type="checkbox" name="istop" value="1" title="置顶">
+			                    	<input type="checkbox" name="isrecommend" value="1" title="推荐">
+			                    	<input type="checkbox" name="isheadline" value="1" title="头条">
+			                     </div>
+			                </div>
+					    </div>
+					    
+					    <div class="layui-tab-item ">
+					    	<div class="layui-form-item">
+			                     <label class="layui-form-label">内容副栏目</label>
+			                     <div class="layui-input-block">
+			                     	<select name="subscode">
+				                        <option value="">请选择内容副栏目</option>
+			                        	{$subsort_select}
+				                    </select>
+			                     </div>
+			                </div>
+			                
+					   		 <div class="layui-form-item">
+			                     <label class="layui-form-label">标题颜色</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="titlecolor" placeholder="请选择标题颜色" value="#333333" class="layui-input jscolor {hash:true}">
+			                     </div>
+			                 </div>
+			                 
+			                 <div class="layui-form-item">
+			                     <label class="layui-form-label">副标题</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="subtitle" placeholder="请输入副标题" class="layui-input">
+			                     </div>
+			                 </div>
+			                 
+			                 <div class="layui-form-item">
+			                     <label class="layui-form-label">自定义路径名</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="filename" placeholder="请输入自定义路径名，如:test" class="layui-input">
+			                     </div>
+			                 </div>
+			                 
+			                  <div class="layui-form-item">
+			                     <label class="layui-form-label">跳转外链接</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="outlink" placeholder="请输入跳转外链接" class="layui-input">
+			                     </div>
+			                 </div>
+			                 
+			                 <div class="layui-form-item">
+			                     <label class="layui-form-label">发布时间</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="date" value="{fun=date('Y-m-d H:i:s')}" readonly placeholder="请选择发布时间"  class="layui-input datetime">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+		                		<label class="layui-form-label">附件</label>
+		                		<div class="layui-input-inline">
+			                     	<input type="text" name="enclosure" id="enclosure" placeholder="请上传附件"  class="layui-input">
+			                     </div>
+			                     <button type="button" class="layui-btn file" data-des="enclosure">
+								 	 <i class="layui-icon">&#xe67c;</i>上传附件
+								 </button>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">页面关键字</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="keywords" placeholder="请输入页面关键字" class="layui-input">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">页面描述</label>
+			                     <div class="layui-input-block">
+			                     	<textarea name="description" placeholder="请输入页面描述" class="layui-textarea"></textarea>
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">状态</label>
+			                     <div class="layui-input-block">
+			                     	<input type="radio" name="status" value="1" title="显示" checked>
+									<input type="radio" name="status" value="0" title="隐藏">
+			                     </div>
+			                </div>
+					    </div>
+					  </div>
+					</div>
+					<div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit>立即提交</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						 </div>
+					</div>
+			   </form>
+	  	   </div>
+	  </div>
+	 </div>
+	{/if} 
 	
 	{if([$mod])}
-    <div class="panel panel-default">
-     	<div class="panel-heading">
-        	<i class="fa fa-list" aria-hidden="true"></i> 内容修改 
-        	<span class="pull-right">{fun=get_btn_back()}</span>
-        </div>
-        <div class="panel-body">
-        
-        	<ul class="nav nav-tabs" role="tablist">
-			    <li role="presentation" class="active"><a href="#basic" role="tab" data-toggle="tab">基本内容</a></li>
-			    <li role="presentation"><a href="#senior" role="tab" data-toggle="tab">高级内容</a></li>
-			</ul>
-			
-            <form action="{url./admin/Content/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" id="edit">
-            	
-            	<div class="tab-content">
-				    <div role="tabpanel" class="tab-pane active" id="basic">
-				    	<div class="row">
-							<div class="form-group col-sm-6">
-			                	<label>文章栏目</label>
-			                    <select name="scode" class="form-control checknone">
-			                    	<option value="">请选择栏目</option>
-			                        {$sort_select}
-			                    </select>
-			                </div>
-			            </div>
-			            
-						<div class="row">
-			                <div class="form-group col-sm-6">
-			                	<label for="title">标题</label>
-			                    <input type="text" name="title" value="{$content->title}" class="form-control checknone">
-			                </div>
-		                </div>
-		                
-		                {foreach $extfield(key,value)}
-		                	{if($value->type==1)}
-		                	<div class="row">
-		                		<div class="form-group col-sm-6">
-			                		<label for="title">[value->description]</label>
-			                    	<input type="text" name="[value->name]" value="{$content->{$value->name}}" class="form-control">
-			                	</div>
-			                </div>
-		                	{/if}
-		                	
-		                	{if($value->type==2)}
-		                	<div class="row">
-		                		<div class="form-group col-sm-6">
-			                		<label for="title">[value->description]</label>
-			                		<textarea name="[value->name]" class="form-control">{php}$name=$value->name;echo str_replace('<br>', "\r\n",$this->vars['content']->$name);{/php}</textarea>
-			                	</div>
-			                </div>
-		                	{/if}
-		                	
-		                    {if($value->type==3)}
-		                	<div class="row">
-		                		<div class="form-group col-sm-6">
-			                		<label for="title">[value->description]</label>
-			                		<div>
-			                			{php}
-			                				$radios=explode(',',$value->value);
-			                				$name=$value->name;
-			                				foreach ($radios as $value2) {
-			                					if($this->vars['content']->$name==$value2){
-                									echo '<label class="radio-inline"><input type="radio" name="'.$value->name.'" value="'.$value2.'" checked>'.$value2.'</label>';
-                								}else{
-                									echo '<label class="radio-inline"><input type="radio" name="'.$value->name.'" value="'.$value2.'">'.$value2.'</label>';
-                								}
-            								}
-            						     {/php}
-				                    </div>
-			                	</div>
-			                </div>
-		                	{/if}
-		                	
-		                    {if($value->type==4)}
-		                	<div class="row">
-		                		<div class="form-group col-sm-6">
-			                		<label for="title">[value->description]</label>
-			                		<div>
-			                			{php}
-			                				$checkboxs=explode(',',$value->value);
-			                				$name=$value->name;
-			                				$values=explode(',',$this->vars['content']->$name);
-			                				foreach ($checkboxs as $value2) {
-			                					if(in_array($value2,$values)){
-            										echo '<label class="checkbox-inline"><input type="checkbox" name="'.$value->name.'[]" value="'.$value2.'" checked>'.$value2.'</label>';
-            									}else{
-            										echo '<label class="checkbox-inline"><input type="checkbox" name="'.$value->name.'[]" value="'.$value2.'">'.$value2.'</label>';
-            									}
-            								}
-            						     {/php}
-				                    </div>
-			                	</div>
-			                </div>
-		                	{/if}
-		                	
-		                	{if($value->type==5)}
-		                	<div class="row">
-			                	 <div class="form-group col-sm-6">
-				               		 <label for="ico">[value->description]</label>
-				               		 <div class="input-group">
-					               		 <input type="text" name="[value->name]" id="[value->name]" value="{$content->{$value->name}}" class="form-control">  
-					               		 <div class="input-group-btn">
-					               		 	<button type="button" class="btn btn-primary upload" data-target="#[value->name]">选择图片</button>
-					               		</div>
-				               		</div>
-				                </div>
-			                </div>
-		                	{/if}
-		                	
-		                	{if($value->type==6)}
-		                	<div class="row">
-			                	 <div class="form-group col-sm-6">
-				               		 <label for="ico">[value->description]</label>
-				               		 <div class="input-group">
-					               		 <input type="text" name="[value->name]" id="[value->name]" value="{$content->{$value->name}}" class="form-control">  
-					               		 <div class="input-group-btn">
-					               		 	<button type="button" class="btn btn-primary file" data-target="#[value->name]">选择文件</button>
-					               		</div>
-				               		</div>
-				                </div>
-			                </div>
-		                	{/if}
-		                	
-		                	{if($value->type==7)}
-		                	<div class="row">
-			                	 <div class="form-group col-sm-6">
-				               		<label for="ico">[value->description]</label>
-				               		<div class="input-group date form_datetime"  data-link-field="[value->name]">
-					                    <input class="form-control" size="16" type="text" value="{$content->{$value->name}}" readonly>
-					                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-										<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-					                </div>
-									<input type="hidden" id="[value->name]" name="[value->name]" value="{$content->{$value->name}}" />
-				                </div>
-			                </div>
-		                	{/if}
-		                	
-		                {/foreach}
-		                
-		                <div class="row">
-			                <div class="form-group col-xs-12">
-			                	<label for="content">内容</label>
-			                	<script type="text/plain" id="editor" name="content" style="width:100%;height:240px;">{fun=decode_string([$content->content])}</script>
-			                </div>
-		                </div>
-		                
-		                <div class="row">
-		                	<div class="form-group col-sm-6">
-			                	<label for="author">作者</label>
-			                    <input type="text" name="author" value="{$content->author}" class="form-control">
+	
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">栏目修改</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	<div class="layui-tab-item layui-show">
+	  		<form action="{url./admin/Content/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
+	  			<div class="layui-tab">
+					  <ul class="layui-tab-title">
+					    <li class="layui-this">基本内容</li>
+					    <li>高级内容</li>
+					  </ul>
+					  <div class="layui-tab-content">
+					    <div class="layui-tab-item layui-show">
+					    	<div class="layui-form-item">
+			                     <label class="layui-form-label">内容栏目</label>
+			                     <div class="layui-input-block">
+			                     	<select name="scode" lay-verify="required">
+				                        <option value="">请选择内容栏目</option>
+			                        	{$sort_select}
+				                    </select>
+			                     </div>
 			                </div>
 			                
-			                <div class="form-group col-sm-6">
-			                	<label for="source">来源</label>
-			                    <input type="text" name="source" value="{$content->source}" class="form-control">
-			                </div>
-		                </div>
-		                
-		                <div class="row">
-		                	<div class="form-group col-sm-6">
-			               		 <label for="ico">缩略图</label>
-			               		 <div class="input-group">
-				               		 <input type="text" name="ico" id="ico" value="{$content->ico}" class="form-control">  
-				               		 <div class="input-group-btn">
-				               		 	<button type="button" class="btn btn-primary upload" data-target="#ico">选择图片</button>
-				               		</div>
-			               		</div>
-			                </div>
-			                <div class="form-group col-sm-6">
-			               		 <label for="pics">轮播多图</label>
-			               		 <div class="input-group">
-				               		 <input type="text" name="pics" id="pics" value="{$content->pics}" class="form-control">  
-				               		 <div class="input-group-btn">
-				               		 	<button type="button" class="btn btn-primary uploads" data-target="#pics">选择图片</button>
-				               		</div>
-			               		</div>
-			                </div>
-		                </div>
-				    </div>
-				    
-				     <div role="tabpanel" class="tab-pane" id="senior">
-				     	 <div class="row">
-			                <div class="form-group col-sm-6">
-			                	<label>文章副栏目</label>
-			                    <select name="subscode" class="form-control">
-			                    	<option value=''>无</option>
-			                        {$subsort_select}
-			                    </select>
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">内容标题</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="title" required lay-verify="required" value="{$content->title}" placeholder="请输入内容标题" class="layui-input">
+			                     </div>
 			                </div>
 			                
-			                <div class="form-group col-sm-6">
-			                	<label for="titlecolor">标题颜色</label>
-			                	<div class="color input-group colorpicker-component" data-color="{$content->titlecolor}">
-									<input type="text" value="{$content->titlecolor}"  name="titlecolor" class="form-control"/>
-									<span class="input-group-addon"><i></i></span>
-								</div>
-			                </div>
-		                </div>
-		
-		                <div class="row">
-			                <div class="form-group col-sm-6">
-			                	<label for="subtitle">副标题</label>
-			                    <input type="text" name="subtitle" value="{$content->subtitle}" class="form-control">
-			                </div>
-			                
-			                 <div class="form-group col-sm-6">
-			                	<label for="subtitle">自定义路径名</label>
-			                    <input type="text" name="filename" value="{$content->filename}" class="form-control">
-			                </div>
-		                </div>
-		                
-		               
-		                
-		               <div class="row">
-		               		<div class="form-group col-sm-6">
-			                	<label for="outlink">转外链接</label>
-			                    <input type="text" name="outlink" value="{$content->outlink}" class="form-control">
-			                </div>
-			                
-		               		<div class="form-group col-sm-6">
-				                <label for="date">发布时间</label>
-				                <div class="input-group date form_datetime"  data-link-field="date">
-				                    <input class="form-control" size="16" type="text" value="{$content->date}" readonly>
-				                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+			                 {foreach $extfield(key,value)}
+			                	{if($value->type==1)} <!-- 单行文本 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+				                    	<input type="text" name="[value->name]" value="{$content->{$value->name}}"  placeholder="请输入[value->description]"  class="layui-input">
+				                	</div>
 				                </div>
-								<input type="hidden" id="date" name="date" value="{$content->date}" />
-				            </div>
-				            
-		                </div>
-		                
-		                <div class="row">
-		                	<div class="form-group col-sm-6">
-			               		 <label for="enclosure">附件</label>
-			               		 <div class="input-group">
-				               		 <input type="text" name="enclosure" id="enclosure" value="{$content->enclosure}" class="form-control">  
-				               		 <div class="input-group-btn">
-				               		 	<button type="button" class="btn btn-primary file" data-target="#enclosure">选择附件</button>
-				               		</div>
-			               		</div>
+			                	{/if}
+			                	
+			                	{if($value->type==2)}<!-- 多行文本 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+				                		<textarea name="[value->name]" class="layui-textarea" placeholder="请输入[value->description]">{php}$name=$value->name;echo str_replace('<br>', "\r\n",$this->vars['content']->$name);{/php}</textarea>
+				                	</div>
+				                </div>
+			                	{/if}
+			                	
+			                    {if($value->type==3)}<!-- 单选 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+				                		<div>
+	            						     {php}
+				                				$radios=explode(',',$value->value);
+				                				$name=$value->name;
+				                				foreach ($radios as $value2) {
+				                					if($this->vars['content']->$name==$value2){
+	                									echo '<input type="radio" name="'.$value->name.'" value="'.$value2.'" title="'.$value2.'" checked>';
+	                								}else{
+	                									echo '<input type="radio" name="'.$value->name.'" value="'.$value2.'" title="'.$value2.'">';
+	                								}
+	            								}
+	            						     {/php}
+					                    </div>
+				                	</div>
+				                </div>
+			                	{/if}
+			                	
+			                    {if($value->type==4)}<!-- 多选 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+				                		<div>
+	            						     {php}
+				                				$checkboxs=explode(',',$value->value);
+				                				$name=$value->name;
+				                				$values=explode(',',$this->vars['content']->$name);
+				                				foreach ($checkboxs as $value2) {
+				                					if(in_array($value2,$values)){
+	            										echo '<input type="checkbox" name="'.$value->name.'[]" value="'.$value2.'" title="'.$value2.'" checked>';
+	            									}else{
+	            										echo '<input type="checkbox" name="'.$value->name.'[]" value="'.$value2.'" title="'.$value2.'">';
+	            									}
+	            								}
+	            						     {/php}
+					                    </div>
+				                	</div>
+				                </div>
+			                	{/if}
+			                	
+			                	{if($value->type==5)}<!-- 图片 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-inline">
+				                     	<input type="text" name="[value->name]" id="[value->name]" value="{$content->{$value->name}}" placeholder="请上传[value->description]"  class="layui-input">
+				                     </div>
+				                     <button type="button" class="layui-btn upload" data-des="[value->name]">
+									 	 <i class="layui-icon">&#xe67c;</i>上传图片
+									 </button>
+				                </div>
+			                	{/if}
+			                	
+			                	{if($value->type==6)}<!-- 文件 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-inline">
+				                     	<input type="text" name="[value->name]" id="[value->name]" value="{$content->{$value->name}}" placeholder="请上传[value->description]"  class="layui-input">
+				                     </div>
+				                     <button type="button" class="layui-btn file" data-des="[value->name]">
+									 	 <i class="layui-icon">&#xe67c;</i>上传文件
+									 </button>
+				                </div>
+			                	{/if}
+			                	
+			                	{if($value->type==7)}<!-- 日期 -->
+				                <div class="layui-form-item">
+				                     <label class="layui-form-label">[value->description]</label>
+				                     <div class="layui-input-block">
+				                     	<input type="text" name="[value->name]" value="{$content->{$value->name}}" readonly placeholder="请选择[value->description]"  class="layui-input datetime">
+				                     </div>
+				                </div>
+			                	{/if}
+			                {/foreach}
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">内容</label>
+			                     <div class="layui-input-block">
+			                     	<script type="text/plain" id="editor" name="content" style="width:100%;height:240px;">{fun=decode_string([$content->content])}</script>
+			                     </div>
 			                </div>
-			                <div class="form-group col-sm-6">
-			                	<label for="keywords">关键字</label>
-			                    <input type="text" name="keywords" value="{$content->keywords}" class="form-control">
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">作者</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="author" placeholder="请输入作者" value="{$content->author}" class="layui-input">
+			                     </div>
 			                </div>
-		                </div>
-		
-		                <div class="row">
-			                <div class="form-group col-xs-12">
-			                	<label for="description">描述</label>
-			                	<textarea name="description" class="form-control">{$content->description}</textarea>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">来源</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="source" placeholder="请输入来源" value="{$content->source}" class="layui-input">
+			                     </div>
 			                </div>
-		                </div>
-		                
-		                <div class="row">
-		                	<div class="form-group col-sm-6">
-			                	<label>状态</label>
-			                    <div>
-			                    	<label class="radio-inline"><input type="radio" name="status" value="1" {if([$content->status]==1)} checked="checked"{/if}>发布</label>
-			                    	<label class="radio-inline"><input type="radio" name="status" value="0" {if([$content->status]==0)} checked="checked"{/if}>不发布</label>
-			                    </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">缩略图</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="ico" id="ico" value="{$content->ico}" placeholder="请上传缩略图"  class="layui-input">
+			                     </div>
+			                     <button type="button" class="layui-btn upload" data-des="ico">
+								 	 <i class="layui-icon">&#xe67c;</i>上传图片
+								 </button>
 			                </div>
-			                <div class="form-group col-sm-6">
-			                	<label>参数</label>
-			                    <div>
-			                    	<label class="checkbox-inline"><input type="checkbox" name="istop" value="1" {if([$content->istop]==1)}checked{/if}>置顶</label>
-			                    	<label class="checkbox-inline"><input type="checkbox" name="isrecommend" value="1" {if([$content->isrecommend]==1)}checked{/if}>推荐</label>
-			                    	<label class="checkbox-inline"><input type="checkbox" name="isheadline" value="1" {if([$content->isheadline]==1)}checked{/if}>头条</label>
-			                    </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">轮播多图</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="pics" id="pics" value="{$content->pics}" placeholder="请上传轮播多图"  class="layui-input">
+			                     </div>
+			                     <button type="button" class="layui-btn uploads" data-des="pics">
+								 	 <i class="layui-icon">&#xe67c;</i>上传多图
+								 </button>
 			                </div>
-		                </div>
-				     
-				     </div>
-				</div>
-				
- 				<button type="submit"  class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button>
-            </form>
-       </div>
-    </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">状态</label>
+			                     <div class="layui-input-block">
+									<input type="checkbox" name="istop" value="1" title="置顶" {if([$content->istop]==1)}checked{/if}>
+			                    	<input type="checkbox" name="isrecommend" value="1" title="推荐" {if([$content->isrecommend]==1)}checked{/if}>
+			                    	<input type="checkbox" name="isheadline" value="1" title="头条" {if([$content->isheadline]==1)}checked{/if}>
+			                     </div>
+			                </div>
+					    </div>
+					    
+					    <div class="layui-tab-item ">
+					    	<div class="layui-form-item">
+			                     <label class="layui-form-label">内容副栏目</label>
+			                     <div class="layui-input-block">
+			                     	<select name="subscode">
+				                        <option value="">请选择内容副栏目</option>
+			                        	{$subsort_select}
+				                    </select>
+			                     </div>
+			                </div>
+			                
+					   		 <div class="layui-form-item">
+			                     <label class="layui-form-label">标题颜色</label>
+			                     <div class="layui-input-inline">
+			                     	<input type="text" name="titlecolor" value="{$content->titlecolor}" placeholder="请选择标题颜色"  class="layui-input jscolor {hash:true}">
+			                     </div>
+			                 </div>
+			                 
+			                 <div class="layui-form-item">
+			                     <label class="layui-form-label">副标题</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="subtitle" value="{$content->subtitle}" placeholder="请输入副标题" class="layui-input">
+			                     </div>
+			                 </div>
+			                 
+			                 <div class="layui-form-item">
+			                     <label class="layui-form-label">自定义路径名</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="filename" value="{$content->filename}" placeholder="请输入自定义路径名，如:test" class="layui-input">
+			                     </div>
+			                 </div>
+			                 
+			                  <div class="layui-form-item">
+			                     <label class="layui-form-label">跳转外链接</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="outlink" value="{$content->outlink}" placeholder="请输入跳转外链接" class="layui-input">
+			                     </div>
+			                 </div>
+			                 
+			                 <div class="layui-form-item">
+			                     <label class="layui-form-label">发布时间</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="date" value="{$content->date}" readonly placeholder="请选择发布时间"  class="layui-input datetime">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+		                		<label class="layui-form-label">附件</label>
+		                		<div class="layui-input-inline">
+			                     	<input type="text" name="enclosure" id="enclosure" value="{$content->enclosure}" placeholder="请上传附件"  class="layui-input">
+			                     </div>
+			                     <button type="button" class="layui-btn file" data-des="enclosure">
+								 	 <i class="layui-icon">&#xe67c;</i>上传附件
+								 </button>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">页面关键字</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="keywords" value="{$content->keywords}"  placeholder="请输入页面关键字" class="layui-input">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">页面描述</label>
+			                     <div class="layui-input-block">
+			                     	<textarea name="description" placeholder="请输入页面描述" class="layui-textarea">{$content->description}</textarea>
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">状态</label>
+			                     <div class="layui-input-block">
+			                     	<input type="radio" name="status" value="1" title="显示" {if([$content->status]==1)} checked="checked"{/if}>
+									<input type="radio" name="status" value="0" title="隐藏" {if([$content->status]==0)} checked="checked"{/if}>
+			                     </div>
+			                </div>
+					    </div>
+					  </div>
+					</div>
+					<div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit>立即提交</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						    {fun=get_btn_back()}
+						 </div>
+					</div>
+	  		</form>
+	  	</div>
+	  </div>
+	</div>
 	{/if} 
 
 </div>
-
+<script type="text/javascript" src="{APP_THEME_DIR}/js/jscolor.js"></script>
 {include file='common/ueditor.html'}
-{include file='common/datatime.html'}
-{include file='common/color.html'} 
-{include file='common/upload.html'}
 {include file='common/foot.html'}

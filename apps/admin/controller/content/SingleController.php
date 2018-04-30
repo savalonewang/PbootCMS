@@ -79,23 +79,20 @@ class SingleController extends Controller
             
             // 获取数据
             $title = post('title');
-            $titlecolor = post('titlecolor');
-            $subtitle = post('subtitle');
-            $filename = post('filename');
+            $content = post('content');
             $author = post('author');
             $source = post('source');
-            $outlink = post('outlink');
-            $date = post('date');
             $ico = post('ico');
             $pics = post('pics');
-            $content = post('content');
+            
+            $titlecolor = post('titlecolor');
+            $subtitle = post('subtitle');
+            $outlink = post('outlink');
+            $date = post('date');
             $enclosure = post('enclosure');
             $keywords = post('keywords');
             $description = post('description');
             $status = post('status', 'int');
-            $istop = post('istop', 'int');
-            $isrecommend = post('isrecommend', 'int');
-            $isheadline = post('isheadline', 'int');
             
             if (! $title) {
                 alert_back('单页内容标题不能为空！');
@@ -104,23 +101,19 @@ class SingleController extends Controller
             // 构建数据
             $data = array(
                 'title' => $title,
-                'titlecolor' => $titlecolor,
-                'subtitle' => $subtitle,
-                'filename' => $filename,
+                'content' => $content,
                 'author' => $author,
                 'source' => $source,
-                'outlink' => $outlink,
-                'date' => $date,
                 'ico' => $ico,
                 'pics' => $pics,
-                'content' => $content,
+                'titlecolor' => $titlecolor,
+                'subtitle' => $subtitle,
+                'outlink' => $outlink,
+                'date' => $date,
                 'enclosure' => $enclosure,
                 'keywords' => $keywords,
                 'description' => $description,
                 'status' => $status,
-                'istop' => $istop,
-                'isrecommend' => $isrecommend,
-                'isheadline' => $isheadline,
                 'update_user' => session('username')
             );
             
@@ -163,10 +156,6 @@ class SingleController extends Controller
                 error('编辑的内容已经不存在！', - 1);
             }
             $this->assign('content', $result);
-            
-            // 单页内容分类
-            $sort_model = model('admin.content.ContentSort');
-            $this->assign('sorts', $sort_model->getSingleSelect());
             
             // 扩展字段
             if (! $mcode = get('mcode', 'var')) {

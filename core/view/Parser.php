@@ -167,7 +167,7 @@ class Parser
     {
         $pattern = '/\{\$server\.([\w]+)\}/';
         if (preg_match($pattern, self::$content)) {
-            self::$content = preg_replace($pattern, "<?php echo \$_SERVER['$1'];?>", self::$content);
+            self::$content = preg_replace($pattern, "<?php echo escape_string(\$_SERVER['$1']);?>", self::$content);
         }
     }
 
@@ -372,7 +372,7 @@ class Parser
     {
         $pattern = '/\[\$server\.([\w]+)\]/';
         if (preg_match($pattern, self::$content)) {
-            self::$content = preg_replace($pattern, "\$_SERVER['$1']", self::$content);
+            self::$content = preg_replace($pattern, "escape_string(\$_SERVER['$1'])", self::$content);
         }
     }
 

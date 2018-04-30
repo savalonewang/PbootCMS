@@ -46,7 +46,6 @@ class SingleModel extends Model
             ->join($join)
             ->group('b.name')
             ->order('a.id DESC')
-            ->page()
             ->select();
     }
 

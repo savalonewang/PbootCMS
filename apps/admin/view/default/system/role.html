@@ -1,144 +1,140 @@
 {include file='common/head.html'}
 
-<div class="container">
+<div class="layui-body">
 	{if([$list])}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-        	<i class="fa fa-list" aria-hidden="true"></i> <a href="{url./admin/Role/index}">角色列表</a> 
-            <span class="pull-right">{fun=get_btn_add()}</span>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-striped">
-            	<thead>
-                    <tr>
-                        <th>序号</th>
-                        <th>角色名称</th>
-                        <th>角色编码</th>
-                        <th>角色描述</th>
-                        <th>添加人员</th>
-                        <th>修改人员</th>
-                        <th>添加时间</th>
-                        <th>修改时间</th>
-                        <th>操作</th>
-                    </tr>
-        		</thead>
-                <tbody>
-                {foreach $roles(key,value,num)}
-                    <tr>
-                        <td>[num]</td>
-                        <td>[value->name]</td>
-                        <td>[value->rcode]</td>
-                        <td>[value->description]</td>
-                        <td>[value->create_user]</td>
-                        <td>[value->update_user]</td>
-                        <td>[value->create_time]</td>
-                        <td>[value->update_time]</td>
-                        <td>
-                            {fun=get_btn_del($value->rcode,'rcode')}
-                            {fun=get_btn_mod($value->rcode,'rcode')}
-                        </td>
-                    </tr>
-                {/foreach}
-                </tbody>
-            </table>
-    	</div>
-     </div>
-	<div class="page">{$pagebar}</div>
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">角色列表</li>
+	    <li lay-id="t2">角色新增</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+	  	   		<table class="layui-table">
+	            	<thead>
+	                    <tr>
+	                        <th>序号</th>
+	                        <th>角色名称</th>
+	                        <th>角色编码</th>
+	                        <th>角色描述</th>
+	                        <th>添加人员</th>
+	                        <th>修改人员</th>
+	                        <th>添加时间</th>
+	                        <th>修改时间</th>
+	                        <th>操作</th>
+	                    </tr>
+	        		</thead>
+	                <tbody>
+	                {foreach $roles(key,value,num)}
+	                    <tr>
+	                        <td>[num]</td>
+	                        <td>[value->name]</td>
+	                        <td>[value->rcode]</td>
+	                        <td>[value->description]</td>
+	                        <td>[value->create_user]</td>
+	                        <td>[value->update_user]</td>
+	                        <td>[value->create_time]</td>
+	                        <td>[value->update_time]</td>
+	                        <td>
+	                            {fun=get_btn_del($value->rcode,'rcode')}
+	                            {fun=get_btn_mod($value->rcode,'rcode')}
+	                        </td>
+	                    </tr>
+	                {/foreach}
+	                </tbody>
+	            </table>
+	            <div class="page">{$pagebar}</div>
+	  	   </div>
+	  	   
+	  	   <div class="layui-tab-item">
+	  	   		<form action="{url./admin/role/add}" method="post" class="layui-form">
+	  	   			<div class="layui-form-item">
+	                     <label class="layui-form-label">角色名称</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="name" required  lay-verify="required" placeholder="请输入角色名称" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">角色描述</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="description" placeholder="请输入角色描述" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+					    <label class="layui-form-label">管辖区域</label>
+					    <div class="layui-input-block">
+					      {$area_checkbox}
+					    </div>
+					 </div>
+					 
+					 <div class="layui-form-item">
+					    <label class="layui-form-label">角色权限</label>
+					    <div class="layui-input-block" id="selectitem">
+					      {$menu_list}
+					    </div>
+					 </div>
+					 
+		  	   		 <div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit>立即提交</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						 </div>
+				    </div>
+	  	   		</form>
+	  	   </div>
+	  </div>
+	</div>
 	{/if} 
-	
-	{if([$add])}
-    <div class="panel panel-default">
-     	<div class="panel-heading">
-        	<i class="fa fa-list" aria-hidden="true"></i> 角色新增 
-        	<span class="pull-right">{fun=get_btn_back()}</span>
-        </div>
-        <div class="panel-body">
-            <form action="{url./admin/role/add}" method="post" class="col-sm-6">
-            	<div class="form-group">
-                     <label for="rcode">角色编码</label>
-                     <input type="text" id="rcode" value="自动编码" readonly class="form-control readonly">
-                </div>
-                
-                <div class="form-group">
-                	<label for="name">角色名称</label>
-                    <input type="text" name="name" id="name"  class="form-control checknone">
-                </div>
-                
-                <div class="form-group">
-                	<label for="description">角色描述</label>
-                    <input type="text" name="description" id="description"  class="form-control">
-                </div>
-                
-                <div class="form-group">
-                	<label>管辖区域</label>
-                    <div>
-                       {$area_checkbox}
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                	<label>角色功能权限</label>
-                    <div id="selectitem">
-                     	{$menu_list}
-                    </div>
-                </div>
-				
-               <div class="form-group">
-            		<label><button type="button" class="btn btn-primary" id="selectall"><i class="fa fa-check-square-o" aria-hidden="true"></i> 全 选</button></label>
-           	 		<label><button type="button" class="btn btn-primary" id="invselect"><i class="fa fa-minus-square-o" aria-hidden="true"></i> 反 选</button></label>
-          	  		<label><button type="reset" class="btn btn-primary"><i class="fa fa-repeat" aria-hidden="true"></i> 重 选</button></label>
-           	 		<label><button type="submit"  class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> 新 增</button></label>
-                </div>
-            </form>
-         </div>
-     </div>
-	{/if}
-	
+
 	{if([$mod])}
-     <div class="panel panel-default">
-     	<div class="panel-heading">
-        	<i class="fa fa-list" aria-hidden="true"></i> 角色修改 
-        	<span class="pull-right">{fun=get_btn_back()}</span>
-        </div>
-		<div class="panel-body">
-            <form action="{url./admin/Role/mod/rcode/'.[$get.rcode].'}?{$server.QUERY_STRING}" method="post" class="col-sm-6">
-            	<div class="form-group">
-                     <label for="rcode">角色编码</label>
-                     <input type="text" id="rcode" value="{$role->rcode}" readonly class="form-control readonly">
-                </div>
-                
-                <div class="form-group">
-                	<label for="name">角色名称</label>
-                    <input type="text" name="name" id="name" value="{$role->name}" class="form-control checknone">
-                </div>
-                
-                <div class="form-group">
-                	<label for="description">角色描述</label>
-                    <input type="text" name="description" id="description" value="{$role->description}"  class="form-control">
-                </div>
-                
-                <div class="form-group">
-                	<label>管辖区域</label>
-                    <div class="checkbox">
-                       {$area_checkbox}
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                	<label>角色功能权限</label>
-                    <div class="checkbox" id="selectitem">
-                     	{$menu_list}
-                    </div>
-                </div>
-				<div class="form-group">
-            		<label><button type="button" class="btn btn-primary" id="selectall"><i class="fa fa-check-square-o" aria-hidden="true"></i> 全 选</button></label>
-           	 		<label><button type="button" class="btn btn-primary" id="invselect"><i class="fa fa-minus-square-o" aria-hidden="true"></i> 反 选</button></label>
-          	  		<label><button type="reset" class="btn btn-primary"><i class="fa fa-repeat" aria-hidden="true"></i> 重 选</button></label>
-           	 		<label><button type="submit"  class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> 保 存</button></label>
-                </div>
-            </form>
-         </div>
-    </div>
+	
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">角色修改</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+	  	  		<form action="{url./admin/Role/mod/rcode/'.[$get.rcode].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
+	  	  			<div class="layui-form-item">
+	                     <label class="layui-form-label">角色名称</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="name" required  lay-verify="required" value="{$role->name}" placeholder="请输入角色名称" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">角色描述</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="description" value="{$role->description}" placeholder="请输入角色描述" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+					    <label class="layui-form-label">管辖区域</label>
+					    <div class="layui-input-block">
+					      {$area_checkbox}
+					    </div>
+					 </div>
+					 
+					 <div class="layui-form-item">
+					    <label class="layui-form-label">角色权限</label>
+					    <div class="layui-input-block" id="selectitem">
+					      {$menu_list}
+					    </div>
+					 </div>
+					 
+		  	   		 <div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit>立即提交</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						    {fun=get_btn_back()}
+						 </div>
+				    </div>
+	  	  		</form>
+	  	   </div>
+	  </div>
+	 </div>
 	{/if} 
 
 </div>

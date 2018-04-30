@@ -46,10 +46,15 @@ class ContentController extends Controller
             // 文章分类下拉列表
             $sort_model = model('admin.content.ContentSort');
             $sort_select = $sort_model->getListSelect($mcode);
-            $this->assign('sort_select', $this->makeSortSelect($sort_select, get('scode')));
+            $this->assign('search_select', $this->makeSortSelect($sort_select, get('scode')));
+            $this->assign('sort_select', $this->makeSortSelect($sort_select));
+            $this->assign('subsort_select', $this->makeSortSelect($sort_select));
             
             // 模型名称
             $this->assign('model_name', model('admin.content.Model')->getName($mcode));
+            
+            // 扩展字段
+            $this->assign('extfield', model('admin.content.ExtField')->getModelField($mcode));
         }
         
         $this->display('content/content.html');
@@ -156,7 +161,7 @@ class ContentController extends Controller
                 if (! ! $backurl = get('backurl')) {
                     success('新增成功！', $backurl);
                 } else {
-                    success('新增成功！', url('/admin/Content/index'));
+                    success('新增成功！', url('/admin/Content/index/mcode/' . get('mcode')));
                 }
             } else {
                 $this->log('新增文章失败！');

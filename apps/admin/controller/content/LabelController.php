@@ -25,12 +25,6 @@ class LabelController extends Controller
     // 自定义标签列表
     public function index()
     {
-        // 编辑标签模式
-        if (! ! $editor = get('editor')) {
-            $this->assign('editor', true);
-        } else {
-            $this->assign('list', true);
-        }
         // 修改参数配置
         if ($_POST) {
             foreach ($_POST as $key => $value) {
@@ -38,6 +32,7 @@ class LabelController extends Controller
             }
             success('修改成功！', url('admin/Label/index'));
         }
+        $this->assign('list', true);
         $this->assign('labels', $this->model->getList());
         $this->display('content/label.html');
     }
@@ -84,11 +79,11 @@ class LabelController extends Controller
                 if (! ! $backurl = get('backurl')) {
                     success('新增成功！', $backurl);
                 } else {
-                    success('新增成功！', url('admin/Label/index/editor/true'));
+                    success('新增成功！', url('admin/Label/index#tab=t2', false));
                 }
             } else {
-                $this->log('修改自定义标签' . $name . '失败！');
-                error('新增失败！', - 1);
+                $this->log('新增自定义标签' . $name . '失败！');
+                error('新增失败！', url('admin/Label/index#tab=t2', false));
             }
         } else {
             $this->assign('add', true);
@@ -104,7 +99,7 @@ class LabelController extends Controller
         }
         if ($this->model->delLabel($id)) {
             $this->log('删除自定义标签' . $id . '成功！');
-            success('删除成功！', - 1);
+            success('删除成功！', url('admin/Label/index#tab=t2', false));
         } else {
             $this->log('删除自定义标签' . $id . '失败！');
             error('删除失败！', - 1);
@@ -153,7 +148,7 @@ class LabelController extends Controller
             // 执行添加
             if ($this->model->modLabel($id, $data)) {
                 $this->log('修改自定义标签字段' . $id . '成功！');
-                success('修改成功！', url('admin/Label/index/editor/true'));
+                success('修改成功！', url('admin/Label/index#tab=t2', false));
             } else {
                 location(- 1);
             }

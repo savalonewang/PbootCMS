@@ -38,7 +38,16 @@ class ContentSortController extends Controller
         
         // 内容模型
         $models = model('admin.content.Model');
-        $this->assign('models', $models->getSelectAll());
+        $this->assign('allmodels', $models->getSelectAll());
+        $this->assign('models', $models->getSelect());
+        
+        // 内容栏目下拉表
+        $sort_tree = $this->model->getSelect();
+        $sort_select = $this->makeSortSelect($sort_tree);
+        $this->assign('sort_select', $sort_select);
+        
+        // 模板文件
+        $this->assign('tpls', file_list(ROOT_PATH . current($this->config('tpl_dir')) . '/' . session('site.theme')));
         
         $this->display('content/contentsort.html');
     }

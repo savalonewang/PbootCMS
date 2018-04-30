@@ -1,132 +1,134 @@
 {include file='common/head.html'}
-
-<div class="container">
-	<div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-list" aria-hidden="true"></i> 快捷操作</div>
-        <div class="panel-body">
-            {foreach $shortcuts(key,value)}
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-                <a href="{url.'.$value->url.'}">
-                    <dl class="deskbox center-block" style="background: [value->color];">
-                        <dd>
-                            <i class="fa [value->ico]" aria-hidden="true"></i>
-                        </dd>
-                        <dt>[value->name]</dt>
-                    </dl>
-                </a>
-             </div>
-            {/foreach}
-            
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-                <a href="{url./admin/index/index}">
-                    <dl class="deskbox center-block" style="background: #888888">
-                        <dd>
-                            <i class="fa fa-refresh" aria-hidden="true"></i>
-                        </dd>
-                        <dt>刷新</dt>
-                    </dl>
-                </a>
-            </div>
-         </div>
-    </div>
-    
-    <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-list" aria-hidden="true"></i> 系统信息</div>
-        <div class="panel-body">
-         	<div class="row">
-         	 	<dl class="dl-horizontal col-sm-6">
-                    <dt>应用版本：</dt>
-                    <dd>{APP_VERSION}</dd>
-                </dl>
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>框架版本：</dt>
-                    <dd>{CORE_VERSION}</dd>
-                </dl>
-            </div>
-            <div class="row">
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>主机系统：</dt>
-                    <dd>{$server->php_os}</dd>
-                </dl>
-				<dl class="dl-horizontal col-sm-6">
-                     <dt>主机名称：</dt>
-                     <dd>{$server->server_name}</dd>
-                 </dl>
-            </div>
-
-            <div class="row">
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>主机地址：</dt>
-                     <dd>{$server->server_addr}:{$server->server_port}</dd>
-                 </dl>
-                 <dl class="dl-horizontal col-sm-6">
-                    <dt>WEB软件：</dt>
-                    <dd>{$server->server_software}</dd>
-                </dl>
-            </div>
-            
-            <div class="row">
-               <dl class="dl-horizontal col-sm-6">
-                   <dt>PHP版：</dt>
-                   <dd>{$server->php_version}</dd>
-               </dl>
-           
-               <dl class="dl-horizontal col-sm-6">
-                   <dt>数据库驱动：</dt>
-                   <dd>{$server->db_driver}</dd>
-               </dl>
-            </div>
-
-            <div class="row">
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>文件上传限制：</dt>
-                     <dd>{$server->upload_max_filesize}</dd>
-                 </dl>
-                 
-                 <dl class="dl-horizontal col-sm-6">
-                     <dt>表单提交限制：</dt>
-                     <dd>{$server->post_max_size}</dd>
-                 </dl>
-            </div>
-        </div>
-    </div>  
-    
-    <div class="panel panel-default">
-        <div class="panel-heading"><i class="fa fa-list" aria-hidden="true"></i> 开发团队</div>
-        <div class="panel-body">
-         	<div class="row">
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>版权所有：</dt>
-                    <dd>长沙翱云网络科技有限公司</dd>
-                </dl>
-            
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>系统开发：</dt>
-                    <dd>星梦开源团队</dd>
-                </dl>
-            </div>
-            
-            <div class="row">
-            	<dl class="dl-horizontal col-sm-6">
-                    <dt>官方网站：</dt>
-                    <dd><a href="http://www.pbootcms.com" target="_blank">www.pbootcms.com</a></dd>
-                </dl>
-                <dl class="dl-horizontal col-sm-6">
-                    <dt>技术交流群：</dt>
-                    <dd>137083872</dd>
-                </dl>
-            </div>
-            
-            <div class="row">
-                <dl class="dl-horizontal col-xs-12">
-                    <dt>感谢贡献者：</dt>
-                    <dd>感谢晨星傲月、富派仙尊、紫雨、远方的回忆、果爸、Jiang、江苏360搜索推广陈杭、书生会武术、六水水炸了等对于系统开发过程中的积极贡献，感谢交流群各位网友的大力支持及问题反馈！</dd>
-                </dl>
-            </div>
-            
-        </div>
-    </div>          
-
+  
+<div class="layui-body">
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+	  <legend>快捷操作</legend>
+	</fieldset>
+	<div class="layui-row">
+		 {foreach $shortcuts(key,value)}
+	    	<div class="layui-col-xs6 layui-col-sm4 layui-col-md3 layui-col-lg2">
+	    		<a href="{url.'.$value->url.'}">
+		      		<dl class="deskbox center-block">
+	                     <dd>
+	                         <i class="fa [value->ico]" aria-hidden="true"></i>
+	                     </dd>
+	                     <dt>[value->name]</dt>
+	                 </dl>
+                 </a>
+	   	   </div>
+	     {/foreach}
+	 </div>
+	 
+	 <div class="layui-row layui-col-space10">
+	 	<div class="layui-col-xs12 layui-col-md6">
+			<table class="layui-table">
+				  <thead>
+				  	<tr>
+				  		<th colspan="2">系统信息</th>
+				  	</tr>
+				  </thead>
+				  <tbody>
+				     <tr>
+				      	<td width="100">应用版本</td>
+				      	<td>{APP_VERSION}</td>
+				     </tr>
+				     <tr>
+				      	<td>框架版本</td>
+				      	<td>{CORE_VERSION}</td>
+				     </tr>
+				     <tr>
+				      	<td>主机系统</td>
+				      	<td>{$server->php_os}</td>
+				     </tr>
+				     <tr>
+				      	<td>主机名称</td>
+				      	<td>{$server->server_name}</td>
+				     </tr>
+				     <tr>
+				      	<td>主机地址</td>
+				      	<td>{$server->server_addr}:{$server->server_port}</td>
+				     </tr>
+				     <tr>
+				      	<td>WEB软件</td>
+				      	<td>{$server->server_software}</td>
+				     </tr>
+				     <tr>
+				      	<td>PHP版</td>
+				      	<td>{$server->php_version}</td>
+				     </tr>
+				     <tr>
+				      	<td>数据库驱动</td>
+				      	<td>{$server->db_driver}</td>
+				     </tr>
+				     <tr>
+				      	<td>文件上传限制</td>
+				      	<td>{$server->upload_max_filesize}</td>
+				     </tr>
+				     <tr>
+				      	<td>表单提交限制</td>
+				      	<td>{$server->post_max_size}</td>
+				     </tr>
+				  </tbody> 
+			</table> 
+	 	</div>
+	 	
+	 	<div class="layui-col-xs12 layui-col-md6">
+			<table class="layui-table">
+				  <thead>
+				  	<tr>
+				  		<th colspan="2">开发信息</th>
+				  	</tr>
+				  </thead>
+				 
+				  <tbody>
+				  	<tr>
+	                    <td>版权所有</td>
+	                    <td>长沙翱云网络科技有限公司</td>
+	                </tr>
+	                
+	                <tr>
+	                    <td>翱云科技</td>
+	                    <td><a href="http://www.hnaoyun.com" target="_blank">hnaoyun.com</a></td>
+	                </tr>
+	                
+	                <tr>
+	                    <td>官方网站</td>
+	                    <td><a href="http://www.pbootcms.com" target="_blank">pbootcms.com</a></td>
+	                </tr>
+	                
+				  	<tr>
+	                    <td width="100">码云地址</td>
+	                    <td><a href="https://gitee.com/hnaoyun/PbootCMS/releases" target="_blank">查看最新版</a></td>
+	                </tr>
+	                
+	                <tr>
+	                    <td>系统开发</td>
+	                    <td>星梦开源团队</td>
+	                </tr>
+	                
+	                <tr>
+	                    <td>前端框架</td>
+	                    <td>LayUI</td>
+	                </tr>
+	               
+	                <tr>
+	                    <td>技术交流群</td>
+	                    <td>137083872</td>
+	                </tr>
+	                
+	                <tr>
+	                    <td>友情贡献者</td>
+	                    <td>
+	                    	感谢晨星傲月、富派仙尊、紫雨、远方的回忆、果爸、Jiang、江苏360搜索推广陈杭、书生会武术、六水水炸了等网友对于系统开发过程中的积极贡献；
+	                    	感谢交流群各位网友的大力支持及问题反馈；
+	                    	感谢LayUI提供的前端框架；
+	                    	感谢星梦开发团队的日夜奋斗。
+	                    </td>
+	                </tr>
+				  </tbody>
+			</table>
+	 	</div>
+	 </div>
 </div>
 
 {include file='common/foot.html'}

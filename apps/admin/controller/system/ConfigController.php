@@ -43,7 +43,12 @@ class ConfigController extends Controller
                 }
             }
             $this->log('修改参数配置成功！');
-            success('修改成功！', url('admin/Config/index'));
+            switch (post('submit')) {
+                case 'api':
+                    success('修改成功！', url('/admin/Config/index#tab=t2', false));
+                default:
+                    success('修改成功！', url('/admin/Config/index', false));
+            }
         }
         $this->assign('basic', true);
         $this->assign('configs', $this->model->getList());
@@ -59,7 +64,7 @@ class ConfigController extends Controller
                 $this->model->modValue($key, post($key));
             }
             $this->log('修改邮件发送配置成功！');
-            success('修改成功！', url('admin/Config/email'));
+            success('修改成功！', url('/admin/Config/email'));
         }
         $this->assign('email', true);
         $this->assign('configs', $this->model->getList());

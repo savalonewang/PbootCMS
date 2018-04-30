@@ -127,7 +127,7 @@ function get_btn_back($btnName = '返 回')
         $url = url('/' . M . '/' . C . '/index');
     }
     
-    $btn_html = "<a href='" . $url . "' class='btn-back'><i class='fa fa-undo' aria-hidden='true'></i> $btnName</a>";
+    $btn_html = "<a href='" . $url . "' class='layui-btn layui-btn-primary'>$btnName</a>";
     return $btn_html;
 }
 

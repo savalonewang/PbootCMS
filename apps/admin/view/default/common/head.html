@@ -1,96 +1,68 @@
 <!DOCTYPE html>
-<html lang="zh-CN"> 
+<html>
 <head>
-	<meta charset="utf-8">
-	<title>PbootCMS-管理中心-V{APP_VERSION}</title>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<link type="text/css" href="{APP_THEME_DIR}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="{APP_THEME_DIR}/font-awesome/css/font-awesome.min.css" type="text/css">
-	<link type="text/css" href="{APP_THEME_DIR}/css/comm.css" rel="stylesheet">
-	<script type="text/javascript" src="{APP_THEME_DIR}/bootstrap/js/jquery.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>PbootCMS-管理中心-V{APP_VERSION}</title>
+  <link rel="stylesheet" href="{APP_THEME_DIR}/layui/css/layui.css">
+  <link rel="stylesheet" href="{APP_THEME_DIR}/font-awesome/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="{APP_THEME_DIR}/css/comm.css">
+  <script type="text/javascript" src="{APP_THEME_DIR}/js/jquery-1.9.1.min.js"></script>
 </head>
-<body>
+
+<body class="layui-layout-body">
 
 <!--定义部分地址方便JS调用-->
 <span style="display: none" id="controller" data-controller="{C}"></span>
 <span style="display: none" id="url" data-url="{URL}"></span>
 <span style="display: none" id="preurl" data-preurl="{fun=url('/admin',false)}"></span>
 
-
-<div class="navbar navbar-blue navbar-fixed-top head" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-                <span class="sr-only">切换导航</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{url./admin/Index/home}">PbootCMS</a>
-        </div>
-
-        <div class="collapse navbar-collapse" id="navbar-collapse">
-        
-            <ul class="nav navbar-nav" id="nav">
-                {foreach $menu_tree(key,value)}
-                    <li class="dropdown">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            [value->name]
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                        	{foreach $value->son(key2,value2)}
-                        		<li><a href="{url.'.$value2->url.'}"><i class="fa [value2->ico]" aria-hidden="true"></i> [value2->name]</a></li><li class="divider"></li>
-                        	{/foreach}
-                        	
-                        	{if($value->mcode=='M130')}
-                        		{foreach $menu_models(key3,value3)}
-	                        		<li>
-	                        			<a href="{url./admin/Content/index/mcode/'.$value3->mcode.'}"><i class="fa fa-file-text-o" aria-hidden="true"></i> [value3->name]内容</a>
-	                        		</li>
-	                        		<li class="divider"></li>
-                        		{/foreach}
-                        	{/if}
-                        </ul>
-                    </li>
-                {/foreach}
-            </ul>
-            
-            <ul class="nav navbar-nav navbar-right">
-            	<li><a href="#">您好，{$session.realname}</a></li>
-                <li><a href="{SITE_DIR}/" class="navbar-link" target="_blank"><span class="fa fa-home"></span> 主页</a></li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-user" aria-hidden="true"></i> 用户中心 <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu">
-                     <li><a href="{url./admin/Index/ucenter}"><i class="fa fa-address-card-o" aria-hidden="true"></i> 资料修改</a></li>
-                     {if(session('id')==1)}
-                     <li role="separator" class="divider"></li>
-                     <li><a href="{url./admin/Index/clearCache}"><i class="fa fa-trash-o" aria-hidden="true"></i> 清理缓存</a></li>
-                     {/if}
-                     <li role="separator" class="divider"></li>
-                     <li><a href="{url./admin/Index/loginOut}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出登陆</a></li>
-                  </ul>
-                </li>
-             </ul>
-             
-             <form method="post" action="{url./admin/index/area}" class="navbar-form navbar-right {if([$hide_area])}hide{/if}">
-                	<div class="input-group"> 
-	                    <select name="acode" class="form-control input-sm">
-	                        {$area_html}
-	                    </select>
-	                    <div class="input-group-btn">
-	                        <button type="submit" class="btn btn-default btn-sm">切换区域</button>
-	                    </div>
-                    </div>
-	        </form>
-        </div>
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo"><a href="{url./admin/Index/home}">PbootCMS</a></div>
+    
+    <ul class="menu">
+    	<li class="menu-ico" title="显示或隐藏侧边栏"><i class="fa fa-bars" aria-hidden="true"></i></li>
+	</ul>
+    
+    <ul class="layui-nav layui-layout-left layui-hide-xs">
+    	 <li class="layui-nav-item"><a href="{SITE_DIR}/" target="_blank"><i class="fa fa-home" aria-hidden="true"></i> 网站主页</a></li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <i class="fa fa-user-circle-o" aria-hidden="true"></i> {$session.realname}
+        </a>
+        <dl class="layui-nav-child">
+		  <dd><a href="{url./admin/Index/ucenter}"><i class="fa fa-address-card-o" aria-hidden="true"></i> 资料修改</a></dd>
+		  {if(session('id')==1)}
+		  <dd><a href="{url./admin/Index/clearCache}"><i class="fa fa-trash-o" aria-hidden="true"></i> 清理缓存</a></dd>
+		  {/if}
+		  <dd><a href="{url./admin/Index/loginOut}"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出登陆</a></dd>
+        </dl>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree" id="nav" lay-shrink="all">
+	   {foreach $menu_tree(key,value)}
+        <li class="layui-nav-item">
+          <a class="" href="javascript:;"><i class="fa [value->ico]" aria-hidden="true"></i>[value->name]</a>
+          <dl class="layui-nav-child">
+			{foreach $value->son(key2,value2,num2)}
+            <dd><a href="{url.'.$value2->url.'}"><i class="fa [value2->ico]" aria-hidden="true"></i>[value2->name]</a></dd>
+			{/foreach}
+			{if($value->mcode=='M130')}
+				 {foreach $menu_models(key3,value3,num3)}
+					<dd><a href="{url./admin/Content/index/mcode/'.$value3->mcode.'}"><i class="fa fa-file-text-o" aria-hidden="true"></i>[value3->name]内容</a></dd>
+				 {/foreach}
+		    {/if}
+          </dl>
+        </li>
+		{/foreach}
+      </ul>
     </div>
-</div>
-<div style="height:60px;"></div>
-	
+  </div>
