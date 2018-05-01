@@ -251,7 +251,7 @@ class Paging
     {
         if (! $this->pageCount)
             return;
-        $select_html = '<select onchange="changepage(this)">';
+        $select_html = '<select onchange="changepage(this)" lay-ignore>';
         for ($i = 1; $i <= $this->pageCount; $i ++) {
             if ($i == $this->page) {
                 $select_html .= '<option value=' . $i . ' selected="selected">' . $i . '</option>';

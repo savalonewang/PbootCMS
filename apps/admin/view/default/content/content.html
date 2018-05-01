@@ -26,7 +26,7 @@
 	                </div>
                 </form>
                 
-	  	   		<form action="{url./admin/Content/mod}" method="post" id="contentForm" name="contentForm">
+	  	   		<form action="{url./admin/Content/mod}" method="post" id="contentForm" name="contentForm" class="layui-form">
 		            <table class="layui-table">
 		            	<thead>
 		                    <tr>
@@ -63,7 +63,7 @@
 		                        {/if}
 		                        </td>
 		                        <td>[value->date]</td>
-		                        <td class="table-input"><input type="text" class="layui-input" name="sorting[]" value="[value->sorting]"></td>
+		                        <td class="table-input"><input type="text" lay-ignore class="layui-input" name="sorting[]" value="[value->sorting]"></td>
 		                        <td>
 		                        {if($value->status)}
 			                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击关闭"></i></a>
