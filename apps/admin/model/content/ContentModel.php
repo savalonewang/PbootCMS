@@ -183,6 +183,12 @@ class ContentModel extends Model
             ->delete();
     }
 
+    // 删除文章
+    public function delContentList($ids)
+    {
+        return parent::table('ay_content')->where("acode='" . session('acode') . "'")->delete($ids);
+    }
+
     // 修改文章
     public function modContent($id, $data)
     {

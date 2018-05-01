@@ -213,6 +213,21 @@ class ContentController extends Controller
     // 文章删除
     public function del()
     {
+        // 执行批量删除
+        if ($_POST) {
+            if (! ! $list = post('list')) {
+                if ($this->model->delContentList($list)) {
+                    $this->log('批量删除文章成功！');
+                    success('批量删除成功！', - 1);
+                } else {
+                    $this->log('批量删除文章失败！');
+                    error('批量删除失败！', - 1);
+                }
+            } else {
+                error('请选择要删除的内容！', - 1);
+            }
+        }
+        
         if (! $id = get('id', 'int')) {
             error('传递的参数值错误！', - 1);
         }
