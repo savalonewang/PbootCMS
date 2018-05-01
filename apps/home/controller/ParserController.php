@@ -311,13 +311,14 @@ class ParserController extends Controller
                 $data = $this->model->getPosition($scode);
                 $out_html = '<a href="' . SITE_DIR . '/">首页</a>';
                 foreach ($data as $key => $value) {
-                    if ($value['type'] == 1) {
+                    if ($value['outlink']) {
+                        $out_html .= $separator . '<a href="' . $value['outlink'] . '">' . $value['name'] . '</a>';
+                    } elseif ($value['type'] == 1) {
                         $out_html .= $separator . '<a href="' . url('/home/about/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
                     } elseif ($value['type'] == 2) {
                         $out_html .= $separator . '<a href="' . url('/home/list/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
                     }
                 }
-                
                 // 执行内容替换
                 $content = str_replace($matches[0][$i], $out_html, $content);
             }

@@ -100,8 +100,19 @@ class ContentSortModel extends Model
     // 获取内容栏目详情
     public function getSort($scode)
     {
-        return parent::table('ay_content_sort')->where("scode='$scode'")
-            ->where("acode='" . session('acode') . "'")
+        $field = array(
+            'a.*',
+            'b.type'
+        );
+        $join = array(
+            'ay_model b',
+            'a.mcode=b.mcode',
+            'LEFT'
+        );
+        return parent::table('ay_content_sort a')->field($field)
+            ->where("a.scode='$scode'")
+            ->where("a.acode='" . session('acode') . "'")
+            ->join($join)
             ->find();
     }
 

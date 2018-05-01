@@ -122,6 +122,7 @@ class ParserModel extends Model
                 'a.pcode',
                 'a.scode',
                 'a.name',
+                'a.outlink',
                 'b.type'
             );
             $join = array(
@@ -146,6 +147,7 @@ class ParserModel extends Model
                 'a.pcode',
                 'a.scode',
                 'a.name',
+                'a.outlink',
                 'b.type'
             );
             $join = array(
