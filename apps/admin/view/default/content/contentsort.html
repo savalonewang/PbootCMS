@@ -9,7 +9,7 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
-	  	   		 <form action="{url./admin/ContentSort/mod}" method="post">
+	  	   		 <form action="{url./admin/ContentSort/mod}" method="post" id="sortForm" name="sortForm">
 	  	   		 <table class="layui-table">
 	  	   		 	  <thead>
 		                    <tr>
@@ -69,7 +69,14 @@
 		                </tbody>
 	  	   		 </table>
 	  	   		 <button type="submit" name="submit" value="sorting" class="layui-btn">保存排序</button>
-	  	   		 </form>
+	  	   		 <button type="submit" name="submit" onclick="return setDelAction();" class="layui-btn">批量删除</button>
+	  	   		 <script>
+		     		function setDelAction(){
+		     			document.sortForm.action = "{url./admin/ContentSort/del}"; 
+		     			return confirm("您确定要删除选中的栏目么？");
+		     		}
+		     	</script>
+	  	   		</form>
 	  	    </div>
 	  	    
 	  	     <div class="layui-tab-item">
@@ -101,7 +108,7 @@
 			                <div class="layui-form-item">
 			                     <label class="layui-form-label">内容模型</label>
 			                     <div class="layui-input-block">
-			                     	<select name="mcode" lay-filter="model">
+			                     	<select name="mcode" lay-filter="model" lay-verify="required" >
 				                     	<option value="">请选择内容模型</option>
 				                        {foreach $models(key,value)}	                        	
 				                        	<option value="[value->mcode]" data-type="[value->type]"  data-listtpl="[value->listtpl]" data-contenttpl="[value->contenttpl]" >[value->name]</option>
@@ -242,7 +249,7 @@
 		                <div class="layui-form-item">
 		                     <label class="layui-form-label">内容模型</label>
 		                     <div class="layui-input-block">
-		                     	<select name="mcode" lay-filter="model">
+		                     	<select name="mcode" lay-filter="model" lay-verify="required" >
 			                     	<option value="">请选择内容模型</option>
 			                        {foreach $models(key,value)}	                        	
 			                        	<option value="[value->mcode]"  {if($value->mcode==[$sort->mcode])}selected{/if}  data-type="[value->type]"  data-listtpl="[value->listtpl]" data-contenttpl="[value->contenttpl]" >[value->name]</option>

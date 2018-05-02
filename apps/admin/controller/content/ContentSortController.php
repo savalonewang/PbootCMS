@@ -129,6 +129,10 @@ class ContentSortController extends Controller
                 alert_back('栏目名不能为空！');
             }
             
+            if (! $mcode) {
+                alert_back('栏目模型必须选择！');
+            }
+            
             if (! $type) {
                 alert_back('栏目类型不能为空！');
             }
@@ -218,6 +222,21 @@ class ContentSortController extends Controller
     // 内容栏目删除
     public function del()
     {
+        // 执行批量删除
+        if ($_POST) {
+            if (! ! $list = post('list')) {
+                if ($this->model->delSortList($list)) {
+                    $this->log('批量删除栏目成功！');
+                    success('批量删除成功！', - 1);
+                } else {
+                    $this->log('批量删除栏目失败！');
+                    error('批量删除失败！', - 1);
+                }
+            } else {
+                error('请选择要删除的内容！', - 1);
+            }
+        }
+        
         if (! $scode = get('scode', 'var')) {
             error('传递的参数值错误！', - 1);
         }
@@ -294,6 +313,10 @@ class ContentSortController extends Controller
             
             if (! $name) {
                 alert_back('栏目名不能为空！');
+            }
+            
+            if (! $mcode) {
+                alert_back('栏目模型必须选择！');
             }
             
             if (! $type) {
