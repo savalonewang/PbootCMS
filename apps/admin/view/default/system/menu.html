@@ -10,7 +10,7 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
-				<table class="layui-table">
+				<table class="layui-table" id="menuTable">
 	                <thead>
 	                    <tr>
 	                        <th>序号</th>
@@ -26,10 +26,9 @@
 	                </thead>
 	                <tbody>
 	                {foreach $menus(key,value)}
-	                    <tr>
+	                    <tr data-tt-id='[value->mcode]' data-tt-parent-id="[value->pcode]">
 	                        <td>[num]</td>
 	                        <td>
-	                            [value->blank]
 	                            <i class="fa [value->ico]" aria-hidden="true"></i> 
 	                            [value->name]</td>
 	                        <td>[value->mcode]</td>
@@ -60,6 +59,9 @@
 	                {/foreach}
 	                </tbody>
             	</table>
+            	<script>
+            	$("#menuTable").treetable({ expandable: true,column: 1,indent:20,stringCollapse:'收缩',stringExpand:'展开' });
+            	</script>
           </div>
           
           <div class="layui-tab-item">

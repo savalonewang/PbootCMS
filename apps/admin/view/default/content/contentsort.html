@@ -10,7 +10,7 @@
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
 	  	   		 <form action="{url./admin/ContentSort/mod}" method="post" id="sortForm" name="sortForm">
-	  	   		 <table class="layui-table">
+	  	   		 <table class="layui-table" id="sortTable">
 	  	   		 	  <thead>
 		                    <tr>
 		                        <th><input type="checkbox" lay-ignore id="checkall" title="全选"></th>
@@ -27,17 +27,17 @@
 		                </thead>
 		                <tbody>
 		                {foreach $sorts(key,value)}
-		                    <tr>
+		                	
+		                    <tr data-tt-id='[value->scode]' data-tt-parent-id="[value->pcode]">
 		                    	<td>
 		                    		<input type="checkbox" class="checkitem" lay-ignore name="list[]" value="[value->scode]">
 		                    		<input type="hidden" name="listall[]" value="[value->id]">
 		                    	</td>
 		                        <td>
-		                            [value->blank]
 		                            {if($value->son)}
-		                                <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+		                               <i class="fa fa-folder-o" aria-hidden="true"></i>
 		                            {else}
-		                                <i class="fa fa-folder-o" aria-hidden="true"></i>
+		                               <i class="fa fa-folder-open-o" aria-hidden="true"></i>
 		                            {/if}
 		                            [value->name]
 		                        </td>
@@ -75,6 +75,8 @@
 		     			document.sortForm.action = "{url./admin/ContentSort/del}"; 
 		     			return confirm("您确定要删除选中的栏目么？");
 		     		}
+		     		
+		     		$("#sortTable").treetable({ expandable: true,column: 1,indent:20,stringCollapse:'收缩',stringExpand:'展开' });
 		     	</script>
 	  	   		</form>
 	  	    </div>
