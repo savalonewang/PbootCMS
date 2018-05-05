@@ -118,6 +118,7 @@ function light_nav(){
         });
     }
 	
+	//默认第一个高亮
 	if(!flag){
 		$('#nav').find('.nav-item').first().addClass('layui-nav-itemed');
 	}
