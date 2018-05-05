@@ -146,9 +146,9 @@ class ContentSortModel extends Model
     {
         $this->scodes = array(); // 先清空
         foreach ($scodes as $value) {
-            $scodes = $this->getSubScodes($value); // 获取全部子类
+            $allscode = $this->getSubScodes($value); // 获取全部子类
         }
-        return parent::table('ay_content_sort')->in('scode', $scodes)
+        return parent::table('ay_content_sort')->in('scode', $allscode)
             ->where("acode='" . session('acode') . "'")
             ->delete();
     }
