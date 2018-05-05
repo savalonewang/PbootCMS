@@ -88,9 +88,10 @@ function light_nav(){
     });
 
     url = url.replace('.html','');
+    
     //第二种情况，菜单的子页面，如翻页
     if(!flag){
-    	aobj.find('a').each(function (index, element) {
+    	aobj.each(function (index, element) {
             var aUrl = $(element).attr('href').toLowerCase();
             aUrl = aUrl.replace('.html','');
             if (url.indexOf(aUrl)>-1) {
