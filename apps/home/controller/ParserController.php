@@ -39,6 +39,7 @@ class ParserController extends Controller
         $content = $this->parserSpecifyListLabel($content); // 指定列表
         $content = $this->parserSpecifyContentLabel($content); // 指定内容
         $content = $this->parserContentPicsLabel($content); // 内容多图
+        $content = $this->parserContentCheckboxLabel($content); // 内容多选调取
         $content = $this->parserSlideLabel($content); // 幻灯片
         $content = $this->parserLinkLabel($content); // 友情链接
         $content = $this->parserMessageLabel($content); // 留言板
@@ -1035,6 +1036,83 @@ class ParserController extends Controller
                     if (isset($num) && $key2 > $num) {
                         break;
                     }
+                }
+                $content = str_replace($matches[0][$i], $out_html, $content);
+            }
+        }
+        return $content;
+    }
+
+    // 解析指定内容多选
+    public function parserContentCheckboxLabel($content)
+    {
+        $pattern = '/\{pboot:checkbox(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:checkbox\}/';
+        $pattern2 = '/\[checkbox:([\w]+)(\s+[^]]+)?\]/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            for ($i = 0; $i < $count; $i ++) {
+                // 获取调节参数
+                $params = $this->parserParam($matches[1][$i]);
+                $id = - 1;
+                
+                // 跳过未指定id的调用
+                if (! array_key_exists('id', $params)) {
+                    continue;
+                }
+                
+                // 跳过未指定field的调用
+                if (! array_key_exists('field', $params)) {
+                    continue;
+                }
+                
+                // 分离参数
+                foreach ($params as $key => $value) {
+                    switch ($key) {
+                        case 'id':
+                            $id = $value;
+                            break;
+                        case 'field':
+                            $field = $value;
+                            break;
+                    }
+                }
+                
+                // 读取内容多图
+                if (! ! $checkboxs = $this->model->getContentCheckbox($id, $field)) {
+                    $data = explode(',', $checkboxs);
+                } else {
+                    $data = array();
+                }
+                
+                // 无内容直接替换为空并跳过
+                if (! $data) {
+                    $content = str_replace($matches[0][$i], '', $content);
+                    continue;
+                }
+                
+                // 匹配到内部标签
+                if (preg_match_all($pattern2, $matches[2][$i], $matches2)) {
+                    $count2 = count($matches2[0]); // 循环内的内容标签数量
+                } else {
+                    $count2 = 0;
+                }
+                
+                $out_html = '';
+                $key = 1;
+                foreach ($data as $value) { // 按条数循环
+                    $one_html = $matches[2][$i];
+                    for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
+                        switch ($matches2[1][$j]) {
+                            case 'i':
+                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
+                                break;
+                            case 'text':
+                                $one_html = str_replace($matches2[0][$j], $value, $one_html);
+                                break;
+                        }
+                    }
+                    $key ++;
+                    $out_html .= $one_html;
                 }
                 $content = str_replace($matches[0][$i], $out_html, $content);
             }

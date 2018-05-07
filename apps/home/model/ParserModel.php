@@ -396,6 +396,13 @@ class ParserModel extends Model
         return $result;
     }
 
+    // 指定内容多选调用
+    public function getContentCheckbox($id, $field)
+    {
+        $result = parent::table('ay_content_ext')->where("contentid='$id'")->value($field);
+        return $result;
+    }
+
     // 上一篇内容
     public function getContentPre($scode, $id)
     {
