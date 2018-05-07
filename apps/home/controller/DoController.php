@@ -33,11 +33,7 @@ class DoController extends Controller
                     session('lg', $lg);
                 }
             }
-            if (isset($_SERVER['HTTP_REFERER'])) {
-                location('-1');
-            } else {
-                location(url('home/index/index'));
-            }
+            location(url('home/index/index'));
         }
     }
 
