@@ -14,6 +14,9 @@ use core\basic\Model;
 class ContentSortModel extends Model
 {
 
+    // 存储分类及子编码
+    protected $scodes = array();
+
     // 获取内容栏目列表
     public function getList()
     {
@@ -131,15 +134,23 @@ class ContentSortModel extends Model
     // 删除内容栏目
     public function delSort($scode)
     {
-        return parent::table('ay_content_sort')->where("scode='$scode' OR pcode='$scode'")
+        $this->scodes = array(); // 先清空
+        $scodes = $this->getSubScodes($scode); // 获取全部子类
+        return parent::table('ay_content_sort')->in('scode', $scodes)
             ->where("acode='" . session('acode') . "'")
             ->delete();
     }
 
     // 批量删除栏目
-    public function delSortList($ids)
+    public function delSortList($scodes)
     {
-        return parent::table('ay_content_sort')->where("acode='" . session('acode') . "'")->delete($ids);
+        $this->scodes = array(); // 先清空
+        foreach ($scodes as $value) {
+            $allscode = $this->getSubScodes($value); // 获取全部子类
+        }
+        return parent::table('ay_content_sort')->in('scode', $allscode)
+            ->where("acode='" . session('acode') . "'")
+            ->delete();
     }
 
     // 修改内容栏目资料
@@ -180,5 +191,21 @@ class ContentSortModel extends Model
         return parent::table('ay_content')->where("scode='$scode'")
             ->where("acode='" . session('acode') . "'")
             ->delete();
+    }
+
+    // 分类子类集
+    private function getSubScodes($scode)
+    {
+        if (! $scode) {
+            return;
+        }
+        $this->scodes[] = $scode;
+        $subs = parent::table('ay_content_sort')->where("pcode='$scode'")->column('scode');
+        if ($subs) {
+            foreach ($subs as $value) {
+                $this->getSubScodes($value);
+            }
+        }
+        return $this->scodes;
     }
 }

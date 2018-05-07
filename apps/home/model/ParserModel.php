@@ -230,6 +230,7 @@ class ParserModel extends Model
         $scodes = $this->getSubScodes($scode);
         return parent::table('ay_content a')->field($fields)
             ->in('a.scode', $scodes)
+            ->where("a.subscode='$scode'", 'AND', 'OR')
             ->where("a.acode='" . session('lg') . "'")
             ->where('a.status=1')
             ->where('d.type=2')
@@ -277,6 +278,7 @@ class ParserModel extends Model
         $scodes = $this->getSubScodes($scode);
         return parent::table('ay_content a')->field($fields)
             ->in('a.scode', $scodes)
+            ->where("a.subscode='$scode'", 'AND', 'OR')
             ->where("a.acode='" . session('lg') . "'")
             ->where('a.status=1')
             ->where('d.type=2')
@@ -391,6 +393,13 @@ class ParserModel extends Model
             ->where("acode='" . session('lg') . "'")
             ->where('status=1')
             ->value('pics');
+        return $result;
+    }
+
+    // 指定内容多选调用
+    public function getContentCheckbox($id, $field)
+    {
+        $result = parent::table('ay_content_ext')->where("contentid='$id'")->value($field);
         return $result;
     }
 

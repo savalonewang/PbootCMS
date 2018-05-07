@@ -26,9 +26,14 @@ class HomeController extends Controller
             session('config', $model->getConfig());
         }
         
+        // 手机版域名
+        $wap_domain = session('config.wap_domain');
+        
+        // 获取系统设置的主题
+        $theme = $model->getTheme();
+        
         // 手机自适应主题
-        $theme = $model->getTheme(); // 获取系统设置的主题
-        if (session('config.open_wap') && is_mobile()) {
+        if ((session('config.open_wap') && is_mobile()) || ($wap_domain && $wap_domain == $_SERVER['HTTP_HOST'])) {
             $this->setTheme($theme . '/wap'); // 移动端主题
         } else {
             if ($theme) {

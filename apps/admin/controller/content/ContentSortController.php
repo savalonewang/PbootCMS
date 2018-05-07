@@ -233,7 +233,7 @@ class ContentSortController extends Controller
                     error('批量删除失败！', - 1);
                 }
             } else {
-                error('请选择要删除的内容！', - 1);
+                alert_back('请选择要删除的内容！');
             }
         }
         
