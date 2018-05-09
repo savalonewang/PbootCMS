@@ -176,6 +176,7 @@
 			                     <button type="button" class="layui-btn upload" data-des="ico">
 								 	 <i class="layui-icon">&#xe67c;</i>上传图片
 								 </button>
+								 <div id="ico_box" class="pic"></div>
 			                </div>
 			                
 			                 <div class="layui-form-item">
@@ -186,6 +187,7 @@
 			                     <button type="button" class="layui-btn upload" data-des="pic">
 								 	 <i class="layui-icon">&#xe67c;</i>上传图片
 								 </button>
+								 <div id="pic_box" class="pic"></div>
 			                </div>
 			                
 			                <div class="layui-form-item">
@@ -323,6 +325,7 @@
 		                     <button type="button" class="layui-btn upload" data-des="ico">
 							 	 <i class="layui-icon">&#xe67c;</i>上传图片
 							 </button>
+							 <div id="ico_box" class="pic"><dl><dt>{if([$sort->ico])}<img src='{SITE_DIR}{$sort->ico}' data-url="{$sort->ico}"></dt><dd>删除</dd></dl>{/if}</div>
 		                </div>
 		                
 		                 <div class="layui-form-item">
@@ -333,6 +336,7 @@
 		                     <button type="button" class="layui-btn upload" data-des="pic">
 							 	 <i class="layui-icon">&#xe67c;</i>上传图片
 							 </button>
+							 <div id="pic_box" class="pic"><dl><dt>{if([$sort->pic])}<img src='{SITE_DIR}{$sort->pic}' data-url="{$sort->pic}"></dt><dd>删除</dd></dl>{/if}</div>
 		                </div>
 		                
 		                <div class="layui-form-item">

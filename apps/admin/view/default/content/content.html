@@ -179,6 +179,7 @@
 				                     <button type="button" class="layui-btn upload" data-des="[value->name]">
 									 	 <i class="layui-icon">&#xe67c;</i>上传图片
 									 </button>
+									 <div id="[value->name]_box" class="pic"></div>
 				                </div>
 			                	{/if}
 			                	
@@ -233,6 +234,7 @@
 			                     <button type="button" class="layui-btn upload" data-des="ico">
 								 	 <i class="layui-icon">&#xe67c;</i>上传图片
 								 </button>
+								 <div id="ico_box" class="pic"></div>
 			                </div>
 			                
 			                <div class="layui-form-item">
@@ -243,6 +245,7 @@
 			                     <button type="button" class="layui-btn uploads" data-des="pics">
 								 	 <i class="layui-icon">&#xe67c;</i>上传多图
 								 </button>
+								 <div id="pics_box" class="pic"></div>
 			                </div>
 			                
 			                <div class="layui-form-item">
@@ -451,6 +454,8 @@
 				                     <button type="button" class="layui-btn upload" data-des="[value->name]">
 									 	 <i class="layui-icon">&#xe67c;</i>上传图片
 									 </button>
+									 {php}$name=$value->name; {/php}
+									 <div id="[value->name]_box" class="pic"><dl><dt>{if([$content]->$name)}<img src='{SITE_DIR}{$content->{$value->name}}' data-url="{$content->{$value->name}}"></dt><dd>删除</dd></dl>{/if}</div>
 				                </div>
 			                	{/if}
 			                	
@@ -505,6 +510,7 @@
 			                     <button type="button" class="layui-btn upload" data-des="ico">
 								 	 <i class="layui-icon">&#xe67c;</i>上传图片
 								 </button>
+								 <div id="ico_box" class="pic">{if([$content->ico])}<dl><dt><img src="{SITE_DIR}{$content->ico}" data-url="{$content->ico}"></dt><dd>删除</dd></dl>{/if}</div>
 			                </div>
 			                
 			                <div class="layui-form-item">
@@ -515,6 +521,18 @@
 			                     <button type="button" class="layui-btn uploads" data-des="pics">
 								 	 <i class="layui-icon">&#xe67c;</i>上传多图
 								 </button>
+								 <div id="pics_box" class="pic">
+									 {php}
+									    if([$content->pics]){
+		                					$pics=explode(',',[$content->pics]);
+		                				}else{
+		                					$pics = array();
+		                				}
+		                				foreach ($pics as $value) {
+		                					echo "<dl><dt><img src='".SITE_DIR.$value."' data-url='".$value."'></dt><dd>删除</dd></dl></dl>";
+	          							}
+	         						 {/php}
+         						 </div>
 			                </div>
 			                
 			                <div class="layui-form-item">

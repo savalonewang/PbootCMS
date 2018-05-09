@@ -1,7 +1,7 @@
 <?php
 return array(
     // 应用版本
-    'app_version' => '1.0.8'
+    'app_version' => '1.0.9'
 
 );
  
