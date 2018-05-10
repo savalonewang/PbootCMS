@@ -75,7 +75,7 @@
       <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
       <ul class="layui-nav layui-nav-tree" id="nav" lay-shrink="all">
 	   {foreach $menu_tree(key,value)}
-        <li class="layui-nav-item nav-item">
+        <li class="layui-nav-item nav-item {if([$primary_menu_url]==$value->url)}layui-nav-itemed{/if}">
           <a class="" href="javascript:;"><i class="fa [value->ico]" aria-hidden="true"></i>[value->name]</a>
           <dl class="layui-nav-child">
 			{foreach $value->son(key2,value2,num2)}

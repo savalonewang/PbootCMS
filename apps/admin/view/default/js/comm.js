@@ -80,8 +80,8 @@ function light_nav(){
         var aUrl = $(element).attr('href').toLowerCase();
         if (url==aUrl) {
             $(element).parent("dd").addClass("layui-this");
-			$(element).parents('li').addClass('layui-nav-itemed');
-			$(element).parents('li').siblings('li').removeClass('layui-nav-itemed');
+			//$(element).parents('li').addClass('layui-nav-itemed');
+			//$(element).parents('li').siblings('li').removeClass('layui-nav-itemed');
             flag = true;
         }
 		if(flag) return false;
@@ -96,8 +96,8 @@ function light_nav(){
             aUrl = aUrl.replace('.html','');
             if (url.indexOf(aUrl)>-1) {
             	$(element).parent("dd").addClass("layui-this");
-     			$(element).parents('li').addClass('layui-nav-itemed');
-     			$(element).parents('li').siblings('li').removeClass('layui-nav-itemed');
+     			//$(element).parents('li').addClass('layui-nav-itemed');
+     			//$(element).parents('li').siblings('li').removeClass('layui-nav-itemed');
                 flag = true;
             }
             if(flag) return false;
@@ -110,8 +110,8 @@ function light_nav(){
             var aUrl = $(element).attr("href").toLowerCase();
             if (aUrl.indexOf('/'+controller+'/')==0||aUrl.indexOf('.php/'+controller+'/')>-1) {
             	$(element).parent("dd").addClass("layui-this");
-     			$(element).parents('li').addClass('layui-nav-itemed');
-     			$(element).parents('li').siblings('li').removeClass('layui-nav-itemed');
+     			//$(element).parents('li').addClass('layui-nav-itemed');
+     			//$(element).parents('li').siblings('li').removeClass('layui-nav-itemed');
                 flag = true;
             }
             if(flag) return false;
@@ -120,7 +120,7 @@ function light_nav(){
 	
 	//默认第一个高亮
 	if(!flag){
-		$('#nav').find('.nav-item').first().addClass('layui-nav-itemed');
+		//$('#nav').find('.nav-item').first().addClass('layui-nav-itemed');
 	}
     
 }
