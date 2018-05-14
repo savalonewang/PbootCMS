@@ -74,6 +74,9 @@ class ParserController extends Controller
         $content = str_replace('{pboot:checkcode}', CORE_DIR . '/code.php', $content); // 验证码路径
         $content = str_replace('{pboot:lgpath}', url('/home/Do/area'), $content); // 多语言切换前置路径,如{pboot:lgpath}?lg=cn
         $content = str_replace('{pboot:scaction}', url('/home/Search/index'), $content); // 搜索提交路径
+        $content = str_replace('{pboot:appid}', session('config.api_appid'), $content); // API认证用户
+        $content = str_replace('{pboot:timestamp}', time(), $content); // 认证时间戳
+        $content = str_replace('{pboot:signature}', md5(md5(session('config.api_appid') . session('config.api_secret') . time())), $content); // API认证密钥
         return $content;
     }
 
