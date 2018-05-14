@@ -845,18 +845,54 @@ class ParserController extends Controller
                         if ($data->type != 2) // 非列表内容页不解析
                             break;
                         if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
-                            $content = str_replace($matches[0][$i], '<a href="' . url('/home/content/index/id/' . $pre->id) . '">' . $pre->title . '</a>', $content);
+                            $content = str_replace($matches[0][$i], '<a href="' . url('/home/content/index/id/' . $pre->id) . '">' . $this->adjustLabelData($params, $pre->title) . '</a>', $content);
                         } else {
                             $content = str_replace($matches[0][$i], '没有了！', $content);
+                        }
+                        break;
+                    case 'prelink':
+                        if ($data->type != 2) // 非列表内容页不解析
+                            break;
+                        if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
+                            $content = str_replace($matches[0][$i], url('/home/content/index/id/' . $pre->id), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '#', $content);
+                        }
+                        break;
+                    case 'pretitle':
+                        if ($data->type != 2) // 非列表内容页不解析
+                            break;
+                        if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
+                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $pre->title), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
                         }
                         break;
                     case 'nextcontent':
                         if ($data->type != 2) // 非列表内容页不解析
                             break;
                         if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
-                            $content = str_replace($matches[0][$i], '<a href="' . url('/home/content/index/id/' . $next->id) . '">' . $next->title . '</a>', $content);
+                            $content = str_replace($matches[0][$i], '<a href="' . url('/home/content/index/id/' . $next->id) . '">' . $this->adjustLabelData($params, $next->title) . '</a>', $content);
                         } else {
                             $content = str_replace($matches[0][$i], '没有了！', $content);
+                        }
+                        break;
+                    case 'nextlink':
+                        if ($data->type != 2) // 非列表内容页不解析
+                            break;
+                        if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
+                            $content = str_replace($matches[0][$i], url('/home/content/index/id/' . $next->id), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '#', $content);
+                        }
+                        break;
+                    case 'nexttitle':
+                        if ($data->type != 2) // 非列表内容页不解析
+                            break;
+                        if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
+                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $next->title), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
                         }
                         break;
                     default:
