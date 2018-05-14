@@ -297,6 +297,7 @@ class ParserController extends Controller
         if (preg_match_all($pattern, $content, $matches)) {
             $count = count($matches[0]);
             $separator = '>>';
+            $indextext = '首页';
             for ($i = 0; $i < $count; $i ++) {
                 $params = $this->parserParam($matches[1][$i]);
                 
@@ -306,11 +307,14 @@ class ParserController extends Controller
                         case 'separator':
                             $separator = $value;
                             break;
+                        case 'indextext':
+                            $indextext = $value;
+                            break;
                     }
                 }
                 
                 $data = $this->model->getPosition($scode);
-                $out_html = '<a href="' . SITE_DIR . '/">首页</a>';
+                $out_html = '<a href="' . SITE_DIR . '/">' . $indextext . '</a>';
                 foreach ($data as $key => $value) {
                     if ($value['outlink']) {
                         $out_html .= $separator . '<a href="' . $value['outlink'] . '">' . $value['name'] . '</a>';
