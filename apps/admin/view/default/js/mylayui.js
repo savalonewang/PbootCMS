@@ -50,9 +50,10 @@ layui.use(['element','upload','laydate','form'], function(){
   });
   
   
+  var sitedir=$('#sitedir').data('sitedir');
   var uploadurl = $("#preurl").data('preurl')+'/index/upload';
   
-  //执行单文件实例
+  //执行单图片实例
   var uploadInst = upload.render({
 	elem: '.upload' //绑定元素
 	,url: uploadurl //上传接口
@@ -65,6 +66,7 @@ layui.use(['element','upload','laydate','form'], function(){
 	   var des=$(item).data('des');
 	   if(res){
 		   $('#'+des).val(res); 
+		   $('#'+des+'_box').html("<dl><dt><img src='"+sitedir+res+"' data-url='"+res+"' ></dt><dd>删除</dd></dl>"); 
 		   layer.msg('上传成功！'); 
 	   }else{
 		   layer.msg('上传失败！'); 
@@ -75,8 +77,9 @@ layui.use(['element','upload','laydate','form'], function(){
 	}
   });
   
-   //执行多文件上传实例
+   //执行多图片上传实例
   var files='';
+  var html='';
   var uploadsInst = upload.render({
 	elem: '.uploads' //绑定元素
 	,url: uploadurl //上传接口
@@ -90,15 +93,22 @@ layui.use(['element','upload','laydate','form'], function(){
 	   }else{
 		   files+=res;
 	   }
+	   html += "<dl><dt><img src='"+sitedir+res+"' data-url='"+res+"'></dt><dd>删除</dd></dl>";
 	}
   	,allDone: function(obj){
   		var item = this.item;
   	    var des=$(item).data('des');
-
+  	    
 	    if(files){
-	 	   $('#'+des).val(files); 
+	       if($('#'+des).val()){
+	    	   $('#'+des).val($('#'+des).val()+','+files); 
+	       }else{
+	    	   $('#'+des).val(files); 
+	       }
+	 	   $('#'+des+'_box').append(html); 
 	 	   layer.msg('成功上传'+obj.successful+'个文件！'); 
 	 	   files='';
+	 	   html='';
 	    }else{
 	 	   layer.msg('全部上传失败！'); 
 	    }
@@ -107,6 +117,22 @@ layui.use(['element','upload','laydate','form'], function(){
 		layer.msg('上传发生错误！'); 
 	}
   });
+	
+  //图片删除功能
+  $('.pic').on("click",'dl dd',function(){
+	  var id=$(this).parents('.pic').attr('id');
+	  var url=$(this).siblings('dt').find('img').data('url');
+	  var input=$('#'+id.replace('_box',''));
+	  var value = input.val();
+	  value = value.replace(url,'');
+	  value = value.replace(/^,/, '');
+	  value = value.replace(/,$/, '');
+	  value = value.replace(/,,/, ',');
+      input.val(value);
+	  $(this).parents('dl').remove();
+  });
+  
+
   
   //执行附件上传实例
   var uploadFileInst = upload.render({

@@ -22,7 +22,7 @@ class AdminController extends Controller
             // 权限检测
             $this->checkLevel();
             
-            // $this->getSecondMenu(); // 获取同级菜单
+            $this->getSecondMenu(); // 获取同级菜单
             $this->assign('menu_tree', session('menu_tree')); // 注入菜单树
             $this->assign('menu_html', session('menu_html')); // 菜单HTML数
             
@@ -131,7 +131,7 @@ class AdminController extends Controller
             }
         }
         
-        // 前面第一种无法匹配，则选择子菜单匹配，只需控制器通过即可，如果增、改、删操作
+        // 前面第一种无法匹配，则选择子菜单匹配，只需控制器通过即可，如翻页、增、改、删操作
         if (! $second_menu) {
             foreach ($menu_tree as $key => $value) {
                 if (is_array($value->son)) {

@@ -178,6 +178,27 @@
 	font-size:20px;
 	color:#d2d2d2;
 }
+.pic{
+	margin-left:130px;
+}
+.pic dl{
+	float:left;
+	position: relative;
+}
+.pic dl dd{
+	position:absolute;
+	right:5px;
+	top:5px;
+	cursor: pointer;
+	background: #666;
+	color: #fff;
+	padding: 2px;
+}
+.pic img{
+	height:100px;
+	margin:5px 0;
+	margin-right:5px;
+}
 
 @media only screen and (max-width: 750px) {
     .layui-body {
@@ -207,6 +228,9 @@
 	}
 	.layui-form-label{
 		width:80px;
+	}
+	.pic{
+		margin-left:110px;
 	}
 	.layui-input-block{
 		margin-left: 110px;

@@ -226,14 +226,25 @@ class ParserModel extends Model
                 'LEFT'
             )
         );
+        
+        // 获取所有子类分类编码
         $this->scodes = array(); // 先清空
         $scodes = $this->getSubScodes($scode);
+        
+        // 拼接条件
+        $where1 = array(
+            "a.scode in (" . implode(',', $scodes) . ")",
+            "a.subscode='$scode'"
+        );
+        $where2 = array(
+            "a.acode='" . session('lg') . "'",
+            'a.status=1',
+            'd.type=2'
+        );
+        
         return parent::table('ay_content a')->field($fields)
-            ->in('a.scode', $scodes)
-            ->where("a.subscode='$scode'", 'AND', 'OR')
-            ->where("a.acode='" . session('lg') . "'")
-            ->where('a.status=1')
-            ->where('d.type=2')
+            ->where($where1, 'OR')
+            ->where($where2)
             ->like('a.' . $field, $keyword)
             ->join($join)
             ->order($order)
@@ -276,12 +287,21 @@ class ParserModel extends Model
         );
         $this->scodes = array(); // 先清空
         $scodes = $this->getSubScodes($scode);
+        
+        // 拼接条件
+        $where1 = array(
+            "a.scode in (" . implode(',', $scodes) . ")",
+            "a.subscode='$scode'"
+        );
+        $where2 = array(
+            "a.acode='" . session('lg') . "'",
+            'a.status=1',
+            'd.type=2'
+        );
+        
         return parent::table('ay_content a')->field($fields)
-            ->in('a.scode', $scodes)
-            ->where("a.subscode='$scode'", 'AND', 'OR')
-            ->where("a.acode='" . session('lg') . "'")
-            ->where('a.status=1')
-            ->where('d.type=2')
+            ->where($where1)
+            ->where($where2)
             ->like('a.' . $field, $keyword)
             ->join($join)
             ->order($order)
@@ -469,18 +489,29 @@ class ParserModel extends Model
         
         // 如果有限定分类，则获取子类集
         $this->scodes = array();
+        
+        // 拼接条件
+        $where1 = '';
         if (isset($where['scode'])) {
-            $this->getSubScodes($where['scode']);
+            $scodes = $this->getSubScodes($where['scode']);
+            $where1 = array(
+                "a.scode in (" . implode(',', $scodes) . ")",
+                "a.subscode='" . $where['scode'] . "'"
+            );
             unset($where['scode']);
         }
         
+        $where2 = array(
+            "a.acode='" . session('lg') . "'",
+            'a.status=1'
+        );
+        
         return parent::table('ay_content a')->field($fields)
-            ->in('a.scode', $this->scodes)
+            ->where($where1, 'OR')
             ->where($where)
             ->like($field, $keyword)
             ->join($join)
-            ->where("a.acode='" . session('lg') . "'")
-            ->where('a.status=1')
+            ->where($where2)
             ->order($order)
             ->page(1, $num)
             ->decode()

@@ -65,6 +65,7 @@
                      <button type="button" class="layui-btn upload" data-des="pic">
 					 	 <i class="layui-icon">&#xe67c;</i>上传图片
 					 </button>
+					 <div id="pic_box" class="pic"></div>
                 </div>
                 
                 <div class="layui-form-item">
@@ -127,6 +128,7 @@
                      <button type="button" class="layui-btn upload" data-des="pic">
 					 	 <i class="layui-icon">&#xe67c;</i>上传图片
 					 </button>
+					 <div id="pic_box" class="pic">{if([$slide->pic])}<dl><dt><img src="{SITE_DIR}{$slide->pic}" data-url="{$slide->pic}"></dt><dd>删除</dd></dl>{/if}</div>
                 </div>
                 
                 <div class="layui-form-item">

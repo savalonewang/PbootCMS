@@ -462,7 +462,7 @@ function post($name, $type = null, $require = false, $vartext = null, $default =
  */
 function request($name, $type = null, $require = false, $vartext = null, $default = null)
 {
-    if ($_POST[$name]) {
+    if (isset($_POST[$name])) {
         $d_source = 'post';
     } else {
         $d_source = 'get';

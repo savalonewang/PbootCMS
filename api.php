@@ -8,6 +8,9 @@
  *  管理后台入口文件
  */
 
+// 定义为入口文件
+define('IS_INDEX', true);
+
 // 入口文件地址绑定
 define('URL_BLIND', 'api');
 

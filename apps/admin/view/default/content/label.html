@@ -38,12 +38,12 @@
 		                     <label class="layui-form-label">[value->description]</label>
 		                     <div class="layui-input-inline">
 		                     	<input type="text" name="[value->name]" id="[value->name]" value="[value->value]" placeholder="请上传[value->description]"  class="layui-input">
-		                     	<div class="layui-form-mid layui-word-aux">{label:[value->name]}</div>
 		                     </div>
 		                     <button type="button" class="layui-btn upload" data-des="[value->name]">
 							 	 <i class="layui-icon">&#xe67c;</i>上传图片
 							 </button>
-							
+							 <div class="layui-form-mid layui-word-aux">{label:[value->name]}</div>
+							 <div id="[value->name]_box" class="pic">{if($value->value)}<dl><dt><img src="{SITE_DIR}[value->value]" data-url="[value->value]"></dt><dd>删除</dd></dl>{/if}</div>
 		                </div>
 	                {/if}
 	                
