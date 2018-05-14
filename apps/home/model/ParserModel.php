@@ -300,7 +300,7 @@ class ParserModel extends Model
         );
         
         return parent::table('ay_content a')->field($fields)
-            ->where($where1)
+            ->where($where1, 'OR')
             ->where($where2)
             ->like('a.' . $field, $keyword)
             ->join($join)
