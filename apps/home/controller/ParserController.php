@@ -895,6 +895,10 @@ class ParserController extends Controller
                             $content = str_replace($matches[0][$i], '', $content);
                         }
                         break;
+                    case 'content':
+                        $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "'></script>";
+                        $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data->content) . $visits, $content);
+                        break;
                     default:
                         if (isset($data->{$matches[1][$i]})) {
                             $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data->{$matches[1][$i]}), $content);

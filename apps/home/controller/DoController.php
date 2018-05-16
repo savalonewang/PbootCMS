@@ -37,6 +37,14 @@ class DoController extends Controller
         }
     }
 
+    // 文章访问量累计
+    public function visits()
+    {
+        if (! ! $id = get('id')) {
+            $this->model->addVisits($id);
+        }
+    }
+
     // 点赞
     public function likes()
     {

@@ -349,12 +349,6 @@ class ParserModel extends Model
             ->join($join)
             ->decode()
             ->find();
-        if ($result) {
-            $data2 = array(
-                'visits' => '+=1'
-            );
-            parent::table('ay_content')->where("id={$result->id}")->update($data2);
-        }
         return $result;
     }
 
@@ -397,12 +391,6 @@ class ParserModel extends Model
             ->join($join)
             ->decode()
             ->find();
-        if ($result) {
-            $data2 = array(
-                'visits' => '+=1'
-            );
-            parent::table('ay_content')->where("id={$result->id}")->update($data2);
-        }
         return $result;
     }
 
