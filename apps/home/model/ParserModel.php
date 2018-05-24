@@ -233,7 +233,7 @@ class ParserModel extends Model
         
         // 拼接条件
         $where1 = array(
-            "a.scode in (" . implode(',', $scodes) . ")",
+            "a.scode in (" . implode_quot(',', $scodes) . ")",
             "a.subscode='$scode'"
         );
         $where2 = array(
@@ -290,7 +290,7 @@ class ParserModel extends Model
         
         // 拼接条件
         $where1 = array(
-            "a.scode in (" . implode(',', $scodes) . ")",
+            "a.scode in (" . implode_quot(',', $scodes) . ")",
             "a.subscode='$scode'"
         );
         $where2 = array(
@@ -483,7 +483,7 @@ class ParserModel extends Model
         if (isset($where['scode'])) {
             $scodes = $this->getSubScodes($where['scode']);
             $where1 = array(
-                "a.scode in (" . implode(',', $scodes) . ")",
+                "a.scode in (" . implode_quot(',', $scodes) . ")",
                 "a.subscode='" . $where['scode'] . "'"
             );
             unset($where['scode']);

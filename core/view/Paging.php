@@ -86,12 +86,14 @@ class Paging
     {
         assign('pagebar', $this->pageBar());
         if ($morePageStr) {
-            assign('pagecurrent', $this->pageCurrent()); // 注入当前
+            assign('pagecurrent', $this->page()); // 注入当前页
+            assign('pagecount', $this->pageCount); // 注入总页数
+            assign('pagerows', $this->rowTotal); // 注入总数据
+            assign('pageindex', $this->pageIndex()); // 注入首页链接
+            assign('pagepre', $this->pagePre()); // 注入前一页链接
+            assign('pagenext', $this->pageNext()); // 注入后一页链接
+            assign('pagelast', $this->pageLast()); // 注入最后一页链接
             assign('pagestatus', $this->pageStatus()); // 注入分页状态
-            assign('pageindex', $this->pageIndex()); // 注入首页
-            assign('pagepre', $this->pagePre()); // 注入前一页
-            assign('pagenext', $this->pageNext()); // 注入下一页
-            assign('pagelast', $this->pageLast()); // 注入最后一页
             assign('pagenumbar', $this->pageNumBar()); // 注入数字
             assign('pageselectbar', $this->pageSelectBar()); // 注入选择栏
         }
@@ -135,21 +137,15 @@ class Paging
     private function pageBar()
     {
         if (! $this->pageCount)
-            return '<span style="color:#999;">返回的查询结果为空 ！</span>';
+            return '<span style="color:#999;">No data has been querying.</span>';
         $string = "<span>{$this->pageStatus()}</span>";
-        $string .= "<span>{$this->pageIndex()}</span>";
-        $string .= "<span>{$this->pagePre()}</span>";
+        $string .= "<span><a href='" . $this->pageIndex() . "'>首页</a></span>";
+        $string .= "<span><a href='" . $this->pagePre() . "'>前一页</a></span>";
         $string .= "<span class='hidden-xs'>{$this->pageNumBar()}</span>";
-        $string .= "<span>{$this->pageNext()}</span>";
-        $string .= "<span>{$this->pageLast()}</span>";
+        $string .= "<span><a href='" . $this->pageNext() . "'>后一页</a></span>";
+        $string .= "<span><a href='" . $this->pageLast() . "'>尾页</a></span>";
         $string .= "<span class='hidden-xs'>{$this->pageSelectBar()}</span>";
         return $string;
-    }
-
-    // 当前页码
-    private function pageCurrent()
-    {
-        return $this->page;
     }
 
     // 当前页面情况
@@ -157,39 +153,39 @@ class Paging
     {
         if (! $this->pageCount)
             return;
-        return "共" . $this->rowTotal . "条 当前" . $this->pageCurrent() . "/" . $this->pageCount . "页";
+        return "共" . $this->rowTotal . "条 当前" . $this->page . "/" . $this->pageCount . "页";
     }
 
-    // 首页
+    // 首页链接
     private function pageIndex()
     {
         if (! $this->pageCount)
             return;
-        return '<a href="' . $this->getPreUrl() . '/page/1' . Config::get('url_suffix') . $this->queryString() . '">首页</a>';
+        return $this->getPreUrl() . '/page/1' . Config::get('url_suffix') . $this->queryString();
     }
 
-    // 上一页
+    // 上一页链接
     private function pagePre()
     {
         if (! $this->pageCount)
             return;
         if ($this->page > 1) {
-            $pre_page = '<a href="' . $this->getPreUrl() . '/page/' . ($this->page - 1) . Config::get('url_suffix') . $this->queryString() . '">前一页</a>';
+            $pre_page = $this->getPreUrl() . '/page/' . ($this->page - 1) . Config::get('url_suffix') . $this->queryString();
         } else {
-            $pre_page = '<a href="#">前一页</a>';
+            $pre_page = '#';
         }
         return $pre_page;
     }
 
-    // 下一页
+    // 下一页链接
     private function pageNext()
     {
         if (! $this->pageCount)
             return;
         if ($this->page < $this->pageCount) {
-            $next_page = '<a href="' . $this->getPreUrl() . '/page/' . ($this->page + 1) . Config::get('url_suffix') . $this->queryString() . '">后一页</a>';
+            $next_page = $this->getPreUrl() . '/page/' . ($this->page + 1) . Config::get('url_suffix') . $this->queryString();
         } else {
-            $next_page = '<a href="#">后一页</a>';
+            $next_page = '#';
         }
         return $next_page;
     }
@@ -199,7 +195,7 @@ class Paging
     {
         if (! $this->pageCount)
             return;
-        return '<a href="' . $this->getPreUrl() . '/page/' . $this->pageCount . Config::get('url_suffix') . $this->queryString() . '">尾页</a>';
+        return $this->getPreUrl() . '/page/' . $this->pageCount . Config::get('url_suffix') . $this->queryString();
     }
 
     // 数字分页,要修改数字显示的条数，请修改类头部num属性值

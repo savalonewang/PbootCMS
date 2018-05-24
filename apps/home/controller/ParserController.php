@@ -1081,6 +1081,7 @@ class ParserController extends Controller
                     $key2 ++;
                     $out_html .= $one_html;
                     if (isset($num) && $key2 > $num) {
+                        unset($num);
                         break;
                     }
                 }
@@ -1178,7 +1179,7 @@ class ParserController extends Controller
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $gid = 1;
-                $num = 3;
+                $num = 5;
                 
                 // 跳过未指定gid的列表
                 if (! array_key_exists('gid', $params)) {
@@ -1432,8 +1433,17 @@ class ParserController extends Controller
                     }
                 }
                 
-                // 转义字符
-                $where = escape_string($_GET);
+                // 数据处理
+                foreach ($_GET as $key => $value) {
+                    $cond = array(
+                        'd_source' => 'get',
+                        'd_regular' => '/^[^\s]+$/'
+                    );
+                    $where[$key] = filter($key, $cond);
+                    if ($_GET[$key] && ! $where[$key]) {
+                        alert_back('您的查询含有非法字符,已被系统拦截');
+                    }
+                }
                 
                 // 去除特殊键值
                 unset($where['keyword']);
@@ -1532,11 +1542,14 @@ class ParserController extends Controller
                     case 'bar':
                         $content = str_replace($matches[0][$i], $this->getVar('pagebar'), $content);
                         break;
-                    case 'status':
-                        $content = str_replace($matches[0][$i], $this->getVar('pagestatus'), $content);
-                        break;
                     case 'current':
                         $content = str_replace($matches[0][$i], $this->getVar('pagecurrent'), $content);
+                        break;
+                    case 'count':
+                        $content = str_replace($matches[0][$i], $this->getVar('pagecount'), $content);
+                        break;
+                    case 'rows':
+                        $content = str_replace($matches[0][$i], $this->getVar('pagerows'), $content);
                         break;
                     case 'index':
                         $content = str_replace($matches[0][$i], $this->getVar('pageindex'), $content);
@@ -1549,6 +1562,9 @@ class ParserController extends Controller
                         break;
                     case 'last':
                         $content = str_replace($matches[0][$i], $this->getVar('pagelast'), $content);
+                        break;
+                    case 'status':
+                        $content = str_replace($matches[0][$i], $this->getVar('pagestatus'), $content);
                         break;
                     case 'numbar':
                         $content = str_replace($matches[0][$i], $this->getVar('pagenumbar'), $content);

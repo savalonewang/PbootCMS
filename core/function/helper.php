@@ -383,9 +383,16 @@ function filter($varname, $condition)
     if (array_key_exists('d_default', $condition)) {
         $data = (! is_null($data)) ? $data : $condition['d_default'];
     }
+    
     // 去空格
-    if (is_string($data))
+    if (is_string($data)) {
         $data = trim($data);
+    }
+    
+    // 销毁错误
+    unset($err);
+    
+    // 返回收据
     return escape_string($data);
 }
 

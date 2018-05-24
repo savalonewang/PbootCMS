@@ -461,6 +461,19 @@ function mult_array_merge($array1, $array2)
     return $array1;
 }
 
+// 数组转换为带引号字符串
+function implode_quot($glue, array $pieces)
+{
+    foreach ($pieces as $key => $value) {
+        if (isset($string)) {
+            $string .= $glue . "'$value'";
+        } else {
+            $string = "'$value'";
+        }
+    }
+    return $string;
+}
+
 // 是否为多维数组,是返回true
 function is_multi_array($array)
 {

@@ -90,6 +90,11 @@ if (Config::get('debug')) {
     error_reporting(E_ALL ^ E_WARNING ^ E_NOTICE);
 }
 
+// 自动转换判断
+if (function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()) {
+    error('您系统PHP.ini配置magic_quotes_gpc为On状态，会导致数据存储异常，请先设置为Off状态.');
+}
+
 // 环境检查
 // Check::checkPHP(); // 拒绝PHP低版本
 Check::checkGo(); // 检查go扩展
