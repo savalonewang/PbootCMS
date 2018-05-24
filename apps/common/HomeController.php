@@ -34,10 +34,17 @@ class HomeController extends Controller
         
         // 手机自适应主题
         if ((session('config.open_wap') && is_mobile()) || ($wap_domain && $wap_domain == $_SERVER['HTTP_HOST'])) {
-            $this->setTheme($theme . '/wap'); // 移动端主题
+            // 移动端主题
+            if ($theme) {
+                $this->setTheme($theme . '/wap');
+            } else {
+                $this->setTheme('default/wap');
+            }
         } else {
             if ($theme) {
                 $this->setTheme($theme);
+            } else {
+                $this->setTheme('default');
             }
         }
     }
