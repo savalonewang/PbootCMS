@@ -41,6 +41,7 @@
 	                    		{if($value->type==5)}图片上传{/if}
 	                    		{if($value->type==6)}附件上传{/if}
 	                    		{if($value->type==7)}日期选择{/if}
+	                    		{if($value->type==8)}编辑器{/if}
 							</td>
 	                        <td>
 	                            {fun=get_btn_del($value->id)}
@@ -77,7 +78,7 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">字段名称</label>
 	                     <div class="layui-input-block">
-	                     	<input type="text" name="name" required lay-verify="required"  placeholder="请输入字段名称" class="layui-input">
+	                     	<input type="text" name="name" required lay-verify="required"  placeholder="请输入字段名称，如：price" class="layui-input">
 	                     </div>
 	                </div>
 	                
@@ -92,6 +93,7 @@
 		                    	<option value="5">图片上传</option>
 		                    	<option value="6">附件上传</option>
 		                    	<option value="7">日期选择</option>
+		                    	<option value="8">编辑器</option>
 		                    </select>
 	                     </div>
 	                </div>
@@ -146,7 +148,7 @@
                 <div class="layui-form-item">
                      <label class="layui-form-label">字段名称</label>
                      <div class="layui-input-block">
-                     	<input type="text" name="name" readonly value="{$extfield->name}" placeholder="请输入字段名称" class="layui-input readonly">
+                     	<input type="text" name="name" readonly value="{$extfield->name}" placeholder="请输入字段名称，如：price" class="layui-input readonly">
                      </div>
                 </div>
                 
@@ -162,7 +164,11 @@
 	                    		<option value="7" selected>日期选择</option>
 	                    	{/if}
 	                    	
-	                    	{if([$extfield->type]!=2 && [$extfield->type]!=7)}
+	                    	{if([$extfield->type]==8)}
+	                    		<option value="8" selected>编辑器</option>
+	                    	{/if}
+	                    	
+	                    	{if([$extfield->type]!=2 && [$extfield->type]!=7 && [$extfield->type]!=8)}
 	                    		<option value="1" {if([$extfield->type]==1)}selected{/if}>单行文本</option>
 	                    		<option value="3" {if([$extfield->type]==3)}selected{/if}>单选按钮</option>
 	                    		<option value="4" {if([$extfield->type]==4)}selected{/if}>多选按钮</option>

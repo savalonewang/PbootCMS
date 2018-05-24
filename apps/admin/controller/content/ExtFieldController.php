@@ -99,6 +99,10 @@ class ExtFieldController extends Controller
                         $mysql = 'datetime';
                         $sqlite = 'TEXT';
                         break;
+                    case '8':
+                        $mysql = 'varchar(2000)';
+                        $sqlite = 'TEXT(2000)';
+                        break;
                     default:
                         $mysql = 'varchar(100)';
                         $sqlite = 'TEXT(100)';

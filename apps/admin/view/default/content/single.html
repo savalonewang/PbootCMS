@@ -43,7 +43,15 @@
 	                    <tr>
 	                    	<td>[value->id]</td>
 	                        <td title="[value->scode]">[value->sort_name]</td>
-	                        <td>[value->title]</td>
+	                        <td>
+		                        [value->title]
+		                        {if($value->ico)}
+		                        	<span class="layui-badge layui-bg-orange">缩</span>
+		                        {/if}
+		                        {if($value->pics)}
+		                        	<span class="layui-badge">图</span>
+		                        {/if}
+	                        </td>
 	                        <td>[value->date]</td>
 	                        <td>
 	                        {if($value->status)}
@@ -74,7 +82,7 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
-	  		<form action="{url./admin/Single/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
+	  		<form action="{url./admin/Single/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form" id="edit">
 	  			<div class="layui-tab">
 					  <ul class="layui-tab-title">
 					    <li class="layui-this">基本内容</li>
@@ -186,6 +194,27 @@
 				                     </div>
 				                </div>
 			                	{/if}
+			                	
+			                	{if($value->type==8)}<!-- 编辑器 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+			                			{php}
+			                				$name=@$value->name;
+			                			{/php}
+				                		<script type="text/plain" id="editor_[value->name]" name="[value->name]" style="width:100%;height:240px;">{fun=decode_string([$content->$name])}</script>
+				                		<script>
+											//初始化编辑器
+											$(document).ready(function (e) {
+												var ue = UE.getEditor('editor_[value->name]',{
+													maximumWords:2000 
+												});
+											})
+										</script>
+				                	</div>
+				                </div>
+			                	{/if}
+			                	
 			                {/foreach}
 			                
 			                <div class="layui-form-item">

@@ -25,7 +25,9 @@ class SingleModel extends Model
             'a.date',
             'a.status',
             'a.visits',
-            'b.mcode'
+            'b.mcode',
+            'a.ico',
+            'a.pics'
         );
         $join = array(
             array(
@@ -60,7 +62,9 @@ class SingleModel extends Model
             'a.date',
             'a.status',
             'a.visits',
-            'b.mcode'
+            'b.mcode',
+            'a.ico',
+            'a.pics'
         );
         $join = array(
             array(

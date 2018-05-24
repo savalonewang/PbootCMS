@@ -33,7 +33,9 @@ class ContentModel extends Model
             'a.istop',
             'a.isrecommend',
             'a.isheadline',
-            'a.visits'
+            'a.visits',
+            'a.ico',
+            'a.pics'
         );
         $join = array(
             array(
@@ -79,7 +81,9 @@ class ContentModel extends Model
             'a.istop',
             'a.isrecommend',
             'a.isheadline',
-            'a.visits'
+            'a.visits',
+            'a.ico',
+            'a.pics'
         );
         $join = array(
             array(

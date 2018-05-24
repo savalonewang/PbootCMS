@@ -325,7 +325,7 @@ class Parser
     // 解析对象变量 [$user->name]
     private static function parObjVar()
     {
-        $pattern = '/\[\$([\w]+)\-\>([\w]+)\]/';
+        $pattern = '/\[\$([\w]+)\-\>([\w$]+)\]/';
         if (preg_match($pattern, self::$content)) {
             self::$content = preg_replace($pattern, "\$this->getVar('$1')->$2", self::$content);
         }
