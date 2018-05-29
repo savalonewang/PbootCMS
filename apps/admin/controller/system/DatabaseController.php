@@ -199,6 +199,8 @@ class DatabaseController extends Controller
     // 数据语句
     private function dataSql($table, $fields, $fieldNnum, $data)
     {
+        if (! $data)
+            return;
         $sql = '';
         $sql .= "--" . PHP_EOL;
         $sql .= "-- 转存表中的数据 `" . $table . "`" . PHP_EOL;

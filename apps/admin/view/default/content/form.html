@@ -1,0 +1,101 @@
+{include file='common/head.html'}
+
+<div class="layui-body">
+	{if([$list])}
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">自定义表单列表</li>
+	    <li lay-id="t2">自定义表单新增</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+	  	   		<table class="layui-table">
+	            	<thead>
+	                    <tr>
+	                    	<th>序号</th>
+	                        <th>表单</th>
+	                        <th>表名</th>
+	                        <th>操作</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    {foreach $forms(key,value)}
+	                    <tr>
+	                    	<td>[num]</td>
+	                    	<td>[value->form_name]</td>
+	                    	<td>[value->table_name]</td>
+	                        <td>
+	                        	<a href="{url./admin/Form/del/id/'.$value->id.'/action/delform}" onclick="return confirm('您确定要删除么？')" class="layui-btn layui-btn-xs layui-btn-danger" title="删除">删除</a>
+	                            {fun=get_btn_mod($value->id)}
+	                        </td>
+	                    </tr>
+	                    {/foreach}
+	                </tbody>
+	            </table>
+	            <div class="page">{$pagebar}</div>
+	  	   </div>
+	  	   
+	  	    <div class="layui-tab-item">
+	   			<form action="{url./admin/Form/add/action/addform}" method="post" class="layui-form">
+	   				<div class="layui-form-item">
+	                     <label class="layui-form-label">表单名称</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="form_name" maxlength=20 required lay-verify="required"  placeholder="请输入表单名称，如：报名表" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">表名称</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="table_name" maxlength=30 required lay-verify="required"  placeholder="请输入表名称，如：ay_baoming" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	   				<div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit>立即提交</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+						 </div>
+					</div>
+	   			</form>
+	   	 	</div>
+	   </div>
+	 </div>
+	{/if} 
+	
+	{if([$mod])}
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">自定义表单修改</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	<div class="layui-tab-item layui-show">
+	  		<form action="{url./admin/Form/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
+	  			<div class="layui-form-item">
+                     <label class="layui-form-label">表单名称</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="form_name" maxlength=20 required value="{$form->form_name}" lay-verify="required"  placeholder="请输入表单名称，如：报名表" class="layui-input">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">表名称</label>
+                     <div class="layui-input-block">
+                     	<input type="text" maxlength=30 required disabled value="{$form->table_name}" lay-verify="required"  placeholder="请输入表名称，如：ay_baoming" class="layui-input">
+                     </div>
+                </div>
+
+   				<div class="layui-form-item">
+					 <div class="layui-input-block">
+					    <button class="layui-btn" lay-submit>立即提交</button>
+					    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					    {fun=get_btn_back()}
+					 </div>
+				</div>
+	  		</form>
+	  	</div>
+	  </div>
+	 </div>
+	{/if} 
+</div>
+{include file='common/foot.html'}

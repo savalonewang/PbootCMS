@@ -174,7 +174,7 @@ function get_btn($btnName, $theme, $btnAction, $idValue, $id = 'id')
     $user_level = session('levels');
     if (! in_array('/' . M . '/' . C . '/' . $btnAction, $user_level) && session('id') != 1)
         return;
-    $btn_html = "<a href='" . url("/" . M . '/' . C . "/$btnAction/$id/$idValue") . "'  class='layui-btn layui-btn-xs $theme'>$btnName</a>";
+    $btn_html = "<a href='" . url("/" . M . '/' . C . "/$btnAction/$id/$idValue") . "?backurl=" . URL . "'  class='layui-btn layui-btn-xs $theme'>$btnName</a>";
     return $btn_html;
 }
 
