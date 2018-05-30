@@ -170,6 +170,7 @@ class ParserModel extends Model
         if (! $scode) {
             return;
         }
+        $this->position = array();
         $this->position[] = $sorts[$scode];
         if ($sorts[$scode]['pcode']) {
             return $this->getTopParent($sorts[$scode]['pcode'], $sorts);

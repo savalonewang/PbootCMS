@@ -88,46 +88,47 @@ class ExtFieldController extends Controller
                 'description' => $description
             );
             
+            // 字段类型及长度
+            switch ($type) {
+                case '2':
+                    $mysql = 'varchar(500)';
+                    $sqlite = 'TEXT(500)';
+                    break;
+                case '7':
+                    $mysql = 'datetime';
+                    $sqlite = 'TEXT';
+                    break;
+                case '8':
+                    $mysql = 'varchar(2000)';
+                    $sqlite = 'TEXT(2000)';
+                    break;
+                default:
+                    $mysql = 'varchar(100)';
+                    $sqlite = 'TEXT(100)';
+            }
+            
+            // 字段不存在时创建
             if (! $this->model->isExistField($name)) {
-                // 字段类型及长度
-                switch ($type) {
-                    case '2':
-                        $mysql = 'varchar(500)';
-                        $sqlite = 'TEXT(500)';
-                        break;
-                    case '7':
-                        $mysql = 'datetime';
-                        $sqlite = 'TEXT';
-                        break;
-                    case '8':
-                        $mysql = 'varchar(2000)';
-                        $sqlite = 'TEXT(2000)';
-                        break;
-                    default:
-                        $mysql = 'varchar(100)';
-                        $sqlite = 'TEXT(100)';
-                }
-                
                 if ($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') {
                     $result = $this->model->amd("ALTER TABLE ay_content_ext ADD COLUMN $name $sqlite NULL");
                 } else {
                     $result = $this->model->amd("ALTER TABLE ay_content_ext ADD $name $mysql NULL COMMENT '$description'");
                 }
-                
-                // 执行扩展字段记录添加
-                if ($this->model->addExtField($data)) {
-                    $this->log('新增扩展字段成功！');
-                    if (! ! $backurl = get('backurl')) {
-                        success('新增成功！', $backurl);
-                    } else {
-                        success('新增成功！', url('/admin/ExtField/index'));
-                    }
+            } elseif ($this->model->checkExtField($name)) { // 字段存在且已使用则 报错
+                alert_back('字段已经存在，不能重复添加！');
+            }
+            
+            // 执行扩展字段记录添加
+            if ($this->model->addExtField($data)) {
+                $this->log('新增扩展字段成功！');
+                if (! ! $backurl = get('backurl')) {
+                    success('新增成功！', $backurl);
                 } else {
-                    $this->log('新增扩展字段失败！');
-                    error('新增失败！', - 1);
+                    success('新增成功！', url('/admin/ExtField/index'));
                 }
             } else {
-                alert_back('字段名称已经存在！');
+                $this->log('新增扩展字段失败！');
+                error('新增失败！', - 1);
             }
         } else {
             
@@ -209,7 +210,7 @@ class ExtFieldController extends Controller
                 'description' => $description
             );
             
-            // 执行添加
+            // 执行修改
             if ($this->model->modExtField($id, $data)) {
                 $this->log('修改扩展字段' . $id . '成功！');
                 if (! ! $backurl = get('backurl')) {

@@ -248,7 +248,7 @@ class Parser
                     }
                 }
                 // 解析内部变量
-                $pattern_var = '/\[(' . $matches[3][$i] . ')(\[[\'\"][\w]+[\'\"]\])?(\-\>[\w]+)?\]/';
+                $pattern_var = '/\[(' . $matches[3][$i] . ')(\[[\'\"][\w]+[\'\"]\])?(\-\>[\w$]+)?\]/';
                 self::$content = preg_replace($pattern_var, "<?php echo \$$1$2$3; ?>", self::$content);
             }
             // 解析闭合标签
@@ -287,7 +287,7 @@ class Parser
                     }
                 }
                 // 解析内部变量
-                $pattern_var = '/\[(' . $matches[3][$i] . ')(\[[\'\"][\w]+[\'\"]\])?(\-\>[\w]+)?\]/';
+                $pattern_var = '/\[(' . $matches[3][$i] . ')(\[[\'\"][\w]+[\'\"]\])?(\-\>[\w$]+)?\]/';
                 self::$content = preg_replace($pattern_var, "<?php echo \$$1$2$3; ?>", self::$content);
             }
             // 解析闭合标签

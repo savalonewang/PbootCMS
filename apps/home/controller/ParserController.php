@@ -301,6 +301,7 @@ class ParserController extends Controller
             $count = count($matches[0]);
             $separator = '>>';
             $indextext = '首页';
+            $data = $this->model->getPosition($scode);
             for ($i = 0; $i < $count; $i ++) {
                 $params = $this->parserParam($matches[1][$i]);
                 
@@ -315,8 +316,6 @@ class ParserController extends Controller
                             break;
                     }
                 }
-                
-                $data = $this->model->getPosition($scode);
                 $out_html = '<a href="' . SITE_DIR . '/">' . $indextext . '</a>';
                 foreach ($data as $key => $value) {
                     if ($value['outlink']) {

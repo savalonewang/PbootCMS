@@ -28,6 +28,12 @@ class ExtFieldModel extends Model
             ->select();
     }
 
+    // 检查扩展字段
+    public function checkExtField($name)
+    {
+        return parent::table('ay_extfield')->where("name='$name'")->find();
+    }
+
     // 获取模型字段
     public function getModelField($mcode)
     {
