@@ -15,13 +15,10 @@ use core\basic\Controller;
 class MessageController extends Controller
 {
 
-    protected $parser;
-
     protected $model;
 
     public function __construct()
     {
-        $this->parser = new ParserController();
         $this->model = new ParserModel();
     }
 

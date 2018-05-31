@@ -43,6 +43,7 @@ class ParserController extends Controller
         $content = $this->parserSlideLabel($content); // 幻灯片
         $content = $this->parserLinkLabel($content); // 友情链接
         $content = $this->parserMessageLabel($content); // 留言板
+        $content = $this->parserFormLabel($content); // 自定义表单
         $content = $this->parserPageLabel($content); // CMS分页标签解析(需置后)
         $content = $this->parserIfLabel($content); // IF语句(需置后)
         return $content;
@@ -1379,6 +1380,31 @@ class ParserController extends Controller
                     $out_html .= $one_html;
                 }
                 $content = str_replace($matches[0][$i], $out_html, $content);
+            }
+        }
+        return $content;
+    }
+
+    // 解析表单提交标签
+    public function parserFormLabel($content)
+    {
+        $pattern = '/\{pboot:form(\s+[^}]+)?\}/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            for ($i = 0; $i < $count; $i ++) {
+                $params = $this->parserParam($matches[1][$i]);
+                $fcode = '';
+                foreach ($params as $key => $value) {
+                    switch ($key) {
+                        case 'fcode':
+                            $fcode = $value;
+                            break;
+                    }
+                }
+                if (! $fcode) { // 无表单编码不解析
+                    continue;
+                }
+                $content = str_replace($matches[0][$i], url('/home/Form/add/fcode/' . $fcode), $content);
             }
         }
         return $content;

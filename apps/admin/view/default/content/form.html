@@ -90,6 +90,10 @@
 						      	<td>[value->$field]</td>
 						    </tr>
 		  	   			{/foreach}
+		  	   			<tr>
+					      	<th>时间</th>
+					      	<td>[value->create_time]</td>
+					    </tr>
 	  	   			</tbody>
 	            </table>
 	            {/foreach}
@@ -115,6 +119,7 @@
 	                    	<th>描述</th>
 	                    	<th>字段</th>
 	                    	<th>长度</th>
+	                    	<th>是否必填</th>
 	                    	<th>排序</th>
 	                        <th>操作</th>
 	                    </tr>
@@ -126,6 +131,13 @@
 	                    	<td>[value->description]</td>
 	                    	<td>[value->name]</td>
 	                    	<td>[value->length]</td>
+	                    	<td>
+		                        {if($value->required)}
+		                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/required/value/0}"><i class='fa fa-toggle-on' title="点击关闭必填"></i></a>
+		                        {else}
+		                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/required/value/1}"><i class='fa fa-toggle-off' title="点击开启必填"></i></a>
+		                        {/if}
+	                    	</td>
 	                    	<td>[value->sorting]</td>
 	                        <td>
 	                       		<a href="{url./admin/Form/del/id/'.$value->id.'/fcode/'.[$get.fcode].'}" onclick="return confirm('您确定要删除么？')" class="layui-btn layui-btn-xs layui-btn-danger" title="删除">删除</a>
@@ -161,6 +173,14 @@
 	                     <label class="layui-form-label">字段长度</label>
 	                     <div class="layui-input-block">
 	                     	<input type="text" name="length" value="20" required lay-verify="required" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">是否必填</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="required" value="1" title="必填" checked>
+							<input type="radio" name="required" value="0" title="非必填"  checked>
 	                     </div>
 	                </div>
 	                
@@ -249,6 +269,14 @@
                      <label class="layui-form-label">字段长度</label>
                      <div class="layui-input-block">
                      	<input type="text" name="length" readonly value="{$field->length}" class="layui-input readonly">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">是否必填</label>
+                     <div class="layui-input-block">
+                     	<input type="radio" name="required" value="1" title="必填" {if([$field->required]==1)}checked{/if}>
+						<input type="radio" name="required" value="0" title="非必填" {if([$field->required]==0)}checked{/if}>
                      </div>
                 </div>
                 

@@ -328,6 +328,7 @@ CREATE TABLE `ay_form_field` (
   `fcode` varchar(20) NOT NULL COMMENT '表单编码',
   `name` varchar(20) NOT NULL COMMENT '字段名称',
   `length` int(10) unsigned NOT NULL COMMENT '字段长度',
+  `required` char(1) NOT NULL DEFAULT '0' COMMENT '是否必填',
   `description` varchar(30) NOT NULL COMMENT '描述文本',
   `sorting` int(10) unsigned NOT NULL DEFAULT '255' COMMENT '排序',
   `create_user` varchar(30) NOT NULL COMMENT '添加人员',

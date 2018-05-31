@@ -77,9 +77,9 @@ class FormController extends Controller
                 
                 if ($this->model->addForm($data)) {
                     if ($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') {
-                        $this->model->amd("CREATE TABLE `$table_name` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)");
+                        $this->model->amd("CREATE TABLE `$table_name` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,`create_time` TEXT NOT NULL)");
                     } else {
-                        $this->model->amd("CREATE TABLE `$table_name` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,PRIMARY KEY (`id`))ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8");
+                        $this->model->amd("CREATE TABLE `$table_name` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`create_time` datetime NOT NULL,PRIMARY KEY (`id`))ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8");
                     }
                     $this->log('新增自定义表单成功！');
                     if (! ! $backurl = get('backurl')) {
@@ -96,6 +96,7 @@ class FormController extends Controller
                 $fcode = post('fcode', 'var');
                 $name = post('name', 'var');
                 $length = post('length', 'int') ?: 20;
+                $required = post('required', 'int') ?: 0;
                 $description = post('description');
                 $sorting = post('sorting', 'int') ?: 255;
                 
@@ -116,6 +117,7 @@ class FormController extends Controller
                     'fcode' => $fcode,
                     'name' => $name,
                     'length' => $length,
+                    'required' => $required,
                     'description' => $description,
                     'sorting' => $sorting,
                     'create_user' => session('username'),
@@ -215,7 +217,7 @@ class FormController extends Controller
         
         // 单独修改状态
         if (($field = get('field', 'var')) && ! is_null($value = get('value', 'var'))) {
-            if ($this->model->modForm($id, "$field='$value',update_user='" . session('username') . "'")) {
+            if ($this->model->modFormField($id, "$field='$value',update_user='" . session('username') . "'")) {
                 location(- 1);
             } else {
                 alert_back('修改失败！');
@@ -252,6 +254,7 @@ class FormController extends Controller
                 
                 // 获取数据
                 $description = post('description');
+                $required = post('required', 'int') ?: 0;
                 $sorting = post('sorting', 'int') ?: 255;
                 
                 if (! $description) {
@@ -261,6 +264,7 @@ class FormController extends Controller
                 // 构建数据
                 $data = array(
                     'description' => $description,
+                    'required' => $required,
                     'sorting' => $sorting,
                     'update_user' => session('username')
                 );

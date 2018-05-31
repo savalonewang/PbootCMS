@@ -544,4 +544,33 @@ class ParserModel extends Model
     {
         return parent::table('ay_message')->autoTime()->insert($data);
     }
+
+    // 获取表单字段
+    public function getFormField($fcode)
+    {
+        $field = array(
+            'a.table_name',
+            'b.name',
+            'b.required',
+            'b.description'
+        );
+        
+        $join = array(
+            'ay_form_field b',
+            'a.fcode=b.fcode',
+            'LEFT'
+        );
+        
+        return parent::table('ay_form a')->field($field)
+            ->where("a.fcode='$fcode'")
+            ->join($join)
+            ->order('b.sorting ASC,b.id ASC')
+            ->select();
+    }
+
+    // 新增表单数据
+    public function addForm($table, $data)
+    {
+        return parent::table($table)->insert($data);
+    }
 }
