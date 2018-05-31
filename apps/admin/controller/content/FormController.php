@@ -70,7 +70,9 @@ class FormController extends Controller
                 $data = array(
                     'fcode' => $fcode,
                     'form_name' => $form_name,
-                    'table_name' => $table_name
+                    'table_name' => $table_name,
+                    'create_user' => session('username'),
+                    'update_user' => session('username')
                 );
                 
                 if ($this->model->addForm($data)) {
@@ -93,15 +95,9 @@ class FormController extends Controller
                 // 获取数据
                 $fcode = post('fcode', 'var');
                 $name = post('name', 'var');
-                $type = post('type', 'int');
-                if (! ! $value = post('value')) {
-                    $value = str_replace("\r\n", ",", $value); // 替换回车
-                    $value = str_replace("，", ",", $value); // 替换中文逗号分割符
-                    $value = str_replace(" ", "", $value); // 替换空格
-                }
-                
+                $length = post('length', 'int') ?: 20;
                 $description = post('description');
-                $sorting = post('sorting') ?: 255;
+                $sorting = post('sorting', 'int') ?: 255;
                 
                 if (! $fcode) {
                     alert_back('表单编码不能为空！');
@@ -109,10 +105,6 @@ class FormController extends Controller
                 
                 if (! $name) {
                     alert_back('字段名称不能为空！');
-                }
-                
-                if (! $type) {
-                    alert_back('字段类型不能为空！');
                 }
                 
                 if (! $description) {
@@ -123,33 +115,19 @@ class FormController extends Controller
                 $data = array(
                     'fcode' => $fcode,
                     'name' => $name,
-                    'type' => $type,
-                    'value' => $value,
+                    'length' => $length,
                     'description' => $description,
-                    'sorting' => $sorting
+                    'sorting' => $sorting,
+                    'create_user' => session('username'),
+                    'update_user' => session('username')
                 );
                 
                 // 获取表名称
                 $table = $this->model->getFormTableByCode($fcode);
                 
                 // 字段类型及长度
-                switch ($type) {
-                    case '2':
-                        $mysql = 'varchar(500)';
-                        $sqlite = 'TEXT(500)';
-                        break;
-                    case '7':
-                        $mysql = 'datetime';
-                        $sqlite = 'TEXT';
-                        break;
-                    case '8':
-                        $mysql = 'varchar(2000)';
-                        $sqlite = 'TEXT(2000)';
-                        break;
-                    default:
-                        $mysql = 'varchar(100)';
-                        $sqlite = 'TEXT(100)';
-                }
+                $mysql = "varchar($length)";
+                $sqlite = "TEXT($length)";
                 
                 // 字段不存在时创建
                 if (! $this->model->isExistField($table, $name)) {
@@ -255,7 +233,8 @@ class FormController extends Controller
                     alert_back('表单名称不能为空！');
                 }
                 $data = array(
-                    'form_name' => $form_name
+                    'form_name' => $form_name,
+                    'update_user' => session('username')
                 );
                 
                 // 执行修改
@@ -272,15 +251,8 @@ class FormController extends Controller
             } else {
                 
                 // 获取数据
-                $type = post('type');
-                if (! ! $value = post('value')) {
-                    $value = str_replace("\r\n", ",", $value); // 替换回车
-                    $value = str_replace("，", ",", $value); // 替换中文逗号分割符
-                    $value = str_replace(" ", "", $value); // 替换空格
-                }
-                
                 $description = post('description');
-                $sorting = post('sorting') ?: 255;
+                $sorting = post('sorting', 'int') ?: 255;
                 
                 if (! $description) {
                     alert_back('字段描述不能为空！');
@@ -288,10 +260,9 @@ class FormController extends Controller
                 
                 // 构建数据
                 $data = array(
-                    'type' => $type,
-                    'value' => $value,
                     'description' => $description,
-                    'sorting' => $sorting
+                    'sorting' => $sorting,
+                    'update_user' => session('username')
                 );
                 
                 // 执行修改

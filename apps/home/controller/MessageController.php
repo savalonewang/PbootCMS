@@ -58,7 +58,7 @@ class MessageController extends Controller
             }
             
             $data = array(
-                'acode' => session('acode'),
+                'acode' => session('lg'),
                 'contacts' => $contacts,
                 'mobile' => $mobile,
                 'content' => $content,

@@ -391,6 +391,7 @@ class ParserModel extends Model
             ->where('a.status=1')
             ->join($join)
             ->decode()
+            ->order('id DESC')
             ->find();
         return $result;
     }

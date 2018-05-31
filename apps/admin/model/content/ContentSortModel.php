@@ -131,23 +131,25 @@ class ContentSortModel extends Model
         return parent::table('ay_content_sort')->autoTime()->insert($data);
     }
 
-    // 删除内容栏目
+    // 删除内容栏目及内容
     public function delSort($scode)
     {
         $this->scodes = array(); // 先清空
         $scodes = $this->getSubScodes($scode); // 获取全部子类
+        $this->delContent($scodes);
         return parent::table('ay_content_sort')->in('scode', $scodes)
             ->where("acode='" . session('acode') . "'")
             ->delete();
     }
 
-    // 批量删除栏目
+    // 批量删除栏目及内容
     public function delSortList($scodes)
     {
         $this->scodes = array(); // 先清空
         foreach ($scodes as $value) {
             $allscode = $this->getSubScodes($value); // 获取全部子类
         }
+        $this->delContent($allscode);
         return parent::table('ay_content_sort')->in('scode', $allscode)
             ->where("acode='" . session('acode') . "'")
             ->delete();
@@ -186,11 +188,9 @@ class ContentSortModel extends Model
     }
 
     // 删除指定栏目文章
-    public function delContent($scode)
+    private function delContent($scodes)
     {
-        return parent::table('ay_content')->where("scode='$scode'")
-            ->where("acode='" . session('acode') . "'")
-            ->delete();
+        return parent::table('ay_content')->in('scode', $scodes)->delete();
     }
 
     // 分类子类集

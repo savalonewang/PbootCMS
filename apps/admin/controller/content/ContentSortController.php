@@ -233,7 +233,7 @@ class ContentSortController extends Controller
                     error('批量删除失败！', - 1);
                 }
             } else {
-                alert_back('请选择要删除的内容！');
+                alert_back('请选择要删除的栏目！');
             }
         }
         
@@ -241,7 +241,6 @@ class ContentSortController extends Controller
             error('传递的参数值错误！', - 1);
         }
         if ($this->model->delSort($scode)) {
-            $this->model->delContent($scode);
             $this->log('删除数据内容栏目' . $scode . '成功！');
             success('删除成功！', - 1);
         } else {

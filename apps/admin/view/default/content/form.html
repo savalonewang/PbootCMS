@@ -52,7 +52,7 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">表名称</label>
 	                     <div class="layui-input-block">
-	                     	<input type="text" name="table_name" maxlength=30 required lay-verify="required"  placeholder="请输入表名称，必须为字母开头，如：baoming" class="layui-input">
+	                     	<input type="text" name="table_name" maxlength=30 required lay-verify="required"  placeholder="请输入表名称，如：baoming" class="layui-input">
 	                     </div>
 	                </div>
 	                
@@ -103,7 +103,7 @@
 	{if([$showfield])}
 	<div class="layui-tab layui-tab-brief" lay-filter="tab">
 	  <ul class="layui-tab-title">
-	    <li class="layui-this" lay-id="t1">表单字段</li>
+	    <li class="layui-this" lay-id="t1">{$form->form_name}-表单字段</li>
 	    <li lay-id="t2">新增字段</li>
 	  </ul>
 	  <div class="layui-tab-content">
@@ -114,8 +114,8 @@
 	                    	<th width=40>序号</th>
 	                    	<th>描述</th>
 	                    	<th>字段</th>
+	                    	<th>长度</th>
 	                    	<th>排序</th>
-	                        <th>类型</th>
 	                        <th>操作</th>
 	                    </tr>
 	                </thead>
@@ -125,17 +125,8 @@
 	                    	<td>[num]</td>
 	                    	<td>[value->description]</td>
 	                    	<td>[value->name]</td>
+	                    	<td>[value->length]</td>
 	                    	<td>[value->sorting]</td>
-	                    	<td>
-								{if($value->type==1)}单行文本{/if}
-	                    		{if($value->type==2)}多行文本{/if}
-	                    		{if($value->type==3)}单选按钮{/if}
-	                    		{if($value->type==4)}多选按钮{/if}
-	                    		{if($value->type==5)}图片上传{/if}
-	                    		{if($value->type==6)}附件上传{/if}
-	                    		{if($value->type==7)}日期选择{/if}
-	                    		{if($value->type==8)}编辑器{/if}
-							</td>
 	                        <td>
 	                       		<a href="{url./admin/Form/del/id/'.$value->id.'/fcode/'.[$get.fcode].'}" onclick="return confirm('您确定要删除么？')" class="layui-btn layui-btn-xs layui-btn-danger" title="删除">删除</a>
 	                            {fun=get_btn_mod($value->id)}
@@ -162,7 +153,14 @@
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">字段名称</label>
 	                     <div class="layui-input-block">
-	                     	<input type="text" name="name" required maxlength="20" lay-verify="required"  placeholder="请输入字段名称，如：contacts" class="layui-input">
+	                     	<input type="text" name="name" required maxlength="20" lay-verify="required"  placeholder="请输入字段名称，必须以字母开头，如：contacts" class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">字段长度</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="length" value="20" required lay-verify="required" class="layui-input">
 	                     </div>
 	                </div>
 	                
@@ -170,30 +168,6 @@
 	                     <label class="layui-form-label">字段排序</label>
 	                     <div class="layui-input-block">
 	                     	<input type="text" name="sorting" value="255" required lay-verify="required" class="layui-input">
-	                     </div>
-	                </div>
-	                
-	                <div class="layui-form-item">
-	                     <label class="layui-form-label">字段类型</label>
-	                     <div class="layui-input-block">
-	                     	 <select name="type" lay-verify="required">
-		                    	<option value="1">单行文本</option>
-		                    	<option value="2">多行文本</option>
-		                    	<option value="3">单选按钮</option>
-		                    	<option value="4">多选按钮</option>
-		                    	<option value="5">图片上传</option>
-		                    	<option value="6">附件上传</option>
-		                    	<option value="7">日期选择</option>
-		                    	<option value="8">编辑器</option>
-		                    </select>
-	                     </div>
-	                </div>
-	                
-	                <div class="layui-form-item">
-	                     <label class="layui-form-label">选择按钮值</label>
-	                     <div class="layui-input-block">
-	                     	<textarea name="value" placeholder="多个选项用逗号隔开或者回车"  class="layui-textarea"></textarea>
-	                     	<div class="layui-form-mid layui-word-aux">只在类型为单选或多选时填写有效。</div>
 	                     </div>
 	                </div>
 	   			
@@ -231,7 +205,7 @@
                 <div class="layui-form-item">
                      <label class="layui-form-label">表名称</label>
                      <div class="layui-input-block">
-                     	<input type="text" maxlength=30 required readonly value="{$form->table_name}" lay-verify="required"  placeholder="请输入表名称，如：ay_baoming" class="layui-input readonly">
+                     	<input type="text" maxlength=30 required readonly value="{$form->table_name}" lay-verify="required"  placeholder="请输入表名称，如：baoming" class="layui-input readonly">
                      </div>
                 </div>
 
@@ -267,7 +241,14 @@
                 <div class="layui-form-item">
                      <label class="layui-form-label">字段名称</label>
                      <div class="layui-input-block">
-                     	<input type="text" name="name" readonly value="{$field->name}" maxlength="30" placeholder="请输入字段名称，如：contacts" class="layui-input readonly">
+                     	<input type="text" name="name" readonly value="{$field->name}" class="layui-input readonly">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">字段长度</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="length" readonly value="{$field->length}" class="layui-input readonly">
                      </div>
                 </div>
                 
@@ -275,41 +256,6 @@
                      <label class="layui-form-label">字段排序</label>
                      <div class="layui-input-block">
                      	<input type="text" name="sorting" value="{$field->sorting}" required lay-verify="required" class="layui-input">
-                     </div>
-                </div>
-                
-                <div class="layui-form-item">
-                     <label class="layui-form-label">字段类型</label>
-                     <div class="layui-input-block">
-                     	 <select name="type" lay-verify="required">
-	                    	{if([$field->type]==2)}
-	                    		<option value="2" selected>多行文本</option>
-	                    	{/if}
-	                    	
-	                    	{if([$field->type]==7)}
-	                    		<option value="7" selected>日期选择</option>
-	                    	{/if}
-	                    	
-	                    	{if([$field->type]==8)}
-	                    		<option value="8" selected>编辑器</option>
-	                    	{/if}
-	                    	
-	                    	{if([$field->type]!=2 && [$field->type]!=7 && [$field->type]!=8)}
-	                    		<option value="1" {if([$field->type]==1)}selected{/if}>单行文本</option>
-	                    		<option value="3" {if([$field->type]==3)}selected{/if}>单选按钮</option>
-	                    		<option value="4" {if([$field->type]==4)}selected{/if}>多选按钮</option>
-	                    		<option value="5" {if([$field->type]==5)}selected{/if}>图片上传</option>
-	                    		<option value="6" {if([$field->type]==6)}selected{/if}>附件上传</option>
-	                    	{/if}
-	                    </select>
-                     </div>
-                </div>
-                
-                <div class="layui-form-item">
-                     <label class="layui-form-label">选择按钮值</label>
-                     <div class="layui-input-block">
-                     	<textarea name="value" placeholder="多个选项用逗号或回车隔开"  class="layui-textarea">{$field->value}</textarea>
-                     	<div class="layui-form-mid layui-word-aux">只在类型为单选或多选时填写有效，多个选项用逗号或回车隔开。</div>
                      </div>
                 </div>
    			

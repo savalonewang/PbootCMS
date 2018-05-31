@@ -18,6 +18,8 @@ PbootCMS是翱云科技开发的全新内核的开源企业建站系统，
 
 如果需要启用Mysql版本，请导入目录下数据库文件\static\backup\sql\xxx.sql，同时请注意使用最新日期名字的脚本文件，并修改config/database数据库连接文件信息。
 
+注意：如果导入的数据库名字不一致，请先修改sql文件中数据库名为自己的。
+
 系统后台默认访问路径：http://ip/admin.php   账号：admin   密码：123456，
 
 

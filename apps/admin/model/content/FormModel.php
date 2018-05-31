@@ -67,7 +67,7 @@ class FormModel extends Model
     // 添加自定义表单
     public function addForm(array $data)
     {
-        return parent::table('ay_form')->insert($data);
+        return parent::table('ay_form')->autoTime()->insert($data);
     }
 
     // 删除自定义表单
@@ -79,7 +79,9 @@ class FormModel extends Model
     // 修改自定义表单
     public function modForm($id, $data)
     {
-        return parent::table('ay_form')->where("id=$id")->update($data);
+        return parent::table('ay_form')->where("id=$id")
+            ->autoTime()
+            ->update($data);
     }
 
     // 获取表单字段
@@ -111,7 +113,7 @@ class FormModel extends Model
     // 新增表单字段
     public function addFormField(array $data)
     {
-        return parent::table('ay_form_field')->insert($data);
+        return parent::table('ay_form_field')->autoTime()->insert($data);
     }
 
     // 删除表单字段
@@ -129,7 +131,9 @@ class FormModel extends Model
     // 修改表单字段
     public function modFormField($id, $data)
     {
-        return parent::table('ay_form_field')->where("id=$id")->update($data);
+        return parent::table('ay_form_field')->where("id=$id")
+            ->autoTime()
+            ->update($data);
     }
 
     // 判断字段是否存在

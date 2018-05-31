@@ -1,6 +1,6 @@
 -- Online Database Management SQL Dump
 -- 数据库名: pbootcms
--- 生成日期: 2018-04-30 15:35:31
+-- 生成日期: 2018-06-01 00:01:52
 -- PHP 版本: 5.6.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -299,6 +299,48 @@ INSERT INTO `ay_extfield` (`id`,`mcode`,`name`,`type`,`value`,`description`) VAL
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `ay_form`
+--
+
+DROP TABLE IF EXISTS `ay_form`;
+CREATE TABLE `ay_form` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `fcode` varchar(20) NOT NULL COMMENT '表但编码',
+  `form_name` varchar(20) NOT NULL COMMENT '表单名称',
+  `table_name` varchar(30) NOT NULL COMMENT '表名称',
+  `create_user` varchar(30) NOT NULL COMMENT '添加人员',
+  `update_user` varchar(30) NOT NULL COMMENT '更新人员',
+  `create_time` datetime NOT NULL COMMENT '添加时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `ay_form_fcode` (`fcode`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `ay_form_field`
+--
+
+DROP TABLE IF EXISTS `ay_form_field`;
+CREATE TABLE `ay_form_field` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `fcode` varchar(20) NOT NULL COMMENT '表单编码',
+  `name` varchar(20) NOT NULL COMMENT '字段名称',
+  `length` int(10) unsigned NOT NULL COMMENT '字段长度',
+  `description` varchar(30) NOT NULL COMMENT '描述文本',
+  `sorting` int(10) unsigned NOT NULL DEFAULT '255' COMMENT '排序',
+  `create_user` varchar(30) NOT NULL COMMENT '添加人员',
+  `update_user` varchar(30) NOT NULL COMMENT '更新人员',
+  `create_time` datetime NOT NULL COMMENT '添加时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `ay_form_field_fcode` (`fcode`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `ay_label`
 --
 
@@ -377,7 +419,7 @@ CREATE TABLE `ay_menu` (
   PRIMARY KEY (`id`),
   KEY `ay_menu_mcode` (`mcode`),
   KEY `ay_menu_pcode` (`pcode`)
-) ENGINE=MyISAM AUTO_INCREMENT=171 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=172 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_menu`
@@ -410,7 +452,8 @@ INSERT INTO `ay_menu` (`id`,`mcode`,`pcode`,`name`,`url`,`sorting`,`status`,`sho
 ('167','M156','0','全局配置','/admin/M156/index','200','1','0','fa-globe','admin','admin','2018-03-25 17:20:43','2018-04-30 14:43:56'),
 ('168','M157','0','扩展内容','/admin/M157/index','500','1','0','fa-arrows-alt','admin','admin','2018-03-25 17:27:57','2018-04-30 14:50:34'),
 ('169','M158','M156','模型字段','/admin/ExtField/index','205','1','1','fa-external-link','admin','admin','2018-03-25 21:24:43','2018-04-07 18:44:49'),
-('170','M159','M130','新闻内容','/admin/Content/index/mcode/2','403','1','1','fa-file-text-o','admin','admin','2018-04-12 18:25:41','2018-04-12 18:26:23');
+('170','M159','M130','新闻内容','/admin/Content/index/mcode/2','403','1','1','fa-file-text-o','admin','admin','2018-04-12 18:25:41','2018-04-12 18:26:23'),
+('171','M160','M157','自定义表单','/admin/Form/index','504','1','1','fa-plus-square-o','admin','admin','2018-05-30 18:25:41','2018-05-31 23:55:10');
 
 -- --------------------------------------------------------
 
@@ -425,7 +468,7 @@ CREATE TABLE `ay_menu_action` (
   `action` varchar(20) NOT NULL COMMENT '类型编码',
   PRIMARY KEY (`id`),
   KEY `ay_menu_action_mcode` (`mcode`)
-) ENGINE=MyISAM AUTO_INCREMENT=606 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=609 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_menu_action`
@@ -492,7 +535,10 @@ INSERT INTO `ay_menu_action` (`id`,`mcode`,`action`) VALUES
 ('569','M155','add'),
 ('574','M158','mod'),
 ('573','M158','del'),
-('572','M158','add');
+('572','M158','add'),
+('606','M160','add'),
+('607','M160','del'),
+('608','M160','mod');
 
 -- --------------------------------------------------------
 
@@ -587,8 +633,8 @@ CREATE TABLE `ay_role` (
 --
 
 INSERT INTO `ay_role` (`id`,`rcode`,`name`,`description`,`create_user`,`update_user`,`create_time`,`update_time`) VALUES
-('1','R101','系统管理员','系统管理员具有所有权限','admin','admin','2017-03-22 11:33:32','2018-04-12 19:48:31'),
-('31','R103','内容管理员','可管理角色用户日志信息','admin','admin','2017-06-01 00:32:02','2018-04-12 19:48:24');
+('1','R101','系统管理员','系统管理员具有所有权限','admin','admin','2017-03-22 11:33:32','2018-05-31 23:55:32'),
+('31','R103','内容管理员','可管理角色用户日志信息','admin','admin','2017-06-01 00:32:02','2018-05-31 23:55:40');
 
 -- --------------------------------------------------------
 
@@ -604,15 +650,15 @@ CREATE TABLE `ay_role_area` (
   PRIMARY KEY (`id`),
   KEY `ay_role_area_rcode` (`rcode`),
   KEY `ay_role_area_acode` (`acode`)
-) ENGINE=MyISAM AUTO_INCREMENT=605 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=607 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_role_area`
 --
 
 INSERT INTO `ay_role_area` (`id`,`rcode`,`acode`) VALUES
-('603','R103','cn'),
-('604','R101','cn');
+('606','R103','cn'),
+('605','R101','cn');
 
 -- --------------------------------------------------------
 
@@ -627,108 +673,116 @@ CREATE TABLE `ay_role_level` (
   `level` varchar(50) NOT NULL COMMENT '权限地址',
   PRIMARY KEY (`id`),
   KEY `ay_role_level_rcode` (`rcode`)
-) ENGINE=MyISAM AUTO_INCREMENT=9581 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9684 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_role_level`
 --
 
 INSERT INTO `ay_role_level` (`id`,`rcode`,`level`) VALUES
-('9571','R101','/admin/Message/index'),
-('9570','R101','/admin/M157/index'),
-('9569','R101','/admin/Content/index/mcode/2'),
-('9568','R101','/admin/Content/mod'),
-('9567','R101','/admin/Content/del'),
-('9566','R101','/admin/Content/add'),
-('9565','R101','/admin/Content/index'),
-('9564','R101','/admin/Single/mod'),
-('9563','R101','/admin/Single/index'),
-('9562','R101','/admin/M130/index'),
-('9561','R101','/admin/ContentSort/mod'),
-('9560','R101','/admin/ContentSort/del'),
-('9559','R101','/admin/ContentSort/add'),
-('9558','R101','/admin/ContentSort/index'),
-('9557','R101','/admin/Company/mod'),
-('9556','R101','/admin/Company/index'),
-('9555','R101','/admin/Site/mod'),
-('9554','R101','/admin/Site/index'),
-('9553','R101','/admin/M112/index'),
-('9552','R101','/admin/ExtField/mod'),
-('9550','R101','/admin/ExtField/add'),
-('9551','R101','/admin/ExtField/del'),
-('9513','R103','/admin/Link/mod'),
-('9512','R103','/admin/Link/del'),
-('9511','R103','/admin/Link/add'),
-('9510','R103','/admin/Link/index'),
-('9509','R103','/admin/Slide/mod'),
-('9508','R103','/admin/Slide/del'),
-('9507','R103','/admin/Slide/add'),
-('9506','R103','/admin/Slide/index'),
-('9505','R103','/admin/Message/mod'),
-('9504','R103','/admin/Message/index'),
-('9503','R103','/admin/M157/index'),
-('9502','R103','/admin/Content/index/mcode/2'),
-('9501','R103','/admin/Content/mod'),
-('9500','R103','/admin/Content/del'),
-('9549','R101','/admin/ExtField/index'),
-('9548','R101','/admin/Model/mod'),
-('9547','R101','/admin/Model/del'),
-('9546','R101','/admin/Model/add'),
-('9545','R101','/admin/Model/index'),
-('9544','R101','/admin/Label/mod'),
-('9543','R101','/admin/Label/del'),
-('9542','R101','/admin/Label/add'),
-('9541','R101','/admin/Label/index'),
-('9499','R103','/admin/Content/add'),
-('9498','R103','/admin/Content/index'),
-('9497','R103','/admin/Single/mod'),
-('9540','R101','/admin/Config/email'),
-('9539','R101','/admin/Config/index'),
-('9538','R101','/admin/M156/index'),
-('9537','R101','/admin/Site/server'),
-('9536','R101','/admin/Database/index'),
-('9535','R101','/admin/Type/mod'),
-('9534','R101','/admin/Type/del'),
-('9533','R101','/admin/Type/add'),
-('9532','R101','/admin/Type/index'),
-('9531','R101','/admin/Syslog/index'),
-('9530','R101','/admin/User/mod'),
-('9529','R101','/admin/User/del'),
-('9528','R101','/admin/User/add'),
-('9496','R103','/admin/Single/index'),
-('9495','R103','/admin/M130/index'),
-('9494','R103','/admin/ContentSort/mod'),
-('9493','R103','/admin/ContentSort/del'),
-('9527','R101','/admin/User/index'),
-('9526','R101','/admin/Role/mod'),
-('9525','R101','/admin/Role/del'),
-('9524','R101','/admin/Role/add'),
-('9523','R101','/admin/Role/index'),
-('9522','R101','/admin/Menu/mod'),
-('9521','R101','/admin/Menu/del'),
-('9520','R101','/admin/Menu/add'),
-('9519','R101','/admin/Menu/index'),
-('9518','R101','/admin/Area/mod'),
-('9517','R101','/admin/Area/del'),
-('9516','R101','/admin/Area/add'),
-('9515','R101','/admin/Area/index'),
-('9514','R101','/admin/M101/index'),
-('9492','R103','/admin/ContentSort/add'),
-('9491','R103','/admin/ContentSort/index'),
-('9490','R103','/admin/Company/mod'),
-('9489','R103','/admin/Company/index'),
-('9488','R103','/admin/Site/mod'),
-('9487','R103','/admin/Site/index'),
-('9486','R103','/admin/M112/index'),
-('9572','R101','/admin/Message/mod'),
-('9573','R101','/admin/Slide/index'),
-('9574','R101','/admin/Slide/add'),
-('9575','R101','/admin/Slide/del'),
-('9576','R101','/admin/Slide/mod'),
-('9577','R101','/admin/Link/index'),
-('9578','R101','/admin/Link/add'),
-('9579','R101','/admin/Link/del'),
-('9580','R101','/admin/Link/mod');
+('9635','R101','/admin/Menu/del'),
+('9634','R101','/admin/Menu/add'),
+('9633','R101','/admin/Menu/index'),
+('9632','R101','/admin/Area/mod'),
+('9631','R101','/admin/Area/del'),
+('9630','R101','/admin/Area/add'),
+('9629','R101','/admin/Area/index'),
+('9628','R101','/admin/M101/index'),
+('9627','R101','/admin/Form/mod'),
+('9626','R101','/admin/Form/del'),
+('9625','R101','/admin/Form/add'),
+('9624','R101','/admin/Form/index'),
+('9623','R101','/admin/Link/mod'),
+('9622','R101','/admin/Link/del'),
+('9621','R101','/admin/Link/add'),
+('9620','R101','/admin/Link/index'),
+('9619','R101','/admin/Slide/mod'),
+('9618','R101','/admin/Slide/del'),
+('9617','R101','/admin/Slide/add'),
+('9616','R101','/admin/Slide/index'),
+('9615','R101','/admin/Message/mod'),
+('9614','R101','/admin/Message/index'),
+('9679','R103','/admin/Link/mod'),
+('9678','R103','/admin/Link/del'),
+('9677','R103','/admin/Link/add'),
+('9676','R103','/admin/Link/index'),
+('9675','R103','/admin/Slide/mod'),
+('9674','R103','/admin/Slide/del'),
+('9673','R103','/admin/Slide/add'),
+('9672','R103','/admin/Slide/index'),
+('9671','R103','/admin/Message/mod'),
+('9670','R103','/admin/Message/index'),
+('9669','R103','/admin/M157/index'),
+('9668','R103','/admin/Content/index/mcode/2'),
+('9667','R103','/admin/Content/mod'),
+('9666','R103','/admin/Content/del'),
+('9613','R101','/admin/M157/index'),
+('9612','R101','/admin/Content/index/mcode/2'),
+('9611','R101','/admin/Content/mod'),
+('9610','R101','/admin/Content/del'),
+('9609','R101','/admin/Content/add'),
+('9608','R101','/admin/Content/index'),
+('9607','R101','/admin/Single/mod'),
+('9665','R103','/admin/Content/add'),
+('9664','R103','/admin/Content/index'),
+('9663','R103','/admin/Single/mod'),
+('9606','R101','/admin/Single/index'),
+('9605','R101','/admin/M130/index'),
+('9604','R101','/admin/ContentSort/mod'),
+('9603','R101','/admin/ContentSort/del'),
+('9602','R101','/admin/ContentSort/add'),
+('9601','R101','/admin/ContentSort/index'),
+('9600','R101','/admin/Company/mod'),
+('9599','R101','/admin/Company/index'),
+('9598','R101','/admin/Site/mod'),
+('9662','R103','/admin/Single/index'),
+('9661','R103','/admin/M130/index'),
+('9660','R103','/admin/ContentSort/mod'),
+('9659','R103','/admin/ContentSort/del'),
+('9597','R101','/admin/Site/index'),
+('9596','R101','/admin/M112/index'),
+('9595','R101','/admin/ExtField/mod'),
+('9594','R101','/admin/ExtField/del'),
+('9593','R101','/admin/ExtField/add'),
+('9592','R101','/admin/ExtField/index'),
+('9591','R101','/admin/Model/mod'),
+('9590','R101','/admin/Model/del'),
+('9589','R101','/admin/Model/add'),
+('9588','R101','/admin/Model/index'),
+('9658','R103','/admin/ContentSort/add'),
+('9657','R103','/admin/ContentSort/index'),
+('9656','R103','/admin/Company/mod'),
+('9655','R103','/admin/Company/index'),
+('9654','R103','/admin/Site/mod'),
+('9653','R103','/admin/Site/index'),
+('9652','R103','/admin/M112/index'),
+('9587','R101','/admin/Label/mod'),
+('9586','R101','/admin/Label/del'),
+('9585','R101','/admin/Label/add'),
+('9584','R101','/admin/Label/index'),
+('9583','R101','/admin/Config/email'),
+('9582','R101','/admin/Config/index'),
+('9581','R101','/admin/M156/index'),
+('9636','R101','/admin/Menu/mod'),
+('9637','R101','/admin/Role/index'),
+('9638','R101','/admin/Role/add'),
+('9639','R101','/admin/Role/del'),
+('9640','R101','/admin/Role/mod'),
+('9641','R101','/admin/User/index'),
+('9642','R101','/admin/User/add'),
+('9643','R101','/admin/User/del'),
+('9644','R101','/admin/User/mod'),
+('9645','R101','/admin/Syslog/index'),
+('9646','R101','/admin/Type/index'),
+('9647','R101','/admin/Type/add'),
+('9648','R101','/admin/Type/del'),
+('9649','R101','/admin/Type/mod'),
+('9650','R101','/admin/Database/index'),
+('9651','R101','/admin/Site/server'),
+('9680','R103','/admin/Form/index'),
+('9681','R103','/admin/Form/add'),
+('9682','R103','/admin/Form/del'),
+('9683','R103','/admin/Form/mod');
 
 -- --------------------------------------------------------
 
