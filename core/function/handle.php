@@ -563,6 +563,20 @@ function is_https()
     }
 }
 
+// 获取当前访问地址
+function get_http_url()
+{
+    if (is_https()) {
+        $domain = 'https://' . $_SERVER['HTTP_HOST'];
+    } else {
+        $domain = 'http://' . $_SERVER['HTTP_HOST'];
+    }
+    if ($_SERVER['SERVER_PORT'] != 80) {
+        $domain .= ':' . $_SERVER['SERVER_PORT'];
+    }
+    return $domain;
+}
+
 // 服务器信息
 function get_server_info()
 {

@@ -44,6 +44,7 @@ class ParserController extends Controller
         $content = $this->parserLinkLabel($content); // 友情链接
         $content = $this->parserMessageLabel($content); // 留言板
         $content = $this->parserFormLabel($content); // 自定义表单
+        $content = $this->parserQrcodeLabel($content); // 二维码生成
         $content = $this->parserPageLabel($content); // CMS分页标签解析(需置后)
         $content = $this->parserIfLabel($content); // IF语句(需置后)
         return $content;
@@ -78,6 +79,7 @@ class ParserController extends Controller
         $content = str_replace('{pboot:appid}', session('config.api_appid'), $content); // API认证用户
         $content = str_replace('{pboot:timestamp}', time(), $content); // 认证时间戳
         $content = str_replace('{pboot:signature}', md5(md5(session('config.api_appid') . session('config.api_secret') . time())), $content); // API认证密钥
+        $content = str_replace('{pboot:httpurl}', get_http_url(), $content); // 当前访问的域名地址
         return $content;
     }
 
@@ -1405,6 +1407,31 @@ class ParserController extends Controller
                     continue;
                 }
                 $content = str_replace($matches[0][$i], url('/home/Form/add/fcode/' . $fcode), $content);
+            }
+        }
+        return $content;
+    }
+
+    // 解析二维码生成标签
+    public function parserQrcodeLabel($content)
+    {
+        $pattern = '/\{pboot:qrcode(\s+[^}]+)?\}/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            for ($i = 0; $i < $count; $i ++) {
+                $params = $this->parserParam($matches[1][$i]);
+                $string = '';
+                foreach ($params as $key => $value) {
+                    switch ($key) {
+                        case 'string':
+                            $string = $value;
+                            break;
+                    }
+                }
+                if (! $string) { // 无内容不解析
+                    continue;
+                }
+                $content = str_replace($matches[0][$i], '<img src="' . CORE_DIR . '/qrcode.php?string=' . $string . '" class="qrcode">', $content);
             }
         }
         return $content;
