@@ -95,6 +95,11 @@ class ContentController extends Controller
                 alert_back('文章标题不能为空！');
             }
             
+            // 自动提起前一百个字符为描述
+            if (! $description) {
+                $description = mb_substr(strip_tags($_POST['content']), 0, 100);
+            }
+            
             // 检查自定义文件名称
             if ($filename) {
                 while ($this->model->checkFilename("filename='$filename'")) {
@@ -310,6 +315,11 @@ class ContentController extends Controller
             
             if (! $title) {
                 alert_back('文章标题不能为空！');
+            }
+            
+            // 自动提起前一百个字符为描述
+            if (! $description) {
+                $description = mb_substr(strip_tags($_POST['content']), 0, 100);
             }
             
             if ($filename) {
