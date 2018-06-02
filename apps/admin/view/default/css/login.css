@@ -17,7 +17,7 @@ body{
 	margin: 0 auto;
 	box-sizing: border-box;
 	background: #ccc; 
-	background-color: rgba(248,248,255,0.5);
+	background-color: rgba(248,248,255,0.2);
 	border-radius: 5px;
 }
 
