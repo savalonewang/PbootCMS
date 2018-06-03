@@ -1,6 +1,6 @@
 -- Online Database Management SQL Dump
 -- 数据库名: pbootcms
--- 生成日期: 2018-06-01 00:01:52
+-- 生成日期: 2018-06-03 23:28:47
 -- PHP 版本: 5.6.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -203,7 +203,7 @@ CREATE TABLE `ay_content_ext` (
   `contentid` int(10) unsigned NOT NULL,
   `ext_price` varchar(100) DEFAULT NULL COMMENT '产品价格',
   PRIMARY KEY (`extid`),
-  KEY `ay_content_ext_contentid` (`contentid`) USING BTREE
+  KEY `ay_content_ext_contentid` (`contentid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
@@ -251,7 +251,7 @@ CREATE TABLE `ay_content_sort` (
   KEY `ay_content_sort_pcode` (`pcode`),
   KEY `ay_content_sort_scode` (`scode`),
   KEY `ay_content_sort_acode` (`acode`),
-  KEY `ay_content_sort_mcode` (`mcode`) USING BTREE
+  KEY `ay_content_sort_mcode` (`mcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
@@ -286,7 +286,7 @@ CREATE TABLE `ay_extfield` (
   `value` varchar(200) NOT NULL COMMENT '单选或多选值',
   `description` varchar(30) NOT NULL COMMENT '描述文本',
   PRIMARY KEY (`id`),
-  KEY `ay_extfield_mcode` (`mcode`) USING BTREE
+  KEY `ay_extfield_mcode` (`mcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
@@ -336,7 +336,7 @@ CREATE TABLE `ay_form_field` (
   `create_time` datetime NOT NULL COMMENT '添加时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `ay_form_field_fcode` (`fcode`) USING BTREE
+  KEY `ay_form_field_fcode` (`fcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -385,8 +385,8 @@ CREATE TABLE `ay_link` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
-  KEY `ay_link_acode` (`acode`) USING BTREE,
-  KEY `ay_link_gid` (`gid`) USING BTREE
+  KEY `ay_link_acode` (`acode`),
+  KEY `ay_link_gid` (`gid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
@@ -835,8 +835,8 @@ CREATE TABLE `ay_slide` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
-  KEY `ay_slide_acode` (`acode`) USING BTREE,
-  KEY `ay_slide_gid` (`gid`) USING BTREE
+  KEY `ay_slide_acode` (`acode`),
+  KEY `ay_slide_gid` (`gid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
@@ -923,7 +923,7 @@ CREATE TABLE `ay_user` (
   PRIMARY KEY (`id`),
   KEY `ay_user_ucode` (`ucode`),
   KEY `ay_user_username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_user`
@@ -931,7 +931,7 @@ CREATE TABLE `ay_user` (
 
 INSERT INTO `ay_user` (`id`,`ucode`,`username`,`realname`,`password`,`status`,`login_count`,`last_login_ip`,`create_user`,`update_user`,`create_time`,`update_time`) VALUES
 ('1','10001','admin','超级管理员','14e1b600b1fd579f47433b88e8d85291','1','1341','2130706433','admin','admin','2017-05-08 18:50:30','2018-04-30 14:56:09'),
-('40','10002','hnxsh','星梦','d6df5a91f11d9b9513c5215e43ef9e8c','1','1','2130706433','admin','admin','2018-04-09 13:34:52','2018-04-30 15:12:01');
+('2','10002','hnxsh','星梦','d6df5a91f11d9b9513c5215e43ef9e8c','1','1','2130706433','admin','admin','2018-04-09 13:34:52','2018-04-30 15:12:01');
 
 -- --------------------------------------------------------
 

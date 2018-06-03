@@ -100,7 +100,7 @@ class UserModel extends Model
     // 删除用户
     public function delUser($ucode)
     {
-        $result = parent::table('ay_user')->where("ucode='$ucode' AND id<>1")->delete();
+        $result = parent::table('ay_user')->where("ucode='$ucode' AND ucode<>10001")->delete();
         if ($result) {
             $this->delUserRole($ucode);
         }
@@ -119,7 +119,8 @@ class UserModel extends Model
                 if (array_key_exists('ucode', $data)) {
                     $ucode = $data['ucode'];
                 }
-                $this->addUserRole($ucode, $roles);
+                if ($ucode != '10001')
+                    $this->addUserRole($ucode, $roles);
             }
         }
         return $result;
@@ -156,6 +157,6 @@ class UserModel extends Model
     // 删除用户角色关联数据
     private function delUserRole($ucode)
     {
-        return parent::table('ay_user_role')->where("ucode='$ucode'")->delete();
+        return parent::table('ay_user_role')->where("ucode='$ucode' AND ucode<>10001")->delete();
     }
 }
