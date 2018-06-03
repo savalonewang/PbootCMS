@@ -80,7 +80,22 @@
 		            	<button class="layui-btn" lay-submit type="submit" name="submit" value="bfsqlite" >备份</button>
 		            	<p class="layui-text">注意：Sqlite数据库只支持直接备份。</p>
 		            {/if}
-			  	   	
+			  	   	</form>
+			  	</div>
+		  </div>
+	  </div>
+	  
+	  <div class="layui-tab layui-tab-brief" lay-filter="tab">
+		  <ul class="layui-tab-title">
+		    <li class="layui-this" lay-id="t1">执行数据库脚本</li>
+		  </ul>
+		  <div class="layui-tab-content">
+		  	   <div class="layui-tab-item layui-show">
+		  	   		<form action="{url./admin/database/mod}" method="post">
+		  	   			<div class="layui-form-item">
+		                    <textarea name="sql" placeholder="请粘贴要执行的数据库脚本，可用于系统升级时数据库升级！" class="layui-textarea"></textarea>
+		                </div>
+		                <button class="layui-btn" lay-submit type="submit" name="submit" value="sql">执行</button>
 			  	   	</form>
 			  	</div>
 		  </div>

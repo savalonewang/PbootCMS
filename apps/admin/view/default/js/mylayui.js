@@ -61,9 +61,13 @@ layui.use(['element','upload','laydate','form'], function(){
 	,multiple: false //多文件上传
 	,accept: 'images' //接收文件类型 images（图片）、file（所有文件）、video（视频）、audio（音频）
 	,acceptMime: 'image/*'
+    ,before: function(obj){ 
+	   layer.load(); //上传loading
+	}
 	,done: function(res){
 	   var item = this.item;
 	   var des=$(item).data('des');
+	   layer.closeAll('loading'); //关闭loading
 	   if(res){
 		   $('#'+des).val(res); 
 		   $('#'+des+'_box').html("<dl><dt><img src='"+sitedir+res+"' data-url='"+res+"' ></dt><dd>删除</dd></dl>"); 
@@ -73,6 +77,7 @@ layui.use(['element','upload','laydate','form'], function(){
 	   }
 	}
 	,error: function(){
+		layer.closeAll('loading'); //关闭loading
 		layer.msg('上传发生错误！'); 
 	}
   });
@@ -87,6 +92,9 @@ layui.use(['element','upload','laydate','form'], function(){
 	,multiple: true//多文件上传
 	,accept: 'images' //接收文件类型 images（图片）、file（所有文件）、video（视频）、audio（音频）
 	,acceptMime: 'image/*'
+	,before: function(obj){ 
+		layer.load(); //上传loading
+	}
 	,done: function(res){
 	   if(files){
 		   files+=','+res;
@@ -99,6 +107,7 @@ layui.use(['element','upload','laydate','form'], function(){
   		var item = this.item;
   	    var des=$(item).data('des');
   	    
+  	    layer.closeAll('loading'); //关闭loading
 	    if(files){
 	       if($('#'+des).val()){
 	    	   $('#'+des).val($('#'+des).val()+','+files); 
@@ -112,13 +121,15 @@ layui.use(['element','upload','laydate','form'], function(){
 	    }else{
 	 	   layer.msg('全部上传失败！'); 
 	    }
+	    
 	 }
 	,error: function(){
+		layer.closeAll('loading'); //关闭loading
 		layer.msg('上传发生错误！'); 
 	}
   });
 	
-  //图片删除功能
+  //图片页面删除功能
   $('.pic').on("click",'dl dd',function(){
 	  var id=$(this).parents('.pic').attr('id');
 	  var url=$(this).siblings('dt').find('img').data('url');
@@ -132,8 +143,6 @@ layui.use(['element','upload','laydate','form'], function(){
 	  $(this).parents('dl').remove();
   });
   
-
-  
   //执行附件上传实例
   var uploadFileInst = upload.render({
 	elem: '.file' //绑定元素
@@ -141,9 +150,13 @@ layui.use(['element','upload','laydate','form'], function(){
 	,field: 'upload' //字段名称
 	,multiple: false //多文件上传
 	,accept: 'file' //接收文件类型 images（图片）、file（所有文件）、video（视频）、audio（音频）
+	,before: function(obj){ 
+		layer.load(); //上传loading
+	}
 	,done: function(res){
 	   var item = this.item;
 	   var des=$(item).data('des');
+	   layer.closeAll('loading'); //关闭loading
 	   if(res){
 		   $('#'+des).val(res); 
 		   layer.msg('上传成功！'); 
@@ -152,6 +165,7 @@ layui.use(['element','upload','laydate','form'], function(){
 	   }
 	}
 	,error: function(){
+		layer.closeAll('loading'); //关闭loading
 		layer.msg('上传发生错误！'); 
 	}
   });

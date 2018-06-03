@@ -108,6 +108,16 @@ class DatabaseController extends Controller
                     error('备份失败！', - 1);
                 }
                 break;
+            case 'sql':
+                $sql = explode(';', $_POST['sql']);
+                foreach ($sql as $value) {
+                    if ($value) {
+                        $this->model->amd($value);
+                    }
+                }
+                $this->log('执行数据库脚本成功！');
+                success('执行数据库脚本成功！', - 1);
+                break;
         }
     }
 
