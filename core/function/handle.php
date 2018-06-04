@@ -571,9 +571,6 @@ function get_http_url()
     } else {
         $domain = 'http://' . $_SERVER['HTTP_HOST'];
     }
-    if ($_SERVER['SERVER_PORT'] != 80) {
-        $domain .= ':' . $_SERVER['SERVER_PORT'];
-    }
     return $domain;
 }
 
