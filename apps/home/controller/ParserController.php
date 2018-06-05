@@ -69,6 +69,233 @@ class ParserController extends Controller
         return $param;
     }
 
+    // 解析列表标签
+    protected function parserList($label, $search, $content, $data, $params, $key)
+    {
+        switch ($label) {
+            case 'i':
+                $content = str_replace($search, $key, $content);
+                break;
+            case 'link':
+                if ($data->outlink) { // 外链
+                    $content = str_replace($search, $data->outlink, $content);
+                } elseif ($data->filename) { // 自定义名称
+                    $content = str_replace($search, url('/home/content/index/id/' . $data->filename), $content);
+                } else { // 编码
+                    $content = str_replace($search, url('/home/content/index/id/' . $data->id), $content);
+                }
+                break;
+            case 'sortlink':
+                if ($data->sortfilename) {
+                    $content = str_replace($search, url('/home/list/index/scode/' . $data->sortfilename), $content);
+                } else {
+                    $content = str_replace($search, url('/home/list/index/scode/' . $data->scode), $content);
+                }
+                break;
+            case 'subsortlink':
+                if ($data->subscode) {
+                    if ($data->subfilename) {
+                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subfilename), $content);
+                    } else {
+                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subscode), $content);
+                    }
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'sortname':
+                if ($data->sortname) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->sortname), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'subsortname':
+                if ($data->subsortname) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->subsortname), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'ico':
+                if ($data->ico) {
+                    $content = str_replace($search, SITE_DIR . $data->ico, $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'enclosure':
+                if ($data->enclosure) {
+                    $content = str_replace($search, SITE_DIR . $data->enclosure, $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'likeslink':
+                $content = str_replace($search, url('/home/Do/likes/id/' . $data->id), $content);
+                break;
+            case 'opposelink':
+                $content = str_replace($search, url('/home/Do/oppose/id/' . $data->id), $content);
+                break;
+            default:
+                if (isset($data->$label)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->$label), $content);
+                } elseif (strpos($label, 'ext_') === 0) {
+                    $content = str_replace($search, '', $content);
+                }
+        }
+        return $content;
+    }
+
+    // 解析内容标签
+    protected function ParserContent($label, $search, $content, $data, $params, $sort)
+    {
+        switch ($label) {
+            case 'link':
+                if ($data->outlink) {
+                    $content = str_replace($search, $data->outlink, $content);
+                } elseif ($data->filename) {
+                    $content = str_replace($search, url('/home/content/index/id/' . $data->filename), $content);
+                } else {
+                    $content = str_replace($search, url('/home/content/index/id/' . $data->id), $content);
+                }
+                break;
+            case 'sortlink':
+                if ($data->sortfilename) {
+                    $content = str_replace($search, url('/home/list/index/scode/' . $data->sortfilename), $content);
+                } else {
+                    $content = str_replace($search, url('/home/list/index/scode/' . $data->scode), $content);
+                }
+                break;
+            case 'subsortlink':
+                if ($data->subscode) {
+                    if ($data->subfilename) {
+                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subfilename), $content);
+                    } else {
+                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subscode), $content);
+                    }
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'sortname':
+                if ($data->sortname) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->sortname), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'subsortname':
+                if ($data->subsortname) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->subsortname), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'ico':
+                if ($data->ico) {
+                    $content = str_replace($search, SITE_DIR . $data->ico, $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'enclosure':
+                if ($data->enclosure) {
+                    $content = str_replace($search, SITE_DIR . $data->enclosure, $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'likeslink':
+                $content = str_replace($search, url('/home/Do/likes/id/' . $data->id), $content);
+                break;
+            case 'opposelink':
+                $content = str_replace($search, url('/home/Do/oppose/id/' . $data->id), $content);
+                break;
+            case 'precontent':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
+                    if ($pre->filename) {
+                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $pre->filename) . '">' . $this->adjustLabelData($params, $pre->title) . '</a>', $content);
+                    } else {
+                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $pre->id) . '">' . $this->adjustLabelData($params, $pre->title) . '</a>', $content);
+                    }
+                } else {
+                    $content = str_replace($search, '没有了！', $content);
+                }
+                break;
+            case 'prelink':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
+                    if ($pre->filename) {
+                        $content = str_replace($search, url('/home/content/index/id/' . $pre->filename), $content);
+                    } else {
+                        $content = str_replace($search, url('/home/content/index/id/' . $pre->id), $content);
+                    }
+                } else {
+                    $content = str_replace($search, '#', $content);
+                }
+                break;
+            case 'pretitle':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $pre->title), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'nextcontent':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
+                    if ($next->filename) {
+                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $next->filename) . '">' . $this->adjustLabelData($params, $next->title) . '</a>', $content);
+                    } else {
+                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $next->id) . '">' . $this->adjustLabelData($params, $next->title) . '</a>', $content);
+                    }
+                } else {
+                    $content = str_replace($search, '没有了！', $content);
+                }
+                break;
+            case 'nextlink':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
+                    if ($next->filename) {
+                        $content = str_replace($search, url('/home/content/index/id/' . $next->filename), $content);
+                    } else {
+                        $content = str_replace($search, url('/home/content/index/id/' . $next->id), $content);
+                    }
+                } else {
+                    $content = str_replace($search, '#', $content);
+                }
+                break;
+            case 'nexttitle':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $next->title), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'content':
+                $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "'></script>";
+                $content = str_replace($search, $this->adjustLabelData($params, $data->content) . $visits, $content);
+                break;
+            default:
+                if (isset($data->$label)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->$label), $content);
+                } elseif (strpos($label, 'ext_') === 0) {
+                    $content = str_replace($search, '', $content);
+                }
+        }
+        return $content;
+    }
+
     // 解析单标签
     public function parserSingleLabel($content)
     {
@@ -253,9 +480,17 @@ class ParserController extends Controller
                                     if ($value['outlink']) {
                                         $one_html = str_replace($matches2[0][$j], $value['outlink'], $one_html);
                                     } elseif ($value['type'] == 1) {
-                                        $one_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $value['scode']), $one_html);
+                                        if ($value['filename']) {
+                                            $one_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $value['filename']), $one_html);
+                                        } else {
+                                            $one_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $value['scode']), $one_html);
+                                        }
                                     } else {
-                                        $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value['scode']), $one_html);
+                                        if ($value['filename']) {
+                                            $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value['filename']), $one_html);
+                                        } else {
+                                            $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value['scode']), $one_html);
+                                        }
                                     }
                                     break;
                                 case 'soncount':
@@ -332,9 +567,17 @@ class ParserController extends Controller
                     if ($value['outlink']) {
                         $out_html .= $separator . '<a href="' . $value['outlink'] . '">' . $value['name'] . '</a>';
                     } elseif ($value['type'] == 1) {
-                        $out_html .= $separator . '<a href="' . url('/home/about/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
+                        if ($value['filename']) {
+                            $out_html .= $separator . '<a href="' . url('/home/about/index/scode/' . $value['filename']) . '">' . $value['name'] . '</a>';
+                        } else {
+                            $out_html .= $separator . '<a href="' . url('/home/about/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
+                        }
                     } elseif ($value['type'] == 2) {
-                        $out_html .= $separator . '<a href="' . url('/home/list/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
+                        if ($value['filename']) {
+                            $out_html .= $separator . '<a href="' . url('/home/list/index/scode/' . $value['filename']) . '">' . $value['name'] . '</a>';
+                        } else {
+                            $out_html .= $separator . '<a href="' . url('/home/list/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
+                        }
                     }
                 }
                 // 执行内容替换
@@ -357,9 +600,17 @@ class ParserController extends Controller
                         if ($sort->outlink) {
                             $content = str_replace($matches[0][$i], $sort->outlink, $content);
                         } elseif ($sort->type == 1) {
-                            $content = str_replace($matches[0][$i], url('/home/about/index/scode/' . $sort->scode), $content);
+                            if ($sort->filename) {
+                                $content = str_replace($matches[0][$i], url('/home/about/index/scode/' . $sort->filename), $content);
+                            } else {
+                                $content = str_replace($matches[0][$i], url('/home/about/index/scode/' . $sort->scode), $content);
+                            }
                         } else {
-                            $content = str_replace($matches[0][$i], url('/home/list/index/scode/' . $sort->scode), $content);
+                            if ($sort->filename) {
+                                $content = str_replace($matches[0][$i], url('/home/list/index/scode/' . $sort->filename), $content);
+                            } else {
+                                $content = str_replace($matches[0][$i], url('/home/list/index/scode/' . $sort->scode), $content);
+                            }
                         }
                         break;
                     case 'tcode': // 顶级栏目ID
@@ -391,7 +642,7 @@ class ParserController extends Controller
         return $content;
     }
 
-    // 解析非栏目页分类标签
+    // 解析非列表页分类标签
     public function parserSpecialPageSortLabel($content, $id, $page, $link)
     {
         $pattern = '/\{sort:([\w]+)(\s+[^}]+)?\}/';
@@ -478,9 +729,17 @@ class ParserController extends Controller
                             if ($data->outlink) {
                                 $out_html = str_replace($matches2[0][$j], $data->outlink, $out_html);
                             } elseif ($data->type == 1) {
-                                $out_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $data->scode), $out_html);
+                                if ($data->filename) {
+                                    $out_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $data->filename), $out_html);
+                                } else {
+                                    $out_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $data->scode), $out_html);
+                                }
                             } else {
-                                $out_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $data->scode), $out_html);
+                                if ($data->filename) {
+                                    $out_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $data->filename), $out_html);
+                                } else {
+                                    $out_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $data->scode), $out_html);
+                                }
                             }
                             break;
                         case 'ico':
@@ -511,7 +770,7 @@ class ParserController extends Controller
     }
 
     // 解析当前分类列表标签
-    public function parserListLabel($content, $scode)
+    public function parserCurrenListLabel($content, $scode)
     {
         $pattern = '/\{pboot:list(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:list\}/';
         $pattern2 = '/\[list:([\w]+)(\s+[^]]+)?\]/';
@@ -592,66 +851,7 @@ class ParserController extends Controller
                     $one_html = $matches[2][$i];
                     for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                         $params = $this->parserParam($matches2[2][$j]);
-                        switch ($matches2[1][$j]) {
-                            case 'i':
-                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
-                                break;
-                            case 'link':
-                                if ($value->outlink) {
-                                    $one_html = str_replace($matches2[0][$j], $value->outlink, $one_html);
-                                } elseif ($value->filename) {
-                                    $one_html = str_replace($matches2[0][$j], url('/home/content/index/id/' . $value->filename), $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], url('/home/content/index/id/' . $value->id), $one_html);
-                                }
-                                break;
-                            case 'sortlink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value->scode), $one_html);
-                                break;
-                            case 'subsortlink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value->subscode), $one_html);
-                                break;
-                            case 'sortname':
-                                if ($value->sortname) {
-                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->sortname), $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'subsortname':
-                                if ($value->subsortname) {
-                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->subsortname), $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'ico':
-                                if ($value->ico) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'enclosure':
-                                if ($value->enclosure) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->enclosure, $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'likeslink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/Do/likes/id/' . $value->id), $one_html);
-                                break;
-                            case 'opposelink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/Do/oppose/id/' . $value->id), $one_html);
-                                break;
-                            default:
-                                if (isset($value->{$matches2[1][$j]})) {
-                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->{$matches2[1][$j]}), $one_html);
-                                } elseif (strpos($matches2[1][$j], 'ext_') === 0) {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                        }
+                        $one_html = $this->parserList($matches2[1][$j], $matches2[0][$j], $one_html, $value, $params, $key);
                     }
                     $key ++;
                     $out_html .= $one_html;
@@ -758,66 +958,7 @@ class ParserController extends Controller
                     $one_html = $matches[2][$i];
                     for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                         $params = $this->parserParam($matches2[2][$j]);
-                        switch ($matches2[1][$j]) {
-                            case 'i':
-                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
-                                break;
-                            case 'link':
-                                if ($value->outlink) {
-                                    $one_html = str_replace($matches2[0][$j], $value->outlink, $one_html);
-                                } elseif ($value->filename) {
-                                    $one_html = str_replace($matches2[0][$j], url('/home/content/index/id/' . $value->filename), $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], url('/home/content/index/id/' . $value->id), $one_html);
-                                }
-                                break;
-                            case 'sortlink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value->scode), $one_html);
-                                break;
-                            case 'subsortlink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value->subscode), $one_html);
-                                break;
-                            case 'sortname':
-                                if ($value->sortname) {
-                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->sortname), $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'subsortname':
-                                if ($value->subsortname) {
-                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->subsortname), $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'ico':
-                                if ($value->ico) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'enclosure':
-                                if ($value->enclosure) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->enclosure, $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'likeslink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/Do/likes/id/' . $value->id), $one_html);
-                                break;
-                            case 'opposelink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/Do/oppose/id/' . $value->id), $one_html);
-                                break;
-                            default:
-                                if (isset($value->{$matches2[1][$j]})) {
-                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->{$matches2[1][$j]}), $one_html);
-                                } elseif (strpos($matches2[1][$j], 'ext_') === 0) {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                        }
+                        $one_html = $this->parserList($matches2[1][$j], $matches2[0][$j], $one_html, $value, $params, $key);
                     }
                     $key ++;
                     $out_html .= $one_html;
@@ -829,7 +970,7 @@ class ParserController extends Controller
     }
 
     // 解析当前内容标签
-    public function parserContentLabel($content, $sort, $data)
+    public function parserCurrentContentLabel($content, $sort, $data)
     {
         $pattern = '/\{content:([\w]+)(\s+[^}]+)?\}/';
         if (preg_match_all($pattern, $content, $matches)) {
@@ -841,121 +982,7 @@ class ParserController extends Controller
                     continue;
                 }
                 $params = $this->parserParam($matches[2][$i]);
-                switch ($matches[1][$i]) {
-                    case 'link':
-                        if ($data->outlink) {
-                            $content = str_replace($matches[0][$i], $data->outlink, $content);
-                        } elseif ($data->filename) {
-                            $content = str_replace($matches[0][$i], url('/home/content/index/id/' . $data->filename), $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], url('/home/content/index/id/' . $data->id), $content);
-                        }
-                        break;
-                    case 'sortlink':
-                        $content = str_replace($matches[0][$i], url('/home/list/index/scode/' . $data->scode), $content);
-                        break;
-                    case 'subsortlink':
-                        $content = str_replace($matches[0][$i], url('/home/list/index/scode/' . $data->subscode), $content);
-                        break;
-                    case 'sortname':
-                        if ($data->sortname) {
-                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data->sortname), $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '', $content);
-                        }
-                        break;
-                    case 'subsortname':
-                        if ($data->subsortname) {
-                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data->subsortname), $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '', $content);
-                        }
-                        break;
-                    case 'ico':
-                        if ($data->ico) {
-                            $content = str_replace($matches[0][$i], SITE_DIR . $data->ico, $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '', $content);
-                        }
-                        break;
-                    case 'enclosure':
-                        if ($data->enclosure) {
-                            $content = str_replace($matches[0][$i], SITE_DIR . $data->enclosure, $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '', $content);
-                        }
-                        break;
-                    case 'likeslink':
-                        $content = str_replace($matches[0][$i], url('/home/Do/likes/id/' . $data->id), $content);
-                        break;
-                    case 'opposelink':
-                        $content = str_replace($matches[0][$i], url('/home/Do/oppose/id/' . $data->id), $content);
-                        break;
-                    case 'precontent':
-                        if ($data->type != 2) // 非列表内容页不解析
-                            break;
-                        if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
-                            $content = str_replace($matches[0][$i], '<a href="' . url('/home/content/index/id/' . $pre->id) . '">' . $this->adjustLabelData($params, $pre->title) . '</a>', $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '没有了！', $content);
-                        }
-                        break;
-                    case 'prelink':
-                        if ($data->type != 2) // 非列表内容页不解析
-                            break;
-                        if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
-                            $content = str_replace($matches[0][$i], url('/home/content/index/id/' . $pre->id), $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '#', $content);
-                        }
-                        break;
-                    case 'pretitle':
-                        if ($data->type != 2) // 非列表内容页不解析
-                            break;
-                        if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
-                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $pre->title), $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '', $content);
-                        }
-                        break;
-                    case 'nextcontent':
-                        if ($data->type != 2) // 非列表内容页不解析
-                            break;
-                        if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
-                            $content = str_replace($matches[0][$i], '<a href="' . url('/home/content/index/id/' . $next->id) . '">' . $this->adjustLabelData($params, $next->title) . '</a>', $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '没有了！', $content);
-                        }
-                        break;
-                    case 'nextlink':
-                        if ($data->type != 2) // 非列表内容页不解析
-                            break;
-                        if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
-                            $content = str_replace($matches[0][$i], url('/home/content/index/id/' . $next->id), $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '#', $content);
-                        }
-                        break;
-                    case 'nexttitle':
-                        if ($data->type != 2) // 非列表内容页不解析
-                            break;
-                        if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
-                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $next->title), $content);
-                        } else {
-                            $content = str_replace($matches[0][$i], '', $content);
-                        }
-                        break;
-                    case 'content':
-                        $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "'></script>";
-                        $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data->content) . $visits, $content);
-                        break;
-                    default:
-                        if (isset($data->{$matches[1][$i]})) {
-                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data->{$matches[1][$i]}), $content);
-                        } elseif (strpos($matches[1][$i], 'ext_') === 0) {
-                            $content = str_replace($matches[0][$i], '', $content);
-                        }
-                }
+                $content = $this->ParserContent($matches[1][$i], $matches[0][$i], $content, $data, $params, $sort);
             }
         }
         return $content;
@@ -1003,63 +1030,7 @@ class ParserController extends Controller
                 $out_html = $matches[2][$i];
                 for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                     $params = $this->parserParam($matches2[2][$j]);
-                    switch ($matches2[1][$j]) {
-                        case 'link':
-                            if ($data->outlink) {
-                                $out_html = str_replace($matches2[0][$j], $data->outlink, $out_html);
-                            } elseif ($data->filename) {
-                                $out_html = str_replace($matches2[0][$j], url('/home/content/index/id/' . $data->filename), $out_html);
-                            } else {
-                                $out_html = str_replace($matches2[0][$j], url('/home/content/index/id/' . $data->id), $out_html);
-                            }
-                            break;
-                        case 'sortlink':
-                            $out_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $data->scode), $out_html);
-                            break;
-                        case 'subsortlink':
-                            $out_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $data->subscode), $out_html);
-                            break;
-                        case 'sortname':
-                            if ($data->sortname) {
-                                $out_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $data->sortname), $out_html);
-                            } else {
-                                $out_html = str_replace($matches2[0][$j], '', $out_html);
-                            }
-                            break;
-                        case 'subsortname':
-                            if ($data->subsortname) {
-                                $out_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $data->subsortname), $out_html);
-                            } else {
-                                $out_html = str_replace($matches2[0][$j], '', $out_html);
-                            }
-                            break;
-                        case 'ico':
-                            if ($data->ico) {
-                                $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->ico, $out_html);
-                            } else {
-                                $out_html = str_replace($matches2[0][$j], '', $out_html);
-                            }
-                            break;
-                        case 'enclosure':
-                            if ($data->enclosure) {
-                                $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->enclosure, $out_html);
-                            } else {
-                                $out_html = str_replace($matches2[0][$j], '', $out_html);
-                            }
-                            break;
-                        case 'likeslink':
-                            $out_html = str_replace($matches2[0][$j], url('/home/Do/likes/id/' . $data->id), $out_html);
-                            break;
-                        case 'opposelink':
-                            $out_html = str_replace($matches2[0][$j], url('/home/Do/oppose/id/' . $data->id), $out_html);
-                            break;
-                        default:
-                            if (isset($data->{$matches2[1][$j]})) {
-                                $out_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $data->{$matches2[1][$j]}), $out_html);
-                            } elseif (strpos($matches2[1][$j], 'ext_') === 0) {
-                                $out_html = str_replace($matches[0][$i], '', $out_html);
-                            }
-                    }
+                    $out_html = $this->parserList($matches2[1][$j], $matches2[0][$j], $out_html, $data, $params, 1);
                 }
                 // 执行替换
                 $content = str_replace($matches[0][$i], $out_html, $content);
@@ -1589,66 +1560,7 @@ class ParserController extends Controller
                     $one_html = $matches[2][$i];
                     for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                         $params = $this->parserParam($matches2[2][$j]);
-                        switch ($matches2[1][$j]) {
-                            case 'i':
-                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
-                                break;
-                            case 'link':
-                                if ($value->outlink) {
-                                    $one_html = str_replace($matches2[0][$j], $value->outlink, $one_html);
-                                } elseif ($value->filename) {
-                                    $one_html = str_replace($matches2[0][$j], url('/home/content/index/id/' . $value->filename), $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], url('/home/content/index/id/' . $value->id), $one_html);
-                                }
-                                break;
-                            case 'sortlink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value->scode), $one_html);
-                                break;
-                            case 'subsortlink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value->subscode), $one_html);
-                                break;
-                            case 'sortname':
-                                if ($value->sortname) {
-                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->sortname), $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'subsortname':
-                                if ($value->subsortname) {
-                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->subsortname), $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'ico':
-                                if ($value->ico) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'enclosure':
-                                if ($value->enclosure) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->enclosure, $one_html);
-                                } else {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                                break;
-                            case 'likeslink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/Do/likes/id/' . $value->id), $one_html);
-                                break;
-                            case 'opposelink':
-                                $one_html = str_replace($matches2[0][$j], url('/home/Do/oppose/id/' . $value->id), $one_html);
-                                break;
-                            default:
-                                if (isset($value->{$matches2[1][$j]})) {
-                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->{$matches2[1][$j]}), $one_html);
-                                } elseif (strpos($matches2[1][$j], 'ext_') === 0) {
-                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
-                                }
-                        }
+                        $one_html = $this->parserList($matches2[1][$j], $matches2[0][$j], $one_html, $value, $params, $key);
                     }
                     $key ++;
                     $out_html .= $one_html;

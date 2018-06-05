@@ -208,4 +208,12 @@ class ContentSortModel extends Model
         }
         return $this->scodes;
     }
+
+    // 检查自定义文件名称
+    public function checkFilename($where)
+    {
+        return parent::table('ay_content_sort')->field('id')
+            ->where($where)
+            ->find();
+    }
 }

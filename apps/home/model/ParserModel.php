@@ -23,6 +23,12 @@ class ParserModel extends Model
     // 存储栏目位置
     protected $position = array();
 
+    // 上一篇
+    protected $pre;
+
+    // 下一篇
+    protected $next;
+
     // 站点配置信息
     public function getSite()
     {
@@ -51,6 +57,7 @@ class ParserModel extends Model
             'a.name',
             'a.subname',
             'b.type',
+            'a.filename',
             'a.outlink',
             'a.listtpl',
             'a.contenttpl',
@@ -67,7 +74,7 @@ class ParserModel extends Model
         );
         return parent::table('ay_content_sort a')->field($field)
             ->where("a.acode='" . session('lg') . "'")
-            ->where("a.scode='$scode'")
+            ->where("a.scode='$scode' OR a.filename='$scode'")
             ->join($join)
             ->find();
     }
@@ -82,6 +89,7 @@ class ParserModel extends Model
             'a.name',
             'a.subname',
             'b.type',
+            'a.filename',
             'a.outlink',
             'a.listtpl',
             'a.contenttpl',
@@ -122,6 +130,7 @@ class ParserModel extends Model
                 'a.pcode',
                 'a.scode',
                 'a.name',
+                'a.filename',
                 'a.outlink',
                 'b.type'
             );
@@ -147,6 +156,7 @@ class ParserModel extends Model
                 'a.pcode',
                 'a.scode',
                 'a.name',
+                'a.filename',
                 'a.outlink',
                 'b.type'
             );
@@ -201,7 +211,9 @@ class ParserModel extends Model
         $fields = array(
             'a.*',
             'b.name as sortname',
+            'b.filename as sortfilename',
             'c.name as subsortname',
+            'c.filename as subfilename',
             'd.type',
             'e.*'
         );
@@ -260,7 +272,9 @@ class ParserModel extends Model
         $fields = array(
             'a.*',
             'b.name as sortname',
+            'b.filename as sortfilename',
             'c.name as subsortname',
+            'c.filename as subfilename',
             'd.type',
             'e.*'
         );
@@ -317,7 +331,9 @@ class ParserModel extends Model
         $field = array(
             'a.*',
             'b.name as sortname',
+            'b.filename as sortfilename',
             'c.name as subsortname',
+            'c.filename as subfilename',
             'd.type',
             'e.*'
         );
@@ -359,7 +375,9 @@ class ParserModel extends Model
         $field = array(
             'a.*',
             'b.name as sortname',
+            'b.filename as sortfilename',
             'c.name as subsortname',
+            'c.filename as subfilename',
             'd.type',
             'e.*'
         );
@@ -386,7 +404,7 @@ class ParserModel extends Model
             )
         );
         $result = parent::table('ay_content a')->field($field)
-            ->where("a.scode='$scode'")
+            ->where("a.scode='$scode' OR b.filename='$scode'")
             ->where("a.acode='" . session('lg') . "'")
             ->where('a.status=1')
             ->join($join)
@@ -416,31 +434,35 @@ class ParserModel extends Model
     // 上一篇内容
     public function getContentPre($scode, $id)
     {
-        $this->scodes = array();
-        $scodes = $this->getSubScodes($scode);
-        $result = parent::table('ay_content')->field('id,title')
-            ->where("id<$id")
-            ->in('scode', $scodes)
-            ->where("acode='" . session('lg') . "'")
-            ->where('status=1')
-            ->order('id DESC')
-            ->find();
-        return $result;
+        if (! $this->pre) {
+            $this->scodes = array();
+            $scodes = $this->getSubScodes($scode);
+            $this->pre = parent::table('ay_content')->field('id,title,filename')
+                ->where("id<$id")
+                ->in('scode', $scodes)
+                ->where("acode='" . session('lg') . "'")
+                ->where('status=1')
+                ->order('id DESC')
+                ->find();
+        }
+        return $this->pre;
     }
 
     // 下一篇内容
     public function getContentNext($scode, $id)
     {
-        $this->scodes = array();
-        $scodes = $this->getSubScodes($scode);
-        $result = parent::table('ay_content')->field('id,title')
-            ->where("id>$id")
-            ->in('scode', $scodes)
-            ->where("acode='" . session('lg') . "'")
-            ->where('status=1')
-            ->order('id ASC')
-            ->find();
-        return $result;
+        if (! $this->next) {
+            $this->scodes = array();
+            $scodes = $this->getSubScodes($scode);
+            $this->next = parent::table('ay_content')->field('id,title,filename')
+                ->where("id>$id")
+                ->in('scode', $scodes)
+                ->where("acode='" . session('lg') . "'")
+                ->where('status=1')
+                ->order('id ASC')
+                ->find();
+        }
+        return $this->next;
     }
 
     // 获取搜索内容
@@ -450,7 +472,9 @@ class ParserModel extends Model
         $fields = array(
             'a.*',
             'b.name as sortname',
+            'b.filename as sortfilename',
             'c.name as subsortname',
+            'c.filename as subfilename',
             'd.type',
             'e.*'
         );

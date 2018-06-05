@@ -39,7 +39,7 @@ class AboutController extends Controller
                     $content = parent::parser($sort->contenttpl); // 框架标签解析
                     $content = $this->parser->parserPosition($content, $sort->scode); // CMS当前位置标签解析
                     $content = $this->parser->parserSortLabel($content, $sort); // CMS分类信息标签解析
-                    $content = $this->parser->parserContentLabel($content, $sort, $data); // CMS内容标签解析
+                    $content = $this->parser->parserCurrentContentLabel($content, $sort, $data); // CMS内容标签解析
                     $content = $this->parser->parserCommom($content); // CMS公共标签解析
                 } else {
                     error('请到后台设置分类栏目内容页模板！');

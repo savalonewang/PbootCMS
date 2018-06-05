@@ -111,6 +111,7 @@ class ContentSortController extends Controller
             $contenttpl = post('contenttpl');
             $status = post('status');
             $subname = post('subname');
+            $filename = post('filename');
             $outlink = post('outlink');
             $ico = post('ico');
             $pic = post('pic');
@@ -142,6 +143,13 @@ class ContentSortController extends Controller
                 alert_back('该内容栏目编号已经存在，不能再使用！');
             }
             
+            // 检查自定义文件名称
+            if ($filename) {
+                while ($this->model->checkFilename("filename='$filename'")) {
+                    $filename = $filename . '_' . mt_rand(1, 20);
+                }
+            }
+            
             // 构建数据
             $data = array(
                 'acode' => session('acode'),
@@ -153,6 +161,7 @@ class ContentSortController extends Controller
                 'contenttpl' => $contenttpl,
                 'status' => $status,
                 'subname' => $subname,
+                'filename' => $filename,
                 'outlink' => $outlink,
                 'ico' => $ico,
                 'pic' => $pic,
@@ -300,6 +309,7 @@ class ContentSortController extends Controller
             $contenttpl = post('contenttpl');
             $status = post('status');
             $subname = post('subname');
+            $filename = post('filename');
             $outlink = post('outlink');
             $ico = post('ico');
             $pic = post('pic');
@@ -322,6 +332,12 @@ class ContentSortController extends Controller
                 alert_back('栏目类型不能为空！');
             }
             
+            if ($filename) {
+                while ($this->model->checkFilename("filename='$filename' and scode<>'$scode'")) {
+                    $filename = $filename . '_' . mt_rand(1, 20);
+                }
+            }
+            
             // 构建数据
             $data = array(
                 'pcode' => $pcode,
@@ -331,6 +347,7 @@ class ContentSortController extends Controller
                 'contenttpl' => $contenttpl,
                 'status' => $status,
                 'subname' => $subname,
+                'filename' => $filename,
                 'outlink' => $outlink,
                 'ico' => $ico,
                 'pic' => $pic,
