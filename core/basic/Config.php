@@ -44,6 +44,7 @@ class Config
         if ($array && ! is_array($value)) {
             if ($value) {
                 $value = explode(',', $value);
+                $value = array_map('trim', $value); // 去空格
             } else {
                 $value = array();
             }

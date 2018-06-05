@@ -5,7 +5,7 @@ return array(
     'debug' => true,
     
     // 授权码
-    'sn' => '382B4E6010',
+    'sn' => '281BE285D7',
     
     // 设置URL模式,1、基本模式,2、伪静态模式
     'url_type' => 1,
