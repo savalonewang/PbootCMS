@@ -100,7 +100,7 @@ class ParserController extends Controller
                         $content = str_replace($matches[0][$i], SITE_DIR, $content);
                         break;
                     case 'logo':
-                        if (isset($data->logo)) {
+                        if (isset($data->logo) && $data->logo) {
                             $content = str_replace($matches[0][$i], SITE_DIR . $data->logo, $content);
                         } else {
                             $content = str_replace($matches[0][$i], '', $content);
@@ -266,10 +266,18 @@ class ParserController extends Controller
                                     }
                                     break;
                                 case 'ico':
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value['ico'], $one_html);
+                                    if ($value['ico']) {
+                                        $one_html = str_replace($matches2[0][$j], SITE_DIR . $value['ico'], $one_html);
+                                    } else {
+                                        $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                    }
                                     break;
                                 case 'pic':
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value['pic'], $one_html);
+                                    if ($value['pic']) {
+                                        $one_html = str_replace($matches2[0][$j], SITE_DIR . $value['pic'], $one_html);
+                                    } else {
+                                        $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                    }
                                     break;
                                 default:
                                     if (isset($value[$matches2[1][$j]])) {
@@ -358,10 +366,18 @@ class ParserController extends Controller
                         $content = str_replace($matches[0][$i], $this->model->getSortTopScode($sort->scode), $content);
                         break;
                     case 'ico':
-                        $content = str_replace($matches[0][$i], SITE_DIR . $sort->ico, $content);
+                        if ($sort->ico) {
+                            $content = str_replace($matches[0][$i], SITE_DIR . $sort->ico, $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
+                        }
                         break;
                     case 'pic':
-                        $content = str_replace($matches[0][$i], SITE_DIR . $sort->pic, $content);
+                        if ($sort->pic) {
+                            $content = str_replace($matches[0][$i], SITE_DIR . $sort->pic, $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
+                        }
                         break;
                     default:
                         if (isset($sort->{$matches[1][$i]})) {
@@ -468,10 +484,18 @@ class ParserController extends Controller
                             }
                             break;
                         case 'ico':
-                            $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->ico, $out_html);
+                            if ($data->ico) {
+                                $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->ico, $out_html);
+                            } else {
+                                $out_html = str_replace($matches2[0][$j], '', $out_html);
+                            }
                             break;
                         case 'pic':
-                            $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->pic, $out_html);
+                            if ($data->pic) {
+                                $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->pic, $out_html);
+                            } else {
+                                $out_html = str_replace($matches2[0][$j], '', $out_html);
+                            }
                             break;
                         default:
                             if (isset($data->{$matches2[1][$j]})) {
@@ -602,10 +626,18 @@ class ParserController extends Controller
                                 }
                                 break;
                             case 'ico':
-                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
+                                if ($value->ico) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
                                 break;
                             case 'enclosure':
-                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->enclosure, $one_html);
+                                if ($value->enclosure) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->enclosure, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
                                 break;
                             case 'likeslink':
                                 $one_html = str_replace($matches2[0][$j], url('/home/Do/likes/id/' . $value->id), $one_html);
@@ -760,10 +792,18 @@ class ParserController extends Controller
                                 }
                                 break;
                             case 'ico':
-                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
+                                if ($value->ico) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
                                 break;
                             case 'enclosure':
-                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->enclosure, $one_html);
+                                if ($value->enclosure) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->enclosure, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
                                 break;
                             case 'likeslink':
                                 $one_html = str_replace($matches2[0][$j], url('/home/Do/likes/id/' . $value->id), $one_html);
@@ -832,10 +872,18 @@ class ParserController extends Controller
                         }
                         break;
                     case 'ico':
-                        $content = str_replace($matches[0][$i], SITE_DIR . $data->ico, $content);
+                        if ($data->ico) {
+                            $content = str_replace($matches[0][$i], SITE_DIR . $data->ico, $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
+                        }
                         break;
                     case 'enclosure':
-                        $content = str_replace($matches[0][$i], SITE_DIR . $data->enclosure, $content);
+                        if ($data->enclosure) {
+                            $content = str_replace($matches[0][$i], SITE_DIR . $data->enclosure, $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
+                        }
                         break;
                     case 'likeslink':
                         $content = str_replace($matches[0][$i], url('/home/Do/likes/id/' . $data->id), $content);
@@ -986,10 +1034,18 @@ class ParserController extends Controller
                             }
                             break;
                         case 'ico':
-                            $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->ico, $out_html);
+                            if ($data->ico) {
+                                $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->ico, $out_html);
+                            } else {
+                                $out_html = str_replace($matches2[0][$j], '', $out_html);
+                            }
                             break;
                         case 'enclosure':
-                            $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->enclosure, $out_html);
+                            if ($data->enclosure) {
+                                $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->enclosure, $out_html);
+                            } else {
+                                $out_html = str_replace($matches2[0][$j], '', $out_html);
+                            }
                             break;
                         case 'likeslink':
                             $out_html = str_replace($matches2[0][$j], url('/home/Do/likes/id/' . $data->id), $out_html);
@@ -1075,7 +1131,11 @@ class ParserController extends Controller
                                 $one_html = str_replace($matches2[0][$j], $key2, $one_html);
                                 break;
                             case 'src':
-                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value, $one_html);
+                                if ($value) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
                                 break;
                         }
                     }
@@ -1227,7 +1287,11 @@ class ParserController extends Controller
                                 $one_html = str_replace($matches2[0][$j], $key2, $one_html);
                                 break;
                             case 'src':
-                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->pic, $one_html);
+                                if ($value->pic) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->pic, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
                                 break;
                             default:
                                 if (isset($value->{$matches2[1][$j]})) {
@@ -1297,7 +1361,11 @@ class ParserController extends Controller
                                 $one_html = str_replace($matches2[0][$j], $key, $one_html);
                                 break;
                             case 'logo':
-                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->logo, $one_html);
+                                if ($value->logo) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->logo, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
                                 break;
                             default:
                                 if (isset($value->{$matches2[1][$j]})) {
@@ -1555,10 +1623,18 @@ class ParserController extends Controller
                                 }
                                 break;
                             case 'ico':
-                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
+                                if ($value->ico) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
                                 break;
                             case 'enclosure':
-                                $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->enclosure, $one_html);
+                                if ($value->enclosure) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->enclosure, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
                                 break;
                             case 'likeslink':
                                 $one_html = str_replace($matches2[0][$j], url('/home/Do/likes/id/' . $value->id), $one_html);
