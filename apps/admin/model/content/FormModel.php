@@ -154,4 +154,10 @@ class FormModel extends Model
             ->order('id DESC')
             ->select();
     }
+
+    // 删除自定义表单数据
+    public function delFormData($table, $id)
+    {
+        return parent::table($table)->where("id=$id")->delete();
+    }
 }

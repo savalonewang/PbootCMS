@@ -181,6 +181,19 @@ class FormController extends Controller
                 $this->log('删除自定义表单' . $id . '失败！');
                 error('删除失败！', - 1);
             }
+        } elseif (get('action') == 'deldata') {
+            // 获取表单
+            if (! $fcode = get('fcode', 'var')) {
+                error('传递的参数值fcode错误！', - 1);
+            }
+            $table = $this->model->getFormTableByCode($fcode);
+            if ($this->model->delFormData($table, $id)) {
+                $this->log('删除表单数据' . $id . '成功！');
+                success('删除成功！', - 1);
+            } else {
+                $this->log('删除表单数据' . $id . '失败！');
+                error('删除失败！', - 1);
+            }
         } else {
             
             // 获取表单

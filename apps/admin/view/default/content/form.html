@@ -79,7 +79,10 @@
 	  	   		<table class="layui-table table-two">
 	  	   			<thead>
 				  		<tr>
-					  		<th colspan="2">{$form->form_name}-[num]</th>
+					  		<th colspan="2">
+					  			{$form->form_name}-[num] 
+					  			<span style="float:right"><a href="{url./admin/Form/del/id/'.$value->id.'/fcode/'.[$form->fcode].'/action/deldata}" onclick="return confirm('您确定要删除么？')" class="layui-btn layui-btn-xs layui-btn-danger" style="margin-bottom:0px" title="删除">删除</a></span>
+					  		</th>
 					  	</tr>
 				    </thead>
 	  	   			<tbody>
