@@ -167,7 +167,6 @@ class ContentSortController extends Controller
                 'pic' => $pic,
                 'keywords' => $keywords,
                 'description' => $description,
-                'filename' => '',
                 'sorting' => 255,
                 'create_user' => session('username'),
                 'update_user' => session('username')
