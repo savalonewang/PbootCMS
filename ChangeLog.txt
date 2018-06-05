@@ -1,5 +1,6 @@
-﻿PbootCMS V1.1.2 build 2018-06-04
+﻿PbootCMS V1.1.2 build 2018-06-05
 1、修复httpurl非标准端口时解析错误；
+2、修复内容为空时提取描述报警告问题；
 
 
 PbootCMS V1.1.1 build 2018-06-03

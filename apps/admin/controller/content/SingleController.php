@@ -98,6 +98,11 @@ class SingleController extends Controller
                 alert_back('单页内容标题不能为空！');
             }
             
+            // 自动提起前一百个字符为描述
+            if (! $description && isset($_POST['content'])) {
+                $description = mb_substr(strip_tags($_POST['content']), 0, 100);
+            }
+            
             // 构建数据
             $data = array(
                 'title' => $title,
