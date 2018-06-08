@@ -127,13 +127,19 @@ class Sqlite implements Builder
             $my_type = $type;
         }
         $row = array();
+        $out = new \stdClass();
         $result = $this->query($sql, 'slave');
         if (! ! $row = $result->fetchArray($my_type)) {
-            if (! $type && $row)
-                $row = json_decode(json_encode($row)); // 转换为对象数组
+            if (! $type && $row) {
+                foreach ($row as $key => $value) {
+                    $out->$key = $value;
+                }
+            } else {
+                $out = $row;
+            }
             $result->finalize();
         }
-        return $row;
+        return $out;
     }
 
     // 查询多条数据模型，接受完整SQL语句，有数据返回二维对象数组，否则空数组
@@ -147,11 +153,17 @@ class Sqlite implements Builder
         $result = $this->query($sql, 'slave');
         $rows = array();
         while (! ! $row = $result->fetchArray($my_type)) {
-            $rows[] = $row;
+            $out = new \stdClass();
+            if (! $type && $row) {
+                foreach ($row as $key => $value) {
+                    $out->$key = $value;
+                }
+            } else {
+                $out = $row;
+            }
+            $rows[] = $out;
         }
         $result->finalize();
-        if (! $type && $rows)
-            $rows = json_decode(json_encode($rows)); // 转换为对象数组
         return $rows;
     }
 

@@ -85,9 +85,9 @@ set_exception_handler('core\basic\Basic::exceptionHandler');
 // 调试模式设置错误报告级别并进行环境检查
 if (Config::get('debug')) {
     ini_set('display_errors', 1); // 开启显示错误
-    error_reporting(E_ALL); // 显示所有错误
-} else {
     error_reporting(E_ALL ^ E_WARNING ^ E_NOTICE);
+} else {
+    error_reporting(0);
 }
 
 // 自动转换判断

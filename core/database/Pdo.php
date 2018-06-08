@@ -232,8 +232,10 @@ class Pdo implements Builder
         if ($type) {
             $type ++; // 与mysqli统一返回类型设置
             $rows = $result->fetchAll($type);
-        } else { // 此处采用非循环，而获取所有数据然后转换对象数组
-            $rows = json_decode(json_encode($result->fetchAll(2)));
+        } else {
+            while (! ! $row = $result->fetchObject()) {
+                $rows[] = $row;
+            }
         }
         return $rows;
     }
