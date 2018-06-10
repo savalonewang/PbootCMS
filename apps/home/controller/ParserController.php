@@ -1525,11 +1525,11 @@ class ParserController extends Controller
                 }
                 
                 // 数据处理
+                $cond = array(
+                    'd_source' => 'get',
+                    'd_regular' => '/^[^\s]+$/'
+                );
                 foreach ($_GET as $key => $value) {
-                    $cond = array(
-                        'd_source' => 'get',
-                        'd_regular' => '/^[^\s]+$/'
-                    );
                     $where[$key] = filter($key, $cond);
                     if ($_GET[$key] && ! $where[$key]) {
                         alert_back('您的查询含有非法字符,已被系统拦截');

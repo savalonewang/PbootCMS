@@ -132,7 +132,7 @@ class CmsController extends Controller
     {
         if (! ! $gid = get('gid')) {
             $acode = get('acode') ?: 'cn';
-            $num = get('num') ?: 3;
+            $num = get('num') ?: 5;
             $data = $this->model->getSlides($acode, $gid, $num);
             json(1, $data);
         } else {

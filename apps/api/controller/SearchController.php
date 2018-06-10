@@ -58,6 +58,18 @@ class SearchController extends Controller
         // 转义字符
         $where = escape_string($_POST);
         
+        $cond = array(
+            'd_source' => 'get',
+            'd_regular' => '/^[^\s]+$/'
+        );
+        
+        foreach ($_POST as $key => $value) {
+            $where[$key] = filter($key, $cond);
+            if ($_POST[$key] && ! $where[$key]) {
+                json(0, '您的查询含有非法字符,已被系统拦截');
+            }
+        }
+        
         // 去除特殊键值
         unset($where['keyword']);
         unset($where['field']);

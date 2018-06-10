@@ -158,6 +158,7 @@ class CmsModel extends Model
                 'a.pcode',
                 'a.scode',
                 'a.name',
+                'a.outlink',
                 'b.type'
             );
             $join = array(
@@ -170,6 +171,7 @@ class CmsModel extends Model
                 ->column($fields, 'scode');
         }
         $result = $this->sorts;
+        $this->position = array();
         $this->getTopParent($scode, $result);
         return array_reverse($this->position);
     }
@@ -177,7 +179,7 @@ class CmsModel extends Model
     // 分类顶级编码及栏目树
     private function getTopParent($scode, $sorts)
     {
-        if (! $scode) {
+        if (! $scode || ! $sorts) {
             return;
         }
         $this->position[] = $sorts[$scode];
@@ -238,11 +240,21 @@ class CmsModel extends Model
         );
         $this->scodes = array(); // 先清空
         $scodes = $this->getSubScodes($scode);
+        
+        // 拼接条件
+        $where1 = array(
+            "a.scode in (" . implode_quot(',', $scodes) . ")",
+            "a.subscode='$scode'"
+        );
+        $where2 = array(
+            "a.acode='" . $acode . "'",
+            'a.status=1',
+            'd.type=2'
+        );
+        
         return parent::table('ay_content a')->field($fields)
-            ->in('a.scode', $scodes)
-            ->where("a.acode='" . $acode . "'")
-            ->where('a.status=1')
-            ->where('d.type=2')
+            ->where($where1, 'OR')
+            ->where($where2)
             ->like('a.' . $field, $keyword)
             ->join($join)
             ->order($order)
@@ -285,11 +297,21 @@ class CmsModel extends Model
         );
         $this->scodes = array(); // 先清空
         $scodes = $this->getSubScodes($scode);
+        
+        // 拼接条件
+        $where1 = array(
+            "a.scode in (" . implode_quot(',', $scodes) . ")",
+            "a.subscode='$scode'"
+        );
+        $where2 = array(
+            "a.acode='" . $acode . "'",
+            'a.status=1',
+            'd.type=2'
+        );
+        
         return parent::table('ay_content a')->field($fields)
-            ->in('a.scode', $scodes)
-            ->where("a.acode='" . $acode . "'")
-            ->where('a.status=1')
-            ->where('d.type=2')
+            ->where($where1, 'OR')
+            ->where($where2)
             ->like('a.' . $field, $keyword)
             ->join($join)
             ->order($order)
@@ -331,7 +353,7 @@ class CmsModel extends Model
             )
         );
         $result = parent::table('ay_content a')->field($field)
-            ->where("a.id='$id' OR a.filename='$id'")
+            ->where("a.id='$id'")
             ->where("a.acode='" . $acode . "'")
             ->where('a.status=1')
             ->join($join)
@@ -392,18 +414,29 @@ class CmsModel extends Model
         
         // 如果有限定分类，则获取子类集
         $this->scodes = array();
+        
+        // 拼接条件
+        $where1 = '';
         if (isset($where['scode'])) {
-            $this->getSubScodes($where['scode']);
+            $scodes = $this->getSubScodes($where['scode']);
+            $where1 = array(
+                "a.scode in (" . implode_quot(',', $scodes) . ")",
+                "a.subscode='" . $where['scode'] . "'"
+            );
             unset($where['scode']);
         }
         
+        $where2 = array(
+            "a.acode='" . $acode . "'",
+            'a.status=1'
+        );
+        
         return parent::table('ay_content a')->field($fields)
-            ->in('a.scode', $this->scodes)
+            ->where($where1, 'OR')
             ->where($where)
             ->like($field, $keyword)
             ->join($join)
-            ->where("a.acode='" . $acode . "'")
-            ->where('a.status=1')
+            ->where($where2)
             ->order($order)
             ->page(1, $num)
             ->decode()

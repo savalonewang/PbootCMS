@@ -206,7 +206,7 @@ class ParserModel extends Model
     }
 
     // 列表内容
-    public function getList($scode, $num, $order, $field, $keyword)
+    public function getList($scode, $num, $order, $field = '', $keyword = '')
     {
         $fields = array(
             'a.*',
