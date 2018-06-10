@@ -170,6 +170,7 @@ class ParserModel extends Model
                 ->column($fields, 'scode');
         }
         $result = $this->sorts;
+        $this->position = array(); // 重置
         $this->getTopParent($scode, $result);
         return array_reverse($this->position);
     }
@@ -177,10 +178,9 @@ class ParserModel extends Model
     // 分类顶级编码及栏目树
     private function getTopParent($scode, $sorts)
     {
-        if (! $scode) {
+        if (! $scode || ! $sorts) {
             return;
         }
-        $this->position = array();
         $this->position[] = $sorts[$scode];
         if ($sorts[$scode]['pcode']) {
             return $this->getTopParent($sorts[$scode]['pcode'], $sorts);
