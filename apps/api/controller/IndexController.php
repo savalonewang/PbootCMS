@@ -1,1 +1,0 @@
-<?php  namespace app\api\controller; use core\basic\Controller;  class IndexController extends Controller{	public function index(){		$this->display('index.html');	} }

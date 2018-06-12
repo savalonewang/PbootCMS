@@ -37,11 +37,11 @@ class MessageController extends Controller
             }
             
             if (! $mobile) {
-                alert_back('号码不能为空！');
+                alert_back('手机号码不能为空！');
             }
             
             if (! $content) {
-                alert_back('内容不能为空！');
+                alert_back('留言内容不能为空！');
             }
             
             if (session('config.message_check_code')) {
@@ -64,8 +64,8 @@ class MessageController extends Controller
                 'user_bs' => get_user_bs(),
                 'recontent' => '',
                 'status' => 0,
-                'create_user' => session('username'),
-                'update_user' => session('username')
+                'create_user' => 'guest',
+                'update_user' => 'guest'
             );
             
             if ($this->model->addMessage($data)) {
