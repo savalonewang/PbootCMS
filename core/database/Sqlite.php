@@ -36,6 +36,7 @@ class Sqlite implements Builder
         if (extension_loaded('SQLite3')) {
             try {
                 $conn = new \SQLite3($cfg);
+                $conn->busyTimeout(15 * 1000); // 设置繁忙延迟时间
             } catch (\Exception $e) {
                 error("读取数据库文件失败：" . iconv('gbk', 'utf-8', $e->getMessage()));
             }
