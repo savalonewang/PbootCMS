@@ -97,7 +97,7 @@ class ContentController extends Controller
             
             // 自动提起前一百个字符为描述
             if (! $description && isset($_POST['content'])) {
-                $description = mb_substr(strip_tags($_POST['content']), 0, 100);
+                $description = mb_substr(strip_tags($_POST['content']), 0, 100, 'utf-8');
             }
             
             // 检查自定义文件名称
@@ -319,7 +319,7 @@ class ContentController extends Controller
             
             // 自动提起前一百个字符为描述
             if (! $description && isset($_POST['content'])) {
-                $description = mb_substr(strip_tags($_POST['content']), 0, 100);
+                $description = mb_substr(strip_tags($_POST['content']), 0, 100, 'utf-8');
             }
             
             if ($filename) {
