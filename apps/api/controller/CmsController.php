@@ -191,7 +191,7 @@ class CmsController extends Controller
         $where = escape_string($_POST);
         
         $cond = array(
-            'd_source' => 'get',
+            'd_source' => 'post',
             'd_regular' => '/^[^\s]+$/'
         );
         
@@ -206,6 +206,9 @@ class CmsController extends Controller
         unset($where['keyword']);
         unset($where['field']);
         unset($where['page']);
+        unset($where['appid']);
+        unset($where['timestamp']);
+        unset($where['signature']);
         
         // 读取数据
         $data = $this->model->getSearch($acode, $field, $keyword, $where, $num, $order);
