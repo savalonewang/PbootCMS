@@ -76,9 +76,12 @@ class CmsController extends Controller
         // 获取参数
         $acode = get('acode') ?: 'cn';
         
-        // 获取栏目数
-        $data = $this->model->getSorts($acode);
-        
+        // 获取栏目树
+        if (! $scode = get('scode')) {
+            $data = $this->model->getSorts($acode);
+        } else { // 获取子类
+            $data = $this->model->getSortsSon($acode, $scode);
+        }
         // 输出数据
         json(1, $data);
     }

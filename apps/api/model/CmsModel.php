@@ -125,6 +125,40 @@ class CmsModel extends Model
         return get_tree($result, 0, 'scode', 'pcode');
     }
 
+    // 获取分类的子类
+    public function getSortsSon($acode, $scode)
+    {
+        $fields = array(
+            'a.id',
+            'a.pcode',
+            'a.scode',
+            'a.name',
+            'a.subname',
+            'b.type',
+            'a.outlink',
+            'a.listtpl',
+            'a.contenttpl',
+            'a.ico',
+            'a.pic',
+            'a.keywords',
+            'a.description',
+            'a.sorting'
+        );
+        $join = array(
+            'ay_model b',
+            'a.mcode=b.mcode',
+            'LEFT'
+        );
+        $result = parent::table('ay_content_sort a')->field($fields)
+            ->where("a.pcode='" . $scode . "'")
+            ->where("a.acode='" . $acode . "'")
+            ->where('a.status=1')
+            ->join($join)
+            ->order('a.sorting,a.id')
+            ->select();
+        return $result;
+    }
+
     // 分类顶级编码
     public function getSortTopScode($acode, $scode)
     {
