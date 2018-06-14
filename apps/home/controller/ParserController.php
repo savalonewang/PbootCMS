@@ -1720,7 +1720,7 @@ class ParserController extends Controller
                 unset($where['scode']);
                 
                 // 读取数据
-                if (! $data = $this->model->getList($scode, $num, $order, '', '', $where)) {
+                if (! $data = $this->model->getList($scode, $num, $order, $field, $keyword, $where)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
