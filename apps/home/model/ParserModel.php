@@ -205,8 +205,14 @@ class ParserModel extends Model
         return $this->scodes;
     }
 
+    // 获取筛选字段数据
+    public function getSelect($field)
+    {
+        return parent::table('ay_extfield')->where("name='$field'")->value('value');
+    }
+
     // 列表内容
-    public function getList($scode, $num, $order, $field = '', $keyword = '')
+    public function getList($scode, $num, $order, $field = '', $keyword = '', $where = array())
     {
         $fields = array(
             'a.*',
@@ -240,15 +246,18 @@ class ParserModel extends Model
             )
         );
         
-        // 获取所有子类分类编码
-        $this->scodes = array(); // 先清空
-        $scodes = $this->getSubScodes($scode);
+        $where1 = '';
+        if ($scode) {
+            // 获取所有子类分类编码
+            $this->scodes = array(); // 先清空
+            $scodes = $this->getSubScodes($scode);
+            // 拼接条件
+            $where1 = array(
+                "a.scode in (" . implode_quot(',', $scodes) . ")",
+                "a.subscode='$scode'"
+            );
+        }
         
-        // 拼接条件
-        $where1 = array(
-            "a.scode in (" . implode_quot(',', $scodes) . ")",
-            "a.subscode='$scode'"
-        );
         $where2 = array(
             "a.acode='" . session('lg') . "'",
             'a.status=1',
@@ -258,7 +267,8 @@ class ParserModel extends Model
         return parent::table('ay_content a')->field($fields)
             ->where($where1, 'OR')
             ->where($where2)
-            ->like('a.' . $field, $keyword)
+            ->where($where)
+            ->like($field, $keyword)
             ->join($join)
             ->order($order)
             ->page(1, $num)
@@ -266,7 +276,7 @@ class ParserModel extends Model
             ->select();
     }
 
-    // 指定列表内容
+    // 指定列表内容，不分页
     public function getSpecifyList($scode, $num, $order, $field, $keyword)
     {
         $fields = array(
@@ -317,7 +327,7 @@ class ParserModel extends Model
         return parent::table('ay_content a')->field($fields)
             ->where($where1, 'OR')
             ->where($where2)
-            ->like('a.' . $field, $keyword)
+            ->like($field, $keyword)
             ->join($join)
             ->order($order)
             ->limit($num)
@@ -463,73 +473,6 @@ class ParserModel extends Model
                 ->find();
         }
         return $this->next;
-    }
-
-    // 获取搜索内容
-    public function getSearch($field, $keyword, $where, $num, $order)
-    {
-        // 此处不使用join，避免字段查询错误问题
-        $fields = array(
-            'a.*',
-            'b.name as sortname',
-            'b.filename as sortfilename',
-            'c.name as subsortname',
-            'c.filename as subfilename',
-            'd.type',
-            'e.*'
-        );
-        $join = array(
-            array(
-                'ay_content_sort b',
-                'a.scode=b.scode',
-                'LEFT'
-            ),
-            array(
-                'ay_content_sort c',
-                'a.subscode=c.scode',
-                'LEFT'
-            ),
-            array(
-                'ay_model d',
-                'b.mcode=d.mcode',
-                'LEFT'
-            ),
-            array(
-                'ay_content_ext e',
-                'a.id=e.contentid',
-                'LEFT'
-            )
-        );
-        
-        // 如果有限定分类，则获取子类集
-        $this->scodes = array();
-        
-        // 拼接条件
-        $where1 = '';
-        if (isset($where['scode'])) {
-            $scodes = $this->getSubScodes($where['scode']);
-            $where1 = array(
-                "a.scode in (" . implode_quot(',', $scodes) . ")",
-                "a.subscode='" . $where['scode'] . "'"
-            );
-            unset($where['scode']);
-        }
-        
-        $where2 = array(
-            "a.acode='" . session('lg') . "'",
-            'a.status=1'
-        );
-        
-        return parent::table('ay_content a')->field($fields)
-            ->where($where1, 'OR')
-            ->where($where)
-            ->like($field, $keyword)
-            ->join($join)
-            ->where($where2)
-            ->order($order)
-            ->page(1, $num)
-            ->decode()
-            ->select();
     }
 
     // 幻灯片

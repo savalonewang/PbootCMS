@@ -540,16 +540,17 @@ class ParserController extends Controller
     }
 
     // 解析当前位置
-    public function parserPosition($content, $scode)
+    public function parserPositionLabel($content, $scode)
     {
         $pattern = '/\{pboot:position(\s+[^}]+)?\}/';
         if (preg_match_all($pattern, $content, $matches)) {
             $count = count($matches[0]);
-            $separator = '>>';
-            $indextext = '首页';
             $data = $this->model->getPosition($scode);
             for ($i = 0; $i < $count; $i ++) {
                 $params = $this->parserParam($matches[1][$i]);
+                
+                $separator = '>>';
+                $indextext = '首页';
                 
                 // 分离参数
                 foreach ($params as $key => $value) {
@@ -769,6 +770,159 @@ class ParserController extends Controller
         return $content;
     }
 
+    // 解析筛选全部
+    public function parserSelectAllLabel($content)
+    {
+        $pattern = '/\{pboot:selectall(\s+[^}]+)?\}/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            for ($i = 0; $i < $count; $i ++) {
+                $params = $this->parserParam($matches[1][$i]);
+                $text = '全部';
+                $field = '';
+                $class = 'active';
+                
+                // 分离参数
+                foreach ($params as $key => $value) {
+                    switch ($key) {
+                        case 'field':
+                            $field = $value;
+                            break;
+                        case 'text':
+                            $text = $value;
+                            break;
+                        case 'class':
+                            $class = $value;
+                            break;
+                    }
+                }
+                
+                // 跳过不带field的标签
+                if (! $field) {
+                    continue;
+                }
+                
+                // 获取地址路径
+                $url = parse_url(URL);
+                $path = preg_replace('/\/page\/[0-9]+/', '', $url['path']); // 去除路径方式分页，回到第一页
+                                                                            
+                // 分离字符串参数
+                $output = array();
+                if (isset($_SERVER["QUERY_STRING"]) && ! ! $qs = $_SERVER["QUERY_STRING"]) {
+                    parse_str($qs, $output);
+                    unset($output['page']); // 去除字符串方式分页，回到第一页
+                    unset($output[$field]); // 不筛选该字段
+                }
+                if ($output) {
+                    $qs = '?' . http_build_query($output);
+                } else {
+                    $qs = '';
+                }
+                // 如果有对本字段进行筛选，则不高亮
+                if (get($field)) {
+                    $out_html = '<a href="' . $path . $qs . '">' . $text . '</a>';
+                } else {
+                    $out_html = '<a href="' . $path . $qs . '" class="' . $class . '">' . $text . '</a>';
+                }
+                
+                // 执行内容替换
+                $content = str_replace($matches[0][$i], $out_html, $content);
+            }
+        }
+        return $content;
+    }
+
+    // 解析筛选标签
+    public function parserSelectLabel($content)
+    {
+        $pattern = '/\{pboot:select(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:select\}/';
+        $pattern2 = '/\[select:([\w]+)(\s+[^]]+)?\]/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            
+            // 获取地址路径
+            $url = parse_url(URL);
+            $path = preg_replace('/\/page\/[0-9]+/', '', $url['path']); // 去除路径方式分页，回到第一页
+                                                                        
+            // 分离字符串参数
+            if (isset($_SERVER["QUERY_STRING"]) && ! ! $qs = $_SERVER["QUERY_STRING"]) {
+                parse_str($qs, $output);
+                unset($output['page']); // 去除字符串方式分页，回到第一页
+            }
+            
+            for ($i = 0; $i < $count; $i ++) {
+                
+                // 获取调节参数
+                $params = $this->parserParam($matches[1][$i]);
+                $field = '';
+                
+                // 分离参数
+                foreach ($params as $key => $value) {
+                    switch ($key) {
+                        case 'field':
+                            $field = $value;
+                            break;
+                    }
+                }
+                
+                // 跳过不带field的标签
+                if (! $field) {
+                    continue;
+                }
+                
+                // 读取数据
+                if (! ! $data = $this->model->getSelect($field)) {
+                    $data = explode(',', $data);
+                } else {
+                    $data = array();
+                }
+                
+                // 无数据直接替换为空并跳过
+                if (! $data) {
+                    $content = str_replace($matches[0][$i], '', $content);
+                    continue;
+                }
+                
+                // 匹配到内部标签
+                if (preg_match_all($pattern2, $matches[2][$i], $matches2)) {
+                    $count2 = count($matches2[0]); // 循环内的内容标签数量
+                } else {
+                    $count2 = 0;
+                }
+                
+                $out_html = '';
+                $key = 1;
+                foreach ($data as $value) { // 按查询数据条数循环
+                    $one_html = $matches[2][$i];
+                    for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
+                        $params = $this->parserParam($matches2[2][$j]);
+                        switch ($matches2[1][$j]) {
+                            case 'i':
+                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
+                                break;
+                            case 'value':
+                                $one_html = str_replace($matches2[0][$j], $value, $one_html);
+                                break;
+                            case 'current':
+                                $one_html = str_replace($matches2[0][$j], get($field), $one_html);
+                                break;
+                            case 'link':
+                                $qs = $output;
+                                $qs[$field] = $value;
+                                $qs = http_build_query($qs);
+                                $one_html = str_replace($matches2[0][$j], $path . '?' . $qs, $one_html);
+                                break;
+                        }
+                    }
+                    $key ++;
+                    $out_html .= $one_html;
+                }
+                $content = str_replace($matches[0][$i], $out_html, $content);
+            }
+        }
+        return $content;
+    }
+
     // 解析当前分类列表标签
     public function parserCurrenListLabel($content, $scode)
     {
@@ -827,9 +981,25 @@ class ParserController extends Controller
                     }
                 }
                 
+                // 数据筛选
+                $where = array();
+                $cond = array(
+                    'd_source' => 'get',
+                    'd_regular' => '/^[^\s]+$/'
+                );
+                foreach ($_GET as $key => $value) {
+                    $where[$key] = filter($key, $cond);
+                    if ($_GET[$key] && ! $where[$key]) {
+                        alert_back('您的查询含有非法字符,已被系统拦截');
+                    }
+                }
+                // 去除特殊键值
+                unset($where['scode']);
+                unset($where['page']);
+                
                 // 读取数据
                 if (! isset($data)) { // 避免同页面多次调用无分类参数列表出现分页错误，多次调用取相同数据
-                    $data = $this->model->getList($scode, $num, $order, $filter_field, $filter_keyword);
+                    $data = $this->model->getList($scode, $num, $order, $filter_field, $filter_keyword, $where);
                 }
                 
                 // 无数据直接替换
@@ -1536,13 +1706,21 @@ class ParserController extends Controller
                     }
                 }
                 
+                // 根据参数设定分类
+                if (isset($where['scode'])) {
+                    $scode = $where['scode'];
+                } else {
+                    $scode = '';
+                }
+                
                 // 去除特殊键值
                 unset($where['keyword']);
                 unset($where['field']);
                 unset($where['page']);
+                unset($where['scode']);
                 
                 // 读取数据
-                if (! $data = $this->model->getSearch($field, $keyword, $where, $num, $order)) {
+                if (! $data = $this->model->getList($scode, $num, $order, '', '', $where)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }

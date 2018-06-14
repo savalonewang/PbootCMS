@@ -263,7 +263,13 @@ class Paging
     private function queryString()
     {
         if (isset($_SERVER["QUERY_STRING"]) && ! ! $qs = $_SERVER["QUERY_STRING"]) {
-            return '?' . $qs;
+            parse_str($qs, $output);
+            if (isset($output['page'])) {
+                unset($output['page']);
+                $qs = http_build_query($output);
+            }
+            if ($qs)
+                return '?' . $qs;
         }
     }
 }

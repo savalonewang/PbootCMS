@@ -37,7 +37,7 @@ class ContentController extends Controller
             if (! ! $sort = $this->model->getSort($data->scode)) {
                 if ($sort->contenttpl) {
                     $content = parent::parser($sort->contenttpl); // 框架标签解析
-                    $content = $this->parser->parserPosition($content, $sort->scode); // CMS当前位置标签解析
+                    $content = $this->parser->parserPositionLabel($content, $sort->scode); // CMS当前位置标签解析
                     $content = $this->parser->parserSortLabel($content, $sort); // CMS分类信息标签解析
                     $content = $this->parser->parserCurrentContentLabel($content, $sort, $data); // CMS内容标签解析
                     $content = $this->parser->parserCommom($content); // CMS公共标签解析
