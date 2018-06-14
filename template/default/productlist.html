@@ -3,7 +3,14 @@
  <div class="uk-container uk-container-center">
  	<p></p>
  	<h1>{sort:name}</h1>
- 	
+ 	  <p>
+	   	类型：{pboot:selectall field=ext_type text=全部}|
+	   {pboot:select field=ext_type}
+	   	   {pboot:if([select:i]>1)}|{/pboot:if} 
+	       <a href= "[select:link]" {pboot:if('[select:value]'=='[select:current]')}class="active" {/pboot:if}>[select:value]</a>
+	   {/pboot:select}
+	  </p>
+
 	{pboot:list num=9 order=date}
 		<a href="[list:link]">
 			<div class="uk-thumbnail uk-thumbnail-small" style="margin:10px;">
