@@ -55,7 +55,7 @@ class ParserController extends Controller
     {
         if (! $string = trim($string))
             return array();
-        $string = preg_replace('/\s+/', ' ', $string); // 多空格 处理
+        $string = preg_replace('/\s+/', ' ', $string); // 多空格处理
         $param = array();
         if (preg_match_all('/([\w]+)[\s]?=[\s]?(\'([^\']+)\'|([^\s]+))/', $string, $matches)) {
             foreach ($matches[1] as $key => $value) {
