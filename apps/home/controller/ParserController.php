@@ -55,15 +55,15 @@ class ParserController extends Controller
     {
         if (! $string = trim($string))
             return array();
-        $string = preg_replace('/\s+/', ' ', $string);
-        $params = explode(' ', $string);
+        $string = preg_replace('/\s+/', ' ', $string); // 多空格 处理
         $param = array();
-        foreach ($params as $key => $value) {
-            $temp = explode('=', $value);
-            if (isset($temp[1])) {
-                $param[$temp[0]] = $temp[1];
-            } else {
-                $param[$temp[0]] = '';
+        if (preg_match_all('/([\w]+)[\s]?=[\s]?(\'([^\']+)\'|([^\s]+))/', $string, $matches)) {
+            foreach ($matches[1] as $key => $value) {
+                if ($matches[3][$key]) {
+                    $param[$value] = $matches[3][$key];
+                } else {
+                    $param[$value] = $matches[4][$key];
+                }
             }
         }
         return $param;
@@ -222,7 +222,11 @@ class ParserController extends Controller
                         $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $pre->id) . '">' . $this->adjustLabelData($params, $pre->title) . '</a>', $content);
                     }
                 } else {
-                    $content = str_replace($search, '没有了！', $content);
+                    if (isset($params['notext'])) {
+                        $content = str_replace($search, $params['notext'], $content);
+                    } else {
+                        $content = str_replace($search, '没有了！', $content);
+                    }
                 }
                 break;
             case 'prelink':
@@ -244,7 +248,11 @@ class ParserController extends Controller
                 if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
                     $content = str_replace($search, $this->adjustLabelData($params, $pre->title), $content);
                 } else {
-                    $content = str_replace($search, '', $content);
+                    if (isset($params['notext'])) {
+                        $content = str_replace($search, $params['notext'], $content);
+                    } else {
+                        $content = str_replace($search, '没有了！', $content);
+                    }
                 }
                 break;
             case 'nextcontent':
@@ -257,7 +265,11 @@ class ParserController extends Controller
                         $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $next->id) . '">' . $this->adjustLabelData($params, $next->title) . '</a>', $content);
                     }
                 } else {
-                    $content = str_replace($search, '没有了！', $content);
+                    if (isset($params['notext'])) {
+                        $content = str_replace($search, $params['notext'], $content);
+                    } else {
+                        $content = str_replace($search, '没有了！', $content);
+                    }
                 }
                 break;
             case 'nextlink':
@@ -279,7 +291,11 @@ class ParserController extends Controller
                 if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
                     $content = str_replace($search, $this->adjustLabelData($params, $next->title), $content);
                 } else {
-                    $content = str_replace($search, '', $content);
+                    if (isset($params['notext'])) {
+                        $content = str_replace($search, $params['notext'], $content);
+                    } else {
+                        $content = str_replace($search, '没有了！', $content);
+                    }
                 }
                 break;
             case 'content':
