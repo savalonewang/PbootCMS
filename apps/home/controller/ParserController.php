@@ -121,7 +121,7 @@ class ParserController extends Controller
                 if ($data->ico) {
                     $content = str_replace($search, SITE_DIR . $data->ico, $content);
                 } else {
-                    $content = str_replace($search, '', $content);
+                    $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
                 }
                 break;
             case 'enclosure':
@@ -196,7 +196,7 @@ class ParserController extends Controller
                 if ($data->ico) {
                     $content = str_replace($search, SITE_DIR . $data->ico, $content);
                 } else {
-                    $content = str_replace($search, '', $content);
+                    $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
                 }
                 break;
             case 'enclosure':
@@ -330,7 +330,7 @@ class ParserController extends Controller
                         if (isset($data->logo) && $data->logo) {
                             $content = str_replace($matches[0][$i], SITE_DIR . $data->logo, $content);
                         } else {
-                            $content = str_replace($matches[0][$i], '', $content);
+                            $content = str_replace($matches[0][$i], STATIC_DIR . '/images/logo.png', $content);
                         }
                         break;
                     case 'tplpath':
