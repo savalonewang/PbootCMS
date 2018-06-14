@@ -37,6 +37,9 @@
 .servers .box .info{
 	color:#999;
 }
+.active{
+	color:red;
+}
 .page{
 	margin:20px 0;
 	text-align:center;
