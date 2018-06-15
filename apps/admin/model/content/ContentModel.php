@@ -197,9 +197,38 @@ class ContentModel extends Model
     public function modContent($id, $data)
     {
         return parent::table('ay_content')->autoTime()
-            ->where("id=$id")
+            ->in('id', $id)
             ->where("acode='" . session('acode') . "'")
             ->update($data);
+    }
+
+    // 复制内容到指定栏目
+    public function copyContent($ids, $scode)
+    {
+        // 查找出要复制的主内容
+        $data = parent::table('ay_content')->in('id', $ids)->select(1);
+        
+        foreach ($data as $key => $value) {
+            // 查找扩展内容
+            $extdata = parent::table('ay_content_ext')->where('contentid=' . $value['id'])->find(1);
+            
+            // 去除主键并修改栏目
+            unset($value['id']);
+            $value['scode'] = $scode;
+            
+            // 插入主内容
+            $id = parent::table('ay_content')->insertGetId($value);
+            
+            // 插入扩展内容
+            if ($id && $extdata) {
+                unset($extdata['extid']);
+                $extdata['contentid'] = $id;
+                $result = parent::table('ay_content_ext')->insert($extdata);
+            } else {
+                $result = $id;
+            }
+        }
+        return $result;
     }
 
     // 查找文章扩展内容
@@ -224,6 +253,12 @@ class ContentModel extends Model
     public function delContentExt($id)
     {
         return parent::table('ay_content_ext')->where("contentid=$id")->delete();
+    }
+
+    // 删除文章扩展内容
+    public function delContentExtList($ids)
+    {
+        return parent::table('ay_content_ext')->delete($ids, 'contentid');
     }
 
     // 检查自定义文件名称

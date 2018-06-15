@@ -10,7 +10,7 @@
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
 	  	   		<form action="{url./admin/Content/index/mcode/'.get('mcode').'}" method="get" class="layui-form">
-		  	   		<div class="layui-form-item">
+		  	   		<div class="layui-form-item nospace">
 		  	   			<div class="layui-input-inline">
 					       <select name="scode">
 	                          	<option value="">全部栏目</option>
@@ -87,15 +87,26 @@
 		                    {/foreach}
 		                </tbody>
 		            </table>
-			        <div class="page">{$pagebar}</div>
-			     	<button type="submit" name="submit" value="sorting" class="layui-btn">保存排序</button>
+			       
+			        
+			        <div class="layui-input-inline">
+				     	 <select name="scode">
+	                        	<option value="">请选择目标栏目</option>
+	                             {$search_select}
+	                     </select>
+                    </div>
+                    <button type="submit" name="submit" value="copy" class="layui-btn">复制</button>
+                    <button type="submit" name="submit" value="move" class="layui-btn">移动</button>
 			     	<button type="submit" name="submit" onclick="return setDelAction();" class="layui-btn">批量删除</button>
+			     	<button type="submit" name="submit" value="sorting" class="layui-btn">保存排序</button>
 			     	<script>
 			     		function setDelAction(){
 			     			document.contentForm.action = "{url./admin/Content/del}"; 
 			     			return confirm("您确定要删除选中的内容么？");
 			     		}
 			     	</script>
+			     	
+			     	<div class="page">{$pagebar}</div>
 			      </form> 
 	  	   </div>
 	  	   

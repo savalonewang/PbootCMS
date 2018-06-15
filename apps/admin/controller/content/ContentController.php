@@ -222,6 +222,7 @@ class ContentController extends Controller
         if ($_POST) {
             if (! ! $list = post('list')) {
                 if ($this->model->delContentList($list)) {
+                    $this->model->delContentExtList($list);
                     $this->log('批量删除文章成功！');
                     success('批量删除成功！', - 1);
                 } else {
@@ -265,6 +266,39 @@ class ContentController extends Controller
                         success('修改成功！', - 1);
                     } else {
                         alert_back('排序失败，无任何内容！');
+                    }
+                    break;
+                case 'copy':
+                    $list = post('list');
+                    $scode = post('scode');
+                    if (! $list) {
+                        alert_back('请选择要复制的内容！');
+                    }
+                    if (! $scode) {
+                        alert_back('请选择目标栏目！');
+                    }
+                    if ($this->model->copyContent($list, $scode)) {
+                        $this->log('复制内容成功！');
+                        success('复制内容成功！', - 1);
+                    } else {
+                        alert_back('复制内容失败！');
+                    }
+                    break;
+                case 'move':
+                    $list = post('list');
+                    $scode = post('scode');
+                    if (! $list) {
+                        alert_back('请选择要移动的内容！');
+                    }
+                    if (! $scode) {
+                        alert_back('请选择目标栏目！');
+                    }
+                    
+                    if ($this->model->modContent($list, "scode='" . $scode . "'")) {
+                        $this->log('移动内容成功！');
+                        success('移动内容成功！', - 1);
+                    } else {
+                        alert_back('移动内容失败！');
                     }
                     break;
             }

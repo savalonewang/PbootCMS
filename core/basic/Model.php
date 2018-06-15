@@ -1152,9 +1152,9 @@ class Model
                             if (! $flag && ! is_numeric($key2)) {
                                 $key_string .= "`" . $key2 . "`,";
                             }
-                            $flag = true;
                             $value_string .= "'" . $value2 . "',";
                         }
+                        $flag = true;
                         if ($this->autoTimestamp || (isset($this->sql['auto_time']) && $this->sql['auto_time'] == true)) {
                             if ($this->intTimeFormat) {
                                 $value_string .= "'" . time() . "','" . time() . "',";

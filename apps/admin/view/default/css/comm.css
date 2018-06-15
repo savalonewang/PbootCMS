@@ -48,7 +48,7 @@
 }
 
 .layui-btn{
-	margin-bottom:5px;
+	margin:0.5px 0;
 }
 
 .layui-form-select dl{
@@ -241,6 +241,12 @@
 	}
 	.layui-input-block{
 		margin-left: 110px;
+	}
+}
+
+@media only screen and (max-width: 450px) {
+	.layui-form-item.nospace .layui-input-inline{
+	    margin: 0 0 10px 0px;
 	}
 }
 
