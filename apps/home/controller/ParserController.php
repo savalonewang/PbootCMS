@@ -1004,9 +1004,11 @@ class ParserController extends Controller
                     'd_regular' => '/^[^\s]+$/'
                 );
                 foreach ($_GET as $key => $value) {
-                    $where[$key] = filter($key, $cond);
-                    if ($_GET[$key] && ! $where[$key]) {
-                        alert_back('您的查询含有非法字符,已被系统拦截');
+                    if (substr($key, 0, 4) == 'ext_') {
+                        $where[$key] = filter($key, $cond);
+                        if ($_GET[$key] && ! $where[$key]) {
+                            alert_back('您的查询含有非法字符,已被系统拦截');
+                        }
                     }
                 }
                 // 去除特殊键值
@@ -1734,6 +1736,8 @@ class ParserController extends Controller
                 unset($where['field']);
                 unset($where['page']);
                 unset($where['scode']);
+                unset($where['from']);
+                unset($where['isappinstalled']);
                 
                 // 读取数据
                 if (! $data = $this->model->getList($scode, $num, $order, $field, $keyword, $where)) {
