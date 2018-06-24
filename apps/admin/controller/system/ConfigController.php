@@ -28,18 +28,32 @@ class ConfigController extends Controller
         // 修改参数配置
         if ($_POST) {
             foreach ($_POST as $key => $value) {
-                if ($this->model->checkConfig("name='$key'")) {
-                    $this->model->modValue($key, post($key));
+                $config = array(
+                    'sn',
+                    'tpl_html_cache',
+                    'tpl_html_cache_time'
+                );
+                if (in_array($key, $config)) {
+                    if ($key == 'tpl_html_cache_time' && ! $value) {
+                        $value = 900;
+                    } else {
+                        $value = post($key);
+                    }
+                    $this->modConfig($key, $value);
                 } else {
-                    // 自动新增配置项
-                    $data = array(
-                        'name' => $key,
-                        'value' => post($key),
-                        'type' => 2,
-                        'sorting' => 255,
-                        'description' => ''
-                    );
-                    $this->model->addConfig($data);
+                    if ($this->model->checkConfig("name='$key'")) {
+                        $this->model->modValue($key, post($key));
+                    } else {
+                        // 自动新增配置项
+                        $data = array(
+                            'name' => $key,
+                            'value' => post($key),
+                            'type' => 2,
+                            'sorting' => 255,
+                            'description' => ''
+                        );
+                        $this->model->addConfig($data);
+                    }
                 }
             }
             $this->log('修改参数配置成功！');
@@ -51,7 +65,11 @@ class ConfigController extends Controller
             }
         }
         $this->assign('basic', true);
-        $this->assign('configs', $this->model->getList());
+        $configs = $this->model->getList();
+        $configs['sn']['value'] = $this->config('sn');
+        $configs['tpl_html_cache']['value'] = $this->config('tpl_html_cache');
+        $configs['tpl_html_cache_time']['value'] = $this->config('tpl_html_cache_time');
+        $this->assign('configs', $configs);
         $this->display('system/config.html');
     }
 
@@ -69,5 +87,17 @@ class ConfigController extends Controller
         $this->assign('email', true);
         $this->assign('configs', $this->model->getList());
         $this->display('system/config.html');
+    }
+
+    // 修改配置文件
+    private function modConfig($key, $value)
+    {
+        $config = file_get_contents(CONF_PATH . '/config.php');
+        if (is_numeric($value)) {
+            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\"]+,/', '${1}' . $value . ',', $config);
+        } else {
+            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\"]+,/', '${1}\'' . $value . '\',', $config);
+        }
+        return file_put_contents(CONF_PATH . '/config.php', $config);
     }
 }

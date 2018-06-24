@@ -5,7 +5,7 @@
 	<div class="layui-tab layui-tab-brief" lay-filter="tab">
 	  <ul class="layui-tab-title">
 	    <li class="layui-this" lay-id="t1">基本配置</li>
-	    <li  lay-id="t2">API认证</li>
+	    <li  lay-id="t2">WebAPI</li>
 	  </ul>
 		  <div class="layui-tab-content">
 		  	   <div class="layui-tab-item layui-show">
@@ -54,6 +54,28 @@
 	                     <div class="layui-input-block">
 	                     	<input type="radio" name="admin_check_code" value="1" {if([$configs['admin_check_code']['value']]==1)} checked="checked" {/if} title="启用">
 							<input type="radio" name="admin_check_code" value="0" {if([$configs['admin_check_code']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
+	                 <div class="layui-form-item">
+	                     <label class="layui-form-label">前端静态缓存</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="tpl_html_cache" value="1" {if([$configs['tpl_html_cache']['value']]==1)} checked="checked" {/if} title="启用">
+							<input type="radio" name="tpl_html_cache" value="0" {if([$configs['tpl_html_cache']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">缓存有效期</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="tpl_html_cache_time"  value="{$configs['tpl_html_cache_time']['value']}" placeholder="请输入缓存有效期（秒）"  class="layui-input">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">域名授权码</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="sn"  value="{$configs['sn']['value']}" placeholder="请输入授权码，多个个授权码请使用英文逗号隔开"  class="layui-input">
 	                     </div>
 	                </div>
 	                
