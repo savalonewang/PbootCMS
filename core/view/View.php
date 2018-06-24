@@ -121,7 +121,7 @@ class View
     public function cache($content)
     {
         if (Config::get('tpl_html_cache')) {
-            $cacheFile = $this->cachePath . '/' . md5($_SERVER["REQUEST_URI"] . session('acode')) . '.html'; // 缓存文件
+            $cacheFile = $this->cachePath . '/' . md5($_SERVER["REQUEST_URI"] . session('lg')) . '.html'; // 缓存文件
             file_put_contents($cacheFile, $content) ?: error('缓存文件' . $cacheFile . '生成出错！请检查目录是否有可写权限！'); // 写入缓存文件
             return true;
         }
