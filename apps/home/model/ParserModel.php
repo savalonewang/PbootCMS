@@ -250,7 +250,10 @@ class ParserModel extends Model
         if ($scode) {
             // 获取所有子类分类编码
             $this->scodes = array(); // 先清空
-            $scodes = $this->getSubScodes($scode);
+            $scode = explode(',', $scode);
+            foreach ($scode as $value) {
+                $scodes = $this->getSubScodes(trim($value));
+            }
             // 拼接条件
             $where1 = array(
                 "a.scode in (" . implode_quot(',', $scodes) . ")",
@@ -312,7 +315,12 @@ class ParserModel extends Model
             )
         );
         $this->scodes = array(); // 先清空
-        $scodes = $this->getSubScodes($scode);
+                                 
+        // 获取多分类子类
+        $scode = explode(',', $scode);
+        foreach ($scode as $value) {
+            $scodes = $this->getSubScodes(trim($value));
+        }
         
         // 拼接条件
         $where1 = array(
