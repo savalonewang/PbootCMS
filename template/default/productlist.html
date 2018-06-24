@@ -10,6 +10,15 @@
 	       <a href= "[select:link]" {pboot:if('[select:value]'=='[select:current]')}class="active" {/pboot:if}>[select:value]</a>
 	   {/pboot:select}
 	  </p>
+	  
+	  <p>
+	   	颜色：{pboot:selectall field=ext_color text=全部}|
+	   {pboot:select field=ext_color}
+	   	   {pboot:if([select:i]>1)}|{/pboot:if} 
+	       <a href= "[select:link]" {pboot:if('[select:value]'=='[select:current]')}class="active" {/pboot:if}>[select:value]</a>
+	   {/pboot:select}
+	  </p>
+	  
 
 	{pboot:list num=9 order=date}
 		<a href="[list:link]">

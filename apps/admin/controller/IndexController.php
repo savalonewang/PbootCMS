@@ -69,6 +69,11 @@ class IndexController extends Controller
             'password' => encrypt_string($password)
         );
         
+        // 判断数据库写入权限
+        if (($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') && ! is_writable(ROOT_PATH . $this->config('database.dbname'))) {
+            json(0, '数据库目录写入权限不足！');
+        }
+        
         if (! ! $login = $this->model->login($where)) {
             
             session_regenerate_id(true);
