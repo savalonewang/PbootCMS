@@ -325,6 +325,7 @@ class ParserController extends Controller
         $content = str_replace('{pboot:timestamp}', time(), $content); // 认证时间戳
         $content = str_replace('{pboot:signature}', md5(md5(session('config.api_appid') . session('config.api_secret') . time())), $content); // API认证密钥
         $content = str_replace('{pboot:httpurl}', get_http_url(), $content); // 当前访问的域名地址
+        $content = str_replace('{pboot:keyword}', get('keyword'), $content); // 当前访问的域名地址
         return $content;
     }
 
