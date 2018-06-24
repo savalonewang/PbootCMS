@@ -5,14 +5,14 @@
 		{if(![$security['dbname']])}
 		<p>
 			<i class="fa fa-info-circle" aria-hidden="true"></i>
-			您的数据库文件存在安全隐患，可能被下载，请尽快修改数据库路径！
+			您的数据库文件存在安全隐患，可能被下载，请尽快修改数据库路径！<a class="layui-btn  layui-btn-sm" href="?action=moddb">自动修改</a>
 		</p>
 		{/if}
 		
 		{if(![$session.pwsecurity])}
 		<p>
 			<i class="fa fa-info-circle" aria-hidden="true"></i>
-			 您的账号密码太简单，存在安全隐患，请尽快修改密码！
+			 您的账号密码太简单，存在安全隐患，请尽快修改密码！<a class="layui-btn  layui-btn-sm" href="{url./admin/Index/ucenter}">立即修改</a>
 		</p>
 		{/if}
 	

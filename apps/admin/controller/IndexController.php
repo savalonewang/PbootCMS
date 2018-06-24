@@ -34,10 +34,34 @@ class IndexController extends Controller
     // 主页面
     public function home()
     {
+        // 自动修改数据库名称
+        if (get('action') == 'moddb') {
+            $file = CONF_PATH . '/database.php';
+            $sname = $this->config('database.dbname');
+            $dname = '/data/#' . time() . mt_rand(1000, 9999) . '.db';
+            $sconfig = file_get_contents($file);
+            $dconfig = str_replace($sname, $dname, $sconfig);
+            if (file_put_contents($file, $dconfig)) {
+                if (! copy(ROOT_PATH . $sname, ROOT_PATH . $dname)) {
+                    file_put_contents($file, $sconfig);
+                    alert_back('修改失败！');
+                } else {
+                    session('deldb', $sname);
+                    alert_back('修改成功！');
+                }
+            }
+        }
+        
+        // 删除修改后老数据库（上一步无法直接删除）
+        if (isset($_SESSION['deldb'])) {
+            @unlink(ROOT_PATH . session('deldb'));
+            unset($_SESSION['deldb']);
+        }
+        
         $this->assign('shortcuts', session('shortcuts'));
         $security = array();
         if ($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') {
-            if ($this->config('database.dbname') != '/data/pbootcms.db') {
+            if ($this->config('database.dbname') != '/data/#pbootcms.db' && $this->config('database.dbname') != '/data/pbootcms.db') {
                 $security['dbname'] = true;
             }
         }
