@@ -264,10 +264,11 @@ class ParserModel extends Model
             'd.type=2'
         );
         
+        // 筛选条件支持模糊匹配
         return parent::table('ay_content a')->field($fields)
             ->where($where1, 'OR')
             ->where($where2)
-            ->where($where)
+            ->where($where, 'AND', 'AND', true)
             ->like($field, $keyword)
             ->join($join)
             ->order($order)

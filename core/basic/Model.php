@@ -370,7 +370,23 @@ class Model
      *            调用本方法时与前面条件使用AND连接，$where参数数组内部的条件默认使用AND连接
      * @return \core\basic\Model
      */
-    final public function where($where, $inConnect = 'AND', $outConnect = 'AND')
+    
+    /**
+     * 连贯操作：设置查询条件
+     *
+     * @param mixed $where
+     *            设置条件，可以为字符串、数组,
+     *            字符串模式：如"id<1","name like %1",
+     *            数组模式：array('username'=>'xie',"realname like '%谢%'")
+     * @param string $inConnect
+     *            调用本方法时$where参数数组内部的条件默认使用AND连接
+     * @param string $outConnect
+     *            调用本方法时与前面条件使用AND连接
+     * @param boolean $fuzzy
+     *            条件是否为模糊匹配，即in匹配
+     * @return \core\basic\Model
+     */
+    final public function where($where, $inConnect = 'AND', $outConnect = 'AND', $fuzzy = false)
     {
         if (! $where) {
             return $this;
@@ -390,7 +406,11 @@ class Model
                     $flag = true;
                 }
                 if (! is_int($key)) {
-                    $where_string .= $key . "='" . $value . "' ";
+                    if ($fuzzy) {
+                        $where_string .= $key . " like '%" . $value . "%' ";
+                    } else {
+                        $where_string .= $key . "='" . $value . "' ";
+                    }
                 } else {
                     $where_string .= $value;
                 }

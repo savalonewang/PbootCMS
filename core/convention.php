@@ -11,7 +11,7 @@ return array(
     'sn' => '281BE285D7',
     
     // 内核版本
-    'core_version' => '1.3.4',
+    'core_version' => '1.3.5',
     
     // 配置模块
     'public_app' => 'home,admin,api',
@@ -95,23 +95,6 @@ return array(
         'dbname' => 'pboot' // 数据库名称,如果Sqlite直接填写路径,如：/data/pboot.db
                                 
     // 'slave' => array( 'host' => '127.0.0.1','user' => 'root','passwd' => 'root','port' => '3306','dbname' => 'pboot')
-    ),
-    
-    // API验证配置
-    'api_auth' => array(
-        'auth_switch' => 1, // 开启验证总开关
-        'auth_time' => 1, // 验证时间差
-        'auth_ip' => 1, // 验证IP
-        'auth_level' => 1, // 验证接口权限
-        
-        'auth_user' => array( // 认证用户表
-            'admin' => array(
-                'permitip' => '127.0.0.1', // 限制接入IP,如为空则自适应同服务器，可以为数组允许一组地址
-                'secret' => '123456', // 认证密钥
-                'level' => '' // 采用all或功能模块数组 array('/admin/Index/login')
-            )
-        )
     )
-
 );
  
