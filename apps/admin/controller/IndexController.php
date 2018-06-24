@@ -35,6 +35,13 @@ class IndexController extends Controller
     public function home()
     {
         $this->assign('shortcuts', session('shortcuts'));
+        $security = array();
+        if ($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') {
+            if ($this->config('database.dbname') != '/data/pbootcms.db') {
+                $security['dbname'] = true;
+            }
+        }
+        $this->assign('security', $security);
         $this->assign('server', get_server_info());
         $this->display('system/home.html');
     }
@@ -84,6 +91,10 @@ class IndexController extends Controller
             session('ucode', $login->ucode); // 用户编码
             session('username', $login->username); // 用户名
             session('realname', $login->realname); // 真实名字
+            
+            if ($where['password'] != '14e1b600b1fd579f47433b88e8d85291') {
+                session('pwsecurity', true);
+            }
             
             session('acodes', $login->acodes); // 用户管理区域
             if ($login->acodes) { // 当前显示区域
@@ -146,6 +157,11 @@ class IndexController extends Controller
                     alert_back('确认密码不正确！');
                 }
                 $data['password'] = encrypt_string($password);
+                if ($data['password'] != '14e1b600b1fd579f47433b88e8d85291') {
+                    session('pwsecurity', true);
+                } else {
+                    session('pwsecurity', false);
+                }
             }
             
             // 检查现有密码
