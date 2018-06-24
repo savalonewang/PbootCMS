@@ -30,6 +30,7 @@ class ConfigController extends Controller
             foreach ($_POST as $key => $value) {
                 $config = array(
                     'sn',
+                    'url_type',
                     'tpl_html_cache',
                     'tpl_html_cache_time'
                 );
@@ -67,6 +68,7 @@ class ConfigController extends Controller
         $this->assign('basic', true);
         $configs = $this->model->getList();
         $configs['sn']['value'] = $this->config('sn');
+        $configs['url_type']['value'] = $this->config('url_type');
         $configs['tpl_html_cache']['value'] = $this->config('tpl_html_cache');
         $configs['tpl_html_cache_time']['value'] = $this->config('tpl_html_cache_time');
         $this->assign('configs', $configs);

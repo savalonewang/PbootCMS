@@ -21,8 +21,8 @@
 	                
 	                 <div class="layui-form-item">
 	                     <label class="layui-form-label">手机版域名绑定</label>
-	                     <div class="layui-input-block">
-	                     	<input type="text" name="wap_domain"  value="{$configs['wap_domain']['value']}" placeholder="请输入要绑定的域名，如：m.baidu.com"  class="layui-input">
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="wap_domain"  value="{$configs['wap_domain']['value']}" placeholder="如：m.pbootcms.com"  class="layui-input">
 	                     </div>
 	                </div>
 	                
@@ -44,7 +44,7 @@
 	                
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">留言接收邮箱</label>
-	                     <div class="layui-input-block">
+	                     <div class="layui-input-inline">
 	                     	<input type="text" name="message_send_to"  value="{$configs['message_send_to']['value']}" placeholder="请输入留言接收邮箱"  class="layui-input">
 	                     </div>
 	                </div>
@@ -57,7 +57,16 @@
 	                     </div>
 	                </div>
 	                
-	                 <div class="layui-form-item">
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">伪静态开关</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="url_type" value="2" {if([$configs['url_type']['value']]==2)} checked="checked" {/if} title="启用">
+							<input type="radio" name="url_type" value="1" {if([$configs['url_type']['value']]==1)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                     <div class="layui-form-mid layui-word-aux">需配合先定义好当前应用环境的伪静态规则，如：web.config, .htaccess规则。</div>
+	                </div>
+	                
+	                <div class="layui-form-item">
 	                     <label class="layui-form-label">前端静态缓存</label>
 	                     <div class="layui-input-block">
 	                     	<input type="radio" name="tpl_html_cache" value="1" {if([$configs['tpl_html_cache']['value']]==1)} checked="checked" {/if} title="启用">
@@ -67,15 +76,15 @@
 	                
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">缓存有效期(秒)</label>
-	                     <div class="layui-input-block">
+	                     <div class="layui-input-inline">
 	                     	<input type="text" name="tpl_html_cache_time"  value="{$configs['tpl_html_cache_time']['value']}" placeholder="请输入缓存有效期（秒）"  class="layui-input">
 	                     </div>
 	                </div>
 	                
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">域名授权码</label>
-	                     <div class="layui-input-block">
-	                     	<input type="text" name="sn"  value="{$configs['sn']['value']}" placeholder="请输入授权码，多个个授权码请使用英文逗号隔开"  class="layui-input">
+	                     <div class="layui-input-inline">
+	                     	<input type="text" name="sn"  value="{$configs['sn']['value']}" placeholder="请输入授权码，多个逗号隔开"  class="layui-input">
 	                     </div>
 	                </div>
 	                
@@ -108,14 +117,14 @@
 	                
 	                <div class="layui-form-item">
 	                      <label class="layui-form-label">API认证用户</label>
-	                     <div class="layui-input-block">
+	                     <div class="layui-input-inline">
 	                     	<input type="text" name="api_appid" value="{$configs['api_appid']['value']}" placeholder="请输入API认证用户名" class="layui-input">
 	                     </div>
 	                </div>
 	                
 	                 <div class="layui-form-item">
 	                      <label class="layui-form-label">API认证密钥</label>
-	                     <div class="layui-input-block">
+	                     <div class="layui-input-inline">
 	                     	<input type="password" name="api_secret" value="{$configs['api_secret']['value']}" placeholder="请输入API认证密钥"  class="layui-input">
 	                     </div>
 	                </div>
