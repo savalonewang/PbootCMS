@@ -35,6 +35,8 @@ class ParserController extends Controller
         $content = $this->parserCompanyLabel($content); // 公司标签
         $content = $this->parserUserLabel($content); // 自定义标签
         $content = $this->parserNavLabel($content); // 分类列表
+        $content = $this->parserSelectAllLabel($content); // CMS筛选全部标签解析
+        $content = $this->parserSelectLabel($content); // CMS筛选标签解析
         $content = $this->parserSpecifySortLabel($content); // 指定分类
         $content = $this->parserSpecifyListLabel($content); // 指定列表
         $content = $this->parserSpecifyContentLabel($content); // 指定内容
@@ -1012,10 +1014,6 @@ class ParserController extends Controller
                     }
                 }
                 
-                // 去除特殊键值
-                unset($where['scode']);
-                unset($where['page']);
-                
                 // 读取数据
                 if (! isset($data)) { // 避免同页面多次调用无分类参数列表出现分页错误，多次调用取相同数据
                     $data = $this->model->getList($scode, $num, $order, $filter_field, $filter_keyword, $where);
@@ -1121,11 +1119,26 @@ class ParserController extends Controller
                     }
                 }
                 
+                // 数据筛选
+                $where = array();
+                $cond = array(
+                    'd_source' => 'get',
+                    'd_regular' => '/^[^\s]+$/'
+                );
+                foreach ($_GET as $key => $value) {
+                    if (substr($key, 0, 4) == 'ext_') {
+                        $where[$key] = filter($key, $cond);
+                        if ($_GET[$key] && ! $where[$key]) {
+                            alert_back('您的查询含有非法字符,已被系统拦截');
+                        }
+                    }
+                }
+                
                 // 读取数据
                 if ($page) {
-                    $data = $this->model->getList($scode, $num, $order, $filter_field, $filter_keyword);
+                    $data = $this->model->getList($scode, $num, $order, $filter_field, $filter_keyword, $where);
                 } else {
-                    $data = $this->model->getSpecifyList($scode, $num, $order, $filter_field, $filter_keyword);
+                    $data = $this->model->getSpecifyList($scode, $num, $order, $filter_field, $filter_keyword, $where);
                 }
                 
                 // 无数据直接替换为空

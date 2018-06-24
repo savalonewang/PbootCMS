@@ -278,7 +278,7 @@ class ParserModel extends Model
     }
 
     // 指定列表内容，不分页
-    public function getSpecifyList($scode, $num, $order, $field, $keyword)
+    public function getSpecifyList($scode, $num, $order, $field = '', $keyword = '', $where = array())
     {
         $fields = array(
             'a.*',
@@ -328,6 +328,7 @@ class ParserModel extends Model
         return parent::table('ay_content a')->field($fields)
             ->where($where1, 'OR')
             ->where($where2)
+            ->where($where, 'AND', 'AND', true)
             ->like($field, $keyword)
             ->join($join)
             ->order($order)
