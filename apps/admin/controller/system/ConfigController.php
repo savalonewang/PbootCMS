@@ -96,9 +96,9 @@ class ConfigController extends Controller
     {
         $config = file_get_contents(CONF_PATH . '/config.php');
         if (is_numeric($value)) {
-            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\"]+,/', '${1}' . $value . ',', $config);
+            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\",]+,/', '${1}' . $value . ',', $config);
         } else {
-            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\"]+,/', '${1}\'' . $value . '\',', $config);
+            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\",]+,/', '${1}\'' . $value . '\',', $config);
         }
         return file_put_contents(CONF_PATH . '/config.php', $config);
     }
