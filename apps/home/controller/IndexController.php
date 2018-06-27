@@ -26,7 +26,7 @@ class IndexController extends Controller
     {
         $content = parent::parser('index.html'); // 框架标签解析
         $content = $this->parser->parserPositionLabel($content, 0); // CMS当前位置标签解析
-        $content = $this->parser->parserSpecialPageSortLabel($content, 0, '首页', SITE_DIR); // 解析分类标签
+        $content = $this->parser->parserSpecialPageSortLabel($content, 0, '', SITE_DIR); // 解析分类标签
         $content = $this->parser->parserCommom($content); // CMS公共标签解析
         $this->cache($content, true);
     }

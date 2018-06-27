@@ -48,7 +48,7 @@ class AboutController extends Controller
                 error('您访问内容的分类已经不存在，请核对后再试！');
             }
         } else {
-            error('您访问的地址有误，必须传递内容id参数！');
+            error('您访问的地址有误，必须传递栏目scode参数！');
         }
         $this->cache($content, true);
     }
