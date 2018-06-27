@@ -11,6 +11,14 @@
 		  	   <div class="layui-tab-item layui-show">
 		  	   	   <form action="{url./admin/Config/index}" method="post" class="layui-form">
 		  	   	   
+		  	   	   <div class="layui-form-item">
+	                     <label class="layui-form-label">调试模式</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="debug" value="1" {if([$configs['debug']['value']]==1)} checked="checked" {/if} title="启用">
+							<input type="radio" name="debug" value="0" {if([$configs['debug']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
 	  	   		 	<div class="layui-form-item">
 	                     <label class="layui-form-label">独立手机版</label>
 	                     <div class="layui-input-block">

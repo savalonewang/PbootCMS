@@ -29,6 +29,7 @@ class ConfigController extends Controller
         if ($_POST) {
             foreach ($_POST as $key => $value) {
                 $config = array(
+                    'debug',
                     'sn',
                     'url_type',
                     'tpl_html_cache',
@@ -67,6 +68,7 @@ class ConfigController extends Controller
         }
         $this->assign('basic', true);
         $configs = $this->model->getList();
+        $configs['debug']['value'] = $this->config('debug');
         $configs['sn']['value'] = $this->config('sn');
         $configs['url_type']['value'] = $this->config('url_type');
         $configs['tpl_html_cache']['value'] = $this->config('tpl_html_cache');
