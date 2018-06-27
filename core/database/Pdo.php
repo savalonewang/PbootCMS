@@ -78,7 +78,7 @@ class Pdo implements Builder
         return $conn;
     }
 
-    // 关闭自动提交
+    // 关闭自动提交，开启事务模式
     public function closeCommit()
     {
         $this->master->beginTransaction();
@@ -104,7 +104,7 @@ class Pdo implements Builder
                 }
                 $result = $this->master->exec($sql);
                 if ($result === false) {
-                    if ($this->commit) {
+                    if ($this->commit) { // 如果是事务模式，发生错误，则回滚
                         $this->master->rollBack();
                     }
                     $this->error($sql, 'master');

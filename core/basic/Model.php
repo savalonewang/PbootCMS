@@ -151,11 +151,7 @@ class Model
     }
 
     /**
-     * 启动事务，关闭自动提交
-     *
-     * @param string $flag
-     *            是否关闭自动提交，默认为false，即关闭
-     * @return \core\basic\Model
+     * 关闭自动提交，开启事务模式（非连贯，直接调用）
      */
     final public function closeCommit()
     {
@@ -163,7 +159,7 @@ class Model
     }
 
     /**
-     * 提交事务
+     * 提交事务（非连贯，直接调用）
      *
      * @return \core\basic\Model
      */

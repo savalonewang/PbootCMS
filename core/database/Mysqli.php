@@ -53,7 +53,7 @@ class Mysqli implements Builder
         return $conn;
     }
 
-    // 关闭自动提交
+    // 关闭自动提交，开启事务模式
     public function closeCommit()
     {
         $this->master->autocommit(false);
@@ -63,9 +63,9 @@ class Mysqli implements Builder
     // 提交事务
     public function commit()
     {
-        $this->master->commit();
-        $this->master->autocommit(true);
-        $this->commit = false;
+        $this->master->commit(); // 提交事务
+        $this->master->autocommit(true); // 提交后恢复自动提交
+        $this->commit = false; // 关闭事务模式
     }
 
     // 执行SQL语句,接受完整SQL语句，返回结果集对象
@@ -81,7 +81,7 @@ class Mysqli implements Builder
                 }
                 $result = $this->master->query($sql);
                 if (! $result) {
-                    if ($this->commit) {
+                    if ($this->commit) { // 如果是事务模式，发生错误，则回滚
                         $this->master->rollback();
                     }
                     $this->error($sql, 'master');
