@@ -35,7 +35,8 @@ class ContentModel extends Model
             'a.isheadline',
             'a.visits',
             'a.ico',
-            'a.pics'
+            'a.pics',
+            'a.filename'
         );
         $join = array(
             array(
@@ -83,7 +84,8 @@ class ContentModel extends Model
             'a.isheadline',
             'a.visits',
             'a.ico',
-            'a.pics'
+            'a.pics',
+            'a.filename'
         );
         $join = array(
             array(

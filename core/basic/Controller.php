@@ -19,7 +19,9 @@ class Controller
     final protected function display($file)
     {
         $view = View::getInstance();
-        echo $view->parser($file);
+        $content = $view->parser($file);
+        $content = $this->runtime($content);
+        echo $content;
     }
 
     // 解析模板
@@ -34,6 +36,7 @@ class Controller
     {
         $view = View::getInstance();
         $view->cache($content);
+        $content = $this->runtime($content);
         if ($display) {
             echo $content;
         } else {
@@ -85,6 +88,12 @@ class Controller
     final protected function log($content, $level = "info")
     {
         Log::write($content, $level);
+    }
+
+    // 解析运行时间标签
+    private function runtime($content)
+    {
+        return str_replace('{pboot:runtime}', round(microtime(true) - START_TIME, 6), $content);
     }
 }
 
