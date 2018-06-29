@@ -7,7 +7,7 @@
  * @date 2017年3月24日
  *  公司信息模型类
  */
-namespace app\admin\model\system;
+namespace app\admin\model\content;
 
 use core\basic\Model;
 

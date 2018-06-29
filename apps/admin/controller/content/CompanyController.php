@@ -7,10 +7,10 @@
  * @date 2017年04月17日
  *  公司设置控制器 
  */
-namespace app\admin\controller\system;
+namespace app\admin\controller\content;
 
 use core\basic\Controller;
-use app\admin\model\system\CompanyModel;
+use app\admin\model\content\CompanyModel;
 
 class CompanyController extends Controller
 {
@@ -27,7 +27,7 @@ class CompanyController extends Controller
     {
         // 获取公司配置
         $this->assign('companys', $this->model->getList());
-        $this->display('system/company.html');
+        $this->display('content/company.html');
     }
 
     // 修改公司设置

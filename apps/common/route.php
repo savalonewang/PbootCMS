@@ -4,8 +4,6 @@ return array(
     'url_route' => array(
         // =======管理端路由============
         // 系统模块路由
-        'admin/Site' => 'admin/system.Site',
-        'admin/Company' => 'admin/system.Company',
         'admin/Area' => 'admin/system.Area',
         'admin/Menu' => 'admin/system.Menu',
         'admin/Role' => 'admin/system.Role',
@@ -16,6 +14,8 @@ return array(
         'admin/Config' => 'admin/system.Config',
         
         // 内容发布模块路由
+        'admin/Site' => 'admin/content.Site',
+        'admin/Company' => 'admin/content.Company',
         'admin/Label' => 'admin/content.Label',
         'admin/Model' => 'admin/content.Model',
         'admin/ExtField' => 'admin/content.ExtField',

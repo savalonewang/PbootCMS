@@ -7,10 +7,10 @@
  * @date 2017年3月21日
  *  站点设置控制器
  */
-namespace app\admin\controller\system;
+namespace app\admin\controller\content;
 
 use core\basic\Controller;
-use app\admin\model\system\SiteModel;
+use app\admin\model\content\SiteModel;
 
 class SiteController extends Controller
 {
@@ -31,7 +31,7 @@ class SiteController extends Controller
         $this->assign('sites', $this->model->getList());
         
         // 显示
-        $this->display('system/site.html');
+        $this->display('content/site.html');
     }
 
     // 修改系统设置
