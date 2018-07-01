@@ -33,7 +33,7 @@ class DoController extends Controller
                     session('lg', $lg);
                 }
             }
-            location(url('home/index/index'));
+            location(SITE_DIR . '/');
         }
     }
 

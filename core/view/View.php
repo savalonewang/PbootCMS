@@ -149,10 +149,10 @@ class View
     public function cache($content)
     {
         if (Config::get('tpl_html_cache')) {
-            if (! isset($_SESSION['lg'])) {
-                $lg = 'cn';
-            } else {
+            if (isset($_SESSION['lg'])) {
                 $lg = session('lg');
+            } else {
+                $lg = 'cn';
             }
             $cacheFile = $this->cachePath . '/' . md5($_SERVER["REQUEST_URI"] . $lg) . '.html'; // 缓存文件
             file_put_contents($cacheFile, $content) ?: error('缓存文件' . $cacheFile . '生成出错！请检查目录是否有可写权限！'); // 写入缓存文件
