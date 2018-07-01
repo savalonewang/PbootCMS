@@ -46,7 +46,7 @@ class SingleModel extends Model
             ->where("a.acode='" . session('acode') . "'")
             ->where('c.type=1')
             ->join($join)
-            ->group('b.name')
+            ->where('a.id IN(SELECT MAX(d.id) FROM ay_content d WHERE d.scode=a.scode)')
             ->order('a.id DESC')
             ->select();
     }

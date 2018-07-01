@@ -211,7 +211,7 @@ class Paging
                 if ($i > $this->pageCount)
                     break;
                 if ($this->page == $i) {
-                    $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="absolutepage">' . $i . '</a> ';
+                    $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="pagenum absolutepage">' . $i . '</a> ';
                 } else {
                     $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="pagenum">' . $i . '</a> ';
                 }
@@ -223,7 +223,7 @@ class Paging
                 $num_html .= '<span>···</span>';
             for ($i = $this->pageCount - $total + 1; $i <= $this->pageCount; $i ++) {
                 if ($this->page == $i) {
-                    $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="absolutepage">' . $i . '</a> ';
+                    $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="pagenum absolutepage">' . $i . '</a> ';
                 } else {
                     $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="pagenum">' . $i . '</a> ';
                 }
@@ -232,7 +232,7 @@ class Paging
             $num_html .= '<span>···</span>';
             for ($i = $this->page - $half; $i <= $this->page + $half; $i ++) {
                 if ($this->page == $i) {
-                    $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="absolutepage">' . $i . '</a> ';
+                    $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="pagenum absolutepage">' . $i . '</a> ';
                 } else {
                     $num_html .= '<a href=' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . ' class="pagenum">' . $i . '</a> ';
                 }
