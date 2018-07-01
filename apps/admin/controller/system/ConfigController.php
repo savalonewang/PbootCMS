@@ -97,10 +97,12 @@ class ConfigController extends Controller
     private function modConfig($key, $value)
     {
         $config = file_get_contents(CONF_PATH . '/config.php');
+        $value = str_replace(' ', '', $value); // 去除空格
+        $value = str_replace('，', ',', $value); // 转换可能输入的中文逗号
         if (is_numeric($value)) {
-            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\",]+,/', '${1}' . $value . ',', $config);
+            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\"\s,]+,/', '${1}' . $value . ',', $config);
         } else {
-            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\",]+,/', '${1}\'' . $value . '\',', $config);
+            $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\"\s,]+,/', '${1}\'' . $value . '\',', $config);
         }
         return file_put_contents(CONF_PATH . '/config.php', $config);
     }
