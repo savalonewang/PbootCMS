@@ -49,11 +49,13 @@ class Check
     // 目录路径检查，不存在时根据配置文件选择是否自动创建
     public static function checkBasicDir()
     {
-        check_dir(APP_PATH, true);
-        check_dir(APP_PATH . '/common', true);
-        check_dir(RUN_PATH, true);
-        check_dir(CONF_PATH, true);
-        check_dir(DOC_PATH . STATIC_DIR, true);
+        if (Config::get('debug')) {
+            check_dir(APP_PATH, true);
+            check_dir(APP_PATH . '/common', true);
+            check_dir(CONF_PATH, true);
+            check_dir(RUN_PATH, true);
+            check_dir(DOC_PATH . STATIC_DIR, true);
+        }
     }
 
     // 启动应用检查
@@ -62,13 +64,15 @@ class Check
         if (! is_dir(APP_PATH)) {
             error('系统尚未初始化，请打开系统调试模式！');
         }
+        
         // 获取系统发布的应用
         $apps = Config::get('public_app', true);
         // 检查发布的模块是否存在
         ! $apps ? error('请设置可访问模块！') : '';
-        // 检查pathinfo是否启用
-        if (strpos($_SERVER["SERVER_SOFTWARE"], 'IIS') !== false && Config::get('url_type') < 3 && ! ini_get('cgi.fix_pathinfo')) {
-            error('您服务器的PHP.ini配置有误：cgi.fix_pathinfo应该设置为1');
+        
+        // 自动转换判断
+        if (function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()) {
+            error('您系统PHP.ini配置magic_quotes_gpc为On状态，会导致数据存储异常，请先设置为Off状态.');
         }
     }
 

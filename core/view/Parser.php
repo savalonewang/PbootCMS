@@ -25,7 +25,6 @@ class Parser
         self::$content = ltrim($content, "\xEF\xBB\xBF"); // 去除内容Bom信息;
                                                           
         // =====以下为直接输出方法=========
-        self::parInclude(); // 文件应用，必须先引进外部文件
         self::parOutputUrl(); // 输出地址输出
         self::parOutputDefine(); // 输出常量
         self::parOutputVar(); // 输出变量
@@ -64,30 +63,6 @@ class Parser
                         
         // 返回解释的内容
         return self::$content;
-    }
-
-    // 解析include语句 如：{include file='head.html'}
-    private static function parInclude()
-    {
-        $pattern = '/\{include\s+file\s?=\s?([\"\']?)([\w\.\-\/]+)([\"\']?)\s*\}/';
-        if (preg_match_all($pattern, self::$content, $matches)) {
-            $arr = $matches[0]; // 匹配到的所有“包含字符串”：{include file='head.html'}
-            $brr = $matches[2]; // 包含的文件名：head.html
-            $count = count($arr);
-            for ($i = 0; $i < $count; $i ++) {
-                $incfile = self::$tplPath . '/' . $brr[$i];
-                if (! file_exists($incfile)) {
-                    error('包含文件' . $brr[$i] . '不存在！');
-                } else {
-                    if (! $inc_content = file_get_contents($incfile)) {
-                        error('包含的模板文件' . $brr[$i] . '读取错误！');
-                    } else {
-                        $inc_content = ltrim($inc_content, "\xEF\xBB\xBF"); // 去除内容Bom信息;
-                        self::$content = str_replace($arr[$i], $inc_content, self::$content);
-                    }
-                }
-            }
-        }
     }
 
     // 解析地址输出 {url./home/index/index}

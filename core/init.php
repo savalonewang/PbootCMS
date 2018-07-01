@@ -42,8 +42,8 @@ define('ROOT_PATH', $file_path);
 
 // 定义站点物理路径
 define('DOC_PATH', preg_replace('/\\' . SITE_DIR . '$/', '', ROOT_PATH));
-$_SERVER['DOCUMENT_ROOT'] = DOC_PATH;
-
+$_SERVER['DOCUMENT_ROOT'] = DOC_PATH; // 统一该环境变量值
+                                      
 // 定义内核文件目录
 define('CORE_DIR', SITE_DIR . '/' . basename(__DIR__));
 
@@ -90,15 +90,9 @@ if (Config::get('debug')) {
     error_reporting(0);
 }
 
-// 自动转换判断
-if (function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()) {
-    error('您系统PHP.ini配置magic_quotes_gpc为On状态，会导致数据存储异常，请先设置为Off状态.');
-}
-
 // 环境检查
-// Check::checkPHP(); // 拒绝PHP低版本
 Check::checkGo(); // 检查go扩展
-Check::checkBasicDir(); // 检查基础目录
 Check::checkApp(); // 检查APP配置
+Check::checkBasicDir(); // 检查基础目录
 Basic::setSessionHandler();// 会话处理程序选择
 

@@ -97,11 +97,52 @@ class Basic
                 ini_set("session.save_path", Config::get('seesion.path'));
                 break;
             default:
-                $save_path = RUN_PATH . '/session';
+                $save_path = RUN_PATH . '/session/';
                 if (! check_dir($save_path, true))
                     error('设置的会话路径目录创建失败！');
                 ini_set("session.save_handler", "files");
-                ini_set("session.save_path", $save_path);
+                ini_set("session.save_path", '2;' . $save_path);
+                if (! is_dir($save_path . '/0') || ! is_dir($save_path . '/v')) {
+                    $char = array(
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        'a',
+                        'b',
+                        'c',
+                        'd',
+                        'e',
+                        'f',
+                        'g',
+                        'h',
+                        'i',
+                        'j',
+                        'k',
+                        'l',
+                        'm',
+                        'n',
+                        'o',
+                        'p',
+                        'q',
+                        'r',
+                        's',
+                        't',
+                        'u',
+                        'v'
+                    );
+                    foreach ($char as $value) {
+                        foreach ($char as $value2) {
+                            check_dir($save_path . $value . '/' . $value2, true);
+                        }
+                    }
+                }
                 break;
         }
     }

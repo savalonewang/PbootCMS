@@ -98,20 +98,48 @@ class View
         // 定义当前应用主题目录
         define('APP_THEME_DIR', str_replace(DOC_PATH, '', APP_VIEW_PATH) . '/' . $theme);
         
-        $tplFile = $this->tplPath . '/' . $file; // 模板文件
-        file_exists($tplFile) ?: error('模板文件' . $file . '不存在！');
-        $tplcFile = $this->tplcPath . '/' . md5($tplFile) . '.php'; // 编译文件
-                                                                    
-        // 当编译文件不存在，或者模板文件修改过，或者调试模式，则重新生成编译文件
-        if (! file_exists($tplcFile) || filemtime($tplcFile) < filemtime($tplFile) || ! Config::get('tpl_parser_cache') || Config::get('debug')) {
-            $content = file_get_contents($tplFile) ?: error('模板文件' . $file . '读取错误！'); // 读取模板
+        $tpl_file = $this->tplPath . '/' . $file; // 模板文件
+        file_exists($tpl_file) ?: error('模板文件' . $file . '不存在！');
+        $tpl_c_file = $this->tplcPath . '/' . md5($tpl_file) . '.php'; // 编译文件
+                                                                       
+        // 读取模板内容
+        $content = file_get_contents($tpl_file) ?: error('模板文件' . $file . '读取错误！');
+        
+        // 处理包含文件
+        $pattern = '/\{include\s+file\s?=\s?([\"\']?)([\w\.\-\/]+)([\"\']?)\s*\}/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $arr = $matches[0]; // 匹配到的所有“包含字符串”：{include file='head.html'}
+            $brr = $matches[2]; // 包含的文件名：head.html
+            $count = count($arr);
+            for ($i = 0; $i < $count; $i ++) {
+                $inc_file = $this->tplPath . '/' . $brr[$i];
+                $inc_c_file = $this->tplcPath . '/' . md5($inc_file) . '.php';
+                // 当包含文件的编译文件不存在，或者模板文件修改过，则重新生成编译文件
+                if (! file_exists($inc_c_file) || filemtime($inc_c_file) < filemtime($inc_file) || ! Config::get('tpl_parser_cache')) {
+                    file_exists($inc_file) ?: error('包含文件' . $brr[$i] . '不存在！');
+                    if (! $inc_content = file_get_contents($inc_file)) {
+                        error('包含的模板文件' . $brr[$i] . '读取错误！');
+                    } else {
+                        $inc_content = Parser::compile($this->tplPath, $inc_content); // 解析包含文件
+                        file_put_contents($inc_c_file, $inc_content) ?: error('包含文件' . $inc_c_file . '生成出错！请检查目录是否有可写权限！'); // 写入编译文件
+                        $content = str_replace($arr[$i], "<?php include '" . $inc_c_file . "' ?>", $content);
+                    }
+                } else {
+                    // 如果公共文件已经存在，则直接引用
+                    $content = str_replace($arr[$i], "<?php include '" . $inc_c_file . "' ?>", $content);
+                }
+            }
+        }
+        
+        // 当编译文件不存在，或者模板文件修改过，则重新生成编译文件
+        if (! file_exists($tpl_c_file) || filemtime($tpl_c_file) < filemtime($tpl_file) || ! Config::get('tpl_parser_cache')) {
             $content = Parser::compile($this->tplPath, $content); // 解析模板
-            file_put_contents($tplcFile, $content) ?: error('编译文件' . $tplcFile . '生成出错！请检查目录是否有可写权限！'); // 写入编译文件
+            file_put_contents($tpl_c_file, $content) ?: error('编译文件' . $tpl_c_file . '生成出错！请检查目录是否有可写权限！'); // 写入编译文件
         }
         
         // 获取编译后内容返回
         ob_start();
-        include $tplcFile;
+        include $tpl_c_file;
         $content = ob_get_contents();
         ob_end_clean();
         return $content;
@@ -121,7 +149,12 @@ class View
     public function cache($content)
     {
         if (Config::get('tpl_html_cache')) {
-            $cacheFile = $this->cachePath . '/' . md5($_SERVER["REQUEST_URI"] . session('lg')) . '.html'; // 缓存文件
+            if (! isset($_SESSION['lg'])) {
+                $lg = 'cn';
+            } else {
+                $lg = session('lg');
+            }
+            $cacheFile = $this->cachePath . '/' . md5($_SERVER["REQUEST_URI"] . $lg) . '.html'; // 缓存文件
             file_put_contents($cacheFile, $content) ?: error('缓存文件' . $cacheFile . '生成出错！请检查目录是否有可写权限！'); // 写入缓存文件
             return true;
         }
