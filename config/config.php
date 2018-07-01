@@ -2,7 +2,7 @@
 return array(
     
     // 调试模式
-    'debug' => true,
+    'debug' => 0,
     
     // 授权码，多个授权码使用英文逗号隔开，如：'aaaaa,bbbbb'
     'sn' => '281BE285D7',
