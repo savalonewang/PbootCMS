@@ -129,7 +129,7 @@ CREATE TABLE `ay_content` (
   `acode` varchar(20) NOT NULL COMMENT '区域',
   `scode` varchar(20) NOT NULL COMMENT '内容栏目',
   `subscode` varchar(20) NOT NULL COMMENT '副栏目',
-  `title` varchar(30) NOT NULL COMMENT '标题',
+  `title` varchar(50) NOT NULL COMMENT '标题',
   `titlecolor` varchar(7) NOT NULL COMMENT '标题颜色',
   `subtitle` varchar(30) NOT NULL COMMENT '副标题',
   `filename` varchar(50) NOT NULL COMMENT '自定义文件名',
