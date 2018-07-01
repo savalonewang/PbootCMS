@@ -301,8 +301,9 @@ class ParserController extends Controller
                 }
                 break;
             case 'content':
-                $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "'></script>";
-                $content = str_replace($search, $this->adjustLabelData($params, $data->content) . $visits, $content);
+                $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "' async='async'></script>";
+                $content = preg_replace('/(<\/body>)/i', $visits . "\n$1", $content);
+                $content = str_replace($search, $this->adjustLabelData($params, $data->content), $content);
                 break;
             default:
                 if (isset($data->$label)) {
