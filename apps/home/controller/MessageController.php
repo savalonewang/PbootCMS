@@ -44,7 +44,7 @@ class MessageController extends Controller
                 alert_back('留言内容不能为空！');
             }
             
-            if (session('config.message_check_code')) {
+            if ($this->config('message_check_code')) {
                 if (! $checkcode) {
                     alert_back('验证码不能为空！');
                 }
@@ -70,10 +70,10 @@ class MessageController extends Controller
             
             if ($this->model->addMessage($data)) {
                 $this->log('提交留言成功！');
-                if (session('config.message_send_mail') && session('config.message_send_to')) {
+                if ($this->config('message_send_mail') && $this->config('message_send_to')) {
                     $mail_subject = "【PbootCMS】您有新的留言，请注意查收！";
                     $mail_body = "联系人：$contacts<br>手　机：$mobile<br>内　容：$content";
-                    sendmail(session('config'), session('config.message_send_to'), $mail_subject, $mail_body);
+                    sendmail(session('config'), $this->config('message_send_to'), $mail_subject, $mail_body);
                 }
                 alert_location('留言成功！', '-1');
             } else {

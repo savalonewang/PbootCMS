@@ -26,7 +26,7 @@ return array(
     'tpl_html_cache' => 0,
     
     // 模板内容缓存有效时间（秒）
-    'tpl_html_cache_time' => 600,
+    'tpl_html_cache_time' => 900,
     
     // URL允许的特殊字符，正则模型或直接写 ,如：\*
     'url_allow_char' => '',
@@ -41,7 +41,9 @@ return array(
     'app_domain_blind' => array(),
     
     // 模块模板路径定义,不定义均采用框架默认
-    'tpl_dir' => array(),
+    'tpl_dir' => array(
+        'home' => '/template'
+    ),
     
     // 控制器返回数据输出方式
     'return_data_type' => 'html',

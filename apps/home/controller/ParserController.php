@@ -322,9 +322,9 @@ class ParserController extends Controller
         $content = str_replace('{pboot:checkcode}', CORE_DIR . '/code.php', $content); // 验证码路径
         $content = str_replace('{pboot:lgpath}', url('/home/Do/area'), $content); // 多语言切换前置路径,如{pboot:lgpath}?lg=cn
         $content = str_replace('{pboot:scaction}', url('/home/Search/index'), $content); // 搜索提交路径
-        $content = str_replace('{pboot:appid}', session('config.api_appid'), $content); // API认证用户
+        $content = str_replace('{pboot:appid}', $this->config('api_appid'), $content); // API认证用户
         $content = str_replace('{pboot:timestamp}', time(), $content); // 认证时间戳
-        $content = str_replace('{pboot:signature}', md5(md5(session('config.api_appid') . session('config.api_secret') . time())), $content); // API认证密钥
+        $content = str_replace('{pboot:signature}', md5(md5($this->config('api_appid') . $this->config('api_secret') . time())), $content); // API认证密钥
         $content = str_replace('{pboot:httpurl}', get_http_url(), $content); // 当前访问的域名地址
         $content = str_replace('{pboot:keyword}', get('keyword'), $content); // 当前搜索的关键字
         return $content;

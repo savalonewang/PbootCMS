@@ -17,9 +17,9 @@ class ApiController extends Controller
 
     public function __construct()
     {
-        $model = new ApiModel();
-        $config = $model->getConfig();
-        $this->checkAccess($config);
+        // 自动缓存基础信息
+        cache_config();
+        $this->checkAccess($this->config());
     }
 
     /**

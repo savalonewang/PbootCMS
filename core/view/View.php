@@ -154,7 +154,12 @@ class View
             } else {
                 $lg = 'cn';
             }
-            $cacheFile = $this->cachePath . '/' . md5($_SERVER["REQUEST_URI"] . $lg) . '.html'; // 缓存文件
+            if (Config::get('open_wap') && (is_mobile() || Config::get('wap_domain') == get_http_host())) {
+                $wap = 'wap';
+            } else {
+                $wap = '';
+            }
+            $cacheFile = $this->cachePath . '/' . md5($_SERVER["REQUEST_URI"] . $lg . $wap) . '.html'; // 缓存文件
             file_put_contents($cacheFile, $content) ?: error('缓存文件' . $cacheFile . '生成出错！请检查目录是否有可写权限！'); // 写入缓存文件
             return true;
         }

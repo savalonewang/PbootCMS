@@ -53,20 +53,26 @@ class Config
     }
 
     // 写入配置文件
-    public static function set($itemName, array $data)
+    public static function set($itemName, array $data, $multistage = true)
     {
         if ($data) {
-            $path = CONF_PATH . '/' . $itemName . '.cache.php';
-            // 合并
-            if (! ! $configs = self::get($itemName)) {
-                $data = mult_array_merge($configs, $data);
+            $path = RUN_PATH . '/config/' . $itemName . '.php';
+            
+            // 是否使用多级
+            if ($multistage) {
+                // 如果获取到配置信息，执行合并
+                if (! ! $configs = self::get($itemName)) {
+                    $data = mult_array_merge($configs, $data);
+                }
+                $config[$itemName] = $data;
+            } else {
+                $config = $data;
             }
-            // 待写入
-            $config[$itemName] = $data;
+            
             // 写入
             if (check_file($path, true)) {
                 $result = file_put_contents($path, "<?php\nreturn " . var_export($config, true) . ";");
-                self::assign($path); // 注入配置
+                self::assign($path); // 写入后注入配置
                 return $result;
             } else {
                 return false;
@@ -121,6 +127,19 @@ class Config
             }
         }
         
+        // 载入缓存的配置文件
+        $cache_path = RUN_PATH . '/config';
+        if (function_exists('scandir') && is_dir($cache_path)) {
+            $files = scandir($cache_path);
+            for ($i = 0; $i < count($files); $i ++) {
+                $file = $cache_path . '/' . $files[$i];
+                if (is_file($file)) {
+                    $config = require $file;
+                    $configs = mult_array_merge($configs, $config);
+                }
+            }
+        }
+        
         // 清理缓冲区，避免配置文件出现Bom时影响显示
         @ob_clean();
         return $configs;
@@ -129,17 +148,21 @@ class Config
     // 配置文件注入
     public static function assign($filePath)
     {
-        if (file_exists($filePath)) {
-            $assign_config = require $filePath;
-            if (! is_array($assign_config))
-                return;
+        if (! file_exists($filePath)) {
+            return;
         }
+        
+        $assign_config = require $filePath;
+        if (! is_array($assign_config))
+            return;
+        
         if (self::$configs) {
             $configs = mult_array_merge(self::$configs, $assign_config);
         } else {
             $configs = $assign_config;
         }
         self::$configs = $configs;
+        return true;
     }
 }
 

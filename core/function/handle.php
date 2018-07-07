@@ -564,14 +564,23 @@ function is_https()
 }
 
 // 获取当前访问地址
-function get_http_url()
+function get_http_url($noport = false)
 {
     if (is_https()) {
-        $domain = 'https://' . $_SERVER['HTTP_HOST'];
+        $url = 'https://' . $_SERVER['HTTP_HOST'];
     } else {
-        $domain = 'http://' . $_SERVER['HTTP_HOST'];
+        $url = 'http://' . $_SERVER['HTTP_HOST'];
     }
-    return $domain;
+    if ($noport) {
+        $url = str_replace(':' . $_SERVER['SERVER_PORT'], '', $url);
+    }
+    return $url;
+}
+
+// 获取当前访问域名
+function get_http_host()
+{
+    return str_replace(':' . $_SERVER['SERVER_PORT'], '', $_SERVER['HTTP_HOST']);
 }
 
 // 服务器信息

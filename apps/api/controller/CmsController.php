@@ -289,10 +289,10 @@ class CmsController extends Controller
             
             if ($this->model->addMessage($data)) {
                 $this->log('API提交留言成功！');
-                if (session('config.message_send_mail') && session('config.message_send_to')) {
+                if ($this->config('message_send_mail') && $this->config('message_send_to')) {
                     $mail_subject = "【PbootCMS】您有新的留言，请注意查收！";
                     $mail_body = "联系人：$contacts<br>手　机：$mobile<br>内　容：$content";
-                    sendmail(session('config'), session('config.message_send_to'), $mail_subject, $mail_body);
+                    sendmail(session('config'), $this->config('message_send_to'), $mail_subject, $mail_body);
                 }
                 json(1, '留言成功！');
             } else {
@@ -336,10 +336,10 @@ class CmsController extends Controller
             // 写入数据
             if ($this->model->addForm($value->table_name, $data)) {
                 $this->log('提交表单数据成功！');
-                if (session('config.message_send_mail') && session('config.message_send_to')) {
+                if ($this->config('message_send_mail') && $this->config('message_send_to')) {
                     $mail_subject = "【PbootCMS】您有新的表单数据，请注意查收！";
                     $mail_body = "您网站有新的表单数据提交，请登陆网站管理后台查看！";
-                    sendmail(session('config'), session('config.message_send_to'), $mail_subject, $mail_body);
+                    sendmail(session('config'), $this->config('message_send_to'), $mail_subject, $mail_body);
                 }
                 json(1, '表单提交成功！');
             } else {

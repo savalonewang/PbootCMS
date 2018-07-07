@@ -11,6 +11,7 @@ namespace app\admin\controller\system;
 
 use core\basic\Controller;
 use app\admin\model\system\ConfigModel;
+use core\basic\Config;
 
 class ConfigController extends Controller
 {
@@ -45,7 +46,7 @@ class ConfigController extends Controller
                 } else {
                     if ($this->model->checkConfig("name='$key'")) {
                         $this->model->modValue($key, post($key));
-                    } else {
+                    } elseif ($key != 'submit') {
                         // 自动新增配置项
                         $data = array(
                             'name' => $key,
@@ -58,7 +59,9 @@ class ConfigController extends Controller
                     }
                 }
             }
+            
             $this->log('修改参数配置成功！');
+            cache_config(true); // 自动缓存基础信息
             switch (post('submit')) {
                 case 'api':
                     success('修改成功！', url('/admin/Config/index#tab=t2', false));

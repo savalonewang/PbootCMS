@@ -33,7 +33,7 @@
 					<label class="user-login-icon layui-icon layui-icon-password"></label>
 					<input name="password" id="password" type="password" lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
 				</div>
-				{if(session('config.admin_check_code'))}
+				{if([$admin_check_code])}
 				<div class="layui-form-item">
 					<div class="layui-row">
 						<div class="layui-col-xs7 layui-col-sm8">

@@ -1,13 +1,13 @@
 <?php
-
 /**
- *@ copyright (C)2016-2099 Hnaoyun Inc.
- *@ license This is not a freeware, use is subject to license terms
- *@ author XingMeng
- *@ email hnxsh@foxmail.com
- *@ date 2017年4月14日
- *  公共处理函数 
+ * @ copyright (C)2016-2099 Hnaoyun Inc.
+ * @ license This is not a freeware, use is subject to license terms
+ * @ author XingMeng
+ * @ email hnxsh@foxmail.com
+ * @ date 2017年4月14日
+ * 公共处理函数
  */
+use core\basic\Config;
 
 // 获取字符串型自动编码
 function get_auto_code($string, $start = '1')
@@ -176,6 +176,34 @@ function get_btn($btnName, $theme, $btnAction, $idValue, $id = 'id')
         return;
     $btn_html = "<a href='" . url("/" . M . '/' . C . "/$btnAction/$id/$idValue") . "?backurl=" . URL . "'  class='layui-btn layui-btn-xs $theme'>$btnName</a>";
     return $btn_html;
+}
+
+// 缓存基础信息
+function cache_config($refresh = false)
+{
+    // 缓存站点基础信息
+    $path = RUN_PATH . '/config/config.php';
+    if (! file_exists($path) || $refresh) {
+        $model = model('admin.system.Config');
+        
+        // 系统配置
+        $data = $model->getConfig();
+        
+        // 获取区域信息
+        $area = $model->getArea();
+        if (! isset($area[0])) {
+            error('系统没有任何可用区域，请核对后再试！');
+        }
+        $data['lgs'] = $area;
+        
+        // 获取系统设置的主题
+        if (! ! $theme = $model->getTheme()) {
+            $data['theme'] = $theme;
+        } else {
+            $data['theme'] = 'default';
+        }
+        Config::set('config', $data, false);
+    }
 }
 
 

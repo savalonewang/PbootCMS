@@ -27,9 +27,9 @@ class DoController extends Controller
     {
         $lg = post('lg') ?: get('lg');
         if ($lg) {
-            $lgs = session('lgs');
+            $lgs = $this->config('lgs');
             foreach ($lgs as $value) {
-                if ($value->acode == $lg) {
+                if ($value['acode'] == $lg) {
                     session('lg', $lg);
                 }
             }
