@@ -1,6 +1,6 @@
 -- Online Database Management SQL Dump
 -- 数据库名: pbootcms
--- 生成日期: 2018-06-03 23:28:47
+-- 生成日期: 2018-07-07 23:45:45
 -- PHP 版本: 5.6.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -444,7 +444,7 @@ INSERT INTO `ay_menu` (`id`,`mcode`,`pcode`,`name`,`url`,`sorting`,`status`,`sho
 ('140','M131','M130','单页内容','/admin/Single/index','401','1','1','fa-file-o','admin','admin','2017-12-26 10:46:35','2018-04-07 18:46:35'),
 ('141','M132','M130','列表内容','/admin/Content/index','402','0','1','fa-file-text-o','admin','admin','2017-12-26 10:48:17','2018-04-07 21:52:15'),
 ('145','M136','M156','定制标签','/admin/Label/index','203','1','1','fa-wrench','admin','admin','2018-01-03 11:52:40','2018-04-07 18:44:31'),
-('159','M150','M157','留言信息','/admin/Message/index','501','1','1','fa-question-circle-o','admin','admin','2018-02-01 13:20:17','2018-04-07 18:46:55'),
+('159','M150','M157','留言信息','/admin/Message/index','501','1','1','fa-question-circle-o','admin','admin','2018-02-01 13:20:17','2018-07-07 23:45:09'),
 ('161','M151','M157','轮播图片','/admin/Slide/index','502','1','1','fa-picture-o','admin','admin','2018-03-01 14:57:41','2018-04-07 18:47:07'),
 ('162','M152','M157','友情链接','/admin/Link/index','503','1','1','fa-link','admin','admin','2018-03-01 14:58:45','2018-04-07 18:47:16'),
 ('164','M153','M156','配置参数','/admin/Config/index','201','1','1','fa-sliders','admin','admin','2018-03-21 14:52:05','2018-04-07 18:44:02'),
@@ -469,7 +469,7 @@ CREATE TABLE `ay_menu_action` (
   `action` varchar(20) NOT NULL COMMENT '类型编码',
   PRIMARY KEY (`id`),
   KEY `ay_menu_action_mcode` (`mcode`)
-) ENGINE=MyISAM AUTO_INCREMENT=609 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=611 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_menu_action`
@@ -524,7 +524,7 @@ INSERT INTO `ay_menu_action` (`id`,`mcode`,`action`) VALUES
 ('398','M145','mod'),
 ('397','M145','del'),
 ('396','M145','add'),
-('584','M150','mod'),
+('609','M150','del'),
 ('587','M151','mod'),
 ('586','M151','del'),
 ('585','M151','add'),
@@ -539,7 +539,8 @@ INSERT INTO `ay_menu_action` (`id`,`mcode`,`action`) VALUES
 ('572','M158','add'),
 ('606','M160','add'),
 ('607','M160','del'),
-('608','M160','mod');
+('608','M160','mod'),
+('610','M150','mod');
 
 -- --------------------------------------------------------
 
