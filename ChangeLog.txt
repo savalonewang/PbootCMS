@@ -4,6 +4,7 @@
 3、新增运行时间标签{pboot:runtime}；
 4、新增留言验证码判断标签{pboot:checkcodestatus}；
 5、新增筛选全部按钮的class和active分别设置；
+6、新增类似filter=title|php,asp多条件过滤支持；
 6、优化内容页访问量代码插入方式；
 7、优化会话文件处理方式；
 8、优化框架模板解析引擎；

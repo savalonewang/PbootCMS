@@ -996,26 +996,28 @@ class ParserController extends Controller
                 }
                 
                 // 内容过滤筛选
-                $filter_field = '';
-                $filter_keyword = '';
+                $where1 = array();
                 if ($filter) {
                     $filter = explode('|', $filter);
                     if (count($filter) == 2) {
-                        $filter_field = $filter[0];
-                        $filter_keyword = $filter[1];
+                        $keys = explode(',', $filter[1]);
+                        foreach ($keys as $value) {
+                            if ($value)
+                                $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
+                        }
                     }
                 }
                 
                 // 数据筛选
-                $where = array();
+                $where2 = array();
                 $cond = array(
                     'd_source' => 'get',
                     'd_regular' => '/^[^\s]+$/'
                 );
                 foreach ($_GET as $key => $value) {
                     if (substr($key, 0, 4) == 'ext_') {
-                        $where[$key] = filter($key, $cond);
-                        if ($_GET[$key] && ! $where[$key]) {
+                        $where2[$key] = filter($key, $cond);
+                        if ($_GET[$key] && ! $where2[$key]) {
                             alert_back('您的查询含有非法字符,已被系统拦截');
                         }
                     }
@@ -1023,7 +1025,7 @@ class ParserController extends Controller
                 
                 // 读取数据
                 if (! isset($data)) { // 避免同页面多次调用无分类参数列表出现分页错误，多次调用取相同数据
-                    $data = $this->model->getList($scode, $num, $order, $filter_field, $filter_keyword, $where);
+                    $data = $this->model->getList($scode, $num, $order, $where1, $where2);
                 }
                 
                 // 无数据直接替换
@@ -1116,26 +1118,28 @@ class ParserController extends Controller
                 }
                 
                 // 内容过滤筛选
-                $filter_field = '';
-                $filter_keyword = '';
+                $where1 = array();
                 if ($filter) {
                     $filter = explode('|', $filter);
                     if (count($filter) == 2) {
-                        $filter_field = $filter[0];
-                        $filter_keyword = $filter[1];
+                        $keys = explode(',', $filter[1]);
+                        foreach ($keys as $value) {
+                            if ($value)
+                                $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
+                        }
                     }
                 }
                 
                 // 数据筛选
-                $where = array();
+                $where2 = array();
                 $cond = array(
                     'd_source' => 'get',
                     'd_regular' => '/^[^\s]+$/'
                 );
                 foreach ($_GET as $key => $value) {
                     if (substr($key, 0, 4) == 'ext_') {
-                        $where[$key] = filter($key, $cond);
-                        if ($_GET[$key] && ! $where[$key]) {
+                        $where2[$key] = filter($key, $cond);
+                        if ($_GET[$key] && ! $where2[$key]) {
                             alert_back('您的查询含有非法字符,已被系统拦截');
                         }
                     }
@@ -1143,9 +1147,9 @@ class ParserController extends Controller
                 
                 // 读取数据
                 if ($page) {
-                    $data = $this->model->getList($scode, $num, $order, $filter_field, $filter_keyword, $where);
+                    $data = $this->model->getList($scode, $num, $order, $where1, $where2);
                 } else {
-                    $data = $this->model->getSpecifyList($scode, $num, $order, $filter_field, $filter_keyword, $where);
+                    $data = $this->model->getSpecifyList($scode, $num, $order, $where1, $where2);
                 }
                 
                 // 无数据直接替换为空
@@ -1761,7 +1765,7 @@ class ParserController extends Controller
                 unset($where['isappinstalled']);
                 
                 // 读取数据
-                if (! $data = $this->model->getList($scode, $num, $order, $field, $keyword, $where)) {
+                if (! $data = $this->model->getList($scode, $num, $order, '', $where)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }

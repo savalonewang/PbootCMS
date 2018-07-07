@@ -212,7 +212,7 @@ class ParserModel extends Model
     }
 
     // 列表内容
-    public function getList($scode, $num, $order, $field = '', $keyword = '', $where = array())
+    public function getList($scode, $num, $order, $filter = array(), $where = array())
     {
         $fields = array(
             'a.*',
@@ -272,7 +272,7 @@ class ParserModel extends Model
             ->where($where1, 'OR')
             ->where($where2)
             ->where($where, 'AND', 'AND', true)
-            ->like($field, $keyword)
+            ->where($filter, 'OR', 'AND')
             ->join($join)
             ->order($order)
             ->page(1, $num)
@@ -281,7 +281,7 @@ class ParserModel extends Model
     }
 
     // 指定列表内容，不分页
-    public function getSpecifyList($scode, $num, $order, $field = '', $keyword = '', $where = array())
+    public function getSpecifyList($scode, $num, $order, $filter = array(), $where = array())
     {
         $fields = array(
             'a.*',
@@ -337,7 +337,7 @@ class ParserModel extends Model
             ->where($where1, 'OR')
             ->where($where2)
             ->where($where, 'AND', 'AND', true)
-            ->like($field, $keyword)
+            ->where($filter, 'OR', 'AND')
             ->join($join)
             ->order($order)
             ->limit($num)
