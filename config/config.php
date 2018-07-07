@@ -11,7 +11,7 @@ return array(
     'url_type' => 1,
     
     // 模板内容输出缓存开关
-    'tpl_html_cache' => 0,
+    'tpl_html_cache' => 1,
     
     // 模板内容缓存有效时间（秒）
     'tpl_html_cache_time' => 900,

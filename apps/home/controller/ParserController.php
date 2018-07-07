@@ -801,7 +801,8 @@ class ParserController extends Controller
                 $params = $this->parserParam($matches[1][$i]);
                 $text = '全部';
                 $field = '';
-                $class = 'active';
+                $class = '';
+                $active = '';
                 
                 // 分离参数
                 foreach ($params as $key => $value) {
@@ -814,6 +815,9 @@ class ParserController extends Controller
                             break;
                         case 'class':
                             $class = $value;
+                            break;
+                        case 'active':
+                            $active = $value;
                             break;
                     }
                 }
@@ -841,9 +845,9 @@ class ParserController extends Controller
                 }
                 // 如果有对本字段进行筛选，则不高亮
                 if (get($field)) {
-                    $out_html = '<a href="' . $path . $qs . '">' . $text . '</a>';
-                } else {
                     $out_html = '<a href="' . $path . $qs . '" class="' . $class . '">' . $text . '</a>';
+                } else {
+                    $out_html = '<a href="' . $path . $qs . '" class="' . $active . '">' . $text . '</a>';
                 }
                 
                 // 执行内容替换
