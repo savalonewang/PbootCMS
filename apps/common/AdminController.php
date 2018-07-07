@@ -40,8 +40,8 @@ class AdminController extends Controller
         
         // 站点基础信息
         $model = new AdminModel();
-        session('config', $model->getConfig());
         session('site', $model->getSite());
+        cache_config();
         
         // 内容模型菜单注入
         $models = model('admin.content.Model');

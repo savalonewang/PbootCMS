@@ -327,6 +327,7 @@ class ParserController extends Controller
         $content = str_replace('{pboot:signature}', md5(md5($this->config('api_appid') . $this->config('api_secret') . time())), $content); // API认证密钥
         $content = str_replace('{pboot:httpurl}', get_http_url(), $content); // 当前访问的域名地址
         $content = str_replace('{pboot:keyword}', get('keyword'), $content); // 当前搜索的关键字
+        $content = str_replace('{pboot:checkcodestatus}', $this->config('message_check_code'), $content); // 是否开启验证码
         return $content;
     }
 
