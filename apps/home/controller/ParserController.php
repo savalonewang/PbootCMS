@@ -48,7 +48,8 @@ class ParserController extends Controller
         $content = $this->parserFormLabel($content); // 自定义表单
         $content = $this->parserQrcodeLabel($content); // 二维码生成
         $content = $this->parserPageLabel($content); // CMS分页标签解析(需置后)
-        $content = $this->parserIfLabel($content); // IF语句(需置后)
+        $content = $this->parserLoopLabel($content); // LOOP语句(需置后)
+        $content = $this->parserIfLabel($content); // IF语句(需置最后)
         return $content;
     }
 
@@ -75,6 +76,9 @@ class ParserController extends Controller
     protected function parserList($label, $search, $content, $data, $params, $key)
     {
         switch ($label) {
+            case 'n':
+                $content = str_replace($search, $key - 1, $content);
+                break;
             case 'i':
                 $content = str_replace($search, $key, $content);
                 break;
@@ -1302,17 +1306,16 @@ class ParserController extends Controller
                 }
                 
                 $out_html = '';
-                $key1 = 0;
-                $key2 = 1;
+                $key = 1;
                 foreach ($pics as $value) { // 按查询图片条数循环
                     $one_html = $matches[2][$i];
                     for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                         switch ($matches2[1][$j]) {
                             case 'n':
-                                $one_html = str_replace($matches2[0][$j], $key1, $one_html);
+                                $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
                                 break;
                             case 'i':
-                                $one_html = str_replace($matches2[0][$j], $key2, $one_html);
+                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
                                 break;
                             case 'src':
                                 if ($value) {
@@ -1323,10 +1326,9 @@ class ParserController extends Controller
                                 break;
                         }
                     }
-                    $key1 ++;
-                    $key2 ++;
+                    $key ++;
                     $out_html .= $one_html;
-                    if (isset($num) && $key2 > $num) {
+                    if (isset($num) && $key > $num) {
                         unset($num);
                         break;
                     }
@@ -1458,17 +1460,16 @@ class ParserController extends Controller
                 }
                 
                 $out_html = '';
-                $key1 = 0;
-                $key2 = 1;
+                $key = 1;
                 foreach ($data as $value) { // 按查询数据条数循环
                     $one_html = $matches[2][$i];
                     for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                         switch ($matches2[1][$j]) {
                             case 'n':
-                                $one_html = str_replace($matches2[0][$j], $key1, $one_html);
+                                $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
                                 break;
                             case 'i':
-                                $one_html = str_replace($matches2[0][$j], $key2, $one_html);
+                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
                                 break;
                             case 'src':
                                 if ($value->pic) {
@@ -1483,8 +1484,7 @@ class ParserController extends Controller
                                 }
                         }
                     }
-                    $key1 ++;
-                    $key2 ++;
+                    $key ++;
                     $out_html .= $one_html;
                 }
                 $content = str_replace($matches[0][$i], $out_html, $content);
@@ -1541,6 +1541,9 @@ class ParserController extends Controller
                     $one_html = $matches[2][$i];
                     for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                         switch ($matches2[1][$j]) {
+                            case 'n':
+                                $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
+                                break;
                             case 'i':
                                 $one_html = str_replace($matches2[0][$j], $key, $one_html);
                                 break;
@@ -1606,6 +1609,9 @@ class ParserController extends Controller
                     for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                         $params = $this->parserParam($matches2[2][$j]);
                         switch ($matches2[1][$j]) {
+                            case 'n':
+                                $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
+                                break;
                             case 'i':
                                 $one_html = str_replace($matches2[0][$j], $key, $one_html);
                                 break;
@@ -1837,6 +1843,44 @@ class ParserController extends Controller
                         $content = str_replace($matches[0][$i], $this->getVar('pageselectbar'), $content);
                         break;
                 }
+            }
+        }
+        return $content;
+    }
+
+    // 解析循环标签
+    public function parserLoopLabel($content)
+    {
+        $pattern = '/\{pboot:loop(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:loop\}/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            for ($i = 0; $i < $count; $i ++) {
+                // 获取调节参数
+                $params = $this->parserParam($matches[1][$i]);
+                $start = 1;
+                $end = $this->config('pagesize');
+                
+                foreach ($params as $key => $value) {
+                    switch ($key) {
+                        case 'start':
+                            $start = $value;
+                            break;
+                        case 'end':
+                            $end = $value;
+                            break;
+                    }
+                }
+                
+                $out_html = '';
+                $key = 1;
+                for ($n = $start; $n <= $end; $n ++) {
+                    $one_html = str_replace('[loop:n]', $key - 1, $matches[2][$i]);
+                    $one_html = str_replace('[loop:i]', $key, $one_html);
+                    $one_html = str_replace('[loop:index]', $n, $one_html);
+                    $out_html .= $one_html;
+                    $key ++;
+                }
+                $content = str_replace($matches[0][$i], $out_html, $content);
             }
         }
         return $content;
