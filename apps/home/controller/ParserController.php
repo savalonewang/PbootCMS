@@ -1015,7 +1015,7 @@ class ParserController extends Controller
                     'd_regular' => '/^[^\s]+$/'
                 );
                 foreach ($_GET as $key => $value) {
-                    if (substr($key, 0, 4) == 'ext_') {
+                    if (substr($key, 0, 4) == 'ext_') { // 其他字段不加入
                         $where2[$key] = filter($key, $cond);
                         if ($_GET[$key] && ! $where2[$key]) {
                             alert_back('您的查询含有非法字符,已被系统拦截');
@@ -1137,7 +1137,7 @@ class ParserController extends Controller
                     'd_regular' => '/^[^\s]+$/'
                 );
                 foreach ($_GET as $key => $value) {
-                    if (substr($key, 0, 4) == 'ext_') {
+                    if (substr($key, 0, 4) == 'ext_') { // 其他字段不加入
                         $where2[$key] = filter($key, $cond);
                         if ($_GET[$key] && ! $where2[$key]) {
                             alert_back('您的查询含有非法字符,已被系统拦截');
@@ -1694,19 +1694,14 @@ class ParserController extends Controller
     {
         $pattern = '/\{pboot:search(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:search\}/';
         $pattern2 = '/\[search:([\w]+)(\s+[^]]+)?\]/';
-        
         if (preg_match_all($pattern, $content, $matches)) {
+            $where = array();
             $count = count($matches[0]);
-            $field = get('field') ?: 'title';
+            $field = get('field');
+            $scode = get('scode');
             $keyword = get('keyword');
             
             for ($i = 0; $i < $count; $i ++) {
-                
-                // 如果关键字为空，直接替换为空结果
-                if (! $keyword) {
-                    $content = str_replace($matches[0][$i], '', $content);
-                    continue;
-                }
                 
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
@@ -1717,6 +1712,12 @@ class ParserController extends Controller
                     switch ($key) {
                         case 'num':
                             $num = $value;
+                            break;
+                        case 'field':
+                            $field = $value;
+                            break;
+                        case 'scode':
+                            $scode = $value;
                             break;
                         case 'order':
                             switch ($value) {
@@ -1737,6 +1738,13 @@ class ParserController extends Controller
                     }
                 }
                 
+                // 匹配单一字段及关键字搜索方式
+                if ($field) {
+                    $where[$field] = $keyword;
+                } elseif ($keyword) {
+                    $where['title'] = $keyword;
+                }
+                
                 // 数据处理
                 $cond = array(
                     'd_source' => 'get',
@@ -1749,18 +1757,11 @@ class ParserController extends Controller
                     }
                 }
                 
-                // 根据参数设定分类
-                if (isset($where['scode'])) {
-                    $scode = $where['scode'];
-                } else {
-                    $scode = '';
-                }
-                
                 // 去除特殊键值
                 unset($where['keyword']);
                 unset($where['field']);
-                unset($where['page']);
                 unset($where['scode']);
+                unset($where['page']);
                 unset($where['from']);
                 unset($where['isappinstalled']);
                 
