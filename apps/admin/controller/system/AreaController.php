@@ -129,7 +129,7 @@ class AreaController extends Controller
                     session('area_tree', $model->getUserAreaTree($areas, 0, 'acode', 'pcode', 'son', $acodes)); // 更新当前用户的区域树
                 }
                 $this->log('新增数据区域' . $acode . '成功！');
-                cache_config(true); // 自动缓存基础信息
+                path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
                 if (! ! $backurl = get('backurl')) {
                     success('新增成功！', $backurl);
                 } else {
@@ -187,7 +187,7 @@ class AreaController extends Controller
         }
         
         if ($this->model->delArea($acode)) {
-            cache_config(true); // 自动缓存基础信息
+            path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
             $this->log('删除数据区域' . $acode . '成功！');
             session_unset();
             success('删除成功,请重新登陆', url('/admin/index/index'));
@@ -254,7 +254,7 @@ class AreaController extends Controller
                     session('area_tree', $model->getUserAreaTree($areas, 0, 'acode', 'pcode', 'son', $acodes)); // 更新当前用户的区域树
                 }
                 $this->log('修改数据区域' . $acode . '成功！');
-                cache_config(true); // 自动缓存基础信息
+                path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
                 if (! ! $backurl = get('backurl')) {
                     success('修改成功！', $backurl);
                 } else {

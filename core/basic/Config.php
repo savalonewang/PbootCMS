@@ -53,7 +53,7 @@ class Config
     }
 
     // 写入配置文件
-    public static function set($itemName, array $data, $multistage = true)
+    public static function set($itemName, array $data, $multistage = false)
     {
         if ($data) {
             $path = RUN_PATH . '/config/' . $itemName . '.php';
@@ -120,19 +120,6 @@ class Config
             $files = scandir($ext_path);
             for ($i = 0; $i < count($files); $i ++) {
                 $file = $ext_path . '/' . $files[$i];
-                if (is_file($file)) {
-                    $config = require $file;
-                    $configs = mult_array_merge($configs, $config);
-                }
-            }
-        }
-        
-        // 载入缓存的配置文件
-        $cache_path = RUN_PATH . '/config';
-        if (function_exists('scandir') && is_dir($cache_path)) {
-            $files = scandir($cache_path);
-            for ($i = 0; $i < count($files); $i ++) {
-                $file = $cache_path . '/' . $files[$i];
                 if (is_file($file)) {
                     $config = require $file;
                     $configs = mult_array_merge($configs, $config);

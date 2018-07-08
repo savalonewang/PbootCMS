@@ -49,9 +49,9 @@ class ConfigModel extends Model
     }
 
     // 获取主题
-    public function getTheme()
+    public function getTheme($acode)
     {
-        return parent::table('ay_site')->where("acode='" . session('lg') . "'")->value('theme');
+        return parent::table('ay_site')->where("acode='" . $acode . "'")->value('theme');
     }
 
     // 获取配置参数

@@ -220,7 +220,7 @@ class IndexController extends Controller
     // 清理缓存
     public function clearCache()
     {
-        if (path_delete(RUN_PATH . '/cache') && path_delete(RUN_PATH . '/complile')) {
+        if (path_delete(RUN_PATH . '/cache') && path_delete(RUN_PATH . '/complile') && path_delete(RUN_PATH . '/config')) {
             $this->log('清理缓存成功！');
             alert_back('清理缓存成功！');
         } else {

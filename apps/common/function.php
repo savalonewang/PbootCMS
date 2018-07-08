@@ -181,8 +181,9 @@ function get_btn($btnName, $theme, $btnAction, $idValue, $id = 'id')
 // 缓存基础信息
 function cache_config($refresh = false)
 {
-    // 缓存站点基础信息
-    $path = RUN_PATH . '/config/config.php';
+    // 判断是否已经设置语言
+    $lg = isset($_SESSION['lg']) ? session('lg') : '';
+    $path = RUN_PATH . '/config/' . md5('config' . $lg) . '.php';
     if (! file_exists($path) || $refresh) {
         $model = model('admin.system.Config');
         
@@ -196,13 +197,20 @@ function cache_config($refresh = false)
         }
         $data['lgs'] = $area;
         
+        // 获取默认语言，下一步获取主题需要
+        if (! $lg) {
+            $lg = $area[0]['acode'];
+        }
+        
         // 获取系统设置的主题
-        if (! ! $theme = $model->getTheme()) {
+        if (! ! $theme = $model->getTheme($lg)) {
             $data['theme'] = $theme;
         } else {
             $data['theme'] = 'default';
         }
-        Config::set('config', $data, false);
+        Config::set(md5('config' . $lg), $data, false);
+    } else {
+        Config::assign($path);
     }
 }
 

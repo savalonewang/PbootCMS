@@ -61,7 +61,7 @@ class ConfigController extends Controller
             }
             
             $this->log('修改参数配置成功！');
-            cache_config(true); // 自动缓存基础信息
+            path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
             switch (post('submit')) {
                 case 'api':
                     success('修改成功！', url('/admin/Config/index#tab=t2', false));
