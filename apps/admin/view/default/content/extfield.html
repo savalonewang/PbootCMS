@@ -42,6 +42,7 @@
 	                    		{if($value->type==6)}附件上传{/if}
 	                    		{if($value->type==7)}日期选择{/if}
 	                    		{if($value->type==8)}编辑器{/if}
+	                    		{if($value->type==9)}下拉选择{/if}
 							</td>
 	                        <td>
 	                            {fun=get_btn_del($value->id)}
@@ -94,6 +95,7 @@
 		                    	<option value="6">附件上传</option>
 		                    	<option value="7">日期选择</option>
 		                    	<option value="8">编辑器</option>
+		                    	<option value="9">下拉选择</option>
 		                    </select>
 	                     </div>
 	                </div>
@@ -174,6 +176,7 @@
 	                    		<option value="4" {if([$extfield->type]==4)}selected{/if}>多选按钮</option>
 	                    		<option value="5" {if([$extfield->type]==5)}selected{/if}>图片上传</option>
 	                    		<option value="6" {if([$extfield->type]==6)}selected{/if}>附件上传</option>
+	                    		<option value="9" {if([$extfield->type]==9)}selected{/if}>下拉选择</option>
 	                    	{/if}
 	                    </select>
                      </div>

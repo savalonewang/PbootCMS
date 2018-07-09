@@ -238,6 +238,22 @@
 				                </div>
 			                	{/if}
 			                	
+			                	{if($value->type==9)}<!-- 下拉 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+			                			<select name="[value->name]">
+			                				{php}
+				                				$selects=explode(',',$value->value);
+				                				foreach ($selects as $value2) {
+	                								echo '<option value="'.$value2.'">'.$value2.'</option>';
+	            								}
+	            						     {/php}
+			                			</select>
+				                	</div>
+				                 </div>
+			                	 {/if}
+			                	
 			                {/foreach}
 			                
 			                <div class="layui-form-item">
@@ -536,6 +552,27 @@
 				                	</div>
 				                </div>
 			                	{/if}
+			                	
+			                	{if($value->type==9)}<!-- 下拉 -->
+			                	<div class="layui-form-item">
+			                		<label class="layui-form-label">[value->description]</label>
+			                		<div class="layui-input-block">
+			                			<select name="[value->name]">
+			                				{php}
+				                				$selects=explode(',',$value->value);
+				                				$name=$value->name;
+				                				foreach ($selects as $value2) {
+				                					if($this->vars['content']->$name==$value2){
+				                						echo '<option value="'.$value2.'" selected>'.$value2.'</option>';
+	                								}else{
+	                									echo '<option value="'.$value2.'">'.$value2.'</option>';
+	                								}
+	            								}
+	            						    {/php}
+			                			</select>
+				                	</div>
+				                 </div>
+			                	 {/if}
 			                	
 			                {/foreach}
 			                
