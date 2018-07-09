@@ -241,7 +241,7 @@ class CmsModel extends Model
     }
 
     // 列表内容
-    public function getList($acode, $scode, $num, $order, $field = '', $keyword = '')
+    public function getList($acode, $scode, $num, $order, $where = array())
     {
         $fields = array(
             'a.*',
@@ -272,14 +272,22 @@ class CmsModel extends Model
                 'LEFT'
             )
         );
-        $this->scodes = array(); // 先清空
-        $scodes = $this->getSubScodes($scode);
         
-        // 拼接条件
-        $where1 = array(
-            "a.scode in (" . implode_quot(',', $scodes) . ")",
-            "a.subscode='$scode'"
-        );
+        $where1 = '';
+        if ($scode) {
+            // 获取所有子类分类编码
+            $this->scodes = array(); // 先清空
+            $scode = explode(',', $scode);
+            foreach ($scode as $value) {
+                $scodes = $this->getSubScodes(trim($value));
+            }
+            // 拼接条件
+            $where1 = array(
+                "a.scode in (" . implode_quot(',', $scodes) . ")",
+                "a.subscode='$scode'"
+            );
+        }
+        
         $where2 = array(
             "a.acode='" . $acode . "'",
             'a.status=1',
@@ -289,7 +297,7 @@ class CmsModel extends Model
         return parent::table('ay_content a')->field($fields)
             ->where($where1, 'OR')
             ->where($where2)
-            ->like('a.' . $field, $keyword)
+            ->where($where, 'AND', 'AND', true)
             ->join($join)
             ->order($order)
             ->page(1, $num)
@@ -298,7 +306,7 @@ class CmsModel extends Model
     }
 
     // 指定列表内容，不带分页
-    public function getSpecifyList($acode, $scode, $num, $order, $field = '', $keyword = '')
+    public function getSpecifyList($acode, $scode, $num, $order, $where = array())
     {
         $fields = array(
             'a.*',
@@ -330,7 +338,12 @@ class CmsModel extends Model
             )
         );
         $this->scodes = array(); // 先清空
-        $scodes = $this->getSubScodes($scode);
+                                 
+        // 获取多分类子类
+        $scode = explode(',', $scode);
+        foreach ($scode as $value) {
+            $scodes = $this->getSubScodes(trim($value));
+        }
         
         // 拼接条件
         $where1 = array(
@@ -346,7 +359,7 @@ class CmsModel extends Model
         return parent::table('ay_content a')->field($fields)
             ->where($where1, 'OR')
             ->where($where2)
-            ->like('a.' . $field, $keyword)
+            ->where($where, 'AND', 'AND', true)
             ->join($join)
             ->order($order)
             ->limit($num)
@@ -410,71 +423,6 @@ class CmsModel extends Model
             ->where('status=1')
             ->value('pics');
         return $result;
-    }
-
-    // 获取搜索内容
-    public function getSearch($acode, $field, $keyword, $where, $num, $order)
-    {
-        // 此处不使用join，避免字段查询错误问题
-        $fields = array(
-            'a.*',
-            'b.name as sortname',
-            'c.name as subsortname',
-            'd.type',
-            'e.*'
-        );
-        $join = array(
-            array(
-                'ay_content_sort b',
-                'a.scode=b.scode',
-                'LEFT'
-            ),
-            array(
-                'ay_content_sort c',
-                'a.subscode=c.scode',
-                'LEFT'
-            ),
-            array(
-                'ay_model d',
-                'b.mcode=d.mcode',
-                'LEFT'
-            ),
-            array(
-                'ay_content_ext e',
-                'a.id=e.contentid',
-                'LEFT'
-            )
-        );
-        
-        // 如果有限定分类，则获取子类集
-        $this->scodes = array();
-        
-        // 拼接条件
-        $where1 = '';
-        if (isset($where['scode'])) {
-            $scodes = $this->getSubScodes($where['scode']);
-            $where1 = array(
-                "a.scode in (" . implode_quot(',', $scodes) . ")",
-                "a.subscode='" . $where['scode'] . "'"
-            );
-            unset($where['scode']);
-        }
-        
-        $where2 = array(
-            "a.acode='" . $acode . "'",
-            'a.status=1'
-        );
-        
-        return parent::table('ay_content a')->field($fields)
-            ->where($where1, 'OR')
-            ->where($where)
-            ->like($field, $keyword)
-            ->join($join)
-            ->where($where2)
-            ->order($order)
-            ->page(1, $num)
-            ->decode()
-            ->select();
     }
 
     // 幻灯片

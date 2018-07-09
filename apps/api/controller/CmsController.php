@@ -17,16 +17,19 @@ class CmsController extends Controller
 
     protected $model;
 
+    protected $lg;
+
     public function __construct()
     {
         $this->model = new CmsModel();
+        $this->lg = $this->config('lgs.0.acode');
     }
 
     // 站点基础信息
     public function site()
     {
         // 获取参数
-        $acode = get('acode') ?: 'cn';
+        $acode = get('acode') ?: $this->lg;
         
         // 读取数据
         if (! $name = get('name')) {
@@ -43,7 +46,7 @@ class CmsController extends Controller
     public function company()
     {
         // 获取参数
-        $acode = get('acode') ?: 'cn';
+        $acode = get('acode') ?: $this->lg;
         
         // 读取数据
         if (! $name = get('name')) {
@@ -74,7 +77,7 @@ class CmsController extends Controller
     public function nav()
     {
         // 获取参数
-        $acode = get('acode') ?: 'cn';
+        $acode = get('acode') ?: $this->lg;
         
         // 获取栏目树
         if (! $scode = get('scode')) {
@@ -90,7 +93,7 @@ class CmsController extends Controller
     public function position()
     {
         // 获取参数
-        $acode = get('acode') ?: 'cn';
+        $acode = get('acode') ?: $this->lg;
         
         if (! ! $scode = get('scode')) {
             $data = $this->model->getPosition($acode, $scode);
@@ -104,7 +107,7 @@ class CmsController extends Controller
     public function sort()
     {
         // 获取参数
-        $acode = get('acode') ?: 'cn';
+        $acode = get('acode') ?: $this->lg;
         
         if (! ! $scode = get('scode')) {
             $data = $this->model->getSort($acode, $scode);
@@ -118,7 +121,7 @@ class CmsController extends Controller
     public function pics()
     {
         if (! ! $id = get('id')) {
-            $acode = get('acode') ?: 'cn';
+            $acode = get('acode') ?: $this->lg;
             if (! ! $pics = $this->model->getContentPics($acode, $id)) {
                 $pics = explode(',', $pics);
             } else {
@@ -134,7 +137,7 @@ class CmsController extends Controller
     public function slide()
     {
         if (! ! $gid = get('gid')) {
-            $acode = get('acode') ?: 'cn';
+            $acode = get('acode') ?: $this->lg;
             $num = get('num') ?: 5;
             $data = $this->model->getSlides($acode, $gid, $num);
             json(1, $data);
@@ -147,7 +150,7 @@ class CmsController extends Controller
     public function link()
     {
         if (! ! $gid = get('gid')) {
-            $acode = get('acode') ?: 'cn';
+            $acode = get('acode') ?: $this->lg;
             $num = get('num') ?: 10;
             $data = $this->model->getLinks($acode, $gid, $num);
             json(1, $data);
@@ -163,9 +166,10 @@ class CmsController extends Controller
             json(0, '请使用POST提交！');
         }
         
-        $acode = get('acode') ?: 'cn';
+        $acode = get('acode') ?: $this->lg;
         $num = get('num') ?: $this->config('pagesize');
         $order = get('order') ?: 'date';
+        
         switch ($order) {
             case 'date':
             case 'istop':
@@ -181,23 +185,24 @@ class CmsController extends Controller
         }
         $order .= ",sorting ASC,id DESC";
         
-        // 获取参数
-        $field = post('field') ?: 'title';
+        // 获取主要参数
+        $field = post('field');
         $keyword = post('keyword');
+        $scode = post('scode');
         
-        // 如果关键字为空，直接替换为空结果
-        if (! $keyword) {
-            json(0, '必须传递关键字keyword参数');
+        // 匹配单一字段及关键字搜索方式
+        $where = array();
+        if ($field && $keyword) {
+            $where[$field] = $keyword;
+        } elseif ($keyword) {
+            $where['title'] = $keyword;
         }
         
-        // 转义字符
-        $where = escape_string($_POST);
-        
+        // 数据处理
         $cond = array(
             'd_source' => 'post',
             'd_regular' => '/^[^\s]+$/'
         );
-        
         foreach ($_POST as $key => $value) {
             $where[$key] = filter($key, $cond);
             if ($_POST[$key] && ! $where[$key]) {
@@ -208,22 +213,25 @@ class CmsController extends Controller
         // 去除特殊键值
         unset($where['keyword']);
         unset($where['field']);
+        unset($where['scode']);
         unset($where['page']);
         unset($where['appid']);
         unset($where['timestamp']);
         unset($where['signature']);
+        unset($where2['from']);
+        unset($where2['isappinstalled']);
         
         // 读取数据
-        $data = $this->model->getSearch($acode, $field, $keyword, $where, $num, $order);
+        $data = $this->model->getList($acode, $scode, $num, $order, $where);
         
-        if ($data) {
-            if ($data->outlink) {
-                $data->link = $data->outlink;
+        foreach ($data as $key => $value) {
+            if ($value->outlink) {
+                $data[$key]->link = $data[$key]->outlink;
             } else {
-                $data->link = url('/api/list/index/scode/' . $data->id, false);
+                $data[$key]->link = url('/api/list/index/scode/' . $data[$key]->id, false);
             }
-            $data->likeslink = url('/home/Do/likes/id/' . $data->id, false);
-            $data->opposelink = url('/home/Do/oppose/id/' . $data->id, false);
+            $data[$key]->likeslink = url('/home/Do/likes/id/' . $data[$key]->id, false);
+            $data[$key]->opposelink = url('/home/Do/oppose/id/' . $data[$key]->id, false);
         }
         
         // 输出数据
@@ -238,7 +246,7 @@ class CmsController extends Controller
     public function msg()
     {
         // 获取参数
-        $acode = get('acode') ?: 'cn';
+        $acode = get('acode') ?: $this->lg;
         $num = get('num') ?: $this->config('pagesize');
         
         // 获取栏目数
@@ -256,7 +264,7 @@ class CmsController extends Controller
     {
         if ($_POST) {
             
-            $acode = get('acode') ?: 'cn';
+            $acode = get('acode') ?: $this->lg;
             $contacts = post('contacts');
             $mobile = post('mobile');
             $content = post('content');

@@ -25,7 +25,7 @@ class ListController extends Controller
     public function index()
     {
         // 获取参数
-        $acode = get('acode') ?: 'cn';
+        $acode = get('acode') ?: $this->config('lgs.0.acode');
         $scode = get('scode') ?: - 1;
         $num = get('num') ?: $this->config('pagesize');
         $order = get('order') ?: 'date';
@@ -47,14 +47,14 @@ class ListController extends Controller
         // 读取数据
         $data = $this->model->getList($acode, $scode, $num, $order);
         
-        if ($data) {
-            if ($data->outlink) {
-                $data->link = $data->outlink;
+        foreach ($data as $key => $value) {
+            if ($value->outlink) {
+                $data[$key]->link = $data->outlink;
             } else {
-                $data->link = url('/api/list/index/scode/' . $data->id, false);
+                $data[$key]->link = url('/api/list/index/scode/' . $data[$key]->id, false);
             }
-            $data->likeslink = url('/home/Do/likes/id/' . $data->id, false);
-            $data->opposelink = url('/home/Do/oppose/id/' . $data->id, false);
+            $data[$key]->likeslink = url('/home/Do/likes/id/' . $data[$key]->id, false);
+            $data[$key]->opposelink = url('/home/Do/oppose/id/' . $data[$key]->id, false);
         }
         
         // 输出数据
