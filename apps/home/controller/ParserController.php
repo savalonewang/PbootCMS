@@ -1701,7 +1701,6 @@ class ParserController extends Controller
         $pattern = '/\{pboot:search(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:search\}/';
         $pattern2 = '/\[search:([\w]+)(\s+[^]]+)?\]/';
         if (preg_match_all($pattern, $content, $matches)) {
-            $where = array();
             $count = count($matches[0]);
             $field = get('field');
             $scode = get('scode');
@@ -1713,6 +1712,7 @@ class ParserController extends Controller
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize');
                 $order = 'date desc';
+                $filter = '';
                 
                 foreach ($params as $key => $value) {
                     switch ($key) {
@@ -1724,6 +1724,9 @@ class ParserController extends Controller
                             break;
                         case 'scode':
                             $scode = $value;
+                            break;
+                        case 'filter':
+                            $filter = $value;
                             break;
                         case 'order':
                             switch ($value) {
@@ -1744,11 +1747,25 @@ class ParserController extends Controller
                     }
                 }
                 
+                // 内容过滤筛选
+                $where1 = array();
+                if ($filter) {
+                    $filter = explode('|', $filter);
+                    if (count($filter) == 2) {
+                        $keys = explode(',', $filter[1]);
+                        foreach ($keys as $value) {
+                            if ($value)
+                                $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
+                        }
+                    }
+                }
+                
                 // 匹配单一字段及关键字搜索方式
-                if ($field) {
-                    $where[$field] = $keyword;
+                $where2 = array();
+                if ($field && $keyword) {
+                    $where2[$field] = $keyword;
                 } elseif ($keyword) {
-                    $where['title'] = $keyword;
+                    $where2['title'] = $keyword;
                 }
                 
                 // 数据处理
@@ -1757,22 +1774,22 @@ class ParserController extends Controller
                     'd_regular' => '/^[^\s]+$/'
                 );
                 foreach ($_GET as $key => $value) {
-                    $where[$key] = filter($key, $cond);
-                    if ($_GET[$key] && ! $where[$key]) {
+                    $where2[$key] = filter($key, $cond);
+                    if ($_GET[$key] && ! $where2[$key]) {
                         alert_back('您的查询含有非法字符,已被系统拦截');
                     }
                 }
                 
                 // 去除特殊键值
-                unset($where['keyword']);
-                unset($where['field']);
-                unset($where['scode']);
-                unset($where['page']);
-                unset($where['from']);
-                unset($where['isappinstalled']);
+                unset($where2['keyword']);
+                unset($where2['field']);
+                unset($where2['scode']);
+                unset($where2['page']);
+                unset($where2['from']);
+                unset($where2['isappinstalled']);
                 
                 // 读取数据
-                if (! $data = $this->model->getList($scode, $num, $order, '', $where)) {
+                if (! $data = $this->model->getList($scode, $num, $order, $where1, $where2)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
