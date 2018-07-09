@@ -60,13 +60,14 @@ class IndexController extends Controller
         }
         
         $this->assign('shortcuts', session('shortcuts'));
-        $security = array();
+        $dbsecurity = true;
+        // 如果是sqlite数据库，并且路径为默认的，则标记为不安全
         if ($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') {
-            if ($this->config('database.dbname') != '/data/#pbootcms.db' && $this->config('database.dbname') != '/data/pbootcms.db') {
-                $security['dbname'] = true;
+            if ($this->config('database.dbname') == '/data/#pbootcms.db' || $this->config('database.dbname') == '/data/pbootcms.db') {
+                $dbsecurity = false;
             }
         }
-        $this->assign('security', $security);
+        $this->assign('dbsecurity', $dbsecurity);
         $this->assign('server', get_server_info());
         $this->display('system/home.html');
     }

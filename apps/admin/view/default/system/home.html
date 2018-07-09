@@ -2,7 +2,7 @@
   
 <div class="layui-body">
 	<div class="layui-row" style="color:red;">
-		{if(![$security['dbname']])}
+		{if(![$dbsecurity])}
 		<p>
 			<i class="fa fa-info-circle" aria-hidden="true"></i>
 			您的数据库文件存在安全隐患，可能被下载，请尽快修改数据库路径！<a class="layui-btn  layui-btn-sm" href="?action=moddb">自动修改</a>
