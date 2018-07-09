@@ -146,6 +146,7 @@
 	            						     {php}
 				                				$checkboxs=explode(',',$value->value);
 				                				$name=$value->name;
+				                				echo '<input name="'.$value->name.'" type="hidden">';//占位清空
 				                				$values=explode(',',$this->vars['content']->$name);
 				                				foreach ($checkboxs as $value2) {
 				                					if(in_array($value2,$values)){
