@@ -58,15 +58,17 @@
 /*菜单显示按钮*/
 .menu {
     position: absolute !important;
-    left :210px;
-    line-height:50px;
+    left :200px;
+    top:10px;
+    line-height:30px;
     color:#ccc;
+    text-align:center;
     z-index:999;
 }
 
 .menu li{
-	float:left;
-	margin-right:20px;
+	width:30px;
+	background:#2F4056;
 }
 
 .menu  a{
