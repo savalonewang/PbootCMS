@@ -1,4 +1,4 @@
-﻿PbootCMS V1.1.5 build 2018-07-11
+﻿PbootCMS V1.1.6 build 2018-07-12
 1、优化编辑器配置及安全加强;
 2、新增Gzip页面压缩功能及后台开关；
 3、调整runtime标签展示方式；
