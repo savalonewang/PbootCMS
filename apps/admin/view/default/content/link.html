@@ -38,6 +38,7 @@
 	  	</div>
 	  	<div class="layui-tab-item">
 	  		 <form action="{url./admin/Link/add}" method="post" class="layui-form">
+	  		 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  		 	<div class="layui-form-item">
                      <label class="layui-form-label">分组</label>
                      <div class="layui-input-block">
@@ -101,6 +102,7 @@
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
 	  		 <form action="{url./admin/Link/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
+	  		 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  		 	<div class="layui-form-item">
                      <label class="layui-form-label">分组</label>
                      <div class="layui-input-block">

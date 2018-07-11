@@ -58,6 +58,7 @@
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
 	  		 <form action="{url./admin/Message/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
+	  		 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  		 	<div class="layui-form-item">
                      <label class="layui-form-label">回复内容</label>
                      <div class="layui-input-block">

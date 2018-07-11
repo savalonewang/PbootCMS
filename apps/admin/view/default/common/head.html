@@ -35,6 +35,7 @@
 	</ul>
 	{if(![$one_area])}
 	<form method="post" action="{url./admin/index/area}" class="area-select">
+		<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		<div class="layui-col-xs8">
 		   <select name="acode">
 		       {$area_html}

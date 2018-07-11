@@ -10,6 +10,7 @@
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
 	  	   		<form action="{url./admin/Content/index/mcode/'.get('mcode').'}" method="get" class="layui-form">
+		  	   		<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	   		<div class="layui-form-item nospace">
 		  	   			<div class="layui-input-inline">
 					       <select name="scode">
@@ -27,6 +28,7 @@
                 </form>
                 
 	  	   		<form action="{url./admin/Content/mod}" method="post" id="contentForm" name="contentForm" class="layui-form" onkeydown="if(event.keyCode==13) return false;">
+		            <input type="hidden" name="formcheck" value="{$formcheck}" > 
 		            <table class="layui-table">
 		            	<thead>
 		                    <tr>
@@ -112,6 +114,7 @@
 	  	   
 	  	   <div class="layui-tab-item">
 	  	  		<form action="{url./admin/Content/add/mcode/'.get('mcode').'}?{$server.QUERY_STRING}" method="post" class="layui-form" lay-filter="content" id="edit">
+		  	     	<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	     	<div class="layui-tab">
 					  <ul class="layui-tab-title">
 					    <li class="layui-this">基本内容</li>
@@ -410,6 +413,7 @@
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
 	  		<form action="{url./admin/Content/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form" id="edit">
+	  			<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  			<div class="layui-tab">
 					  <ul class="layui-tab-title">
 					    <li class="layui-this">基本内容</li>

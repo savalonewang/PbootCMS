@@ -10,7 +10,7 @@
 		  <div class="layui-tab-content">
 		  	   <div class="layui-tab-item layui-show">
 		  	   	   <form action="{url./admin/Config/index}" method="post" class="layui-form">
-		  	   	   
+		  	   	   <input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	   	   <div class="layui-form-item">
 	                     <label class="layui-form-label">调试模式</label>
 	                     <div class="layui-input-block">
@@ -115,6 +115,7 @@
 		  	   
 		  	   <div class="layui-tab-item">
 		  	   	  <form action="{url./admin/Config/index}" method="post" class="layui-form">
+		  	   	  	<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	   		<div class="layui-form-item">
 	                     <label class="layui-form-label">API状态</label>
 	                     <div class="layui-input-block">
@@ -167,6 +168,7 @@
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
 	  		<form action="{url./admin/Config/email}" method="post" class="layui-form">
+	  			<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	 	   		<div class="layui-form-item">
 	                    <label class="layui-form-label">SMTP服务器</label>
 	                   <div class="layui-input-block">

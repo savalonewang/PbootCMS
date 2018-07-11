@@ -42,6 +42,7 @@
 	  	   
 	  	    <div class="layui-tab-item">
 	   			<form action="{url./admin/Form/add/action/addform}" method="post" class="layui-form">
+	   				<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	   				<div class="layui-form-item">
 	                     <label class="layui-form-label">表单名称</label>
 	                     <div class="layui-input-block">
@@ -156,7 +157,7 @@
 	  	   
 	  	   <div class="layui-tab-item">
 	   			<form action="{url./admin/Form/add}" method="post" class="layui-form">
-
+					<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	                <div class="layui-form-item">
 	                     <label class="layui-form-label">字段描述</label>
 	                     <div class="layui-input-block">
@@ -218,6 +219,7 @@
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
 	  		<form action="{url./admin/Form/mod/id/'.[$get.id].'/action/modform}?{$server.QUERY_STRING}" method="post" class="layui-form">
+	  			<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  			<div class="layui-form-item">
                      <label class="layui-form-label">表单名称</label>
                      <div class="layui-input-block">
@@ -253,7 +255,7 @@
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
 	  		<form action="{url./admin/Form/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
-	  		
+	  			<input type="hidden" name="formcheck" value="{$formcheck}" > 
                 <div class="layui-form-item">
                      <label class="layui-form-label">字段描述</label>
                      <div class="layui-input-block">

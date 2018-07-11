@@ -11,6 +11,7 @@
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
 	  	   		<form action="{url./admin/type/index}" method="get" class="layui-form">
+	  	   			<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	   		<div class="layui-form-item nospace">
 		  	   			<div class="layui-input-inline">
 					       <select name="field" lay-verify="required">
@@ -72,6 +73,7 @@
 			
 			<div class="layui-tab-item">
 				 <form action="{url./admin/type/add}?{$server.QUERY_STRING}" method="post" class="layui-form">
+				 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
 				 	<div class="layui-form-item">
 	                     <label class="layui-form-label">类型编码</label>
 	                     <div class="layui-input-block">
@@ -135,6 +137,7 @@
 		<div class="layui-tab-content">
 		   <div class="layui-tab-item layui-show">
 		   		 <form action="{url./admin/type/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
+					<input type="hidden" name="formcheck" value="{$formcheck}" > 
 					<div class="layui-form-item">
 	                     <label class="layui-form-label">类型名称</label>
 	                     <div class="layui-input-block">

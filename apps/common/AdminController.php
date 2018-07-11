@@ -46,6 +46,16 @@ class AdminController extends Controller
         // 内容模型菜单注入
         $models = model('admin.content.Model');
         $this->assign('menu_models', $models->getSelectMunu());
+        
+        // 表单提交校验
+        if ($_REQUEST) {
+            if (session('formcheck') != $_REQUEST['formcheck']) {
+                alert_back('表单提交验失败！');
+            }
+        }
+        $uniqid = get_uniqid();
+        session('formcheck', $uniqid);
+        $this->assign('formcheck', $uniqid);
     }
 
     // 后台用户登录状态检查

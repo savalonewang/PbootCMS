@@ -10,6 +10,7 @@
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
 	  	   		 <form action="{url./admin/ContentSort/mod}" method="post" id="sortForm" name="sortForm">
+	  	   		 <input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  	   		 <table class="layui-table" id="sortTable">
 	  	   		 	  <thead>
 		                    <tr>
@@ -83,6 +84,7 @@
 	  	    
 	  	     <div class="layui-tab-item">
 	  	     	<form action="{url./admin/ContentSort/add}" method="post" class="layui-form" lay-filter="sort">
+		  	     	<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	     	<div class="layui-tab">
 					  <ul class="layui-tab-title">
 					    <li class="layui-this">基本选项</li>
@@ -233,6 +235,7 @@
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
 	  		<form action="{url./admin/ContentSort/mod/scode/'.[$get.scode].'}" method="post" class="layui-form" lay-filter="sort">
+	  	     	<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  	     	<div class="layui-tab">
 				  <ul class="layui-tab-title">
 				    <li class="layui-this">基本选项</li>

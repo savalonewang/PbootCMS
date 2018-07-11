@@ -9,6 +9,7 @@
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
 	  	   		<form action="{url./admin/Single/index}" method="get" class="layui-form">
+		  	   		<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	   		<div class="layui-form-item nospace">
 		  	   			<div class="layui-input-inline">
 					       <select name="field" class="form-control input-sm" style="width:auto;">
@@ -83,6 +84,7 @@
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
 	  		<form action="{url./admin/Single/mod/id/'.[$get.id].'}?{$server.QUERY_STRING}" method="post" class="layui-form" id="edit">
+	  			<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  			<div class="layui-tab">
 					  <ul class="layui-tab-title">
 					    <li class="layui-this">基本内容</li>
