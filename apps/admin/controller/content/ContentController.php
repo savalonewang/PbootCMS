@@ -100,6 +100,11 @@ class ContentController extends Controller
                 $description = mb_substr(strip_tags($_POST['content']), 0, 100, 'utf-8');
             }
             
+            // 缩放缩略图
+            if ($ico) {
+                resize_img(ROOT_PATH . $ico, '', $this->config('ico.max_width'), $this->config('ico.max_height'));
+            }
+            
             // 检查自定义文件名称
             if ($filename) {
                 while ($this->model->checkFilename("filename='$filename'")) {
@@ -354,6 +359,11 @@ class ContentController extends Controller
             // 自动提起前一百个字符为描述
             if (! $description && isset($_POST['content'])) {
                 $description = mb_substr(strip_tags($_POST['content']), 0, 100, 'utf-8');
+            }
+            
+            // 缩放缩略图
+            if ($ico) {
+                resize_img(ROOT_PATH . $ico, '', $this->config('ico.max_width'), $this->config('ico.max_height'));
             }
             
             if ($filename) {

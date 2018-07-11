@@ -138,6 +138,11 @@ class ContentSortController extends Controller
                 alert_back('栏目类型不能为空！');
             }
             
+            // 缩放缩略图
+            if ($ico) {
+                resize_img(ROOT_PATH . $ico, '', $this->config('ico.max_width'), $this->config('ico.max_height'));
+            }
+            
             // 检查编码
             if ($this->model->checkSort("scode='$scode'")) {
                 alert_back('该内容栏目编号已经存在，不能再使用！');
@@ -329,6 +334,11 @@ class ContentSortController extends Controller
             
             if (! $type) {
                 alert_back('栏目类型不能为空！');
+            }
+            
+            // 缩放缩略图
+            if ($ico) {
+                resize_img(ROOT_PATH . $ico, '', $this->config('ico.max_width'), $this->config('ico.max_height'));
             }
             
             if ($filename) {

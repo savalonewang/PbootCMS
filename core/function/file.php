@@ -285,7 +285,13 @@ function resize_img($src_image, $out_image = null, $max_width = null, $max_heigh
     }
     
     // 求缩放比例
-    $scale = min($max_width / $width, $max_height / $height);
+    if ($max_width && $max_height) {
+        $scale = min($max_width / $width, $max_height / $height);
+    } elseif ($max_width) {
+        $scale = $max_width / $width;
+    } elseif ($max_height) {
+        $scale = $max_height / $height;
+    }
     
     // 检查输出目录
     check_dir(dirname($out_image), true);

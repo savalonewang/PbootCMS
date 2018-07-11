@@ -62,6 +62,11 @@ class LinkController extends Controller
                 alert_back('链接不能为空！');
             }
             
+            // logo图缩放
+            if ($logo) {
+                resize_img(ROOT_PATH . $logo, '', $this->config('ico.max_width'), $this->config('ico.max_height'));
+            }
+            
             // 构建数据
             $data = array(
                 'acode' => session('acode'),
@@ -142,6 +147,11 @@ class LinkController extends Controller
             
             if (! $link) {
                 alert_back('链接不能为空！');
+            }
+            
+            // logo图缩放
+            if ($logo) {
+                resize_img(ROOT_PATH . $logo, '', $this->config('ico.max_width'), $this->config('ico.max_height'));
             }
             
             // 构建数据

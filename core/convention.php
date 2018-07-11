@@ -81,7 +81,13 @@ return array(
     'upload' => array(
         'format' => 'jpg,png,gif,xls,xlsx,doc,docx,ppt,pptx,rar,zip,pdf,txt,mp4,avi,flv,rmvb,mp3',
         'max_width' => '1920',
-        'max_height' => '1920'
+        'max_height' => ''
+    ),
+    
+    // 缩略图配置
+    'ico' => array(
+        'max_width' => '500',
+        'max_height' => '500'
     ),
     
     // 数据库连接配置,主从配置时,如果配置多台从服务器，通过在slave下数组配置slave1，slave2...

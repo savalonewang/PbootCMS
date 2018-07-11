@@ -25,7 +25,13 @@ return array(
     'upload' => array(
         'format' => 'jpg,png,gif,xls,xlsx,doc,docx,ppt,pptx,rar,zip,pdf,txt,mp4,avi,flv,rmvb,mp3',
         'max_width' => '1920',
-        'max_height' => '1920'
+        'max_height' => ''
+    ),
+    
+    // 缩略图配置
+    'ico' => array(
+        'max_width' => '500',
+        'max_height' => '500'
     ),
     
     // 模块模板路径定义

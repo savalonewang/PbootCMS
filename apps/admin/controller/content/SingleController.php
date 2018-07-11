@@ -103,6 +103,11 @@ class SingleController extends Controller
                 $description = mb_substr(strip_tags($_POST['content']), 0, 100, 'utf-8');
             }
             
+            // 缩放缩略图
+            if ($ico) {
+                resize_img(ROOT_PATH . $ico, '', $this->config('ico.max_width'), $this->config('ico.max_height'));
+            }
+            
             // 构建数据
             $data = array(
                 'title' => $title,
