@@ -21,7 +21,7 @@ class Controller
         $view = View::getInstance();
         $content = $view->parser($file);
         $content = $this->runtime($content);
-        echo $content;
+        echo $this->gzip($content);
     }
 
     // 解析模板
@@ -37,6 +37,7 @@ class Controller
         $view = View::getInstance();
         $view->cache($content);
         $content = $this->runtime($content);
+        $content = $this->gzip($content);
         if ($display) {
             echo $content;
         } else {
@@ -94,6 +95,18 @@ class Controller
     private function runtime($content)
     {
         return str_replace('{pboot:runtime}', round(microtime(true) - START_TIME, 6), $content);
+    }
+
+    // 压缩内容
+    private function gzip($content)
+    {
+        if (! headers_sent() && extension_loaded("zlib") && strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")) {
+            $content = gzencode($content, 9);
+            header("Content-Encoding: gzip");
+            header("Vary: Accept-Encoding");
+            header("Content-Length: " . strlen($content));
+        }
+        return $content;
     }
 }
 
