@@ -6,6 +6,14 @@
 require '../../../init.php';
 error_reporting(E_ERROR);
 
+// 启动会话
+if (! ini_get('session.auto_start') && ! isset($_SESSION)) {
+    session_start();
+}
+if (! $_SESSION['sid']) {
+    die('权限不足');
+}
+
 $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("config.json")), true);
 
 $action = $_GET['action'];
