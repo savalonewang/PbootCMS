@@ -50,6 +50,7 @@ class ParserController extends Controller
         $content = $this->parserPageLabel($content); // CMS分页标签解析(需置后)
         $content = $this->parserLoopLabel($content); // LOOP语句(需置后)
         $content = $this->parserIfLabel($content); // IF语句(需置最后)
+        $content = $this->gzip($content);
         return $content;
     }
 
@@ -1996,5 +1997,17 @@ class ParserController extends Controller
             }
         }
         return $data;
+    }
+
+    // 压缩内容
+    private function gzip($content)
+    {
+        if (! headers_sent() && extension_loaded("zlib") && strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")) {
+            $content = gzencode($content, 9);
+            header("Content-Encoding: gzip");
+            header("Vary: Accept-Encoding");
+            header("Content-Length: " . strlen($content));
+        }
+        return $content;
     }
 }
