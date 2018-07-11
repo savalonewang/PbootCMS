@@ -47,9 +47,9 @@ class AdminController extends Controller
         $models = model('admin.content.Model');
         $this->assign('menu_models', $models->getSelectMunu());
         
-        // 表单提交校验
-        if ($_REQUEST) {
-            if (session('formcheck') != $_REQUEST['formcheck']) {
+        // POST表单提交校验
+        if ($_POST) {
+            if (session('formcheck') != $_POST['formcheck']) {
                 alert_back('表单提交验失败！');
             }
         }
@@ -79,7 +79,7 @@ class AdminController extends Controller
     // 检查会话id
     private function checkSid()
     {
-        $sid = encrypt_string($_SERVER['HTTP_USER_AGENT'] . session('id'));
+        $sid = encrypt_string(session_id() . $_SERVER['HTTP_USER_AGENT'] . session('id'));
         if ($sid != session('sid') || session('M') != M) {
             session_destroy();
             return false;

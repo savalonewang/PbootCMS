@@ -24,6 +24,7 @@ layui.use(['element','upload','laydate','form'], function(){
     var username = form.find("#username").val();
     var password = form.find("#password").val();
     var checkcode = form.find("#checkcode").val();
+    var formcheck = form.find("#formcheck").val();
     
 	$.ajax({
 	  type: 'POST',
@@ -32,7 +33,8 @@ layui.use(['element','upload','laydate','form'], function(){
 	  data: {
             username: username,
             password: password,
-            checkcode: checkcode
+            checkcode: checkcode,
+            formcheck: formcheck
        },
 	  success: function (response, status) {
 			if (response.code == 1) {

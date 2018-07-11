@@ -110,7 +110,7 @@ class IndexController extends Controller
         if (! ! $login = $this->model->login($where)) {
             
             session_regenerate_id(true);
-            session('sid', encrypt_string($_SERVER['HTTP_USER_AGENT'] . $login->id)); // 会话标识
+            session('sid', encrypt_string(session_id() . $_SERVER['HTTP_USER_AGENT'] . $login->id)); // 会话标识
             session('M', M);
             
             session('id', $login->id); // 用户id
