@@ -35,8 +35,12 @@ class Controller
     final protected function cache($content, $display = true)
     {
         $view = View::getInstance();
-        $view->cache($content);
-        $content = $this->runtime($content);
+        if (Config::get('tpl_html_cache')) {
+            $content = str_replace('{pboot:runtime}', 'Cached at ' . date('Y-m-d H:i:s'), $content);
+        } else {
+            $content = $this->runtime($content);
+        }
+        $view->cache($content); // 压缩前缓存
         $content = $this->gzip($content);
         if ($display) {
             echo $content;
@@ -94,14 +98,14 @@ class Controller
     // 解析运行时间标签
     private function runtime($content)
     {
-        return str_replace('{pboot:runtime}', round(microtime(true) - START_TIME, 6), $content);
+        return str_replace('{pboot:runtime}', 'Processed in ' . round(microtime(true) - START_TIME, 6) . ' second(s).', $content);
     }
 
     // 压缩内容
     private function gzip($content)
     {
-        if (! headers_sent() && extension_loaded("zlib") && strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")) {
-            $content = gzencode($content, 9);
+        if (Config::get('gzip') && ! headers_sent() && extension_loaded("zlib") && strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")) {
+            $content = gzencode($content, 6);
             header("Content-Encoding: gzip");
             header("Vary: Accept-Encoding");
             header("Content-Length: " . strlen($content));

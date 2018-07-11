@@ -90,6 +90,14 @@
 	                </div>
 	                
 	                <div class="layui-form-item">
+	                     <label class="layui-form-label">Gzip页面压缩</label>
+	                     <div class="layui-input-block">
+	                     	<input type="radio" name="gzip" value="1" {if([$configs['gzip']['value']]==1)} checked="checked" {/if} title="启用">
+							<input type="radio" name="gzip" value="0" {if([$configs['gzip']['value']]==0)} checked="checked" {/if} title="禁用">
+	                     </div>
+	                </div>
+	                
+	                <div class="layui-form-item">
 	                     <label class="layui-form-label">域名授权码</label>
 	                     <div class="layui-input-inline">
 	                     	<input type="text" name="sn"  value="{$configs['sn']['value']}" placeholder="请输入授权码，多个逗号隔开"  class="layui-input">
