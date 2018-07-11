@@ -293,7 +293,7 @@
         //,toolbarTopOffset:400
 
         //设置远程图片是否抓取到本地保存
-        //,catchRemoteImageEnable: true //设置是否抓取远程图片
+        ,catchRemoteImageEnable: true //设置是否抓取远程图片
 
         //pageBreakTag
         //分页标识符,默认是_ueditor_page_break_tag_
@@ -389,6 +389,7 @@
 			dl:     ['class', 'style'],
 			dt:     ['class', 'style'],
 			em:     ['class', 'style'],
+			embed:  ['class', 'style', 'src', 'width', 'height', 'type', 'quality', 'allowfullscreen'],
 			font:   ['color', 'size', 'face'],
 			footer: ['class', 'style'],
 			h1:     ['class', 'style'],
