@@ -53,9 +53,13 @@ class AdminController extends Controller
                 alert_back('表单提交验失败！');
             }
         }
-        $uniqid = get_uniqid();
-        session('formcheck', $uniqid);
-        $this->assign('formcheck', $uniqid);
+        
+        // 上传文件接口不重新生成
+        if (! (C == 'Index' && F == 'upload')) {
+            $uniqid = get_uniqid();
+            session('formcheck', $uniqid);
+            $this->assign('formcheck', $uniqid);
+        }
     }
 
     // 后台用户登录状态检查
