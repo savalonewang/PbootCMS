@@ -90,6 +90,12 @@ class Config
             die('系统框架文件丢失，惯性配置文件不存在！');
         }
         
+        // 载入用户路由配置文件
+        if (file_exists(CONF_PATH . '/route.php')) {
+            $config = require CONF_PATH . '/route.php';
+            $configs = mult_array_merge($configs, $config);
+        }
+        
         // 载入应用路由文件
         if (file_exists(APP_PATH . '/common/route.php')) {
             $config = require APP_PATH . '/common/route.php';
