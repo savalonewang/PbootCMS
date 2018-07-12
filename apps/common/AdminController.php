@@ -54,8 +54,8 @@ class AdminController extends Controller
             }
         }
         
-        // 上传文件接口不重新生成
-        if (! (C == 'Index' && F == 'upload')) {
+        // 上传文件接口不重新生成和异步登陆不重新生成
+        if (! (C == 'Index' && F == 'upload') && ! (C == 'Index' && F == 'login')) {
             $uniqid = get_uniqid();
             session('formcheck', $uniqid);
             $this->assign('formcheck', $uniqid);

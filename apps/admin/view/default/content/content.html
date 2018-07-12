@@ -33,12 +33,14 @@
 		            	<thead>
 		                    <tr>
 		                    	<th><input type="checkbox" class="checkbox" lay-ignore id="checkall" title="全选"></th>
-		                    	<th>内容ID</th>
+		                    	<th>ID</th>
 		                        <th>栏目</th>
 		                        <th>标题</th>
-		                        <th>发布时间</th>
+		                        <th>时间</th>
 		                        <th>排序</th>
 		                        <th>状态</th>
+		                        <th>置顶</th>
+		                        <th>推荐</th>
 		                        <th>访问量</th>
 		                        <th>操作</th>
 		                    </tr>
@@ -52,14 +54,8 @@
 		                    	</td>
 		                    	<td>[value->id]</td>
 		                        <td title="[value->scode]">[value->sort_name]</td>
-		                        <td>
-		                        [value->title]
-		                        {if($value->istop)}
-		                        	<span class="layui-badge layui-bg-green">顶</span>
-		                        {/if}
-		                        {if($value->isrecommend)}
-		                        	<span class="layui-badge layui-bg-cyan">荐</span>
-		                        {/if}
+		                        <td title="[value->title]">
+		                        {fun=mb_substr($value->title,0,10,'utf8')}
 		                        {if($value->isheadline)}
 		                        	<span class="layui-badge layui-bg-blue">头</span>
 		                        {/if}
@@ -77,6 +73,20 @@
 			                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击关闭"></i></a>
 			                        {else}
 			                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击开启"></i></a>
+			                    {/if}
+			                    </td>
+			                    <td>
+		                        {if($value->istop)}
+			                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/istop/value/0}"><i class='fa fa-toggle-on' title="点击关闭"></i></a>
+			                        {else}
+			                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/istop/value/1}"><i class='fa fa-toggle-off' title="点击开启"></i></a>
+			                    {/if}
+			                    </td>
+			                    <td>
+		                        {if($value->isrecommend)}
+			                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/isrecommend/value/0}"><i class='fa fa-toggle-on' title="点击关闭"></i></a>
+			                        {else}
+			                        <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/isrecommend/value/1}"><i class='fa fa-toggle-off' title="点击开启"></i></a>
 			                    {/if}
 			                    </td>
 			                    <td>[value->visits]</td>
