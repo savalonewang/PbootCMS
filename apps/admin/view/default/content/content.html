@@ -55,7 +55,7 @@
 		                    	<td>[value->id]</td>
 		                        <td title="[value->scode]">[value->sort_name]</td>
 		                        <td title="[value->title]">
-		                        {fun=mb_substr($value->title,0,10,'utf8')}
+		                        {fun=mb_substr($value->title,0,15,'utf8')}
 		                        {if($value->isheadline)}
 		                        	<span class="layui-badge layui-bg-blue">头</span>
 		                        {/if}
