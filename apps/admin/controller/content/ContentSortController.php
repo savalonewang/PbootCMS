@@ -107,8 +107,8 @@ class ContentSortController extends Controller
             $name = post('name');
             $type = post('type');
             $mcode = post('mcode');
-            $listtpl = post('listtpl');
-            $contenttpl = post('contenttpl');
+            $listtpl = basename(post('listtpl'));
+            $contenttpl = basename(post('contenttpl'));
             $status = post('status');
             $subname = post('subname');
             $filename = post('filename');
@@ -309,8 +309,8 @@ class ContentSortController extends Controller
             $name = post('name');
             $mcode = post('mcode');
             $type = post('type');
-            $listtpl = post('listtpl');
-            $contenttpl = post('contenttpl');
+            $listtpl = basename(post('listtpl'));
+            $contenttpl = basename(post('contenttpl'));
             $status = post('status');
             $subname = post('subname');
             $filename = post('filename');

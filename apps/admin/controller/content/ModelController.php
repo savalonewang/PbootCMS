@@ -48,8 +48,8 @@ class ModelController extends Controller
             $mcode = get_auto_code($this->model->getLastCode());
             $name = post('name');
             $type = post('type');
-            $listtpl = post('listtpl');
-            $contenttpl = post('contenttpl');
+            $listtpl = basename(post('listtpl'));
+            $contenttpl = basename(post('contenttpl'));
             $status = post('status');
             
             if (! $name) {
@@ -125,8 +125,8 @@ class ModelController extends Controller
             // 获取数据
             $name = post('name');
             $type = post('type');
-            $listtpl = post('listtpl');
-            $contenttpl = post('contenttpl');
+            $listtpl = basename(post('listtpl'));
+            $contenttpl = basename(post('contenttpl'));
             $status = post('status');
             
             if (! $name) {
