@@ -25,9 +25,10 @@ class IndexController extends Controller
     public function index()
     {
         $content = parent::parser('index.html'); // 框架标签解析
+        $content = $this->parser->parserBefore($content); // CMS公共标签前置解析
         $content = $this->parser->parserPositionLabel($content, 0); // CMS当前位置标签解析
         $content = $this->parser->parserSpecialPageSortLabel($content, 0, '', SITE_DIR); // 解析分类标签
-        $content = $this->parser->parserCommom($content); // CMS公共标签解析
+        $content = $this->parser->parserAfter($content); // CMS公共标签后置解析
         $this->cache($content, true);
     }
 

@@ -27,8 +27,32 @@ class ParserController extends Controller
         error('您访问的地址有误，请核对后重试！');
     }
 
-    // 解析全局公共标签
-    public function parserCommom($content)
+    // 解析全局前置公共标签
+    public function parserBefore($content)
+    {
+        // 实现自动页面关键字及描述
+        if (C == 'List') {
+            $content = str_replace('{pboot:pagetitle}', '{sort:name}-{pboot:sitetitle}-{pboot:sitesubtitle}', $content);
+            $content = str_replace('{pboot:pagekeywords}', '{sort:keywords}', $content);
+            $content = str_replace('{pboot:pagedescription}', '{sort:description}', $content);
+        } elseif (C == 'Content') {
+            $content = str_replace('{pboot:pagetitle}', '{content:title}-{sort:name}-{pboot:sitetitle}-{pboot:sitesubtitle}', $content);
+            $content = str_replace('{pboot:pagekeywords}', '{content:keywords}', $content);
+            $content = str_replace('{pboot:pagedescription}', '{content:description}', $content);
+        } elseif (C == 'About') {
+            $content = str_replace('{pboot:pagetitle}', '{content:title}-{pboot:sitetitle}-{pboot:sitesubtitle}', $content);
+            $content = str_replace('{pboot:pagekeywords}', '{content:keywords}', $content);
+            $content = str_replace('{pboot:pagedescription}', '{content:description}', $content);
+        } else {
+            $content = str_replace('{pboot:pagetitle}', '{pboot:sitetitle}-{pboot:sitesubtitle}', $content);
+            $content = str_replace('{pboot:pagekeywords}', '{pboot:sitekeywords}', $content);
+            $content = str_replace('{pboot:pagedescription}', '{pboot:sitedescription}', $content);
+        }
+        return $content;
+    }
+
+    // 解析全局后置公共标签
+    public function parserAfter($content)
     {
         $content = $this->parserSingleLabel($content); // 单标签解析
         $content = $this->parserSiteLabel($content); // 站点标签
@@ -50,272 +74,6 @@ class ParserController extends Controller
         $content = $this->parserPageLabel($content); // CMS分页标签解析(需置后)
         $content = $this->parserLoopLabel($content); // LOOP语句(需置后)
         $content = $this->parserIfLabel($content); // IF语句(需置最后)
-        return $content;
-    }
-
-    // 解析调节参数
-    protected function parserParam($string)
-    {
-        if (! $string = trim($string))
-            return array();
-        $string = preg_replace('/\s+/', ' ', $string); // 多空格处理
-        $param = array();
-        if (preg_match_all('/([\w]+)[\s]?=[\s]?(\'([^\']+)\'|([^\s]+))/', $string, $matches)) {
-            foreach ($matches[1] as $key => $value) {
-                if ($matches[3][$key]) {
-                    $param[$value] = $matches[3][$key];
-                } else {
-                    $param[$value] = $matches[4][$key];
-                }
-            }
-        }
-        return $param;
-    }
-
-    // 解析列表标签
-    protected function parserList($label, $search, $content, $data, $params, $key)
-    {
-        switch ($label) {
-            case 'n':
-                $content = str_replace($search, $key - 1, $content);
-                break;
-            case 'i':
-                $content = str_replace($search, $key, $content);
-                break;
-            case 'link':
-                if ($data->outlink) { // 外链
-                    $content = str_replace($search, $data->outlink, $content);
-                } elseif ($data->filename) { // 自定义名称
-                    $content = str_replace($search, url('/home/content/index/id/' . $data->filename), $content);
-                } else { // 编码
-                    $content = str_replace($search, url('/home/content/index/id/' . $data->id), $content);
-                }
-                break;
-            case 'sortlink':
-                if ($data->sortfilename) {
-                    $content = str_replace($search, url('/home/list/index/scode/' . $data->sortfilename), $content);
-                } else {
-                    $content = str_replace($search, url('/home/list/index/scode/' . $data->scode), $content);
-                }
-                break;
-            case 'subsortlink':
-                if ($data->subscode) {
-                    if ($data->subfilename) {
-                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subfilename), $content);
-                    } else {
-                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subscode), $content);
-                    }
-                } else {
-                    $content = str_replace($search, '', $content);
-                }
-                break;
-            case 'sortname':
-                if ($data->sortname) {
-                    $content = str_replace($search, $this->adjustLabelData($params, $data->sortname), $content);
-                } else {
-                    $content = str_replace($search, '', $content);
-                }
-                break;
-            case 'subsortname':
-                if ($data->subsortname) {
-                    $content = str_replace($search, $this->adjustLabelData($params, $data->subsortname), $content);
-                } else {
-                    $content = str_replace($search, '', $content);
-                }
-                break;
-            case 'ico':
-                if ($data->ico) {
-                    $content = str_replace($search, SITE_DIR . $data->ico, $content);
-                } else {
-                    $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
-                }
-                break;
-            case 'enclosure':
-                if ($data->enclosure) {
-                    $content = str_replace($search, SITE_DIR . $data->enclosure, $content);
-                } else {
-                    $content = str_replace($search, '', $content);
-                }
-                break;
-            case 'likeslink':
-                $content = str_replace($search, url('/home/Do/likes/id/' . $data->id), $content);
-                break;
-            case 'opposelink':
-                $content = str_replace($search, url('/home/Do/oppose/id/' . $data->id), $content);
-                break;
-            default:
-                if (isset($data->$label)) {
-                    $content = str_replace($search, $this->adjustLabelData($params, $data->$label), $content);
-                } elseif (strpos($label, 'ext_') === 0) {
-                    $content = str_replace($search, '', $content);
-                }
-        }
-        return $content;
-    }
-
-    // 解析内容标签
-    protected function ParserContent($label, $search, $content, $data, $params, $sort)
-    {
-        switch ($label) {
-            case 'link':
-                if ($data->outlink) {
-                    $content = str_replace($search, $data->outlink, $content);
-                } elseif ($data->filename) {
-                    $content = str_replace($search, url('/home/content/index/id/' . $data->filename), $content);
-                } else {
-                    $content = str_replace($search, url('/home/content/index/id/' . $data->id), $content);
-                }
-                break;
-            case 'sortlink':
-                if ($data->sortfilename) {
-                    $content = str_replace($search, url('/home/list/index/scode/' . $data->sortfilename), $content);
-                } else {
-                    $content = str_replace($search, url('/home/list/index/scode/' . $data->scode), $content);
-                }
-                break;
-            case 'subsortlink':
-                if ($data->subscode) {
-                    if ($data->subfilename) {
-                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subfilename), $content);
-                    } else {
-                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subscode), $content);
-                    }
-                } else {
-                    $content = str_replace($search, '', $content);
-                }
-                break;
-            case 'sortname':
-                if ($data->sortname) {
-                    $content = str_replace($search, $this->adjustLabelData($params, $data->sortname), $content);
-                } else {
-                    $content = str_replace($search, '', $content);
-                }
-                break;
-            case 'subsortname':
-                if ($data->subsortname) {
-                    $content = str_replace($search, $this->adjustLabelData($params, $data->subsortname), $content);
-                } else {
-                    $content = str_replace($search, '', $content);
-                }
-                break;
-            case 'ico':
-                if ($data->ico) {
-                    $content = str_replace($search, SITE_DIR . $data->ico, $content);
-                } else {
-                    $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
-                }
-                break;
-            case 'enclosure':
-                if ($data->enclosure) {
-                    $content = str_replace($search, SITE_DIR . $data->enclosure, $content);
-                } else {
-                    $content = str_replace($search, '', $content);
-                }
-                break;
-            case 'likeslink':
-                $content = str_replace($search, url('/home/Do/likes/id/' . $data->id), $content);
-                break;
-            case 'opposelink':
-                $content = str_replace($search, url('/home/Do/oppose/id/' . $data->id), $content);
-                break;
-            case 'precontent':
-                if ($data->type != 2) // 非列表内容页不解析
-                    break;
-                if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
-                    if ($pre->filename) {
-                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $pre->filename) . '">' . $this->adjustLabelData($params, $pre->title) . '</a>', $content);
-                    } else {
-                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $pre->id) . '">' . $this->adjustLabelData($params, $pre->title) . '</a>', $content);
-                    }
-                } else {
-                    if (isset($params['notext'])) {
-                        $content = str_replace($search, $params['notext'], $content);
-                    } else {
-                        $content = str_replace($search, '没有了！', $content);
-                    }
-                }
-                break;
-            case 'prelink':
-                if ($data->type != 2) // 非列表内容页不解析
-                    break;
-                if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
-                    if ($pre->filename) {
-                        $content = str_replace($search, url('/home/content/index/id/' . $pre->filename), $content);
-                    } else {
-                        $content = str_replace($search, url('/home/content/index/id/' . $pre->id), $content);
-                    }
-                } else {
-                    $content = str_replace($search, '#', $content);
-                }
-                break;
-            case 'pretitle':
-                if ($data->type != 2) // 非列表内容页不解析
-                    break;
-                if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
-                    $content = str_replace($search, $this->adjustLabelData($params, $pre->title), $content);
-                } else {
-                    if (isset($params['notext'])) {
-                        $content = str_replace($search, $params['notext'], $content);
-                    } else {
-                        $content = str_replace($search, '没有了！', $content);
-                    }
-                }
-                break;
-            case 'nextcontent':
-                if ($data->type != 2) // 非列表内容页不解析
-                    break;
-                if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
-                    if ($next->filename) {
-                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $next->filename) . '">' . $this->adjustLabelData($params, $next->title) . '</a>', $content);
-                    } else {
-                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $next->id) . '">' . $this->adjustLabelData($params, $next->title) . '</a>', $content);
-                    }
-                } else {
-                    if (isset($params['notext'])) {
-                        $content = str_replace($search, $params['notext'], $content);
-                    } else {
-                        $content = str_replace($search, '没有了！', $content);
-                    }
-                }
-                break;
-            case 'nextlink':
-                if ($data->type != 2) // 非列表内容页不解析
-                    break;
-                if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
-                    if ($next->filename) {
-                        $content = str_replace($search, url('/home/content/index/id/' . $next->filename), $content);
-                    } else {
-                        $content = str_replace($search, url('/home/content/index/id/' . $next->id), $content);
-                    }
-                } else {
-                    $content = str_replace($search, '#', $content);
-                }
-                break;
-            case 'nexttitle':
-                if ($data->type != 2) // 非列表内容页不解析
-                    break;
-                if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
-                    $content = str_replace($search, $this->adjustLabelData($params, $next->title), $content);
-                } else {
-                    if (isset($params['notext'])) {
-                        $content = str_replace($search, $params['notext'], $content);
-                    } else {
-                        $content = str_replace($search, '没有了！', $content);
-                    }
-                }
-                break;
-            case 'content':
-                $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "' async='async'></script>";
-                $content = preg_replace('/(<\/body>)/i', $visits . "\n$1", $content);
-                $content = str_replace($search, $this->adjustLabelData($params, $data->content), $content);
-                break;
-            default:
-                if (isset($data->$label)) {
-                    $content = str_replace($search, $this->adjustLabelData($params, $data->$label), $content);
-                } elseif (strpos($label, 'ext_') === 0) {
-                    $content = str_replace($search, '', $content);
-                }
-        }
         return $content;
     }
 
@@ -659,6 +417,20 @@ class ParserController extends Controller
                             $content = str_replace($matches[0][$i], '', $content);
                         }
                         break;
+                    case 'keywords': // 如果栏目关键字为空，则自动使用全局关键字
+                        if ($sort->keywords) {
+                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $sort->keywords), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '{pboot:sitekeywords}', $content);
+                        }
+                        break;
+                    case 'description': // 如果栏目描述为空，则自动使用全局描述
+                        if ($sort->description) {
+                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $sort->description), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '{pboot:sitedescription}', $content);
+                        }
+                        break;
                     default:
                         if (isset($sort->{$matches[1][$i]})) {
                             $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $sort->{$matches[1][$i]}), $content);
@@ -694,6 +466,12 @@ class ParserController extends Controller
                         break;
                     case 'name': // 当前分类名称
                         $content = str_replace($matches[0][$i], $page, $content);
+                        break;
+                    case 'keywords': // 当前分类关键字,使用全局
+                        $content = str_replace($matches[0][$i], '{pboot:sitekeywords}', $content);
+                        break;
+                    case 'description': // 当前分类描述,使用全局
+                        $content = str_replace($matches[0][$i], '{pboot:sitedescription}', $content);
                         break;
                     default:
                         $content = str_replace($matches[0][$i], '', $content);
@@ -2016,5 +1794,285 @@ class ParserController extends Controller
             }
         }
         return $data;
+    }
+
+    // 解析调节参数
+    protected function parserParam($string)
+    {
+        if (! $string = trim($string))
+            return array();
+        $string = preg_replace('/\s+/', ' ', $string); // 多空格处理
+        $param = array();
+        if (preg_match_all('/([\w]+)[\s]?=[\s]?(\'([^\']+)\'|([^\s]+))/', $string, $matches)) {
+            foreach ($matches[1] as $key => $value) {
+                if ($matches[3][$key]) {
+                    $param[$value] = $matches[3][$key];
+                } else {
+                    $param[$value] = $matches[4][$key];
+                }
+            }
+        }
+        return $param;
+    }
+
+    // 解析列表标签
+    protected function parserList($label, $search, $content, $data, $params, $key)
+    {
+        switch ($label) {
+            case 'n':
+                $content = str_replace($search, $key - 1, $content);
+                break;
+            case 'i':
+                $content = str_replace($search, $key, $content);
+                break;
+            case 'link':
+                if ($data->outlink) { // 外链
+                    $content = str_replace($search, $data->outlink, $content);
+                } elseif ($data->filename) { // 自定义名称
+                    $content = str_replace($search, url('/home/content/index/id/' . $data->filename), $content);
+                } else { // 编码
+                    $content = str_replace($search, url('/home/content/index/id/' . $data->id), $content);
+                }
+                break;
+            case 'sortlink':
+                if ($data->sortfilename) {
+                    $content = str_replace($search, url('/home/list/index/scode/' . $data->sortfilename), $content);
+                } else {
+                    $content = str_replace($search, url('/home/list/index/scode/' . $data->scode), $content);
+                }
+                break;
+            case 'subsortlink':
+                if ($data->subscode) {
+                    if ($data->subfilename) {
+                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subfilename), $content);
+                    } else {
+                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subscode), $content);
+                    }
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'sortname':
+                if ($data->sortname) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->sortname), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'subsortname':
+                if ($data->subsortname) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->subsortname), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'ico':
+                if ($data->ico) {
+                    $content = str_replace($search, SITE_DIR . $data->ico, $content);
+                } else {
+                    $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
+                }
+                break;
+            case 'enclosure':
+                if ($data->enclosure) {
+                    $content = str_replace($search, SITE_DIR . $data->enclosure, $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'likeslink':
+                $content = str_replace($search, url('/home/Do/likes/id/' . $data->id), $content);
+                break;
+            case 'opposelink':
+                $content = str_replace($search, url('/home/Do/oppose/id/' . $data->id), $content);
+                break;
+            default:
+                if (isset($data->$label)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->$label), $content);
+                } elseif (strpos($label, 'ext_') === 0) {
+                    $content = str_replace($search, '', $content);
+                }
+        }
+        return $content;
+    }
+
+    // 解析内容标签
+    protected function ParserContent($label, $search, $content, $data, $params, $sort)
+    {
+        switch ($label) {
+            case 'link':
+                if ($data->outlink) {
+                    $content = str_replace($search, $data->outlink, $content);
+                } elseif ($data->filename) {
+                    $content = str_replace($search, url('/home/content/index/id/' . $data->filename), $content);
+                } else {
+                    $content = str_replace($search, url('/home/content/index/id/' . $data->id), $content);
+                }
+                break;
+            case 'sortlink':
+                if ($data->sortfilename) {
+                    $content = str_replace($search, url('/home/list/index/scode/' . $data->sortfilename), $content);
+                } else {
+                    $content = str_replace($search, url('/home/list/index/scode/' . $data->scode), $content);
+                }
+                break;
+            case 'subsortlink':
+                if ($data->subscode) {
+                    if ($data->subfilename) {
+                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subfilename), $content);
+                    } else {
+                        $content = str_replace($search, url('/home/list/index/scode/' . $data->subscode), $content);
+                    }
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'sortname':
+                if ($data->sortname) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->sortname), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'subsortname':
+                if ($data->subsortname) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->subsortname), $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'ico':
+                if ($data->ico) {
+                    $content = str_replace($search, SITE_DIR . $data->ico, $content);
+                } else {
+                    $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
+                }
+                break;
+            case 'enclosure':
+                if ($data->enclosure) {
+                    $content = str_replace($search, SITE_DIR . $data->enclosure, $content);
+                } else {
+                    $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'likeslink':
+                $content = str_replace($search, url('/home/Do/likes/id/' . $data->id), $content);
+                break;
+            case 'opposelink':
+                $content = str_replace($search, url('/home/Do/oppose/id/' . $data->id), $content);
+                break;
+            case 'precontent':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
+                    if ($pre->filename) {
+                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $pre->filename) . '">' . $this->adjustLabelData($params, $pre->title) . '</a>', $content);
+                    } else {
+                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $pre->id) . '">' . $this->adjustLabelData($params, $pre->title) . '</a>', $content);
+                    }
+                } else {
+                    if (isset($params['notext'])) {
+                        $content = str_replace($search, $params['notext'], $content);
+                    } else {
+                        $content = str_replace($search, '没有了！', $content);
+                    }
+                }
+                break;
+            case 'prelink':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
+                    if ($pre->filename) {
+                        $content = str_replace($search, url('/home/content/index/id/' . $pre->filename), $content);
+                    } else {
+                        $content = str_replace($search, url('/home/content/index/id/' . $pre->id), $content);
+                    }
+                } else {
+                    $content = str_replace($search, '#', $content);
+                }
+                break;
+            case 'pretitle':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $pre = $this->model->getContentPre($sort->scode, $data->id)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $pre->title), $content);
+                } else {
+                    if (isset($params['notext'])) {
+                        $content = str_replace($search, $params['notext'], $content);
+                    } else {
+                        $content = str_replace($search, '没有了！', $content);
+                    }
+                }
+                break;
+            case 'nextcontent':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
+                    if ($next->filename) {
+                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $next->filename) . '">' . $this->adjustLabelData($params, $next->title) . '</a>', $content);
+                    } else {
+                        $content = str_replace($search, '<a href="' . url('/home/content/index/id/' . $next->id) . '">' . $this->adjustLabelData($params, $next->title) . '</a>', $content);
+                    }
+                } else {
+                    if (isset($params['notext'])) {
+                        $content = str_replace($search, $params['notext'], $content);
+                    } else {
+                        $content = str_replace($search, '没有了！', $content);
+                    }
+                }
+                break;
+            case 'nextlink':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
+                    if ($next->filename) {
+                        $content = str_replace($search, url('/home/content/index/id/' . $next->filename), $content);
+                    } else {
+                        $content = str_replace($search, url('/home/content/index/id/' . $next->id), $content);
+                    }
+                } else {
+                    $content = str_replace($search, '#', $content);
+                }
+                break;
+            case 'nexttitle':
+                if ($data->type != 2) // 非列表内容页不解析
+                    break;
+                if (! ! $next = $this->model->getContentNext($sort->scode, $data->id)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $next->title), $content);
+                } else {
+                    if (isset($params['notext'])) {
+                        $content = str_replace($search, $params['notext'], $content);
+                    } else {
+                        $content = str_replace($search, '没有了！', $content);
+                    }
+                }
+                break;
+            case 'content':
+                $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "' async='async'></script>";
+                $content = preg_replace('/(<\/body>)/i', $visits . "\n$1", $content);
+                $content = str_replace($search, $this->adjustLabelData($params, $data->content), $content);
+                break;
+            case 'keywords': // 如果内容关键字为空，则自动使用全局关键字
+                if ($data->keywords) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->keywords), $content);
+                } else {
+                    $content = str_replace($search, '{pboot:sitekeywords}', $content);
+                }
+                break;
+            case 'description': // 如果内容描述为空，则自动使用全局描述
+                if ($data->description) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->description), $content);
+                } else {
+                    $content = str_replace($search, '{pboot:sitedescription}', $content);
+                }
+                break;
+            default:
+                if (isset($data->$label)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, $data->$label), $content);
+                } elseif (strpos($label, 'ext_') === 0) {
+                    $content = str_replace($search, '', $content);
+                }
+        }
+        return $content;
     }
 }
