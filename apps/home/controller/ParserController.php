@@ -1707,14 +1707,60 @@ class ParserController extends Controller
         $pattern = '/\{pboot:if\(([^}]+)\)\}([\s\S]*?)\{\/pboot:if\}/';
         $pattern2 = '/pboot:([0-9])+if/';
         if (preg_match_all($pattern, $content, $matches)) {
+            // IF语句需要过滤的黑名单
+            $black = array(
+                'chr',
+                'phpinfo',
+                'eval',
+                'passthru',
+                'exec',
+                'system',
+                'chroot',
+                'scandir',
+                'chgrp',
+                'chown',
+                'shell_exec',
+                'proc_open',
+                'proc_get_status',
+                'error_log',
+                'ini_alter',
+                'ini_set',
+                'ini_restore',
+                'dl',
+                'pfsockopen',
+                'syslog',
+                'readlink',
+                'symlink',
+                'popen',
+                'stream_socket_server',
+                'putenv',
+                'unlink',
+                'path_delete',
+                'rmdir',
+                'session',
+                'cookie',
+                'mkdir',
+                'create_dir',
+                'create_file',
+                'check_dir',
+                'check_file'
+            );
             $count = count($matches[0]);
             for ($i = 0; $i < $count; $i ++) {
                 $flag = '';
                 $out_html = '';
-                // 对于无参数函数不执行解析工作
-                if (preg_match('/[\w]+\(\)/', $matches[1][$i])) {
+                $danger = false;
+                foreach ($black as $value) {
+                    if (preg_match('/' . $value . '([\s]+)?\(/i', $matches[1][$i])) {
+                        $danger = true;
+                        break;
+                    }
+                }
+                // 如果有危险字符，则不解析该IF
+                if ($danger) {
                     continue;
                 }
+                
                 eval('if(' . $matches[1][$i] . '){$flag="if";}else{$flag="else";}');
                 if (preg_match('/([\s\S]*)?\{else\}([\s\S]*)?/', $matches[2][$i], $matches2)) { // 判断是否存在else
                     switch ($flag) {
