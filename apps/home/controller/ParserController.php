@@ -498,6 +498,9 @@ class ParserController extends Controller
                         for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                             $params = $this->parserParam($matches2[2][$j]);
                             switch ($matches2[1][$j]) {
+                                case 'n':
+                                    $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
+                                    break;
                                 case 'i':
                                     $one_html = str_replace($matches2[0][$j], $key, $one_html);
                                     break;
@@ -726,13 +729,12 @@ class ParserController extends Controller
                     }
                 }
                 
-                // 避免传递分类为0读取全部数据
                 if (! $scode) {
                     $scode = - 1;
                 }
                 
-                // 读取数据
-                $data = $this->model->getSort($scode);
+                // 读取一个或多个栏目数据
+                $data = $this->model->getMultSort($scode);
                 
                 // 无数据直接跳过
                 if (! $data) {
@@ -747,46 +749,58 @@ class ParserController extends Controller
                     $count2 = 0;
                 }
                 
-                $out_html = $matches[2][$i];
-                for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
-                    $params = $this->parserParam($matches2[2][$j]);
-                    switch ($matches2[1][$j]) {
-                        case 'link':
-                            if ($data->outlink) {
-                                $out_html = str_replace($matches2[0][$j], $data->outlink, $out_html);
-                            } elseif ($data->type == 1) {
-                                if ($data->filename) {
-                                    $out_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $data->filename), $out_html);
+                $out_html = '';
+                $key = 1;
+                foreach ($data as $value) { // 按查询数据条数循环
+                    $one_html = $matches[2][$i];
+                    for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
+                        $params = $this->parserParam($matches2[2][$j]);
+                        switch ($matches2[1][$j]) {
+                            case 'n':
+                                $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
+                                break;
+                            case 'i':
+                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
+                                break;
+                            case 'link':
+                                if ($value->outlink) {
+                                    $one_html = str_replace($matches2[0][$j], $value->outlink, $one_html);
+                                } elseif ($value->type == 1) {
+                                    if ($value->filename) {
+                                        $one_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $value->filename), $one_html);
+                                    } else {
+                                        $one_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $value->scode), $one_html);
+                                    }
                                 } else {
-                                    $out_html = str_replace($matches2[0][$j], url('/home/about/index/scode/' . $data->scode), $out_html);
+                                    if ($value->filename) {
+                                        $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value->filename), $one_html);
+                                    } else {
+                                        $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value->scode), $one_html);
+                                    }
                                 }
-                            } else {
-                                if ($data->filename) {
-                                    $out_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $data->filename), $out_html);
+                                break;
+                            case 'ico':
+                                if ($value->ico) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
                                 } else {
-                                    $out_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $data->scode), $out_html);
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
                                 }
-                            }
-                            break;
-                        case 'ico':
-                            if ($data->ico) {
-                                $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->ico, $out_html);
-                            } else {
-                                $out_html = str_replace($matches2[0][$j], '', $out_html);
-                            }
-                            break;
-                        case 'pic':
-                            if ($data->pic) {
-                                $out_html = str_replace($matches2[0][$j], SITE_DIR . $data->pic, $out_html);
-                            } else {
-                                $out_html = str_replace($matches2[0][$j], '', $out_html);
-                            }
-                            break;
-                        default:
-                            if (isset($data->{$matches2[1][$j]})) {
-                                $out_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $data->{$matches2[1][$j]}), $out_html);
-                            }
+                                break;
+                            case 'pic':
+                                if ($value->pic) {
+                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->pic, $one_html);
+                                } else {
+                                    $one_html = str_replace($matches2[0][$j], '', $one_html);
+                                }
+                                break;
+                            default:
+                                if (isset($value->{$matches2[1][$j]})) {
+                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->{$matches2[1][$j]}), $one_html);
+                                }
+                        }
                     }
+                    $key ++;
+                    $out_html .= $one_html;
                 }
                 // 执行替换
                 $content = str_replace($matches[0][$i], $out_html, $content);
@@ -926,6 +940,9 @@ class ParserController extends Controller
                     for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                         $params = $this->parserParam($matches2[2][$j]);
                         switch ($matches2[1][$j]) {
+                            case 'n':
+                                $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
+                                break;
                             case 'i':
                                 $one_html = str_replace($matches2[0][$j], $key, $one_html);
                                 break;
@@ -1399,6 +1416,9 @@ class ParserController extends Controller
                     $one_html = $matches[2][$i];
                     for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
                         switch ($matches2[1][$j]) {
+                            case 'n':
+                                $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
+                                break;
                             case 'i':
                                 $one_html = str_replace($matches2[0][$j], $key, $one_html);
                                 break;

@@ -47,7 +47,7 @@ class ParserModel extends Model
         return parent::table('ay_label')->decode()->column('value', 'name');
     }
 
-    // 分类信息
+    // 单个分类信息
     public function getSort($scode)
     {
         $field = array(
@@ -77,6 +77,38 @@ class ParserModel extends Model
             ->where("a.scode='$scode' OR a.filename='$scode'")
             ->join($join)
             ->find();
+    }
+
+    // 多个分类信息
+    public function getMultSort($scodes)
+    {
+        $field = array(
+            'a.id',
+            'a.pcode',
+            'a.scode',
+            'a.name',
+            'a.subname',
+            'b.type',
+            'a.filename',
+            'a.outlink',
+            'a.listtpl',
+            'a.contenttpl',
+            'a.ico',
+            'a.pic',
+            'a.keywords',
+            'a.description',
+            'a.sorting'
+        );
+        $join = array(
+            'ay_model b',
+            'a.mcode=b.mcode',
+            'LEFT'
+        );
+        return parent::table('ay_content_sort a')->field($field)
+            ->where("a.acode='" . session('lg') . "'")
+            ->in('scode', $scodes)
+            ->join($join)
+            ->select();
     }
 
     // 分类栏目列表
