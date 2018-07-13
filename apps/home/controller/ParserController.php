@@ -1748,7 +1748,7 @@ class ParserController extends Controller
     }
 
     // 调整标签数据
-    public function adjustLabelData($params, $data)
+    protected function adjustLabelData($params, $data)
     {
         if (! $params || ! $data)
             return $data;
