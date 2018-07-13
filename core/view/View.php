@@ -98,6 +98,7 @@ class View
         // 定义当前应用主题目录
         define('APP_THEME_DIR', str_replace(DOC_PATH, '', APP_VIEW_PATH) . '/' . $theme);
         
+        $file = str_replace('../', '', $file); // 过滤掉相对路径
         $tpl_file = $this->tplPath . '/' . $file; // 模板文件
         file_exists($tpl_file) ?: error('模板文件' . $file . '不存在！');
         $tpl_c_file = $this->tplcPath . '/' . md5($tpl_file) . '.php'; // 编译文件
