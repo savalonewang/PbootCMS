@@ -111,7 +111,9 @@ class DatabaseController extends Controller
             case 'sql':
                 $sql = explode(';', $_POST['sql']);
                 foreach ($sql as $value) {
-                    if ($value) {
+                    $value = trim($value);
+                    // 不允许执行删除操作
+                    if ($value && ! preg_match('/(^|[\s]+)(drop|truncate)[\s]+/i', $value)) {
                         $this->model->amd($value);
                     }
                 }
