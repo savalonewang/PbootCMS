@@ -21,7 +21,7 @@
 		                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击前端显示"></i></a>
 		                            {/if}
 						  			{fun=get_btn_mod($value->id,'id','回复')}
-						  			<a href="{url./admin/Form/del/id/'.$value->id.'/fcode/'.[$form->fcode].'/action/deldata}" onclick="return confirm('您确定要删除么？')" class="layui-btn layui-btn-xs layui-btn-danger" style="margin-bottom:0px" title="删除">删除</a>
+						  			{fun=get_btn_del($value->id)} 
 					  			</span>
 					  		</th>
 					  	</tr>
