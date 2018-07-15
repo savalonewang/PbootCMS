@@ -5,7 +5,7 @@
  * @author XingMeng
  * @email hnxsh@foxmail.com
  * @date 2018年2月14日
- *  标签解析引擎模型
+ *  Sitemap模型
  */
 namespace app\home\model;
 
@@ -46,6 +46,7 @@ class SitemapModel extends Model
         $fields = array(
             'a.id',
             'a.filename',
+            'a.date',
             'c.type'
         );
         $join = array(

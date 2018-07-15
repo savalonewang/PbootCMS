@@ -26,7 +26,7 @@ class SitemapController extends Controller
     {
         header("Content-type:text/xml;charset=utf-8");
         $str = '<?xml version="1.0" encoding="UTF-8" ?>' . "\n" . '<urlset>';
-        $str .= $this->makeNode('', 1); // 根目录
+        $str .= $this->makeNode('', date('Y-m-d'), 1); // 根目录
         $sorts = $this->model->getSorts();
         foreach ($sorts as $value) {
             if ($value->outlink) {
@@ -37,38 +37,37 @@ class SitemapController extends Controller
                 } else {
                     $link = url('/home/about/index/scode/' . $value->scode);
                 }
-                $str .= $this->makeNode($link);
+                $str .= $this->makeNode($link, date('Y-m-d'));
             } else {
                 if ($value->filename) {
                     $link = url('/home/list/index/scode/' . $value->filename);
                 } else {
                     $link = url('/home/list/index/scode/' . $value->scode);
                 }
-                $str .= $this->makeNode($link);
+                $str .= $this->makeNode($link, date('Y-m-d'));
                 $contents = $this->model->getList($value->scode);
                 foreach ($contents as $value2) {
                     if ($value2->outlink) { // 外链
                         $link = $value2->outlink;
                     } elseif ($value2->filename) { // 自定义名称
                         $link = url('/home/content/index/id/' . $value2->filename);
-                    } else { // 编码
+                    } else {
                         $link = url('/home/content/index/id/' . $value2->id);
                     }
-                    $str .= $this->makeNode($link);
+                    $str .= $this->makeNode($link, date('Y-m-d', strtotime($value2->date)));
                 }
             }
         }
-        
         echo $str . "\n</urlset>";
     }
 
     // 生成结点信息
-    private function makeNode($link, $priority = 0.8)
+    private function makeNode($link, $date, $priority = 0.8)
     {
         $node = '
 <url>
     <loc>' . get_http_url() . $link . '</loc>
-    <lastmod>' . date('Y-m-d') . '</lastmod>
+    <lastmod>' . $date . '</lastmod>
     <changefreq>daily</changefreq>
     <priority>' . $priority . '</priority>
 </url>';
