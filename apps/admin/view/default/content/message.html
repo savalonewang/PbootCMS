@@ -18,7 +18,7 @@
 						  			{if($value->status)}
 		                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击前端隐藏" style="vertical-align:middle"></i></a>
 		                            {else}
-		                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击前端显示"></i></a>
+		                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击前端显示" style="vertical-align:middle"></i></a>
 		                            {/if}
 						  			{fun=get_btn_mod($value->id,'id','回复')}
 						  			{fun=get_btn_del($value->id)} 
