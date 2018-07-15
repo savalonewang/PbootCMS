@@ -26,7 +26,7 @@ class SitemapController extends Controller
     {
         header("Content-type:text/xml;charset=utf-8");
         $str = '<?xml version="1.0" encoding="UTF-8" ?>' . "\n" . '<urlset>';
-        
+        $str .= $this->makeNode('', 1); // 根目录
         $sorts = $this->model->getSorts();
         foreach ($sorts as $value) {
             if ($value->outlink) {
@@ -63,14 +63,14 @@ class SitemapController extends Controller
     }
 
     // 生成结点信息
-    private function makeNode($link)
+    private function makeNode($link, $priority = 0.8)
     {
         $node = '
 <url>
     <loc>' . get_http_url() . $link . '</loc>
     <lastmod>' . date('Y-m-d') . '</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <priority>' . $priority . '</priority>
 </url>';
         return $node;
     }
