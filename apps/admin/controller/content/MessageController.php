@@ -26,6 +26,7 @@ class MessageController extends Controller
     public function index()
     {
         $this->assign('list', true);
+        $this->assign('fields', $this->model->getFormFieldByCode(1)); // 获取字段
         $this->assign('messages', $this->model->getList());
         $this->display('content/message.html');
     }

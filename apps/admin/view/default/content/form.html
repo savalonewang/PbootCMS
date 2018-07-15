@@ -26,11 +26,17 @@
 	                    	<td>[value->fcode]</td>
 	                    	<td>[value->table_name]</td>
 	                    	<td>[value->form_name]</td>
-	                    	<td><a href="{url./admin/Form/index/fcode/'.$value->fcode.'/action/showdata}"><i class="fa fa-list"></i> 查看数据</a></td>
-	                    	
+	                    	<td>
+	                    	{if($value->id==1)}
+	                    	<a href="{url./admin/Message/index}"><i class="fa fa-list"></i> 查看数据</a></td>
+	                    	{else}
+	                    	<a href="{url./admin/Form/index/fcode/'.$value->fcode.'/action/showdata}"><i class="fa fa-list"></i> 查看数据</a></td>
+	                    	{/if}
 	                    	<td><a href="{url./admin/Form/index/fcode/'.$value->fcode.'/action/showfield}"><i class="fa fa-pencil-square-o"></i> 编辑字段</a></td>
 	                        <td>
-	                        	<a href="{url./admin/Form/del/id/'.$value->id.'/action/delform}" onclick="return confirm('您确定要删除么？')" class="layui-btn layui-btn-xs layui-btn-danger" title="删除">删除</a>
+	                        	{if($value->id!=1)}
+	                        		<a href="{url./admin/Form/del/id/'.$value->id.'/action/delform}" onclick="return confirm('您确定要删除么？')" class="layui-btn layui-btn-xs layui-btn-danger" title="删除">删除</a>
+	                            {/if}
 	                            <a href="{url./admin/Form/mod/id/'.$value->id.'/action/modform}?backurl={URL}" class="layui-btn layui-btn-xs">修改</a>
 	                        </td>
 	                    </tr>

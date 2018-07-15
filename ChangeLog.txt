@@ -13,6 +13,7 @@
 12、新增全局自动页面标题标签{pboot:pagetitle}；
 13、新增全局自动页面关键字标签{pboot:pagekeywords}；
 14、新增全局自动页面描述标签{pboot:pagedescription}
+15、新增留言表单添加字段的支持；
 
 PbootCMS V1.1.5 build 2018-07-10
 1、修复开启静态缓存后无法切换语言问题；

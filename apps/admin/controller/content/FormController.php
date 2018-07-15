@@ -169,6 +169,10 @@ class FormController extends Controller
             error('传递的参数值错误！', - 1);
         }
         
+        if ($id == 1) {
+            alert_back('留言表单不允许删除');
+        }
+        
         // 删除表单
         if (get('action') == 'delform') {
             $table = $this->model->getFormTable($id);

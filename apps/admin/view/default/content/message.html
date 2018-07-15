@@ -8,44 +8,54 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
-	  	   		<table class="layui-table">
-	            	<thead>
-	                    <tr>
-	                        <th>序号</th>
-	                        <th>联系人</th>
-	                        <th>电话</th>
-	                        <th>内容</th>
-	                        <th>时间</th>
-	                        <th>状态</th>
-	                        <th>操作</th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                    {foreach $messages(key,value,num)}
-	                    <tr>
-	                        <td>[num]</td>
-	                        <td>[value->contacts]</td>
-	                        <td>[value->mobile]</td>
-	                        <td>[value->content]</td>
-	                        <td>[value->create_time]</td>
-	                        <td>
-	                            {if($value->status)}
-	                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击前端隐藏"></i></a>
-	                            {else}
-	                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击前端显示"></i></a>
-	                            {/if}
-	                        </td>
-	                        <td>
-	                            {fun=get_btn_del($value->id)}
-	                            {fun=get_btn_mod($value->id,'id','回复')}
-	                        </td>
-	                    </tr>
-	                    {/foreach}
-	                </tbody>
+	  	   		{foreach $messages(key,value,num)}
+	  	   		<table class="layui-table table-two">
+	  	   			<thead>
+				  		<tr>
+					  		<th colspan="2">
+					  			在线留言-[num] 
+					  			<span style="float:right">
+						  			{if($value->status)}
+		                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/0}"><i class='fa fa-toggle-on' title="点击前端隐藏" style="vertical-align:middle"></i></a>
+		                            {else}
+		                            <a href="{url./admin/'.C.'/mod/id/'.$value->id.'/field/status/value/1}"><i class='fa fa-toggle-off' title="点击前端显示"></i></a>
+		                            {/if}
+						  			{fun=get_btn_mod($value->id,'id','回复')}
+						  			<a href="{url./admin/Form/del/id/'.$value->id.'/fcode/'.[$form->fcode].'/action/deldata}" onclick="return confirm('您确定要删除么？')" class="layui-btn layui-btn-xs layui-btn-danger" style="margin-bottom:0px" title="删除">删除</a>
+					  			</span>
+					  		</th>
+					  	</tr>
+				    </thead>
+	  	   			<tbody>
+		  	   			{foreach $fields(key2,value2,num2)}
+			  	   			<tr>
+						      	<th>[value2->description]</th>
+						      	{php} $field=$value2->name {/php}
+						      	<td>[value->$field]</td>
+						    </tr>
+		  	   			{/foreach}
+		  	   			<tr>
+					      	<th>时间</th>
+					      	<td>[value->create_time]</td>
+					    </tr>
+					    <tr>
+					      	<th>访客信息</th>
+					      	<td>
+					      		IP:<a href="http://ip.taobao.com/ipSearch.html?ipAddr={fun=long2ip($value->user_ip)}" target="_blank" title="点击查看归属地">{fun=long2ip($value->user_ip)}</a>；
+								浏览器:[value->user_bs]；
+								操作系统:[value->user_os]
+							</td>
+					    </tr>
+					    <tr>
+					      	<th>回复内容</th>
+					      	<td>[value->recontent]</td>
+					    </tr>
+	  	   			</tbody>
 	            </table>
+	            {/foreach}
 	            <div class="page">{$pagebar}</div>
 	  	   </div>
-	  </div>
+	  	 </div>
 	</div>
 	{/if}
 	

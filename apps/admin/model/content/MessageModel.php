@@ -48,4 +48,12 @@ class MessageModel extends Model
             ->where("acode='" . session('acode') . "'")
             ->update($data);
     }
+
+    // 获取表单字段
+    public function getFormFieldByCode($fcode)
+    {
+        return parent::table('ay_form_field')->where("fcode='$fcode'")
+            ->order('sorting ASC,id ASC')
+            ->select();
+    }
 }
