@@ -57,7 +57,7 @@ class FormController extends Controller
             if (get('action') == 'addform') {
                 $fcode = get_auto_code($this->model->getLastCode());
                 $form_name = post('form_name');
-                $table_name = 'ay_' . post('table_name', 'var');
+                $table_name = 'ay_diy_' . post('table_name', 'var');
                 
                 if (! $form_name) {
                     alert_back('表单名称不能为空！');
