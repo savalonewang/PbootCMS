@@ -522,7 +522,7 @@ class ParserModel extends Model
     {
         $result = parent::table('ay_slide')->where("gid='$gid'")
             ->where("acode='" . session('lg') . "'")
-            ->order('sorting asc,id asc')
+            ->order('sorting ASC,id ASC')
             ->limit($num)
             ->select();
         return $result;
@@ -533,7 +533,7 @@ class ParserModel extends Model
     {
         $result = parent::table('ay_link')->where("gid='$gid'")
             ->where("acode='" . session('lg') . "'")
-            ->order('sorting asc,id asc')
+            ->order('sorting ASC,id ASC')
             ->limit($num)
             ->select();
         return $result;
