@@ -17,6 +17,7 @@
 	                        <th>字段描述</th>
 	                        <th>字段名称</th>
 	                        <th>字段类型</th>
+	                        <th>排序</th>
 	                        <th>操作</th>
 	                    </tr>
 	                </thead>
@@ -44,6 +45,7 @@
 	                    		{if($value->type==8)}编辑器{/if}
 	                    		{if($value->type==9)}下拉选择{/if}
 							</td>
+							<td>[value->sorting]</td>
 	                        <td>
 	                            {fun=get_btn_del($value->id)}
 	                            {fun=get_btn_mod($value->id)}
@@ -108,7 +110,14 @@
 	                     	<div class="layui-form-mid layui-word-aux">只在类型为单选或多选时填写有效。</div>
 	                     </div>
 	                </div>
-	   			
+	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">排序</label>
+	                     <div class="layui-input-block">
+	                     	<input type="text" name="sorting" required lay-verify="required" value="255" placeholder="请输入排序"  class="layui-input">
+	                     </div>
+	                </div>
+		   			
 	   				<div class="layui-form-item">
 						 <div class="layui-input-block">
 						    <button class="layui-btn" lay-submit>立即提交</button>
@@ -189,6 +198,13 @@
                      <div class="layui-input-block">
                      	<textarea name="value" placeholder="多个选项用逗号或回车隔开"  class="layui-textarea">{$extfield->value}</textarea>
                      	<div class="layui-form-mid layui-word-aux">只在类型为单选或多选时填写有效，多个选项用逗号或回车隔开。</div>
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">排序</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="sorting" required lay-verify="required" value="{$extfield->sorting}" placeholder="请输入排序"  class="layui-input">
                      </div>
                 </div>
    			

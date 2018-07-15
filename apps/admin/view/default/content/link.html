@@ -16,6 +16,7 @@
                         <th>名称</th>
                         <th>链接</th>
                         <th>Logo</th>
+                        <th>排序</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -26,6 +27,7 @@
                         <td>[value->name]</td>
                         <td>[value->link]</td>
                         <td><img src="{SITE_DIR}[value->logo]" style="height:20px;"></td>
+                        <td>[value->sorting]</td>
                         <td>
                             {fun=get_btn_del($value->id)}
                             {fun=get_btn_mod($value->id)}
@@ -80,6 +82,13 @@
 					 	 <i class="layui-icon">&#xe67c;</i>上传图片
 					 </button>
 					 <div id="logo_box" class="pic"></div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">排序</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="sorting" required lay-verify="required" value="255" placeholder="请输入排序"  class="layui-input">
+                     </div>
                 </div>
                 
                 <div class="layui-form-item">
@@ -144,6 +153,13 @@
 					 	 <i class="layui-icon">&#xe67c;</i>上传图片
 					 </button>
 					 <div id="logo_box" class="pic">{if([$link->logo])}<dl><dt><img src="{SITE_DIR}{$link->logo}" data-url="{$link->logo}"></dt><dd>删除</dd></dl>{/if}</div>
+                </div>
+                
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">排序</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="sorting" required lay-verify="required" value="{$link->sorting}" placeholder="请输入排序"  class="layui-input">
+                     </div>
                 </div>
                 
                  <div class="layui-form-item">

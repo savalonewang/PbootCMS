@@ -58,8 +58,8 @@ class ExtFieldController extends Controller
                 $value = str_replace("，", ",", $value); // 替换中文逗号分割符
                 $value = str_replace(" ", "", $value); // 替换空格
             }
-            
             $description = post('description');
+            $sorting = post('sorting', 'int');
             
             if (! $mcode) {
                 alert_back('内容模型不能为空！');
@@ -85,7 +85,8 @@ class ExtFieldController extends Controller
                 'name' => $name,
                 'type' => $type,
                 'value' => $value,
-                'description' => $description
+                'description' => $description,
+                'sorting' => $sorting
             );
             
             // 字段类型及长度
@@ -191,8 +192,8 @@ class ExtFieldController extends Controller
                 $value = str_replace("，", ",", $value); // 替换中文逗号分割符
                 $value = str_replace(" ", "", $value); // 替换空格
             }
-            
             $description = post('description');
+            $sorting = post('sorting', 'int');
             
             if (! $mcode) {
                 alert_back('内容模型不能为空！');
@@ -207,7 +208,8 @@ class ExtFieldController extends Controller
                 'mcode' => $mcode,
                 'type' => $type,
                 'value' => $value,
-                'description' => $description
+                'description' => $description,
+                'sorting' => $sorting
             );
             
             // 执行修改

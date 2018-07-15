@@ -27,23 +27,8 @@ class MessageController extends Controller
     {
         if ($_POST) {
             
-            $contacts = post('contacts');
-            $mobile = post('mobile');
-            $content = post('content');
+            // 验证码验证
             $checkcode = post('checkcode');
-            
-            if (! $contacts) {
-                alert_back('联系人不能为空!');
-            }
-            
-            if (! $mobile) {
-                alert_back('手机号码不能为空！');
-            }
-            
-            if (! $content) {
-                alert_back('留言内容不能为空！');
-            }
-            
             if ($this->config('message_check_code')) {
                 if (! $checkcode) {
                     alert_back('验证码不能为空！');
@@ -54,34 +39,49 @@ class MessageController extends Controller
                 }
             }
             
-            $data = array(
-                'acode' => session('lg'),
-                'contacts' => $contacts,
-                'mobile' => $mobile,
-                'content' => $content,
-                'user_ip' => ip2long(get_user_ip()),
-                'user_os' => get_user_os(),
-                'user_bs' => get_user_bs(),
-                'recontent' => '',
-                'status' => 0,
-                'create_user' => 'guest',
-                'update_user' => 'guest'
-            );
+            // 读取字段
+            if (! $form = $this->model->getFormField(1)) {
+                alert_back('留言表单不存在任何字段，请核对后重试！');
+            }
+            
+            // 接收数据
+            $mail_body = '';
+            foreach ($form as $value) {
+                $field_data = post($value->name);
+                if ($value->required && ! $field_data) {
+                    alert_back($value->description . '不能为空！');
+                } else {
+                    $data[$value->name] = post($value->name);
+                    $mail_body .= $value->name . '：' . post($value->name) . '<br>';
+                }
+            }
+            
+            // 设置创建时间
+            if ($data) {
+                $data['acode'] = session('lg');
+                $data['user_ip'] = ip2long(get_user_ip());
+                $data['user_os'] = get_user_os();
+                $data['user_bs'] = get_user_bs();
+                $data['acode'] = session('lg');
+                $data['recontent'] = '';
+                $data['status'] = 0;
+                $data['create_user'] = 'guest';
+                $data['update_user'] = 'guest';
+            }
             
             if ($this->model->addMessage($data)) {
-                $this->log('提交留言成功！');
+                $this->log('留言提交成功！');
                 if ($this->config('message_send_mail') && $this->config('message_send_to')) {
-                    $mail_subject = "【PbootCMS】您有新的留言，请注意查收！";
-                    $mail_body = "联系人：$contacts<br>手　机：$mobile<br>内　容：$content";
+                    $mail_subject = "【PbootCMS】您有新的表单数据，请注意查收！";
                     sendmail($this->config(), $this->config('message_send_to'), $mail_subject, $mail_body);
                 }
-                alert_location('留言成功！', '-1');
+                alert_location('提交成功！', '-1');
             } else {
-                $this->log('提交留言失败！');
-                alert_back('留言失败！');
+                $this->log('留言提交失败！');
+                alert_back('提交失败！');
             }
         } else {
-            error('留言失败，请使用POST方式提交留言！');
+            error('提交失败，请使用POST方式提交！');
         }
     }
 

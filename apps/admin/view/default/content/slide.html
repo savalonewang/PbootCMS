@@ -13,9 +13,11 @@
             	<thead>
                     <tr>
                     	<th>分组(gid)</th>
-                        <th>轮播图片</th>
-                        <th>跳转链接</th>
-                        <th>描述文本</th>
+                        <th>图片</th>
+                        <th>链接</th>
+                        <th>标题</th>
+                        <th>描述</th>
+                        <th>排序</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -26,6 +28,8 @@
                         <td><img src="{SITE_DIR}[value->pic]" style="height:30px;"></td>
                         <td>[value->link]</td>
                         <td>[value->title]</td>
+                        <td>[value->subtitle]</td>
+                        <td>[value->sorting]</td>
                         <td>
                             {fun=get_btn_del($value->id)}
                             {fun=get_btn_mod($value->id)}
@@ -70,16 +74,30 @@
                 </div>
                 
                 <div class="layui-form-item">
-                     <label class="layui-form-label">跳转链接</label>
+                     <label class="layui-form-label">链接</label>
                      <div class="layui-input-block">
                      	<input type="text" name="link" placeholder="请输入跳转链接"  class="layui-input">
                      </div>
                 </div>
                 
-                <div class="layui-form-item">
-                     <label class="layui-form-label">描述文本</label>
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">标题</label>
                      <div class="layui-input-block">
-                     	<input type="text" name="title" placeholder="请输入描述文本"  class="layui-input">
+                     	<input type="text" name="title" placeholder="请输入标题"  class="layui-input">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">描述</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="subtitle" placeholder="请输入描述"  class="layui-input">
+                     </div>
+                </div>
+                
+                <div class="layui-form-item">
+                     <label class="layui-form-label">排序</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="sorting" required lay-verify="required" value="255" placeholder="请输入排序"  class="layui-input">
                      </div>
                 </div>
                 
@@ -141,9 +159,23 @@
                 </div>
                 
                 <div class="layui-form-item">
-                     <label class="layui-form-label">描述文本</label>
+                     <label class="layui-form-label">标题</label>
                      <div class="layui-input-block">
-                     	<input type="text" name="title" value="{$slide->title}" placeholder="请输入描述文本"  class="layui-input">
+                     	<input type="text" name="title" value="{$slide->title}" placeholder="请输入标题"  class="layui-input">
+                     </div>
+                </div>
+                
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">描述</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="subtitle" value="{$slide->subtitle}" placeholder="请输入描述"  class="layui-input">
+                     </div>
+                </div>
+                
+                 <div class="layui-form-item">
+                     <label class="layui-form-label">排序</label>
+                     <div class="layui-input-block">
+                     	<input type="text" name="sorting" required lay-verify="required" value="{$slide->sorting}" placeholder="请输入排序"  class="layui-input">
                      </div>
                 </div>
                 

@@ -49,6 +49,8 @@ class SlideController extends Controller
             $pic = post('pic');
             $link = post('link');
             $title = post('title');
+            $subtitle = post('subtitle');
+            $sorting = post('sorting', 'int');
             
             if (! $gid) {
                 alert_back('分组不能为空！');
@@ -65,6 +67,8 @@ class SlideController extends Controller
                 'pic' => $pic,
                 'link' => $link,
                 'title' => $title,
+                'subtitle' => $subtitle,
+                'sorting' => $sorting,
                 'create_user' => session('username'),
                 'update_user' => session('username')
             );
@@ -127,6 +131,8 @@ class SlideController extends Controller
             $pic = post('pic');
             $link = post('link');
             $title = post('title');
+            $subtitle = post('subtitle');
+            $sorting = post('sorting', 'int');
             
             if (! $gid) {
                 alert_back('分组不能为空！');
@@ -142,6 +148,8 @@ class SlideController extends Controller
                 'pic' => $pic,
                 'link' => $link,
                 'title' => $title,
+                'subtitle' => $subtitle,
+                'sorting' => $sorting,
                 'update_user' => session('username')
             );
             

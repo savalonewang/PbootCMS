@@ -48,12 +48,14 @@ class FormController extends Controller
             }
             
             // 接收数据
+            $mail_body = '';
             foreach ($form as $value) {
                 $field_data = post($value->name);
                 if ($value->required && ! $field_data) {
                     alert_back($value->description . '不能为空！');
                 } else {
                     $data[$value->name] = post($value->name);
+                    $mail_body .= $value->name . '：' . post($value->name) . '<br>';
                 }
             }
             
@@ -67,7 +69,6 @@ class FormController extends Controller
                 $this->log('提交表单数据成功！');
                 if ($this->config('message_send_mail') && $this->config('message_send_to')) {
                     $mail_subject = "【PbootCMS】您有新的表单数据，请注意查收！";
-                    $mail_body = "您网站有新的表单数据提交，请登陆网站管理后台查看！";
                     sendmail($this->config(), $this->config('message_send_to'), $mail_subject, $mail_body);
                 }
                 alert_location('提交成功！', '-1');

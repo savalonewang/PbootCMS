@@ -17,13 +17,16 @@ class ExtFieldModel extends Model
     // 获取扩展字段列表
     public function getList()
     {
-        return parent::table('ay_extfield')->page()->select();
+        return parent::table('ay_extfield')->order('mcode asc,sorting asc,id asc')
+            ->page()
+            ->select();
     }
 
     // 查找扩展字段
     public function findExtField($field, $keyword)
     {
         return parent::table('ay_extfield')->like($field, $keyword)
+            ->order('mcode asc,sorting asc,id asc')
             ->page()
             ->select();
     }
@@ -37,7 +40,9 @@ class ExtFieldModel extends Model
     // 获取模型字段
     public function getModelField($mcode)
     {
-        return parent::table('ay_extfield')->where("mcode='$mcode'")->select();
+        return parent::table('ay_extfield')->where("mcode='$mcode'")
+            ->order('sorting asc,id asc')
+            ->select();
     }
 
     // 获取扩展字段详情

@@ -18,7 +18,7 @@ class SlideModel extends Model
     public function getList()
     {
         return parent::table('ay_slide')->where("acode='" . session('acode') . "'")
-            ->order('gid asc')
+            ->order('gid asc,sorting asc,id asc')
             ->page()
             ->select();
     }
@@ -28,7 +28,7 @@ class SlideModel extends Model
     {
         return parent::table('ay_slide')->where("acode='" . session('acode') . "'")
             ->like($field, $keyword)
-            ->order('gid asc')
+            ->order('gid asc,sorting asc,id asc')
             ->page()
             ->select();
     }
