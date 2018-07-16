@@ -37,6 +37,7 @@ class ContentController extends Controller
                 }
                 $data->likeslink = url('/home/Do/likes/id/' . $data->id, false);
                 $data->opposelink = url('/home/Do/oppose/id/' . $data->id, false);
+                $data->content = str_replace('/static/upload/', get_http_url() . '/static/upload/', $data->content);
                 json(1, $data);
             } else {
                 json(0, 'id为' . $id . '的内容已经不存在了！');

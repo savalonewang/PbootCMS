@@ -55,6 +55,7 @@ class ListController extends Controller
             }
             $data[$key]->likeslink = url('/home/Do/likes/id/' . $data[$key]->id, false);
             $data[$key]->opposelink = url('/home/Do/oppose/id/' . $data[$key]->id, false);
+            $data[$key]->content = str_replace('/static/upload/', get_http_url() . '/static/upload/', $data[$key]->content);
         }
         
         // 输出数据
