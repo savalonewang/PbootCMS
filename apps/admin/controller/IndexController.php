@@ -85,7 +85,7 @@ class IndexController extends Controller
         }
         
         // 就收数据
-        $username = post('username', 'var', true);
+        $username = post('username', 'vars', true);
         $password = post('password');
         
         if (! $username) {
