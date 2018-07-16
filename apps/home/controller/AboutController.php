@@ -28,7 +28,7 @@ class AboutController extends Controller
     // 单页内容
     public function index()
     {
-        if (! ! $scode = get('scode', 'var')) {
+        if (! ! $scode = get('scode', 'vars')) {
             // 读取数据
             if (! $data = $this->model->getAbout($scode)) {
                 error('您访问的内容不存在，请核对后重试！');

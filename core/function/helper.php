@@ -331,6 +331,11 @@ function filter($varname, $condition)
                     $err = '必须为对象类型！';
                 }
                 break;
+            case 'vars':
+                if (! preg_match('/^[\x{4e00}-\x{9fa5}\w\-]+$/u', $data)) {
+                    $err = '只能包含中文、字母、数字、横线！';
+                }
+                break;
             default:
                 if ($condition['d_type'])
                     error($vartext . '数据类型设置错误！');

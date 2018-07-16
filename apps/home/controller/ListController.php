@@ -28,7 +28,7 @@ class ListController extends Controller
     // 内容列表
     public function index()
     {
-        if (! ! $scode = get('scode', 'var')) {
+        if (! ! $scode = get('scode', 'vars')) {
             if (! ! $sort = $this->model->getSort($scode)) {
                 if ($sort->listtpl) {
                     $content = parent::parser($sort->listtpl); // 框架标签解析

@@ -62,7 +62,6 @@ class MessageController extends Controller
                 $data['user_ip'] = ip2long(get_user_ip());
                 $data['user_os'] = get_user_os();
                 $data['user_bs'] = get_user_bs();
-                $data['acode'] = session('lg');
                 $data['recontent'] = '';
                 $data['status'] = 0;
                 $data['create_user'] = 'guest';

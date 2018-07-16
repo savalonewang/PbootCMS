@@ -28,7 +28,7 @@ class ContentController extends Controller
     // 内容详情
     public function index()
     {
-        if (! ! $id = get('id', 'var')) {
+        if (! ! $id = get('id', 'vars')) {
             // 读取数据
             if (! $data = $this->model->getContent($id)) {
                 error('您访问的内容不存在，请核对后重试！');
