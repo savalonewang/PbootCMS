@@ -199,21 +199,33 @@
 	                 </div>
 	            </div>
 	   
-	
 	   			<div class="layui-form-item">
 	                  <label class="layui-form-label">邮箱密码</label>
 	                 <div class="layui-input-block">
-	                 	<input type="text" name="smtp_password" value="{$configs['smtp_password']['value']}" placeholder="请输入邮箱密码" class="layui-input">
+	                 	<input type="password" name="smtp_password" value="{$configs['smtp_password']['value']}" placeholder="请输入邮箱密码" class="layui-input">
 	                 </div>
 	            </div>
-		
+	            
+				<div class="layui-form-item">
+	                  <label class="layui-form-label">测试账号</label>
+	                 <div class="layui-input-block">
+	                 	<input type="text" name="smtp_username_test" id="smtp_username_test" lay-verify="email" value="{$configs['smtp_username_test']['value']}" placeholder="请输入用于接受测试邮件的账号" class="layui-input">
+	                 </div>
+	            </div>
 		  	   
 		  	   <div class="layui-form-item">
 					 <div class="layui-input-block">
 					    <button class="layui-btn" lay-submit>立即提交</button>
 					    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					    <a href="{url./admin/Config/email/action/sendemail}" onclick="return sendtest(this,'#smtp_username_test')" class="layui-btn layui-btn-primary">发送测试邮件</a>
 					 </div>
 				</div>
+				<script>
+			    	function sendtest(obj,to){
+			    		$(obj).attr('href',$(obj).attr('href')+'?to='+$(to).val()); 
+			    		return true;
+			    	}
+			    </script>
           	</form> 
           </div>
 	  </div>

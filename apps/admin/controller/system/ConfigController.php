@@ -44,19 +44,7 @@ class ConfigController extends Controller
                     }
                     $this->modConfig($key, $value);
                 } else {
-                    if ($this->model->checkConfig("name='$key'")) {
-                        $this->model->modValue($key, post($key));
-                    } elseif ($key != 'submit') {
-                        // 自动新增配置项
-                        $data = array(
-                            'name' => $key,
-                            'value' => post($key),
-                            'type' => 2,
-                            'sorting' => 255,
-                            'description' => ''
-                        );
-                        $this->model->addConfig($data);
-                    }
+                    $this->modDbConfig($key);
                 }
             }
             
@@ -84,10 +72,22 @@ class ConfigController extends Controller
     // 邮件发送配置
     public function email()
     {
+        if (! ! $action = get('action')) {
+            switch ($action) {
+                case 'sendemail':
+                    if (! ! $rs = sendmail($this->config(), $this->config('smtp_username'), 'PbootCMS测试邮件', '欢迎您使用PbootCMS网站开发管理系统！')) {
+                        alert_back('测试邮件发送成功！');
+                    } else {
+                        alert($rs);
+                    }
+                    break;
+            }
+        }
+        
         // 修改参数配置
         if ($_POST) {
             foreach ($_POST as $key => $value) {
-                $this->model->modValue($key, post($key));
+                $this->modDbConfig($key);
             }
             $this->log('修改邮件发送配置成功！');
             success('修改成功！', url('/admin/Config/email'));
@@ -109,5 +109,23 @@ class ConfigController extends Controller
             $config = preg_replace('/(\'' . $key . '\'([\s]+)?=>([\s]+)?)[\w\'\"\s,]+,/', '${1}\'' . $value . '\',', $config);
         }
         return file_put_contents(CONF_PATH . '/config.php', $config);
+    }
+
+    // 修改数据库配置
+    private function modDbConfig($key)
+    {
+        if ($this->model->checkConfig("name='$key'")) {
+            $this->model->modValue($key, post($key));
+        } elseif ($key != 'submit') {
+            // 自动新增配置项
+            $data = array(
+                'name' => $key,
+                'value' => post($key),
+                'type' => 2,
+                'sorting' => 255,
+                'description' => ''
+            );
+            return $this->model->addConfig($data);
+        }
     }
 }

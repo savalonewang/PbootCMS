@@ -597,5 +597,9 @@ function session($name, $value = null)
 function sendmail(array $config, $to, $subject, $body)
 {
     $smtp = new Smtp($config['smtp_server'], $config['smtp_username'], $config['smtp_password'], $config['smtp_port'], $config['smtp_ssl']);
-    return $smtp->sendMail($to, $subject, $body);
+    if ($smtp->sendMail($to, $subject, $body)) {
+        return true;
+    } else {
+        return $smtp->error();
+    }
 }
