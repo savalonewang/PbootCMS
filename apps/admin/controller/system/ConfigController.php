@@ -64,7 +64,7 @@ class ConfigController extends Controller
             path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
             switch (post('submit')) {
                 case 'api':
-                    success('修改成功！', url('/admin/Config/index#tab=t2', false));
+                    success('修改成功！', url('/admin/Config/index?#tab=t2', false));
                 default:
                     success('修改成功！', url('/admin/Config/index', false));
             }
