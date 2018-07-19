@@ -5,7 +5,7 @@
  * @author XingMeng
  * @email hnxsh@foxmail.com
  * @date 2016年11月5日
- *  管理后台入口文件
+ *  API入口文件
  */
 
 // 定义为入口文件
