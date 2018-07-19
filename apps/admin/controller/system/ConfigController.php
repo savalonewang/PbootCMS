@@ -65,6 +65,7 @@ class ConfigController extends Controller
             switch (post('submit')) {
                 case 'api':
                     success('修改成功！', url('/admin/Config/index?#tab=t2', false));
+                    break;
                 default:
                     success('修改成功！', url('/admin/Config/index', false));
             }
