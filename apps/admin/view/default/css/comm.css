@@ -13,7 +13,10 @@
 	font-size: 20px;
 	background: #23262E;
 	line-height: 50px;
+	height: 50px;
+	overflow:hidden;
 	text-align: left;
+	width: 180px;
 	padding-left: 20px;
 }
 .layui-layout-admin .layui-logo img {
@@ -216,7 +219,7 @@
 	display: none;
 }
 .layui-body {
-	overflow-x: scroll;
+	overflow-x: auto;
 }
 .hidden-xs {
 	display: none;
