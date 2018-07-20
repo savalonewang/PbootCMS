@@ -326,7 +326,7 @@ class ParserController extends Controller
     }
 
     // 解析当前位置
-    public function parserPositionLabel($content, $scode)
+    public function parserPositionLabel($content, $scode, $page = null, $link = null)
     {
         $pattern = '/\{pboot:position(\s+[^}]+)?\}/';
         if (preg_match_all($pattern, $content, $matches)) {
@@ -350,20 +350,24 @@ class ParserController extends Controller
                     }
                 }
                 $out_html = '<a href="' . SITE_DIR . '/">' . $indextext . '</a>';
-                foreach ($data as $key => $value) {
-                    if ($value['outlink']) {
-                        $out_html .= $separator . '<a href="' . $value['outlink'] . '">' . $value['name'] . '</a>';
-                    } elseif ($value['type'] == 1) {
-                        if ($value['filename']) {
-                            $out_html .= $separator . '<a href="' . url('/home/about/index/scode/' . $value['filename']) . '">' . $value['name'] . '</a>';
-                        } else {
-                            $out_html .= $separator . '<a href="' . url('/home/about/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
-                        }
-                    } elseif ($value['type'] == 2) {
-                        if ($value['filename']) {
-                            $out_html .= $separator . '<a href="' . url('/home/list/index/scode/' . $value['filename']) . '">' . $value['name'] . '</a>';
-                        } else {
-                            $out_html .= $separator . '<a href="' . url('/home/list/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
+                if ($page && $scode == 0) {
+                    $out_html .= $separator . '<a href="' . $link . '">' . $page . '</a>';
+                } else {
+                    foreach ($data as $key => $value) {
+                        if ($value['outlink']) {
+                            $out_html .= $separator . '<a href="' . $value['outlink'] . '">' . $value['name'] . '</a>';
+                        } elseif ($value['type'] == 1) {
+                            if ($value['filename']) {
+                                $out_html .= $separator . '<a href="' . url('/home/about/index/scode/' . $value['filename']) . '">' . $value['name'] . '</a>';
+                            } else {
+                                $out_html .= $separator . '<a href="' . url('/home/about/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
+                            }
+                        } elseif ($value['type'] == 2) {
+                            if ($value['filename']) {
+                                $out_html .= $separator . '<a href="' . url('/home/list/index/scode/' . $value['filename']) . '">' . $value['name'] . '</a>';
+                            } else {
+                                $out_html .= $separator . '<a href="' . url('/home/list/index/scode/' . $value['scode']) . '">' . $value['name'] . '</a>';
+                            }
                         }
                     }
                 }
@@ -801,8 +805,11 @@ class ParserController extends Controller
                     if (count($filter) == 2) {
                         $keys = explode(',', $filter[1]);
                         foreach ($keys as $value) {
-                            if ($value)
+                            if ($value) {
                                 $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
+                            } else {
+                                $where1[] = $filter[0] . "='" . escape_string($value) . "'";
+                            }
                         }
                     }
                 }
@@ -923,8 +930,11 @@ class ParserController extends Controller
                     if (count($filter) == 2) {
                         $keys = explode(',', $filter[1]);
                         foreach ($keys as $value) {
-                            if ($value)
+                            if ($value) {
                                 $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
+                            } else {
+                                $where1[] = $filter[0] . "='" . escape_string($value) . "'";
+                            }
                         }
                     }
                 }
@@ -1585,6 +1595,12 @@ class ParserController extends Controller
                 unset($where2['page']);
                 unset($where2['from']);
                 unset($where2['isappinstalled']);
+                
+                // 无任何条件不显示内容
+                if (! $where2) {
+                    $content = str_replace($matches[0][$i], '', $content);
+                    continue;
+                }
                 
                 // 读取数据
                 if (! $data = $this->model->getList($scode, $num, $order, $where1, $where2)) {

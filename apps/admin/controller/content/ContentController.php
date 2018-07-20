@@ -83,9 +83,9 @@ class ContentController extends Controller
             $keywords = post('keywords');
             $description = post('description');
             $status = post('status', 'int');
-            $istop = post('istop', 'int');
-            $isrecommend = post('isrecommend', 'int');
-            $isheadline = post('isheadline', 'int');
+            $istop = post('istop', 'int', '', '', 0);
+            $isrecommend = post('isrecommend', 'int', '', '', 0);
+            $isheadline = post('isheadline', 'int', '', '', 0);
             
             if (! $scode) {
                 alert_back('内容分类不能为空！');
@@ -97,7 +97,7 @@ class ContentController extends Controller
             
             // 自动提起前一百个字符为描述
             if (! $description && isset($_POST['content'])) {
-                $description = mb_substr(strip_tags($_POST['content']), 0, 100, 'utf-8');
+                $description = mb_substr(strip_tags($_POST['content']), 0, 150, 'utf-8');
             }
             
             // 缩放缩略图
@@ -344,9 +344,9 @@ class ContentController extends Controller
             $keywords = post('keywords');
             $description = post('description');
             $status = post('status', 'int');
-            $istop = post('istop', 'int');
-            $isrecommend = post('isrecommend', 'int');
-            $isheadline = post('isheadline', 'int');
+            $istop = post('istop', 'int', '', '', 0);
+            $isrecommend = post('isrecommend', 'int', '', '', 0);
+            $isheadline = post('isheadline', 'int', '', '', 0);
             
             if (! $scode) {
                 alert_back('内容分类不能为空！');
@@ -358,7 +358,7 @@ class ContentController extends Controller
             
             // 自动提起前一百个字符为描述
             if (! $description && isset($_POST['content'])) {
-                $description = mb_substr(strip_tags($_POST['content']), 0, 100, 'utf-8');
+                $description = mb_substr(strip_tags($_POST['content']), 0, 150, 'utf-8');
             }
             
             // 缩放缩略图
