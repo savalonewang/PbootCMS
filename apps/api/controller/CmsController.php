@@ -242,7 +242,7 @@ class CmsController extends Controller
         }
     }
 
-    // 留言记录
+    // 读取留言记录
     public function msg()
     {
         // 获取参数
@@ -259,56 +259,80 @@ class CmsController extends Controller
         }
     }
 
-    // 留言
+    // 新增留言
     public function addmsg()
     {
         if ($_POST) {
             
-            $acode = get('acode') ?: $this->lg;
-            $contacts = post('contacts');
-            $mobile = post('mobile');
-            $content = post('content');
-            
-            if (! $contacts) {
-                json(0, '联系人不能为空!');
+            // 读取字段
+            if (! $form = $this->model->getFormField(1)) {
+                json(0, '接收表单不存在任何字段，请核对后重试！');
             }
             
-            if (! $mobile) {
-                json(0, '手机号码不能为空!');
+            // 接收数据
+            $mail_body = '';
+            foreach ($form as $value) {
+                $field_data = post($value->name);
+                if ($value->required && ! $field_data) {
+                    json(0, $value->description . '不能为空！');
+                } else {
+                    $data[$value->name] = post($value->name);
+                    $mail_body .= $value->description . '：' . post($value->name) . '<br>';
+                }
             }
             
-            if (! $content) {
-                json(0, '留言内容不能为空!');
+            // 设置其他字段
+            if ($data) {
+                $data['acode'] = get('acode') ?: $this->lg;
+                $data['user_ip'] = ip2long(get_user_ip());
+                $data['user_os'] = get_user_os();
+                $data['user_bs'] = get_user_bs();
+                $data['recontent'] = '';
+                $data['status'] = 0;
+                $data['create_user'] = 'api';
+                $data['update_user'] = 'api';
             }
             
-            $data = array(
-                'acode' => $acode,
-                'contacts' => $contacts,
-                'mobile' => $mobile,
-                'content' => $content,
-                'user_ip' => ip2long(get_user_ip()),
-                'user_os' => get_user_os(),
-                'user_bs' => get_user_bs(),
-                'recontent' => '',
-                'status' => 0,
-                'create_user' => 'API',
-                'update_user' => 'API'
-            );
-            
-            if ($this->model->addMessage($data)) {
-                $this->log('API提交留言成功！');
+            // 写入数据
+            if ($this->model->addMessage($value->table_name, $data)) {
+                $this->log('API提交表单数据成功！');
                 if ($this->config('message_send_mail') && $this->config('message_send_to')) {
-                    $mail_subject = "【PbootCMS】您有新的留言，请注意查收！";
-                    $mail_body = "联系人：$contacts<br>手　机：$mobile<br>内　容：$content";
+                    $mail_subject = "【PbootCMS】您有新的表单数据，请注意查收！";
+                    $mail_body .= '<br>来自网站' . get_http_url() . '（' . date('Y-m-d H:i:s') . '）';
                     sendmail($this->config(), $this->config('message_send_to'), $mail_subject, $mail_body);
                 }
-                json(1, '留言成功！');
+                json(1, '表单提交成功！');
             } else {
-                $this->log('提交留言失败！');
-                json(0, '留言失败！');
+                $this->log('API提交表单数据失败！');
+                json(0, '表单提交失败！');
             }
         } else {
-            json(0, '留言失败，请使用POST方式提交留言！');
+            json(0, '表单提交失败，请使用POST方式提交！');
+        }
+    }
+
+    // 表单记录
+    public function form()
+    {
+        // 获取参数
+        $num = get('num') ?: $this->config('pagesize');
+        
+        // 获取表单编码
+        if (! $fcode = get('fcode'))
+            json(0, '必须传递表单编码fcode');
+        
+        // 获取表名称
+        if (! $table = $this->model->getFormTable($fcode)) {
+            json(0, '传递的fcode有误');
+        }
+        
+        // 获取表数据
+        $data = $this->model->getForm($table, $num);
+        
+        if (get('page') <= PAGECOUNT) {
+            json(1, $data);
+        } else {
+            return json(0, '已经到底了！');
         }
     }
 
@@ -327,12 +351,14 @@ class CmsController extends Controller
             }
             
             // 接收数据
+            $mail_body = '';
             foreach ($form as $value) {
                 $field_data = post($value->name);
                 if ($value->required && ! $field_data) {
                     json(0, $value->description . '不能为空！');
                 } else {
                     $data[$value->name] = post($value->name);
+                    $mail_body .= $value->description . '：' . post($value->name) . '<br>';
                 }
             }
             
@@ -343,25 +369,25 @@ class CmsController extends Controller
             
             // 写入数据
             if ($this->model->addForm($value->table_name, $data)) {
-                $this->log('提交表单数据成功！');
+                $this->log('API提交表单数据成功！');
                 if ($this->config('message_send_mail') && $this->config('message_send_to')) {
                     $mail_subject = "【PbootCMS】您有新的表单数据，请注意查收！";
-                    $mail_body = "您网站有新的表单数据提交，请登陆网站管理后台查看！";
+                    $mail_body .= '<br>来自网站' . get_http_url() . '（' . date('Y-m-d H:i:s') . '）';
                     sendmail($this->config(), $this->config('message_send_to'), $mail_subject, $mail_body);
                 }
                 json(1, '表单提交成功！');
             } else {
-                $this->log('提交表单数据失败！');
+                $this->log('API提交表单数据失败！');
                 json(0, '表单提交失败！');
             }
         } else {
-            json(0, '提交失败，请使用POST方式提交！');
+            json(0, '表单提交失败，请使用POST方式提交！');
         }
     }
 
     // 空拦截
     public function _empty()
     {
-        error('您调用的接口不存在，请核对后重试！');
+        json(0, '您调用的接口不存在，请核对后重试！');
     }
 }

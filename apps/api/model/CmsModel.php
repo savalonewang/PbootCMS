@@ -457,7 +457,7 @@ class CmsModel extends Model
     }
 
     // 新增留言
-    public function addMessage($data)
+    public function addMessage($table, $data)
     {
         return parent::table('ay_message')->autoTime()->insert($data);
     }
@@ -482,6 +482,21 @@ class CmsModel extends Model
             ->where("a.fcode='$fcode'")
             ->join($join)
             ->order('b.sorting ASC,b.id ASC')
+            ->select();
+    }
+
+    // 获取表单表名称
+    public function getFormTable($fcode)
+    {
+        return parent::table('ay_form')->where("fcode='$fcode'")->value('table_name');
+    }
+
+    // 获取表单数据
+    public function getForm($table, $num)
+    {
+        return parent::table($table)->order('id DESC')
+            ->decode(false)
+            ->page(1, $num)
             ->select();
     }
 
