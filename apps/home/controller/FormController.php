@@ -55,7 +55,7 @@ class FormController extends Controller
                     alert_back($value->description . '不能为空！');
                 } else {
                     $data[$value->name] = post($value->name);
-                    $mail_body .= $value->name . '：' . post($value->name) . '<br>';
+                    $mail_body .= $value->description . '：' . post($value->name) . '<br>';
                 }
             }
             
