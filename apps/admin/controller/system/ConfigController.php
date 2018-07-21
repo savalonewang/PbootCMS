@@ -75,7 +75,7 @@ class ConfigController extends Controller
         if (! ! $action = get('action')) {
             switch ($action) {
                 case 'sendemail':
-                    if (! ! $rs = sendmail($this->config(), $this->config('smtp_username'), 'PbootCMS测试邮件', '欢迎您使用PbootCMS网站开发管理系统！')) {
+                    if (! ! $rs = sendmail($this->config(), get('to'), '【PbootCMS】测试邮件', '欢迎您使用PbootCMS网站开发管理系统！')) {
                         alert_back('测试邮件发送成功！');
                     } else {
                         alert($rs);
