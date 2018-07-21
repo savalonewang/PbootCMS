@@ -96,18 +96,6 @@ class Config
             $configs = mult_array_merge($configs, $config);
         }
         
-        // 载入应用路由文件
-        if (file_exists(APP_PATH . '/common/route.php')) {
-            $config = require APP_PATH . '/common/route.php';
-            $configs = mult_array_merge($configs, $config);
-        }
-        
-        // 载入应用版本文件
-        if (file_exists(APP_PATH . '/common/version.php')) {
-            $config = require APP_PATH . '/common/version.php';
-            $configs = mult_array_merge($configs, $config);
-        }
-        
         // 载入用户主配置文件
         if (file_exists(CONF_PATH . '/config.php')) {
             $config = require CONF_PATH . '/config.php';
@@ -131,6 +119,18 @@ class Config
                     $configs = mult_array_merge($configs, $config);
                 }
             }
+        }
+        
+        // 载入公共路由文件
+        if (file_exists(APP_PATH . '/common/route.php')) {
+            $config = require APP_PATH . '/common/route.php';
+            $configs = mult_array_merge($configs, $config);
+        }
+        
+        // 载入应用版本文件
+        if (file_exists(APP_PATH . '/common/version.php')) {
+            $config = require APP_PATH . '/common/version.php';
+            $configs = mult_array_merge($configs, $config);
         }
         
         // 清理缓冲区，避免配置文件出现Bom时影响显示

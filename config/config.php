@@ -30,8 +30,8 @@ return array(
     
     // 缩略图配置
     'ico' => array(
-        'max_width' => '500',
-        'max_height' => '500'
+        'max_width' => '1000',
+        'max_height' => '1000'
     ),
     
     // 模块模板路径定义
