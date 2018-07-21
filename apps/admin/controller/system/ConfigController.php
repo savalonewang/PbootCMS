@@ -116,7 +116,7 @@ class ConfigController extends Controller
     {
         if ($this->model->checkConfig("name='$key'")) {
             $this->model->modValue($key, post($key));
-        } elseif ($key != 'submit') {
+        } elseif ($key != 'submit' && $key != 'formcheck') {
             // 自动新增配置项
             $data = array(
                 'name' => $key,
