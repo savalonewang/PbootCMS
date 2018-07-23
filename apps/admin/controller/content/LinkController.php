@@ -49,6 +49,7 @@ class LinkController extends Controller
             $name = post('name');
             $link = post('link');
             $logo = post('logo');
+            $sorting = post('sorting');
             
             if (! $gid) {
                 alert_back('分组不能为空！');
@@ -60,6 +61,10 @@ class LinkController extends Controller
             
             if (! $link) {
                 alert_back('链接不能为空！');
+            }
+            
+            if (! $sorting) {
+                $sorting = 255;
             }
             
             // logo图缩放
@@ -74,6 +79,7 @@ class LinkController extends Controller
                 'name' => $name,
                 'link' => $link,
                 'logo' => $logo,
+                'sorting' => $sorting,
                 'create_user' => session('username'),
                 'update_user' => session('username')
             );
@@ -136,6 +142,7 @@ class LinkController extends Controller
             $name = post('name');
             $link = post('link');
             $logo = post('logo');
+            $sorting = post('sorting');
             
             if (! $gid) {
                 alert_back('分组不能为空！');
@@ -160,6 +167,7 @@ class LinkController extends Controller
                 'name' => $name,
                 'link' => $link,
                 'logo' => $logo,
+                'sorting' => $sorting,
                 'update_user' => session('username')
             );
             
