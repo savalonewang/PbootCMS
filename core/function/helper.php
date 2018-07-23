@@ -603,3 +603,49 @@ function sendmail(array $config, $to, $subject, $body)
         return $smtp->error();
     }
 }
+
+// 发送短信
+function sendsms(array $config, $to, $content)
+{
+    if (! $to || ! $content) {
+        return false;
+    }
+    
+    if (! isset($config['sms_account']) || ! isset($config['sms_pwd']) || ! isset($config['sms_signid'])) {
+        alert_back('短信发送参数配置有误');
+    }
+    
+    $data['Account'] = $config['sms_account'];
+    $data['Pwd'] = $config['sms_pwd'];
+    $data['SignId'] = $config['sms_signid'];
+    $data['Content'] = $content;
+    $to = str_replace("\r\n", ",", $to); // 替换回车
+    $to = str_replace("，", ",", $to); // 替换中文逗号分割符
+    $data['Mobile'] = str_replace(" ", "", $to); // 替换空格
+    
+    $url = "http://api.feige.ee/SmsService/Send";
+    if (! ! $res = get_url($url, $data)) {
+        $result = json_decode($res);
+        if (! ($result->Code === 0)) {
+            error('短信发送失败，' . $result->Message);
+        } else {
+            return true;
+        }
+    }
+}
+
+// 查询短信余额
+function get_sms_balance(array $config)
+{
+    $data['Account'] = $config['sms_account'];
+    $data['Pwd'] = $config['sms_pwd'];
+    $url = "http://api.feige.ee/Account/Balance";
+    if (! ! $res = get_url($url, $data)) {
+        $result = json_decode($res);
+        if (! ($result->Code === 0)) {
+            error('查询失败，' . $result->Message);
+        } else {
+            return $result->Balance;
+        }
+    }
+}

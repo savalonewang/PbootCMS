@@ -11,7 +11,7 @@ return array(
     'sn' => '281BE285D7',
     
     // 内核版本
-    'core_version' => '1.3.7',
+    'core_version' => '1.3.8',
     
     // 配置模块
     'public_app' => 'home,admin,api',
@@ -86,8 +86,8 @@ return array(
     
     // 缩略图配置
     'ico' => array(
-        'max_width' => '500',
-        'max_height' => '500'
+        'max_width' => '1000',
+        'max_height' => '1000'
     ),
     
     // 数据库连接配置,主从配置时,如果配置多台从服务器，通过在slave下数组配置slave1，slave2...
