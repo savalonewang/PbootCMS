@@ -50,7 +50,7 @@ class AdminController extends Controller
         // POST表单提交校验
         if ($_POST) {
             if (session('formcheck') != $_POST['formcheck']) {
-                alert_back('表单提交验失败！');
+                alert_back('表单提交校验失败！');
             }
         }
         
