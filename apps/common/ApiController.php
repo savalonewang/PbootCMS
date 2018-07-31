@@ -57,7 +57,7 @@ class ApiController extends Controller
             }
             
             // 验证时间戳
-            if (time() - $timestamp > 15) { // 请求时间戳认证，不得超过15秒
+            if (strpos($_SERVER['HTTP_REFERER'], get_http_url()) === false && time() - $timestamp > 15) { // 请求时间戳认证，不得超过15秒
                 json(0, '请求失败：接口时间戳验证失败！');
             }
             
