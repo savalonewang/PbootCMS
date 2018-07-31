@@ -430,6 +430,7 @@ class CmsModel extends Model
     {
         $result = parent::table('ay_slide')->where("gid='$gid'")
             ->where("acode='" . $acode . "'")
+            ->order('sorting asc,id asc')
             ->limit($num)
             ->select();
         return $result;
@@ -440,6 +441,7 @@ class CmsModel extends Model
     {
         $result = parent::table('ay_link')->where("gid='$gid'")
             ->where("acode='" . $acode . "'")
+            ->order('sorting asc,id asc')
             ->limit($num)
             ->select();
         return $result;
