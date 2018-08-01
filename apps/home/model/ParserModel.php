@@ -579,6 +579,21 @@ class ParserModel extends Model
             ->select();
     }
 
+    // 获取表单表名称
+    public function getFormTable($fcode)
+    {
+        return parent::table('ay_form')->where("fcode='$fcode'")->value('table_name');
+    }
+
+    // 获取表单数据
+    public function getForm($table, $num)
+    {
+        return parent::table($table)->order('id DESC')
+            ->decode(false)
+            ->page(1, $num)
+            ->select();
+    }
+
     // 新增表单数据
     public function addForm($table, $data)
     {

@@ -70,6 +70,7 @@ class ParserController extends Controller
         $content = $this->parserLinkLabel($content); // 友情链接
         $content = $this->parserMessageLabel($content); // 留言板
         $content = $this->parserFormLabel($content); // 自定义表单
+        $content = $this->parserSubmitFormLabel($content); // 自定义表单提交
         $content = $this->parserQrcodeLabel($content); // 二维码生成
         $content = $this->parserPageLabel($content); // CMS分页标签解析(需置后)
         $content = $this->parserLoopLabel($content); // LOOP语句(需置后)
@@ -1237,7 +1238,7 @@ class ParserController extends Controller
                 $gid = 1;
                 $num = 5;
                 
-                // 跳过未指定gid的列表
+                // 跳过未指定gid的标签
                 if (! array_key_exists('gid', $params)) {
                     continue;
                 }
@@ -1314,7 +1315,7 @@ class ParserController extends Controller
                 $gid = 1;
                 $num = 10;
                 
-                // 跳过未指定gid的列表
+                // 跳过未指定gid的标签
                 if (! array_key_exists('gid', $params)) {
                     continue;
                 }
@@ -1453,8 +1454,87 @@ class ParserController extends Controller
         return $content;
     }
 
-    // 解析表单提交标签
+    // 解析表单数据标签
     public function parserFormLabel($content)
+    {
+        $pattern = '/\{pboot:form(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:form\}/';
+        $pattern2 = '/\[form:([\w]+)(\s+[^]]+)?\]/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            for ($i = 0; $i < $count; $i ++) {
+                // 获取调节参数
+                $params = $this->parserParam($matches[1][$i]);
+                $num = $this->config('pagesize');
+                $fcode = - 1;
+                
+                // 跳过未指定fcode的标签
+                if (! array_key_exists('fcode', $params)) {
+                    continue;
+                }
+                
+                foreach ($params as $key => $value) {
+                    switch ($key) {
+                        case 'num':
+                            $num = $value;
+                            break;
+                        case 'fcode':
+                            $fcode = $value;
+                            break;
+                    }
+                }
+                
+                // 获取表名称
+                if (! $table = $this->model->getFormTable($fcode)) {
+                    $content = str_replace($matches[0][$i], '', $content);
+                    continue;
+                }
+                
+                // 读取数据
+                if (! $data = $this->model->getForm($table, $num)) {
+                    $content = str_replace($matches[0][$i], '', $content);
+                    continue;
+                }
+                
+                // 匹配到内部标签
+                if (preg_match_all($pattern2, $matches[2][$i], $matches2)) {
+                    $count2 = count($matches2[0]); // 循环内的内容标签数量
+                } else {
+                    $count2 = 0;
+                }
+                
+                $out_html = '';
+                $key = 1;
+                foreach ($data as $value) { // 按查询数据条数循环
+                    $one_html = $matches[2][$i];
+                    for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
+                        $params = $this->parserParam($matches2[2][$j]);
+                        switch ($matches2[1][$j]) {
+                            case 'n':
+                                $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
+                                break;
+                            case 'i':
+                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
+                                break;
+                            case 'date':
+                                $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->create_time), $one_html);
+                                break;
+                            default:
+                                if (isset($value->{$matches2[1][$j]})) {
+                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, $value->{$matches2[1][$j]}), $one_html);
+                                }
+                        }
+                    }
+                    $key ++;
+                    $out_html .= $one_html;
+                }
+                $content = str_replace($matches[0][$i], $out_html, $content);
+            }
+        }
+        return $content;
+    }
+
+    // 解析表单提交标签
+    public function parserSubmitFormLabel($content)
     {
         $pattern = '/\{pboot:form(\s+[^}]+)?\}/';
         if (preg_match_all($pattern, $content, $matches)) {
