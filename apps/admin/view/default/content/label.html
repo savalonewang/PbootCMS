@@ -72,10 +72,24 @@
 		                <script>
 							//初始化编辑器
 							$(document).ready(function (e) {
-								var ue = UE.getEditor('[value->name]');
+								var ue = UE.getEditor('[value->name]',{
+									maximumWords:500 
+								});
 							})
 						</script>
 	                {/if}
+	                
+	                {if($value->type==6)} <!-- 开关 -->
+		                <div class="layui-form-item">
+		                     <label class="layui-form-label">[value->description]</label>
+		                     <div class="layui-input-block">
+		                     	<input type="radio" name="[value->name]" value="1" title="开启" {if($value->value)}checked{/if}>
+      							<input type="radio" name="[value->name]" value="0" title="关闭" {if(!$value->value)}checked{/if}>
+		                     </div>
+		                     <div class="layui-form-mid layui-word-aux">{label:[value->name]}</div>
+		                </div>
+	                {/if}
+	                
 	  			{/foreach}
 	  			<div class="layui-form-item">
 					 <div class="layui-input-block">
@@ -113,6 +127,7 @@
                         {if($value->type==3)}图片{/if}
                         {if($value->type==4)}附件{/if}
                         {if($value->type==5)}编辑器{/if}
+                        {if($value->type==6)}开关{/if}
                         </td>
                         <td>[value->create_user]</td>
                         <td>[value->update_user]</td>
@@ -156,6 +171,7 @@
 	                    	<option value="3">图片</option>
 	                    	<option value="4">附件</option>
 	                    	<option value="5">编辑器</option>
+	                    	<option value="6">开关</option>
 	                    </select>
                      </div>
                 </div>
@@ -209,6 +225,7 @@
 	                    	<option value="3" {if([$label->type]==3)}selected{/if}>图片</option>
 	                    	<option value="4" {if([$label->type]==4)}selected{/if}>附件</option>
 	                    	<option value="5" {if([$label->type]==5)}selected{/if}>编辑器</option>
+	                    	<option value="6" {if([$label->type]==6)}selected{/if}>开关</option>
 	                    </select>
                      </div>
                 </div>
