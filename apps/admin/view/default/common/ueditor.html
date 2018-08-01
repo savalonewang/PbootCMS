@@ -9,15 +9,25 @@ $(document).ready(function (e) {
 })
 </script>
 
-<!-- 解决源码模式无法保存 -->
+
 <script type="text/javascript">
+   <!-- 解决源码模式无法保存 -->
   function editor_init() {
       $('#edit').submit(function () {
           editor=UE.getEditor('editor');
           if(editor.queryCommandState('source')==1) editor.execCommand('source');
       })
   }
+ 
+  <!-- 点击后添加到编辑器 -->
+  $(".addedit").on("click",'img',function(){
+	    editor=UE.getEditor('editor');
+		$img = $(this).attr("src");
+		editor.execCommand('inserthtml',"<img src='"+$img+"'>");
+   });
+
 </script>
+
 <script type="text/javascript">editor_init();</script>
 
 
