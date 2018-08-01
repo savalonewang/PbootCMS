@@ -5,7 +5,6 @@
  * @author XingMeng
  * @email hnxsh@foxmail.com
  * @date 2016年12月25日
- * @link www.xmcms.club
  *  应用公共控制类
  */
 namespace app\common;
@@ -48,18 +47,18 @@ class AdminController extends Controller
         $this->assign('menu_models', $models->getSelectMunu());
         
         // POST表单提交校验
-        if ($_POST) {
-            if (session('formcheck') != $_POST['formcheck']) {
-                alert_back('表单提交校验失败！');
-            }
+        if ($_POST && session('formcheck') != post('formcheck')) {
+            alert_back('表单提交校验失败！');
         }
         
-        // 上传文件接口不重新生成和异步登陆不重新生成
-        if (! (C == 'Index' && F == 'upload') && ! (C == 'Index' && F == 'login')) {
+        // 非上传接口提交后或页面首次加载时，生成页面验证码
+        if (($_POST || ! isset($_SESSION['formcheck'])) && ! (C == 'Index' && F == 'upload')) {
             $uniqid = get_uniqid();
             session('formcheck', $uniqid);
-            $this->assign('formcheck', $uniqid);
         }
+        
+        // 注入formcheck模板变量
+        $this->assign('formcheck', session('formcheck'));
     }
 
     // 后台用户登录状态检查

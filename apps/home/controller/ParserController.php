@@ -1635,7 +1635,7 @@ class ParserController extends Controller
                     }
                 }
                 
-                // 内容过滤筛选
+                // 内容过滤筛选,过滤为“或”关系
                 $where1 = array();
                 if ($filter) {
                     $filter = explode('|', $filter);
@@ -1648,15 +1648,30 @@ class ParserController extends Controller
                     }
                 }
                 
-                // 匹配单一字段及关键字搜索方式
+                // 存储搜索条件，条件为“并列”关系，由于为模糊匹配，条件为空时意味着“任意”
                 $where2 = array();
-                if ($field && $keyword) {
-                    $where2[$field] = $keyword;
-                } elseif ($keyword) {
-                    $where2['title'] = $keyword;
+                
+                // 采取keyword方式
+                if ($keyword) {
+                    if (strpos($field, '|')) { // 匹配多字段的关键字搜索
+                        $field = explode('|', $field);
+                        foreach ($field as $value) {
+                            if (isset($where2[0])) {
+                                $where2[0] .= ' OR ' . $value . " like '%" . escape_string($keyword) . "%'";
+                            } else {
+                                $where2[0] = $value . " like '%" . escape_string($keyword) . "%'";
+                            }
+                        }
+                    } else { // 匹配单一字段的关键字搜索
+                        if ($field) {
+                            $where2[$field] = $keyword;
+                        } else {
+                            $where2['title'] = $keyword;
+                        }
+                    }
                 }
                 
-                // 数据处理
+                // 多条件数据处理
                 $cond = array(
                     'd_source' => 'get',
                     'd_regular' => '/^[^\s]+$/'

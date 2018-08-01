@@ -188,7 +188,7 @@ class ContentSortModel extends Model
     }
 
     // 删除指定栏目文章
-    private function delContent($scodes)
+    public function delContent($scodes)
     {
         return parent::table('ay_content')->in('scode', $scodes)->delete();
     }

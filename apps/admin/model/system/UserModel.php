@@ -5,7 +5,6 @@
  * @author XingMeng
  * @email hnxsh@foxmail.com
  * @date 2017年04月07日
- * @link www.xmcms.club
  *  用户模型类
  */
 namespace app\admin\model\system;

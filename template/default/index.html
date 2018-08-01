@@ -91,13 +91,10 @@
         </div>
         
         <form action="{pboot:scaction}"  method="get" class="uk-form" style="margin-top:20px;">
-			搜索内容：
-			<select name="field">
-			     <option value="title">内容标题</option>
-			    <option value="content">内容详情</option>
-			</select><!--关键字匹配的字段-->
+			搜索内容/标题：
   			<input type="text" name="keyword" >
-			<input type="hidden" name="scode"  value="5" > <!--限定条件1（分类为5）-->
+  			<input type="hidden" name="field" value="content|title">
+			<input type="hidden" name="scode"  value="5,2" > <!--限定条件1（分类为5）-->
 			<button type="submit" class="uk-button">搜索</button>
 		</form>
     </div>

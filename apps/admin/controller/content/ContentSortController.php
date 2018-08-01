@@ -179,7 +179,7 @@ class ContentSortController extends Controller
             
             // 执行添加
             if ($this->model->addSort($data)) {
-                if ($type == 1) {
+                if ($type == 1 && ! $outlink) { // 在填写了外链时不生成单页
                     $this->addSingle($scode, $name);
                 }
                 $this->log('新增数据内容栏目' . $scode . '成功！');
@@ -367,10 +367,13 @@ class ContentSortController extends Controller
             
             // 执行添加
             if ($this->model->modSort($scode, $data)) {
-                // 如果修改为单页，并且不存在文章，则新增
-                if ($type == 1 && ! $this->model->findContent($scode)) {
+                // 如果修改为单页并且跳转，则删除单页内容，否则判断是否存在内容，不存在则添加
+                if ($type == 1 && $outlink) {
+                    $this->model->delContent($scode);
+                } elseif ($type == 1 && ! $this->model->findContent($scode)) {
                     $this->addSingle($scode, $name);
                 }
+                
                 $this->log('修改数据内容栏目' . $scode . '成功！');
                 success('修改成功！', url('/admin/ContentSort/index'));
             } else {
