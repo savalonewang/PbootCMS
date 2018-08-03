@@ -51,6 +51,9 @@ class FormController extends Controller
             $mail_body = '';
             foreach ($form as $value) {
                 $field_data = post($value->name);
+                if (is_array($field_data)) { // 如果是多选等情况时转换
+                    $field_data = implode(',', $field_data);
+                }
                 if ($value->required && ! $field_data) {
                     alert_back($value->description . '不能为空！');
                 } else {
