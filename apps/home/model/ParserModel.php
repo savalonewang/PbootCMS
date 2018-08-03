@@ -244,7 +244,7 @@ class ParserModel extends Model
     }
 
     // 列表内容
-    public function getList($scode, $num, $order, $filter = array(), $where = array())
+    public function getList($scode, $num, $order, $filter = array(), $where = array(), $fuzzy = true)
     {
         $fields = array(
             'a.*',
@@ -303,7 +303,7 @@ class ParserModel extends Model
         return parent::table('ay_content a')->field($fields)
             ->where($where1, 'OR')
             ->where($where2)
-            ->where($where, 'AND', 'AND', true)
+            ->where($where, 'AND', 'AND', $fuzzy)
             ->where($filter, 'OR', 'AND')
             ->join($join)
             ->order($order)
@@ -313,7 +313,7 @@ class ParserModel extends Model
     }
 
     // 指定列表内容，不分页
-    public function getSpecifyList($scode, $num, $order, $filter = array(), $where = array())
+    public function getSpecifyList($scode, $num, $order, $filter = array(), $where = array(), $fuzzy = true)
     {
         $fields = array(
             'a.*',
@@ -368,7 +368,7 @@ class ParserModel extends Model
         return parent::table('ay_content a')->field($fields)
             ->where($where1, 'OR')
             ->where($where2)
-            ->where($where, 'AND', 'AND', true)
+            ->where($where, 'AND', 'AND', $fuzzy)
             ->where($filter, 'OR', 'AND')
             ->join($join)
             ->order($order)

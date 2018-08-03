@@ -817,16 +817,9 @@ class ParserController extends Controller
                 
                 // 数据筛选
                 $where2 = array();
-                $cond = array(
-                    'd_source' => 'get',
-                    'd_regular' => '/^[^\s]+$/'
-                );
                 foreach ($_GET as $key => $value) {
                     if (substr($key, 0, 4) == 'ext_') { // 其他字段不加入
-                        $where2[$key] = filter($key, $cond);
-                        if ($_GET[$key] && ! $where2[$key]) {
-                            alert_back('您的查询含有非法字符,已被系统拦截');
-                        }
+                        $where2[$key] = get($key);
                     }
                 }
                 
@@ -941,17 +934,9 @@ class ParserController extends Controller
                 }
                 
                 // 数据筛选
-                $where2 = array();
-                $cond = array(
-                    'd_source' => 'get',
-                    'd_regular' => '/^[^\s]+$/'
-                );
                 foreach ($_GET as $key => $value) {
                     if (substr($key, 0, 4) == 'ext_') { // 其他字段不加入
-                        $where2[$key] = filter($key, $cond);
-                        if ($_GET[$key] && ! $where2[$key]) {
-                            alert_back('您的查询含有非法字符,已被系统拦截');
-                        }
+                        $where2[$key] = get($key);
                     }
                 }
                 
@@ -1601,6 +1586,7 @@ class ParserController extends Controller
                 $num = $this->config('pagesize');
                 $order = 'date desc';
                 $filter = '';
+                $fuzzy = true;
                 
                 foreach ($params as $key => $value) {
                     switch ($key) {
@@ -1615,6 +1601,8 @@ class ParserController extends Controller
                             break;
                         case 'filter':
                             $filter = $value;
+                        case 'fuzzy':
+                            $fuzzy = $value;
                             break;
                         case 'order':
                             switch ($value) {
@@ -1656,10 +1644,15 @@ class ParserController extends Controller
                     if (strpos($field, '|')) { // 匹配多字段的关键字搜索
                         $field = explode('|', $field);
                         foreach ($field as $value) {
-                            if (isset($where2[0])) {
-                                $where2[0] .= ' OR ' . $value . " like '%" . escape_string($keyword) . "%'";
+                            if ($fuzzy) {
+                                $like = " like '%" . escape_string($keyword) . "%'";
                             } else {
-                                $where2[0] = $value . " like '%" . escape_string($keyword) . "%'";
+                                $like = " like '" . escape_string($keyword) . "'";
+                            }
+                            if (isset($where2[0])) {
+                                $where2[0] .= ' OR ' . $value . $like;
+                            } else {
+                                $where2[0] = $value . $like;
                             }
                         }
                     } else { // 匹配单一字段的关键字搜索
@@ -1671,15 +1664,10 @@ class ParserController extends Controller
                     }
                 }
                 
-                // 多条件数据处理
-                $cond = array(
-                    'd_source' => 'get',
-                    'd_regular' => '/^[^\s]+$/'
-                );
+                // 数据接收
                 foreach ($_GET as $key => $value) {
-                    $where2[$key] = filter($key, $cond);
-                    if ($_GET[$key] && ! $where2[$key]) {
-                        alert_back('您的查询含有非法字符,已被系统拦截');
+                    if (! ! $value = get($key)) {
+                        $where2[$key] = $value;
                     }
                 }
                 
@@ -1698,7 +1686,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getList($scode, $num, $order, $where1, $where2)) {
+                if (! $data = $this->model->getList($scode, $num, $order, $where1, $where2, $fuzzy)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
