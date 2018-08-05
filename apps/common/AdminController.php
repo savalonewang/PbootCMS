@@ -52,7 +52,7 @@ class AdminController extends Controller
         }
         
         // 非上传接口提交后或页面首次加载时，生成页面验证码
-        if (($_POST || ! isset($_SESSION['formcheck'])) && ! (C == 'Index' && F == 'upload')) {
+        if (($_POST || ! isset($_SESSION['formcheck'])) && ! (C == 'Index' && F == 'upload') && ! (C == 'Index' && F == 'login')) {
             $uniqid = get_uniqid();
             session('formcheck', $uniqid);
         }
