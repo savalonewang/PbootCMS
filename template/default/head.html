@@ -29,8 +29,9 @@
          </a>
 
          <ul class="uk-navbar-nav uk-hidden-small">
+         	<li {pboot:if(0=='{sort:scode}')}class='uk-active'{/pboot:if}><a href="{pboot:sitepath}/">首页</a></li>
          	{pboot:nav}
-         		<li><a href="[nav:link]">[nav:name]</a></li>
+         		<li {pboot:if('[nav:scode]'=='{sort:tcode}')}class='uk-active'{/pboot:if}><a href="[nav:link]">[nav:name]</a></li>
          	{/pboot:nav}
          	
          	<!--  
@@ -53,8 +54,9 @@
 <div id="tm-offcanvas" class="uk-offcanvas">
      <div class="uk-offcanvas-bar">
          <ul class="uk-nav uk-nav-offcanvas uk-nav-parent-icon">
+         	<li {pboot:if(0=='{sort:scode}')}class='uk-active'{/pboot:if}><a href="{pboot:sitepath}/">首页</a></li>
          	{pboot:nav}
-            	<li><a href="[nav:link]">[nav:name]</a></li>
+            	<li {pboot:if('[nav:scode]'=='{sort:tcode}')}class='uk-active'{/pboot:if}><a href="[nav:link]">[nav:name]</a></li>
             {/pboot:nav}
          </ul>
      </div>

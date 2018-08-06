@@ -53,6 +53,7 @@ class ParserModel extends Model
         $field = array(
             'a.id',
             'a.pcode',
+            'c.name AS parentname',
             'a.scode',
             'a.name',
             'a.subname',
@@ -68,9 +69,16 @@ class ParserModel extends Model
             'a.sorting'
         );
         $join = array(
-            'ay_model b',
-            'a.mcode=b.mcode',
-            'LEFT'
+            array(
+                'ay_model b',
+                'a.mcode=b.mcode',
+                'LEFT'
+            ),
+            array(
+                'ay_content_sort c',
+                'a.pcode=c.scode',
+                'LEFT'
+            )
         );
         return parent::table('ay_content_sort a')->field($field)
             ->where("a.acode='" . session('lg') . "'")
@@ -85,6 +93,7 @@ class ParserModel extends Model
         $field = array(
             'a.id',
             'a.pcode',
+            'c.name AS parentname',
             'a.scode',
             'a.name',
             'a.subname',
@@ -100,19 +109,26 @@ class ParserModel extends Model
             'a.sorting'
         );
         $join = array(
-            'ay_model b',
-            'a.mcode=b.mcode',
-            'LEFT'
+            array(
+                'ay_model b',
+                'a.mcode=b.mcode',
+                'LEFT'
+            ),
+            array(
+                'ay_content_sort c',
+                'a.pcode=c.scode',
+                'LEFT'
+            )
         );
         return parent::table('ay_content_sort a')->field($field)
             ->where("a.acode='" . session('lg') . "'")
-            ->in('scode', $scodes)
+            ->in('a.scode', $scodes)
             ->join($join)
             ->select();
     }
 
-    // 分类栏目列表
-    public function getSorts()
+    // 分类栏目列表关系树
+    public function getSortsTree()
     {
         $fields = array(
             'a.id',
@@ -153,61 +169,30 @@ class ParserModel extends Model
         return $data;
     }
 
+    // 获取分类名称
+    public function getSortName($scode)
+    {
+        $result = $this->getSortList();
+        return $result[$scode]['name'];
+    }
+
     // 分类顶级编码
     public function getSortTopScode($scode)
     {
-        if (! isset($this->sorts)) {
-            $fields = array(
-                'a.id',
-                'a.pcode',
-                'a.scode',
-                'a.name',
-                'a.filename',
-                'a.outlink',
-                'b.type'
-            );
-            $join = array(
-                'ay_model b',
-                'a.mcode=b.mcode',
-                'LEFT'
-            );
-            $this->sorts = parent::table('ay_content_sort a')->where("a.acode='" . session('lg') . "'")
-                ->join($join)
-                ->column($fields, 'scode');
-        }
-        $result = $this->sorts;
+        $result = $this->getSortList();
         return $this->getTopParent($scode, $result);
     }
 
     // 获取位置
     public function getPosition($scode)
     {
-        if (! isset($this->sorts)) {
-            $fields = array(
-                'a.id',
-                'a.pcode',
-                'a.scode',
-                'a.name',
-                'a.filename',
-                'a.outlink',
-                'b.type'
-            );
-            $join = array(
-                'ay_model b',
-                'a.mcode=b.mcode',
-                'LEFT'
-            );
-            $this->sorts = parent::table('ay_content_sort a')->where("a.acode='" . session('lg') . "'")
-                ->join($join)
-                ->column($fields, 'scode');
-        }
-        $result = $this->sorts;
+        $result = $this->getSortList();
         $this->position = array(); // 重置
         $this->getTopParent($scode, $result);
         return array_reverse($this->position);
     }
 
-    // 分类顶级编码及栏目树
+    // 分类顶级编码
     private function getTopParent($scode, $sorts)
     {
         if (! $scode || ! $sorts) {
@@ -235,6 +220,31 @@ class ParserModel extends Model
             }
         }
         return $this->scodes;
+    }
+
+    // 获取栏目清单
+    private function getSortList()
+    {
+        if (! isset($this->sorts)) {
+            $fields = array(
+                'a.id',
+                'a.pcode',
+                'a.scode',
+                'a.name',
+                'a.filename',
+                'a.outlink',
+                'b.type'
+            );
+            $join = array(
+                'ay_model b',
+                'a.mcode=b.mcode',
+                'LEFT'
+            );
+            $this->sorts = parent::table('ay_content_sort a')->where("a.acode='" . session('lg') . "'")
+                ->join($join)
+                ->column($fields, 'scode');
+        }
+        return $this->sorts;
     }
 
     // 获取筛选字段数据

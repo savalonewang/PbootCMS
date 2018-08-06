@@ -202,7 +202,7 @@ class ParserController extends Controller
         $pattern2 = '/\[nav:([\w]+)(\s+[^]]+)?\]/';
         $pattern3 = '/pboot:([0-9])+nav/';
         if (preg_match_all($pattern, $content, $matches)) {
-            $data = $this->model->getSorts();
+            $data = $this->model->getSortsTree();
             $count = count($matches[0]);
             for ($i = 0; $i < $count; $i ++) {
                 
@@ -406,7 +406,66 @@ class ParserController extends Controller
                         }
                         break;
                     case 'tcode': // 顶级栏目ID
-                        $content = str_replace($matches[0][$i], $this->model->getSortTopScode($sort->scode), $content);
+                        if (! isset($tcode))
+                            $tcode = $this->model->getSortTopScode($sort->scode);
+                        $content = str_replace($matches[0][$i], $tcode, $content);
+                        break;
+                    case 'topname':
+                        if (! isset($tcode))
+                            $tcode = $this->model->getSortTopScode($sort->scode);
+                        $content = str_replace($matches[0][$i], $this->model->getSortName($tcode), $content);
+                        break;
+                    case 'toplink':
+                        if (! isset($tcode)) {
+                            $tcode = $this->model->getSortTopScode($sort->scode);
+                        }
+                        $top_sort = $this->model->getSort($tcode);
+                        if ($top_sort->outlink) {
+                            $toplink = $top_sort->outlink;
+                        } elseif ($top_sort->type == 1) {
+                            if ($top_sort->filename) {
+                                $toplink = url('/home/about/index/scode/' . $top_sort->filename);
+                            } else {
+                                $toplink = url('/home/about/index/scode/' . $top_sort->scode);
+                            }
+                        } else {
+                            if ($top_sort->filename) {
+                                $toplink = url('/home/list/index/scode/' . $top_sort->filename);
+                            } else {
+                                $toplink = url('/home/list/index/scode/' . $top_sort->scode);
+                            }
+                        }
+                        $content = str_replace($matches[0][$i], $toplink, $content);
+                        break;
+                    case 'parentname':
+                        if ($sort->pcode == 0) {
+                            $content = str_replace($matches[0][$i], $sort->name, $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], $sort->parentname, $content);
+                        }
+                        break;
+                    case 'parentlink':
+                        if ($sort->pcode == 0) {
+                            $parent_sort = $sort;
+                        } else {
+                            $parent_sort = $this->model->getSort($sort->pcode);
+                        }
+                        if ($parent_sort->outlink) {
+                            $parentlink = $top_sort->outlink;
+                        } elseif ($parent_sort->type == 1) {
+                            if ($parent_sort->filename) {
+                                $parentlink = url('/home/about/index/scode/' . $parent_sort->filename);
+                            } else {
+                                $parentlink = url('/home/about/index/scode/' . $parent_sort->scode);
+                            }
+                        } else {
+                            if ($parent_sort->filename) {
+                                $parentlink = url('/home/list/index/scode/' . $parent_sort->filename);
+                            } else {
+                                $parentlink = url('/home/list/index/scode/' . $parent_sort->scode);
+                            }
+                        }
+                        $content = str_replace($matches[0][$i], $parentlink, $content);
                         break;
                     case 'ico':
                         if ($sort->ico) {
@@ -460,8 +519,20 @@ class ParserController extends Controller
                     case 'tcode': // 顶级栏目ID
                         $content = str_replace($matches[0][$i], $id, $content);
                         break;
+                    case 'topname':
+                        $content = str_replace($matches[0][$i], $page, $content);
+                        break;
+                    case 'toplink':
+                        $content = str_replace($matches[0][$i], $link, $content);
+                        break;
                     case 'pcode': // 父栏目ID
                         $content = str_replace($matches[0][$i], $id, $content);
+                        break;
+                    case 'parentname':
+                        $content = str_replace($matches[0][$i], $page, $content);
+                        break;
+                    case 'parentlink':
+                        $content = str_replace($matches[0][$i], $link, $content);
                         break;
                     case 'scode': // 当前栏目ID
                         $content = str_replace($matches[0][$i], $id, $content);
