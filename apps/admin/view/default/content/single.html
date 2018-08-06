@@ -282,6 +282,7 @@
 								 	 <i class="layui-icon">&#xe67c;</i>上传多图
 								 </button>
 								 <div id="pics_box" class="pic addedit">
+								 	<dl><dt></dt></dl> <!-- 规避拖动bug -->
 								 	{php}
 		                				if([$content->pics]){
 		                					$pics=explode(',',[$content->pics]);
@@ -374,6 +375,24 @@
 	{/if} 
 
 </div>
+
+<style>.placeHolder {border:dashed 2px gray; }</style>
+<script type="text/javascript" src="{APP_THEME_DIR}/js/jquery.dragsort-0.5.2.min.js"></script>
+<script type="text/javascript">
+$("#pics_box").dragsort({
+	dragSelector: "dl",
+	dragBetween: false,
+	dragEnd: saveOrder,
+	placeHolderTemplate: "<dl class='placeHolder'><dt></dt></dl>"
+});
+
+function saveOrder() {
+	var data = $("#pics_box dl dt img").map(function() {
+		return $(this).data("url");
+	}).get();
+	$("input[name=pics]").val(data.join(","))
+};
+</script>
 <script type="text/javascript" src="{APP_THEME_DIR}/js/jscolor.js"></script>
 {include file='common/ueditor.html'}
 {include file='common/foot.html'}
