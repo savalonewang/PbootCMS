@@ -469,7 +469,7 @@ class Model
      */
     final public function in($field, $range)
     {
-        if (! $field || ! $range) {
+        if (! $field || (! $range && $range !== 0 && $range !== '0')) {
             return $this;
         }
         $in_string = '';
@@ -512,8 +512,9 @@ class Model
      */
     final public function notIn($field, $range)
     {
-        if (! $field || ! $range)
+        if (! $field || (! $range && $range !== 0 && $range !== '0')) {
             return $this;
+        }
         $in_string = '';
         if (is_array($range)) {
             foreach ($range as $key => $value) {
