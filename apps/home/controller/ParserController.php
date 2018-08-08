@@ -1877,58 +1877,31 @@ class ParserController extends Controller
         $pattern = '/\{pboot:if\(([^}]+)\)\}([\s\S]*?)\{\/pboot:if\}/';
         $pattern2 = '/pboot:([0-9])+if/';
         if (preg_match_all($pattern, $content, $matches)) {
-            // IF语句需要过滤的黑名单
-            $black = array(
-                'chr',
-                'phpinfo',
-                'eval',
-                'passthru',
-                'exec',
-                'system',
-                'chroot',
-                'scandir',
-                'chgrp',
-                'chown',
-                'shell_exec',
-                'proc_open',
-                'proc_get_status',
-                'error_log',
-                'ini_alter',
-                'ini_set',
-                'ini_restore',
-                'dl',
-                'pfsockopen',
-                'syslog',
-                'readlink',
-                'symlink',
-                'popen',
-                'stream_socket_server',
-                'putenv',
-                'unlink',
-                'path_delete',
-                'rmdir',
-                'session',
-                'cookie',
-                'mkdir',
-                'create_dir',
-                'create_file',
-                'check_dir',
-                'check_file'
-            );
             $count = count($matches[0]);
             for ($i = 0; $i < $count; $i ++) {
                 $flag = '';
                 $out_html = '';
                 $danger = false;
-                foreach ($black as $value) {
-                    if (preg_match('/' . $value . '([\s]+)?\(/i', $matches[1][$i])) {
-                        $danger = true;
-                        break;
+                
+                $white_fun = array(
+                    'date'
+                );
+                
+                // 不允许执行带有函数的条件语句
+                if (preg_match_all('/([\w]+)([\s]+)?\(/i', $matches[1][$i], $matches2)) {
+                    foreach ($matches2[1] as $value) {
+                        if (function_exists($value) && ! in_array($value, $white_fun)) {
+                            $danger = true;
+                            break;
+                        }
                     }
                 }
+                
                 // 如果有危险字符，则不解析该IF
                 if ($danger) {
                     continue;
+                } else {
+                    $matches[1][$i] = decode_string($matches[1][$i]); // 解码条件字符串
                 }
                 
                 eval('if(' . $matches[1][$i] . '){$flag="if";}else{$flag="else";}');
