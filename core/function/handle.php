@@ -351,13 +351,33 @@ function escape_string($string)
         foreach ($string as $key => $value) {
             $string->$key = escape_string($value);
         }
-    } else { // 字符串处
+    } else { // 字符串处理
         $string = htmlspecialchars(trim($string), ENT_QUOTES);
+        $string = addslashes($string);
     }
     return $string;
 }
 
-// 字符反转义，支持字符串、数组、对象
+// 字符反转义斜杠，支持字符串、数组、对象
+function decode_slashes($string)
+{
+    if (! $string)
+        return $string;
+    if (is_array($string)) { // 数组处理
+        foreach ($string as $key => $value) {
+            $string[$key] = decode_slashes($value);
+        }
+    } elseif (is_object($string)) { // 对象处理
+        foreach ($string as $key => $value) {
+            $string->$key = decode_slashes($value);
+        }
+    } else { // 字符串处理
+        $string = stripcslashes($string);
+    }
+    return $string;
+}
+
+// 字符反转义html实体及斜杠，支持字符串、数组、对象
 function decode_string($string)
 {
     if (! $string)
@@ -371,6 +391,7 @@ function decode_string($string)
             $string->$key = decode_string($value);
         }
     } else { // 字符串处理
+        $string = stripcslashes($string);
         $string = htmlspecialchars_decode($string, ENT_QUOTES);
     }
     return $string;

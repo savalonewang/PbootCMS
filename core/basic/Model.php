@@ -179,6 +179,8 @@ class Model
         if ($this->decode) {
             $result = decode_string($result);
             $this->decode = false;
+        } else {
+            $result = decode_slashes($result);
         }
         if ($this->showRs) {
             print_r($result);
