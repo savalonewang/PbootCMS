@@ -40,15 +40,18 @@ class DoController extends Controller
     // 文章访问量累计
     public function visits()
     {
-        if (! ! $id = get('id')) {
+        if (! ! $id = get('id', 'int')) {
             $this->model->addVisits($id);
+            json(1, 'ok');
+        } else {
+            json(0, 'error');
         }
     }
 
     // 点赞
     public function likes()
     {
-        if (($id = get('id')) && ! cookie('likes_' . $id)) {
+        if (($id = get('id', 'int')) && ! cookie('likes_' . $id)) {
             $this->model->addLikes($id);
             cookie('likes_' . $id, true, 31536000);
         }
@@ -58,7 +61,7 @@ class DoController extends Controller
     // 反对
     public function oppose()
     {
-        if (($id = get('id')) && ! cookie('oppose_' . $id)) {
+        if (($id = get('id', 'int')) && ! cookie('oppose_' . $id)) {
             $this->model->addOppose($id);
             cookie('oppose_' . $id, true, 31536000);
         }

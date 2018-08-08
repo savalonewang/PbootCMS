@@ -20,7 +20,7 @@ class DoModel extends Model
         $data = array(
             'visits' => '+=1'
         );
-        parent::table('ay_content')->where("id='$id' OR filename='$id'")->update($data);
+        parent::table('ay_content')->where("id=$id")->update($data);
     }
 
     // 新增喜欢
@@ -29,7 +29,7 @@ class DoModel extends Model
         $data = array(
             'likes' => '+=1'
         );
-        parent::table('ay_content')->where("id='$id' OR filename='$id'")->update($data);
+        parent::table('ay_content')->where("id=$id")->update($data);
     }
 
     // 新增喜欢
@@ -38,6 +38,6 @@ class DoModel extends Model
         $data = array(
             'oppose' => '+=1'
         );
-        parent::table('ay_content')->where("id='$id' OR filename='$id'")->update($data);
+        parent::table('ay_content')->where("id=$id")->update($data);
     }
 }
