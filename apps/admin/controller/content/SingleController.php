@@ -32,7 +32,7 @@ class SingleController extends Controller
             $this->assign('content', $result);
         } else {
             $this->assign('list', true);
-            if (! ! ($field = get('field')) && ! ! ($keyword = get('keyword'))) {
+            if (! ! ($field = get('field', 'var')) && ! ! ($keyword = get('keyword', 'vars'))) {
                 $result = $this->model->findSingle($field, $keyword);
             } else {
                 $result = $this->model->getList();

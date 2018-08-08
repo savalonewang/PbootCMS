@@ -30,7 +30,7 @@ class ModelController extends Controller
             $this->assign('model', $result);
         } else {
             $this->assign('list', true);
-            if (! ! ($field = get('field')) && ! ! ($keyword = get('keyword'))) {
+            if (! ! ($field = get('field', 'var')) && ! ! ($keyword = get('keyword', 'vars'))) {
                 $result = $this->model->findModel($field, $keyword);
             } else {
                 $result = $this->model->getList();

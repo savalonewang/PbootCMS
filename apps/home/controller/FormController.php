@@ -31,6 +31,10 @@ class FormController extends Controller
                 alert_back('传递的表单编码有误！');
             }
             
+            if ($fcode == 1) {
+                alert_back('留言提交请使用留言专用地址!');
+            }
+            
             // 验证码验证
             $checkcode = post('checkcode');
             if ($this->config('message_check_code')) {

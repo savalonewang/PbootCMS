@@ -1646,9 +1646,9 @@ class ParserController extends Controller
         $pattern2 = '/\[search:([\w]+)(\s+[^]]+)?\]/';
         if (preg_match_all($pattern, $content, $matches)) {
             $count = count($matches[0]);
-            $field = get('field');
-            $scode = get('scode');
-            $keyword = get('keyword');
+            $field = get('field', 'var');
+            $scode = get('scode', 'var');
+            $keyword = get('keyword', 'vars');
             
             for ($i = 0; $i < $count; $i ++) {
                 
@@ -1737,7 +1737,7 @@ class ParserController extends Controller
                 
                 // 数据接收
                 foreach ($_GET as $key => $value) {
-                    if (! ! $value = get($key)) {
+                    if (! ! $value = get($key, 'vars')) {
                         $where2[$key] = $value;
                     }
                 }

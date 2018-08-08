@@ -26,7 +26,7 @@ class TypeController extends Controller
     public function index()
     {
         $this->assign('list', true);
-        if (! ! ($field = get('field')) && ! ! ($keyword = get('keyword'))) {
+        if (! ! ($field = get('field', 'var')) && ! ! ($keyword = get('keyword', 'vars'))) {
             $result = $this->model->findType($field, $keyword);
         } else {
             $result = $this->model->getList();

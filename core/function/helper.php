@@ -307,7 +307,7 @@ function filter($varname, $condition)
                 }
                 break;
             case 'var':
-                if (! preg_match('/^[\w\-]+$/', $data)) {
+                if (! preg_match('/^[\w\-\.]+$/', $data)) {
                     $err = '只能包含字母、数字、划线！';
                 }
                 break;
