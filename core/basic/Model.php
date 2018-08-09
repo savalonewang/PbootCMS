@@ -471,6 +471,8 @@ class Model
      */
     final public function in($field, $range)
     {
+        if (! $field)
+            return $this;
         if (is_array($range)) {
             if (count($range) == 1) { // 单只有一个值时使用直接使用等于，提高读取性能
                 $in_string = "$field='$range[0]'";
@@ -503,6 +505,8 @@ class Model
      */
     final public function notIn($field, $range)
     {
+        if (! $field)
+            return $this;
         if (is_array($range)) {
             $in_string = implode_quot(',', $range);
         } else {
