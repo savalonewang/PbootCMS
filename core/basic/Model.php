@@ -465,7 +465,7 @@ class Model
      *
      * @param string $field
      *            传递需要比对的字段，如: 'username'
-     * @param mixed $in
+     * @param mixed $range
      *            字符串、数组、子查询,如：'1,2,3',array(1,2,3);
      * @return \core\basic\Model
      */
@@ -499,7 +499,7 @@ class Model
      *
      * @param string $field
      *            传递需要比对的字段，如: id NOT IN (1,2,3)
-     * @param mixed $in
+     * @param mixed $range
      *            字符串、数组、子查询
      * @return \core\basic\Model
      */

@@ -118,6 +118,56 @@ class ContentModel extends Model
             ->select();
     }
 
+    // 在全部栏目查找文章
+    public function findContentAll($mcode, $keyword)
+    {
+        $fields = array(
+            'a.id',
+            'b.name as sort_name',
+            'a.scode',
+            'c.name as subsort_name',
+            'a.subscode',
+            'a.title',
+            'a.subtitle',
+            'a.date',
+            'a.sorting',
+            'a.status',
+            'a.istop',
+            'a.isrecommend',
+            'a.isheadline',
+            'a.visits',
+            'a.ico',
+            'a.pics',
+            'a.filename'
+        );
+        $join = array(
+            array(
+                'ay_content_sort b',
+                'a.scode=b.scode',
+                'LEFT'
+            ),
+            array(
+                'ay_content_sort c',
+                'a.subscode=c.scode',
+                'LEFT'
+            ),
+            array(
+                'ay_model d',
+                'b.mcode=d.mcode',
+                'LEFT'
+            )
+        );
+        return parent::table('ay_content a')->field($fields)
+            ->where("b.mcode='$mcode'")
+            ->where('d.type=2 OR d.type is null ')
+            ->where("a.acode='" . session('acode') . "'")
+            ->like('a.title', $keyword)
+            ->join($join)
+            ->order('a.sorting ASC,a.istop DESC,a.isrecommend DESC,a.id DESC')
+            ->page()
+            ->select();
+    }
+
     // 获取子栏目
     public function getSubScodes($scode)
     {

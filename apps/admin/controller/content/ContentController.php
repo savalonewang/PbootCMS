@@ -37,7 +37,11 @@ class ContentController extends Controller
             }
             
             if (isset($_GET['keyword'])) {
-                $result = $this->model->findContent($mcode, get('scode'), get('keyword'));
+                if (! ! $scode = get('scode', 'var')) {
+                    $result = $this->model->findContent($mcode, $scode, get('keyword', 'vars'));
+                } else {
+                    $result = $this->model->findContentAll($mcode, get('keyword', 'vars'));
+                }
             } else {
                 $result = $this->model->getList($mcode);
             }
