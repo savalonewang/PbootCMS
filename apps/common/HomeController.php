@@ -15,7 +15,6 @@ class HomeController extends Controller
         // 设置默认语言
         if (! isset($_SESSION['lg'])) {
             session('lg', $this->config('lgs.0.acode'));
-            cookie('lg', $this->config('lgs.0.acode'));
         }
         
         // 手机自适应主题

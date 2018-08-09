@@ -53,7 +53,7 @@ class Config
     }
 
     // 写入配置文件
-    public static function set($itemName, array $data, $multistage = false)
+    public static function set($itemName, array $data, $multistage = false, $assign = true)
     {
         if ($data) {
             $path = RUN_PATH . '/config/' . $itemName . '.php';
@@ -72,7 +72,9 @@ class Config
             // 写入
             if (check_file($path, true)) {
                 $result = file_put_contents($path, "<?php\nreturn " . var_export($config, true) . ";");
-                self::assign($path); // 写入后注入配置
+                if ($assign) { // 缓存后是否注入配置
+                    self::assign($path);
+                }
                 return $result;
             } else {
                 return false;

@@ -509,6 +509,7 @@ function cookie($name, $value = null, $expire = null, $path = null)
         if (is_string($value))
             $value = trim($value);
         
+        $_COOKIE[$name] = $value; // 让cookie立即生效
         if (! is_null($expire)) {
             return setcookie($name, $value, time() + $expire, $path);
         } else {
@@ -516,7 +517,7 @@ function cookie($name, $value = null, $expire = null, $path = null)
         }
     } else {
         if (isset($_COOKIE[$name])) {
-            return $_COOKIE[$name];
+            return escape_string($_COOKIE[$name]);
         } else {
             return null;
         }

@@ -182,9 +182,10 @@ function get_btn($btnName, $theme, $btnAction, $idValue, $id = 'id')
 function cache_config($refresh = false)
 {
     // 判断是否已经设置语言
-    $lg = isset($_SESSION['lg']) ? session('lg') : '';
+    $lg = isset($_COOKIE['lg']) ? cookie('lg') : '';
     $path = RUN_PATH . '/config/' . md5('config' . $lg) . '.php';
     if (! file_exists($path) || $refresh) {
+        
         $model = model('admin.system.Config');
         
         // 系统配置
@@ -197,18 +198,17 @@ function cache_config($refresh = false)
         }
         $data['lgs'] = $area;
         
-        // 获取默认语言，下一步获取主题需要
-        if (! $lg) {
-            $lg = $area[0]['acode'];
-        }
-        
         // 获取系统设置的主题
-        if (! ! $theme = $model->getTheme($lg)) {
+        if (! preg_match('/^[\w]+$/', $lg)) { // 过滤非法参数
+            unset($_COOKIE['lg']);
+            $lg = '';
+        }
+        if (! ! $theme = $model->getTheme($lg ?: $area[0]['acode'])) {
             $data['theme'] = $theme;
         } else {
             $data['theme'] = 'default';
         }
-        Config::set(md5('config' . $lg), $data, false);
+        Config::set(md5('config' . $lg), $data, false); // 缓存语言配置并注入
     } else {
         Config::assign($path);
     }

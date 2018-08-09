@@ -150,7 +150,7 @@ class View
     public function cache($content)
     {
         if (Config::get('tpl_html_cache')) {
-            $lg = isset($_SESSION['lg']) ? session('lg') : '';
+            $lg = session('lg');
             if (Config::get('open_wap') && (is_mobile() || Config::get('wap_domain') == get_http_host())) {
                 $wap = 'wap';
             } else {
