@@ -37,7 +37,7 @@
 	                        	{if($value->id!=1)}
 	                        		<a href="{url./admin/Form/del/id/'.$value->id.'/action/delform}" onclick="return confirm('您确定要删除么？')" class="layui-btn layui-btn-xs layui-btn-danger" title="删除">删除</a>
 	                            {/if}
-	                            <a href="{url./admin/Form/mod/id/'.$value->id.'/action/modform}?backurl={URL}" class="layui-btn layui-btn-xs">修改</a>
+	                            <a href="{url./admin/Form/mod/id/'.$value->id.'/action/modform}?backurl={$backurl}" class="layui-btn layui-btn-xs">修改</a>
 	                        </td>
 	                    </tr>
 	                    {/foreach}

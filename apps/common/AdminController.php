@@ -57,8 +57,8 @@ class AdminController extends Controller
             session('formcheck', $uniqid);
         }
         
-        // 注入formcheck模板变量
-        $this->assign('formcheck', session('formcheck'));
+        $this->assign('formcheck', session('formcheck')); // 注入formcheck模板变量
+        $this->assign('backurl', base64_encode(URL)); // 注入编码后的回跳地址
     }
 
     // 后台用户登录状态检查

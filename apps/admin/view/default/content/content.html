@@ -92,7 +92,7 @@
 		                        <td>
 		                        	<a href="{SITE_DIR}/index.php/content/[value->id].html" class="layui-btn layui-btn-xs layui-btn-primary"  target="_blank">查看</a>
 		                            {fun=get_btn_del($value->id)}
-		                            <a href="{url./admin/Content/mod/mcode/'.get('mcode').'/id/'.$value->id.'}?backurl={URL}" class="layui-btn layui-btn-xs" >修改</a>
+		                            <a href="{url./admin/Content/mod/mcode/'.get('mcode').'/id/'.$value->id.'}?backurl={$backurl}" class="layui-btn layui-btn-xs" >修改</a>
 		                        </td>
 		                    </tr>
 		                    {/foreach}
