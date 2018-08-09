@@ -135,7 +135,7 @@ class MenuController extends Controller
             if ($this->model->addMenu($data, $actions)) {
                 $this->log('新增菜单' . $mcode . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('admin/Menu/index'));
                 }
@@ -257,7 +257,7 @@ class MenuController extends Controller
             if ($this->model->modMenu($mcode, $data, $actions)) {
                 $this->log('修改菜单' . $mcode . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('admin/Menu/index'));
                 }

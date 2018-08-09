@@ -88,7 +88,7 @@ class LinkController extends Controller
             if ($this->model->addLink($data)) {
                 $this->log('新增友情链接成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('/admin/Link/index'));
                 }
@@ -175,7 +175,7 @@ class LinkController extends Controller
             if ($this->model->modLink($id, $data)) {
                 $this->log('修改友情链接' . $id . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('/admin/Link/index'));
                 }

@@ -84,7 +84,7 @@ class FormController extends Controller
                 if ($result && $this->model->addForm($data)) {
                     $this->log('新增自定义表单成功！');
                     if (! ! $backurl = get('backurl')) {
-                        success('新增成功！', $backurl);
+                        success('新增成功！', base64_decode($backurl));
                     } else {
                         success('新增成功！', url('/admin/Form/index'));
                     }
@@ -147,7 +147,7 @@ class FormController extends Controller
                 if ($this->model->addFormField($data)) {
                     $this->log('新增表单字段成功！');
                     if (! ! $backurl = get('backurl')) {
-                        success('新增成功！', $backurl);
+                        success('新增成功！', base64_decode($backurl));
                     } else {
                         success('新增成功！', url('/admin/Form/index/fcode/' . $fcode . '/action/showfield'));
                     }
@@ -260,7 +260,7 @@ class FormController extends Controller
                 if ($this->model->modForm($id, $data)) {
                     $this->log('修改自定义表单' . $id . '成功！');
                     if (! ! $backurl = get('backurl')) {
-                        success('修改成功！', $backurl);
+                        success('修改成功！', base64_decode($backurl));
                     } else {
                         success('修改成功！', url('/admin/Form/index'));
                     }
@@ -290,7 +290,7 @@ class FormController extends Controller
                 if ($this->model->modFormField($id, $data)) {
                     $this->log('修改表单字段' . $id . '成功！');
                     if (! ! $backurl = get('backurl')) {
-                        success('修改成功！', $backurl);
+                        success('修改成功！', base64_decode($backurl));
                     } else {
                         success('修改成功！', url('/admin/Form/index'));
                     }

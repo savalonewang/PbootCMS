@@ -77,7 +77,7 @@ class LabelController extends Controller
             if ($this->model->addLabel($data)) {
                 $this->log('修改自定义标签' . $name . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('admin/Label/index?#tab=t2', false));
                 }

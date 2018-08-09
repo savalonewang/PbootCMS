@@ -123,7 +123,7 @@ class ExtFieldController extends Controller
             if ($this->model->addExtField($data)) {
                 $this->log('新增扩展字段成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('/admin/ExtField/index'));
                 }
@@ -216,7 +216,7 @@ class ExtFieldController extends Controller
             if ($this->model->modExtField($id, $data)) {
                 $this->log('修改扩展字段' . $id . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('/admin/ExtField/index'));
                 }

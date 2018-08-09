@@ -358,25 +358,6 @@ function escape_string($string)
     return $string;
 }
 
-// 字符反转义斜杠，支持字符串、数组、对象
-function decode_slashes($string)
-{
-    if (! $string)
-        return $string;
-    if (is_array($string)) { // 数组处理
-        foreach ($string as $key => $value) {
-            $string[$key] = decode_slashes($value);
-        }
-    } elseif (is_object($string)) { // 对象处理
-        foreach ($string as $key => $value) {
-            $string->$key = decode_slashes($value);
-        }
-    } else { // 字符串处理
-        $string = stripcslashes($string);
-    }
-    return $string;
-}
-
 // 字符反转义html实体及斜杠，支持字符串、数组、对象
 function decode_string($string)
 {
@@ -393,6 +374,25 @@ function decode_string($string)
     } else { // 字符串处理
         $string = stripcslashes($string);
         $string = htmlspecialchars_decode($string, ENT_QUOTES);
+    }
+    return $string;
+}
+
+// 字符反转义斜杠，支持字符串、数组、对象
+function decode_slashes($string)
+{
+    if (! $string)
+        return $string;
+    if (is_array($string)) { // 数组处理
+        foreach ($string as $key => $value) {
+            $string[$key] = decode_slashes($value);
+        }
+    } elseif (is_object($string)) { // 对象处理
+        foreach ($string as $key => $value) {
+            $string->$key = decode_slashes($value);
+        }
+    } else { // 字符串处理
+        $string = stripcslashes($string);
     }
     return $string;
 }
@@ -483,13 +483,20 @@ function mult_array_merge($array1, $array2)
 }
 
 // 数组转换为带引号字符串
-function implode_quot($glue, array $pieces)
+function implode_quot($glue, array $pieces, $diffnum = false)
 {
+    if (! $pieces)
+        return "''";
     foreach ($pieces as $key => $value) {
+        if ($diffnum && ! is_numeric($value)) {
+            $value = "'$value'";
+        } elseif (! $diffnum) {
+            $value = "'$value'";
+        }
         if (isset($string)) {
-            $string .= $glue . "'$value'";
+            $string .= $glue . $value;
         } else {
-            $string = "'$value'";
+            $string = $value;
         }
     }
     return $string;

@@ -82,7 +82,7 @@ class TypeController extends Controller
             if ($this->model->addType($data)) {
                 $this->log('新增类型' . $tcode . '-' . $item . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('/admin/type/index'));
                 }
@@ -156,7 +156,7 @@ class TypeController extends Controller
             if ($this->model->modType($id, $data)) {
                 $this->log('修改类型项' . $id . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('/admin/Type/index'));
                 }

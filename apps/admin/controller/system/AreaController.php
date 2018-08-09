@@ -131,7 +131,7 @@ class AreaController extends Controller
                 $this->log('新增数据区域' . $acode . '成功！');
                 path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('/admin/Area/index'));
                 }
@@ -256,7 +256,7 @@ class AreaController extends Controller
                 $this->log('修改数据区域' . $acode . '成功！');
                 path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('/admin/Area/index'));
                 }

@@ -80,7 +80,7 @@ class MessageController extends Controller
             if ($this->model->modMessage($id, $data)) {
                 $this->log('修改留言' . $id . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('/admin/Message/index'));
                 }

@@ -73,7 +73,7 @@ class ModelController extends Controller
             if ($this->model->addModel($data)) {
                 $this->log('新增内容模型成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('/admin/Model/index'));
                 }
@@ -147,7 +147,7 @@ class ModelController extends Controller
             if ($this->model->modModel($id, $data)) {
                 $this->log('修改内容模型' . $id . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('/admin/Model/index'));
                 }

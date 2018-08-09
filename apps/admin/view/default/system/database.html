@@ -7,7 +7,7 @@
 		  </ul>
 		  <div class="layui-tab-content">
 		  	   <div class="layui-tab-item layui-show">
-		  	   		<form action="{url./admin/database/mod}" method="post">
+		  	   		<form action="{url./admin/Database/mod}" method="post">
 		  	   			<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	   		{if([$db]=='mysql')}
 				  	   	<table class="layui-table">
@@ -92,7 +92,7 @@
 		  </ul>
 		  <div class="layui-tab-content">
 		  	   <div class="layui-tab-item layui-show">
-		  	   		<form action="{url./admin/database/mod}" method="post">
+		  	   		<form action="{url./admin/Database/mod}" method="post">
 		  	   			<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	   			<div class="layui-form-item">
 		                    <textarea name="sql" placeholder="请粘贴要执行的数据库脚本，可用于系统升级时数据库升级！" class="layui-textarea"></textarea>

@@ -83,7 +83,7 @@ class RoleController extends Controller
             if ($this->model->addRole($data, $acodes, $levels)) {
                 $this->log('修改角色' . $rcode . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('admin/Role/index'));
                 }
@@ -231,7 +231,7 @@ class RoleController extends Controller
             if ($this->model->modRole($rcode, $data, $acodes, $levels)) {
                 $this->log('修改角色' . $rcode . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('admin/Role/index'));
                 }

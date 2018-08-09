@@ -169,7 +169,7 @@ class ContentController extends Controller
                 
                 $this->log('新增文章成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('/admin/Content/index/mcode/' . get('mcode')));
                 }
@@ -421,7 +421,7 @@ class ContentController extends Controller
                 
                 $this->log('修改文章' . $id . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('/admin/Content/index'));
                 }

@@ -9,7 +9,7 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
-	  	   		<form action="{url./admin/user/index}" method="get" class="layui-form">
+	  	   		<form action="{url./admin/User/index}" method="get" class="layui-form">
 		  	   		<input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	   		<div class="layui-form-item nospace">
 		  	   			<div class="layui-input-inline">
@@ -71,7 +71,7 @@
 	  	   	</div>
 	  	   	
 	  	   	<div class="layui-tab-item">
-	  	   		<form action="{url./admin/user/add}" method="post" class="layui-form">
+	  	   		<form action="{url./admin/User/add}" method="post" class="layui-form">
 	  	   			<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  	   			<div class="layui-form-item">
 	                     <label class="layui-form-label">用户账号</label>
@@ -140,7 +140,7 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
-	  	   		 <form action="{url./admin/user/mod/ucode/'.[$get.ucode].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
+	  	   		 <form action="{url./admin/User/mod/ucode/'.[$get.ucode].'}?{$server.QUERY_STRING}" method="post" class="layui-form">
 	  	   		 	<input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  	   		 	<div class="layui-form-item">
 	                     <label class="layui-form-label">用户账号</label>

@@ -77,7 +77,7 @@ class SlideController extends Controller
             if ($this->model->addSlide($data)) {
                 $this->log('新增轮播图成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('/admin/Slide/index'));
                 }
@@ -157,7 +157,7 @@ class SlideController extends Controller
             if ($this->model->modSlide($id, $data)) {
                 $this->log('修改轮播图' . $id . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('/admin/Slide/index'));
                 }

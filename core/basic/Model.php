@@ -471,26 +471,15 @@ class Model
      */
     final public function in($field, $range)
     {
-        if (! $field || (! $range && $range !== 0 && $range !== '0')) {
-            return $this;
-        }
-        $in_string = '';
         if (is_array($range)) {
             if (count($range) == 1) { // 单只有一个值时使用直接使用等于，提高读取性能
                 $in_string = "$field='$range[0]'";
             } else {
-                foreach ($range as $key => $value) {
-                    if (is_int($value)) {
-                        $in_string .= "$value,";
-                    } else {
-                        $in_string .= "'$value',";
-                    }
-                }
-                $in_string = "$field IN (" . substr($in_string, 0, - 1) . ")";
+                $in_string = "$field IN (" . implode_quot(',', $range) . ")";
             }
         } else {
             if (preg_match('/,/', $range)) {
-                $in_string = "$field IN (" . $range . ")";
+                $in_string = "$field IN (" . implode_quot(',', explode(',', $range)) . ")";
             } else { // 传递单个字符串时直接相等处理
                 $in_string = "$field = '$range'";
             }
@@ -514,21 +503,14 @@ class Model
      */
     final public function notIn($field, $range)
     {
-        if (! $field || (! $range && $range !== 0 && $range !== '0')) {
-            return $this;
-        }
-        $in_string = '';
         if (is_array($range)) {
-            foreach ($range as $key => $value) {
-                if (is_int($value)) {
-                    $in_string .= "$value,";
-                } else {
-                    $in_string .= "'$value',";
-                }
-            }
-            $in_string = substr($in_string, 0, - 1);
+            $in_string = implode_quot(',', $range);
         } else {
-            $in_string = $range;
+            if (preg_match('/,/', $range)) {
+                $in_string = implode_quot(',', explode(',', $range));
+            } else {
+                $in_string = "'$range'";
+            }
         }
         if (isset($this->sql['where']) && $this->sql['where']) {
             $this->sql['where'] .= " AND $field NOT IN ($in_string)";
@@ -542,7 +524,7 @@ class Model
      * 连贯操作：设置关键字条件匹配
      *
      * @param string $field
-     *            字段名
+     *            字段名,支持数组传递多个字段或多个字段用逗号隔开
      * @param string $keyword
      *            匹配关键字
      * @param string $matchType
@@ -551,7 +533,7 @@ class Model
      */
     final public function like($field, $keyword, $matchType = "all")
     {
-        if (! $field || ! $keyword)
+        if (! $field)
             return $this;
         switch ($matchType) {
             case 'left':
@@ -561,6 +543,7 @@ class Model
                 $keyword = "%$keyword";
                 break;
             case 'equal':
+            case '==':
                 $keyword = "$keyword";
                 break;
             default:
@@ -601,7 +584,7 @@ class Model
      */
     final public function notLike($field, $keyword, $matchType = "all")
     {
-        if (! $field || ! $keyword)
+        if (! $field)
             return $this;
         switch ($matchType) {
             case 'left':
@@ -609,6 +592,10 @@ class Model
                 break;
             case 'right':
                 $keyword = "%$keyword";
+                break;
+            case 'equal':
+            case '==':
+                $keyword = "$keyword";
                 break;
             default:
                 $keyword = "%$keyword%";
@@ -621,11 +608,11 @@ class Model
                 if (isset($sqlStr)) {
                     $sqlStr .= " AND $value NOT LIKE '$keyword'";
                 } else {
-                    $sqlStr = "`$value` NOT LIKE '$keyword'";
+                    $sqlStr = "$value NOT LIKE '$keyword'";
                 }
             }
         } else {
-            $sqlStr = "`$field` NOT LIKE '$keyword'";
+            $sqlStr = "$field NOT LIKE '$keyword'";
         }
         if (isset($this->sql['where']) && $this->sql['where']) {
             $this->sql['where'] .= " AND ($sqlStr)";
@@ -667,9 +654,9 @@ class Model
      *
      * @param string $limit
      *            设置限制语句，可接受：
-     *            单个参数数，如 1,
-     *            单个参数字符串，如"1,10",
-     *            两个参数数字，如：1,10,
+     *            单个参数数，如 1,条数
+     *            单个参数字符串，如"1,10"
+     *            两个参数数字，如：1,10
      *            注意：当使用了分页时会无效
      * @return \core\basic\Model
      */

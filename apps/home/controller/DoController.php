@@ -25,12 +25,13 @@ class DoController extends Controller
     // 多语言切换
     public function area()
     {
-        $lg = post('lg') ?: get('lg');
+        $lg = post('lg', 'var') ?: get('lg', 'var');
         if ($lg) {
             $lgs = $this->config('lgs');
             foreach ($lgs as $value) {
                 if ($value['acode'] == $lg) {
                     session('lg', $lg);
+                    cookie('lg', $lg);
                 }
             }
             location(SITE_DIR . '/');

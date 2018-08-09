@@ -120,7 +120,7 @@ function check_level($btnAction, $isPath = false)
 function get_btn_back($btnName = '返 回')
 {
     if (! ! $backurl = get('backurl')) {
-        $url = $backurl;
+        $url = base64_decode($backurl);
     } elseif (isset($_SERVER["HTTP_REFERER"])) {
         $url = $_SERVER["HTTP_REFERER"];
     } else {
@@ -137,7 +137,7 @@ function get_btn_add($btnName = '新 增')
     $user_level = session('levels');
     if (! in_array('/' . M . '/' . C . '/add', $user_level) && session('id') != 1)
         return;
-    $btn_html = "<a href='" . url("/" . M . '/' . C . "/add") . "?backurl=" . URL . "' class='layui-btn layui-btn-primary'>$btnName</a>";
+    $btn_html = "<a href='" . url("/" . M . '/' . C . "/add") . "?backurl=" . base64_encode(URL) . "' class='layui-btn layui-btn-primary'>$btnName</a>";
     return $btn_html;
 }
 
@@ -164,7 +164,7 @@ function get_btn_mod($idValue, $id = 'id', $btnName = '修改')
     $user_level = session('levels');
     if (! in_array('/' . M . '/' . C . '/mod', $user_level) && session('id') != 1)
         return;
-    $btn_html = "<a href='" . url("/" . M . '/' . C . "/mod/$id/$idValue") . "?backurl=" . URL . "'  class='layui-btn layui-btn-xs'>$btnName</a>";
+    $btn_html = "<a href='" . url("/" . M . '/' . C . "/mod/$id/$idValue") . "?backurl=" . base64_encode(URL) . "'  class='layui-btn layui-btn-xs'>$btnName</a>";
     return $btn_html;
 }
 
@@ -174,7 +174,7 @@ function get_btn($btnName, $theme, $btnAction, $idValue, $id = 'id')
     $user_level = session('levels');
     if (! in_array('/' . M . '/' . C . '/' . $btnAction, $user_level) && session('id') != 1)
         return;
-    $btn_html = "<a href='" . url("/" . M . '/' . C . "/$btnAction/$id/$idValue") . "?backurl=" . URL . "'  class='layui-btn layui-btn-xs $theme'>$btnName</a>";
+    $btn_html = "<a href='" . url("/" . M . '/' . C . "/$btnAction/$id/$idValue") . "?backurl=" . base64_encode(URL) . "'  class='layui-btn layui-btn-xs $theme'>$btnName</a>";
     return $btn_html;
 }
 

@@ -100,7 +100,7 @@ class UserController extends Controller
             if ($this->model->addUser($data, $roles)) {
                 $this->log('新增用户' . $ucode . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('新增成功！', $backurl);
+                    success('新增成功！', base64_decode($backurl));
                 } else {
                     success('新增成功！', url('/admin/User/index'));
                 }
@@ -193,7 +193,7 @@ class UserController extends Controller
             if ($this->model->modUser($ucode, $data, $roles)) {
                 $this->log('修改用户' . $ucode . '成功！');
                 if (! ! $backurl = get('backurl')) {
-                    success('修改成功！', $backurl);
+                    success('修改成功！', base64_decode($backurl));
                 } else {
                     success('修改成功！', url('/admin/User/index'));
                 }
