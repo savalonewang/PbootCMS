@@ -78,10 +78,10 @@ class FormController extends Controller
                 if ($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') {
                     $result = $this->model->amd("CREATE TABLE `$table_name` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,`create_time` TEXT NOT NULL)");
                 } else {
-                    $result = $this->model->amd("CREATE TABLE `$table_name` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`create_time` datetime NOT NULL,PRIMARY KEY (`id`))ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8");
+                    $result = $this->model->amd("CREATE TABLE `$table_name` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`create_time` datetime NOT NULL,PRIMARY KEY (`id`))ENGINE=MyISAM DEFAULT CHARSET=utf8");
                 }
                 
-                if ($result && $this->model->addForm($data)) {
+                if ($this->model->addForm($data)) {
                     $this->log('新增自定义表单成功！');
                     if (! ! $backurl = get('backurl')) {
                         success('新增成功！', base64_decode($backurl));
@@ -90,7 +90,7 @@ class FormController extends Controller
                     }
                 } else {
                     $this->log('新增自定义表单失败！');
-                    error('新增失败！', - 1);
+                    error('新增失败！');
                 }
             } else {
                 // 获取数据
