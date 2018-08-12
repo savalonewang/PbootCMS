@@ -90,7 +90,7 @@ class FormController extends Controller
                     }
                 } else {
                     $this->log('新增自定义表单失败！');
-                    error('新增失败！');
+                    error('新增失败！', - 1);
                 }
             } else {
                 // 获取数据
