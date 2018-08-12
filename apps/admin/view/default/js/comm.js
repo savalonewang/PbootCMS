@@ -68,20 +68,20 @@ $(document).ready(function (e) {
 
 //对菜单进行高亮显示
 function light_nav(){
-	
+	 
 	//二级菜单标记当前栏目
     var url = $('#url').data('url').toLowerCase();
     var controller = $('#controller').data('controller').toLowerCase();
+    var mcode = $('#mcode').data('mcode');
     var aobj= $('#nav .nav-item').find('a');
     var flag = false;
+
    
     //第一种情况，url完全一致
     aobj.each(function (index, element) {
         var aUrl = $(element).attr('href').toLowerCase();
         if (url==aUrl) {
             $(element).parent("dd").addClass("layui-this");
-			//$(element).parents('li').addClass('layui-nav-itemed');
-			//$(element).parents('li').siblings('li').removeClass('layui-nav-itemed');
             flag = true;
         }
 		if(flag) return false;
@@ -96,32 +96,38 @@ function light_nav(){
             aUrl = aUrl.replace('.html','');
             if (url.indexOf(aUrl)>-1) {
             	$(element).parent("dd").addClass("layui-this");
-     			//$(element).parents('li').addClass('layui-nav-itemed');
-     			//$(element).parents('li').siblings('li').removeClass('layui-nav-itemed');
                 flag = true;
             }
             if(flag) return false;
         });
     }
-	
-	//第三种情况，只匹配到控制器，如增、改、删的操作页面
+   
+  //第三种情况，只匹配到模型，如模型栏目内容的修改操作页面
     if(!flag){
     	aobj.each(function (index, element) {
             var aUrl = $(element).attr("href").toLowerCase();
-            if (aUrl.indexOf('/'+controller+'/')==0||aUrl.indexOf('.php/'+controller+'/')>-1) {
+            if (mcode && aUrl.indexOf('/mcode/'+mcode)>-1) {
             	$(element).parent("dd").addClass("layui-this");
-     			//$(element).parents('li').addClass('layui-nav-itemed');
-     			//$(element).parents('li').siblings('li').removeClass('layui-nav-itemed');
                 flag = true;
             }
             if(flag) return false;
         });
     }
 	
-	//默认第一个高亮
+	//第四种情况，只匹配到控制器，如增、改的操作页面
+    if(!flag){
+    	aobj.each(function (index, element) {
+            var aUrl = $(element).attr("href").toLowerCase();
+            if (controller!='index' && aUrl.indexOf('/'+controller+'/')>-1) {
+            	$(element).parent("dd").addClass("layui-this");
+                flag = true;
+            }
+            if(flag) return false;
+        });
+    }
+    
+	//默认高亮
 	if(!flag){
-		//$('#nav').find('.nav-item').first().addClass('layui-nav-itemed');
 		$('#nav').find('.nav-item').eq(2).addClass('layui-nav-itemed');
 	}
-    
 }

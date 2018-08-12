@@ -194,6 +194,9 @@ class ContentController extends Controller
             $this->assign('sort_select', $this->makeSortSelect($sort_select));
             $this->assign('subsort_select', $this->makeSortSelect($sort_select));
             
+            // 模型名称
+            $this->assign('model_name', model('admin.content.Model')->getName($mcode));
+            
             // 扩展字段
             $this->assign('extfield', model('admin.content.ExtField')->getModelField($mcode));
             
@@ -449,6 +452,9 @@ class ContentController extends Controller
             $sort_select = $sort_model->getListSelect($mcode);
             $this->assign('sort_select', $this->makeSortSelect($sort_select, $result->scode));
             $this->assign('subsort_select', $this->makeSortSelect($sort_select, $result->subscode));
+            
+            // 模型名称
+            $this->assign('model_name', model('admin.content.Model')->getName($mcode));
             
             // 扩展字段
             $this->assign('extfield', model('admin.content.ExtField')->getModelField($mcode));
