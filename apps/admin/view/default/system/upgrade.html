@@ -1,0 +1,62 @@
+{include file='common/head.html'}
+
+<div class="layui-body">
+	<div class="layui-tab layui-tab-brief" lay-filter="tab">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this" lay-id="t1">在线更新</li>
+	  </ul>
+	  <div class="layui-tab-content">
+	  	   <div class="layui-tab-item layui-show">
+	  	   <form action="{url./admin/Upgrade/update}" method="post" name="upgredeForm" id="upgredeForm" class="layui-form">
+		        <input type="hidden" name="formcheck" value="{$formcheck}" > 
+		  	   	<table class="layui-table">
+	            	<thead>
+	                    <tr>
+	                        <th width="30">选择</th>
+	                        <th>更新文件</th>
+	                        <th>更新方式</th>
+	                        <th>更新时间</th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    {foreach $upfile(key,value)}
+	                    <tr>
+	                        <td><input type="checkbox" checked class="checkbox checkitem" lay-ignore name="list[]" value="/[value->dir][value->path]"></td>
+	                        <td>[value->path]</td>
+	                        <td>[value->type]</td>
+	                        <td>{fun=date('Y-m-d H:i:s',$value->ctime)}</td>
+	                    </tr>
+	                    {/foreach}
+	                    
+	                    {if([$upfile])}
+	                    <tr>
+	                    	 <td><input type="checkbox" class="checkbox" checked lay-ignore id="checkall" title="全选"></td>
+	                    	 <td colspan="4">{if(get('action')=='local')}已下载{else}已检测到{/if}更新：[num]个文件</td>
+	                    </tr>
+	                    {/if}
+	                </tbody>
+	            </table>
+	            {if(get('action')=='')}
+	            	<a class="layui-btn" href="{url./admin/Upgrade/index/action/check}">检查更新</a>    
+	            {else}
+	            	<a class="layui-btn" href="{url./admin/Upgrade/index/action/check}">重新检查</a>
+	             	 {if(get('action')=='local')}
+		             	<button type="submit" name="submit"  class="layui-btn" onclick="return setAction('{url./admin/Upgrade/update}');">执行更新</button>
+		             {else}
+		             	<button type="submit" name="submit" class="layui-btn" onclick="return setAction('{url./admin/Upgrade/down}');" >下载更新</button>
+		             {/if}
+		            
+	            {/if}
+	            <script>
+		     		function setAction(action){
+		     			document.upgredeForm.action = action; 
+		     		}
+		     	</script>
+	           
+	        </form>
+	  	   </div>
+	  </div>
+	</div>	
+</div>
+
+{include file='common/foot.html'}

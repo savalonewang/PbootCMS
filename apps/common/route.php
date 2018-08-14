@@ -12,6 +12,7 @@ return array(
         'admin/Syslog' => 'admin/system.Syslog',
         'admin/Database' => 'admin/system.Database',
         'admin/Config' => 'admin/system.Config',
+        'admin/Upgrade' => 'admin/system.Upgrade',
         
         // 内容发布模块路由
         'admin/Site' => 'admin/content.Site',
