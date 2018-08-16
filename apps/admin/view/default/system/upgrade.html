@@ -78,9 +78,10 @@
 	        	        	html += '<tr><td><input type="checkbox" checked class="checkbox checkitem" lay-ignore name="list" value="'+data[i].path+'"></td><td>'+data[i].path+'</td><td>'+data[i].type+'</td><td>'+data[i].ctime+'</td></tr>';
 	        	   		}
 	       		   html += '<tr><td><input type="checkbox" class="checkbox" checked lay-ignore id="checkall" title="全选"></td><td colspan="4">总共检测到 '+i+' 个文件</td></tr>';
+	       		  $("#upfile").html('');
 	       		   $("#upfile").append(html);
 	       		   layer.close(lyindex);
-	       		   layer.msg('总共检测到 '+i+' 个文件需要更新！', {icon: 1});
+	       		   layer.msg('共检测到 '+i+' 个文件需要更新！', {icon: 1});
 	       		   $('#check').text('重新检查');
 	       		   $('#down').show();
       		  }else{

@@ -150,7 +150,7 @@ class UpgradeController extends Controller
                     } else {
                         $path = RUN_PATH . '/upgrade' . $value;
                         $des_path = ROOT_PATH . $value;
-                        $back_path = DOC_PATH . STATIC_DIR . '/backup/upgrade/' . $backdir . $des_path;
+                        $back_path = DOC_PATH . STATIC_DIR . '/backup/upgrade/' . $backdir . $value;
                         check_dir(dirname($des_path), true);
                         check_dir(dirname($back_path), true);
                         if (file_exists($des_path)) { // 执行备份
