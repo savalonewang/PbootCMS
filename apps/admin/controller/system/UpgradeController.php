@@ -152,8 +152,8 @@ class UpgradeController extends Controller
                         $des_path = ROOT_PATH . $value;
                         $back_path = DOC_PATH . STATIC_DIR . '/backup/upgrade/' . $backdir . $value;
                         check_dir(dirname($des_path), true);
-                        check_dir(dirname($back_path), true);
                         if (file_exists($des_path)) { // 文件存在时执行备份
+                            check_dir(dirname($back_path), true);
                             copy($des_path, $back_path);
                         }
                         if (! copy($path, $des_path)) {
