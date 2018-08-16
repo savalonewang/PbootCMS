@@ -92,9 +92,9 @@ class UpgradeController extends Controller
                 $len = count($list) ?: 0;
                 foreach ($list as $value) {
                     $path = RUN_PATH . '/upgrade' . $value;
-                    
                     $types = '.gif|.jpeg|.png|.bmp|.jpg|'; // 定义执行下载的类型
-                    $ext = end(explode(".", basename($path))); // 扩展
+                    $pathinfo = explode(".", basename($path));
+                    $ext = end($pathinfo); // 扩展
                     if (preg_match('/\.' . $ext . '\|/i', $types)) {
                         if (! $this->getServerDown($value, $path)) {
                             if ($len == 1) {

@@ -27,26 +27,21 @@
 	                        <td>[value->ctime]</td>
 	                    </tr>
 	                    {/foreach}
-	                </tbody>
-
-	                 {if([$upfile] && get('action')=='local')}
-	                  <tfoot>
-	                    <tr>
+	                    {if([$upfile] && get('action')=='local')}
+	                     <tr>
 	                    	 <td><input type="checkbox" class="checkbox" checked lay-ignore id="checkall" title="全选"></td>
 	                    	 <td colspan="4">已下载更新：[num]个文件</td>
 	                    </tr>
-	                  </tfoot>
-                    {/if}
-                    
+	                    {/if}
+	                </tbody> 
 	            </table>
 	             {if(get('action')=='local')}
 	             	<button class="layui-btn" id="check" data-url='{url./admin/Upgrade/check}'>重新检查</button>
-	             	<button class="layui-btn" id="update" data-url='{url./admin/Upgrade/update}'>执行更新</button>
 	             {else}
 	             	<button class="layui-btn" id="check" data-url='{url./admin/Upgrade/check}'>检查更新</button>
-	             	<button class="layui-btn" style="display:none" id="down" data-url='{url./admin/Upgrade/down}'>下载更新</button>
-	             {/if}  
-	            
+	             {/if}
+	             <button class="layui-btn" {if(![$upfile])}style="display:none"{/if} id="update" data-url='{url./admin/Upgrade/update}'>执行更新</button>
+	             <button class="layui-btn" style="display:none" id="down" data-url='{url./admin/Upgrade/down}'>下载更新</button>
 	  	   </div>
 	  </div>
 	</div>	
@@ -88,9 +83,10 @@
 		       		   $("#upfile").append(html);
 		       		   layer.close(lyindex);
 		       		   layer.msg('共检测到 '+i+' 个文件需要更新！', {icon: 1});
-		       			$('#down').show();
+		       		  $('#update').hide();
+		       		  $('#down').show();
       			  }
-	       		   $('#check').text('重新检查');
+	       		  $('#check').text('重新检查');
       		  }else{
       			 layer.close(lyindex);
       			 layer.msg(response.data, {icon: 5});
@@ -151,6 +147,8 @@
 			  layer.close(index); 
 		   }
 		});
+   	 	$('#update').show();
+		$('#down').hide();
    	});
    	
 	//执行更新,由于涉及到数据库升级文件先后顺序，所以必须一次性提交
