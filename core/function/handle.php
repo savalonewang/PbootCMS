@@ -143,8 +143,8 @@ function get_url($url, $fields = array(), $UserAgent = null, $vfSSL = false)
     // SSL验证
     if ($SSL) {
         if ($vfSSL) {
-            curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, true); // 信任任何证书
-            curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, true); // 不检查证书中是否设置域名
+            curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, true);
             curl_setopt($ci, CURLOPT_CAINFO, CORE_PATH . '/cacert.pem');
         } else {
             curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, false); // 信任任何证书
