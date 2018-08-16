@@ -54,7 +54,7 @@ class UpgradeController extends Controller
         $db = get_db_type();
         foreach ($files as $key => $value) {
             $file = ROOT_PATH . $value->path;
-            if (md5_file($file) != $value->md5) {
+            if (@md5_file($file) != $value->md5) {
                 // 筛选数据库更新脚本
                 if (preg_match('/([\w]+)-([\w\.]+)-update\.sql/i', $file, $matches)) {
                     if ($matches[1] != $db || ! $this->compareVersion($matches[2], APP_VERSION . '.' . RELEASE_TIME)) {
