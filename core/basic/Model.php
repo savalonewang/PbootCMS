@@ -673,17 +673,14 @@ class Model
             } else {
                 $var_arr = explode(',', $limit);
             }
-            switch (Config::get('database.type')) {
-                case 'mysqli':
-                case 'pdo_mysql':
+            switch (get_db_type()) {
+                case 'mysql':
                     $this->sql['limit'] = 'LIMIT ' . $var_arr[0] . ',' . $var_arr[1];
                     break;
                 case 'sqlite':
-                case 'pdo_sqlite':
                     $this->sql['limit'] = 'LIMIT ' . $var_arr[1] . ' OFFSET ' . $var_arr[0];
                     break;
                 case 'pgsql':
-                case 'pdo_pgsql':
                     $this->sql['limit'] = 'LIMIT ' . $var_arr[1] . ' OFFSET ' . $var_arr[0];
                     break;
             }
@@ -1185,7 +1182,7 @@ class Model
                     $this->sql['value'] = $value_string;
                     $sql = $this->buildSql($this->insertMultSql);
                     // 判断SQL语句是否超过数据库设置
-                    if (Config::get('database.type') == 'mysqli' || Config::get('database.type') == 'pdo_mysql') {
+                    if (get_db_type() == 'mysql') {
                         $max_allowed_packet = $this->getDb()->one('SELECT @@global.max_allowed_packet', 2);
                     } else {
                         $max_allowed_packet = 1 * 1024 * 1024; // 其他类型数据库按照1M限制

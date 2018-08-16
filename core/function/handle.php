@@ -125,7 +125,7 @@ function get_user_ip()
 }
 
 // 执行URL请求，并返回数据
-function get_url($url, $fields = array(), $UserAgent = null)
+function get_url($url, $fields = array(), $UserAgent = null, $vfSSL = false)
 {
     $SSL = substr($url, 0, 8) == "https://" ? true : false;
     
@@ -142,8 +142,14 @@ function get_url($url, $fields = array(), $UserAgent = null)
                                                  
     // SSL验证
     if ($SSL) {
-        curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, false); // 信任任何证书
-        curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, 0); // 不检查证书中是否设置域名
+        if ($vfSSL) {
+            curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, true); // 信任任何证书
+            curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, true); // 不检查证书中是否设置域名
+            curl_setopt($ci, CURLOPT_CAINFO, CORE_PATH . '/cacert.pem');
+        } else {
+            curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, false); // 信任任何证书
+            curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, false); // 不检查证书中是否设置域名
+        }
     }
     
     // 数据字段
@@ -634,7 +640,7 @@ function get_server_info()
     $data['document_root'] = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : DOC_PATH;
     // PHP版本
     $data['php_version'] = PHP_VERSION;
-    // 数据库版本
+    // 数据库驱动
     $data['db_driver'] = Config::get('database.type');
     // php配置文件
     $data['php_ini'] = @php_ini_loaded_file();
@@ -682,6 +688,27 @@ function get_server_info()
     }
     $data['extensions'] = $extensions;
     return json_decode(json_encode($data));
+}
+
+// 获取数据库类型
+function get_db_type()
+{
+    switch (Config::get('database.type')) {
+        case 'mysqli':
+        case 'pdo_mysql':
+            $db = 'mysql';
+            break;
+        case 'sqlite':
+        case 'pdo_sqlite':
+            $db = 'sqlite';
+            break;
+        case 'pdo_pgsql':
+            $db = 'pgsql';
+            break;
+        default:
+            $db = null;
+    }
+    return $db;
 }
 
 

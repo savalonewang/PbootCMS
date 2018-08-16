@@ -7,8 +7,6 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
-	  	   <form action="{url./admin/Upgrade/update}" method="post" name="upgredeForm" id="upgredeForm" class="layui-form">
-		        <input type="hidden" name="formcheck" value="{$formcheck}" > 
 		  	   	<table class="layui-table">
 	            	<thead>
 	                    <tr>
@@ -18,45 +16,198 @@
 	                        <th>更新时间</th>
 	                    </tr>
 	                </thead>
-	                <tbody>
+	                <tbody id="upfile">
 	                    {foreach $upfile(key,value)}
 	                    <tr>
-	                        <td><input type="checkbox" checked class="checkbox checkitem" lay-ignore name="list[]" value="/[value->dir][value->path]"></td>
+	                        <td><input type="checkbox" checked class="checkbox checkitem" lay-ignore name="list" value="[value->path]"></td>
 	                        <td>[value->path]</td>
 	                        <td>[value->type]</td>
-	                        <td>{fun=date('Y-m-d H:i:s',$value->ctime)}</td>
+	                        <td>[value->ctime]</td>
 	                    </tr>
 	                    {/foreach}
-	                    
-	                    {if([$upfile])}
+	                </tbody>
+
+	                 {if([$upfile] && get('action')=='local')}
+	                  <tfoot>
 	                    <tr>
 	                    	 <td><input type="checkbox" class="checkbox" checked lay-ignore id="checkall" title="全选"></td>
-	                    	 <td colspan="4">{if(get('action')=='local')}已下载{else}已检测到{/if}更新：[num]个文件</td>
+	                    	 <td colspan="4">已下载更新：[num]个文件</td>
 	                    </tr>
-	                    {/if}
-	                </tbody>
+	                  </tfoot>
+                    {/if}
+                    
 	            </table>
-	            {if(get('action')=='')}
-	            	<a class="layui-btn" href="{url./admin/Upgrade/index/action/check}">检查更新</a>    
-	            {else}
-	            	<a class="layui-btn" href="{url./admin/Upgrade/index/action/check}">重新检查</a>
-	             	 {if(get('action')=='local')}
-		             	<button type="submit" name="submit"  class="layui-btn" onclick="return setAction('{url./admin/Upgrade/update}');">执行更新</button>
-		             {else}
-		             	<button type="submit" name="submit" class="layui-btn" onclick="return setAction('{url./admin/Upgrade/down}');" >下载更新</button>
-		             {/if}
-		            
-	            {/if}
-	            <script>
-		     		function setAction(action){
-		     			document.upgredeForm.action = action; 
-		     		}
-		     	</script>
-	           
-	        </form>
+	             {if(get('action')=='local')}
+	             	<button class="layui-btn" id="check" data-url='{url./admin/Upgrade/check}'>重新检查</button>
+	             	<button class="layui-btn" id="update" data-url='{url./admin/Upgrade/update}'>执行更新</button>
+	             {else}
+	             	<button class="layui-btn" id="check" data-url='{url./admin/Upgrade/check}'>检查更新</button>
+	             	<button class="layui-btn" style="display:none" id="down" data-url='{url./admin/Upgrade/down}'>下载更新</button>
+	             {/if}  
+	            
 	  	   </div>
 	  </div>
 	</div>	
 </div>
+
+ <script>
+	//检查更新	  	         
+   	$("#check").on("click",function(){
+   		var lyindex;
+   	    layui.use('layer', function(){
+		  	var layer = layui.layer;
+		  	lyindex = layer.open({
+			  type: 1,
+			  title:'检查更新',
+			  closeBtn:0,
+			  content: '<div style="padding:20px 10px;"><img src="{APP_THEME_DIR}/layui/css/modules/layer/default/loading-0.gif">正在检查更新文件，请稍等...<div>' 
+			});
+		});
+   		
+   		var url= $(this).data('url');
+   		 $.ajax({
+      	  type: 'POST',
+      	  url: url,
+      	  dataType: 'json',
+      	  data: {},
+      	  success: function (response, status) {
+      		  if(response.code==1){
+      			  var data=response.data;
+	      		  var html='';
+	       		   for(var i = 0; i < data.length; i++){
+	        	        	html += '<tr><td><input type="checkbox" checked class="checkbox checkitem" lay-ignore name="list" value="'+data[i].path+'"></td><td>'+data[i].path+'</td><td>'+data[i].type+'</td><td>'+data[i].ctime+'</td></tr>';
+	        	   		}
+	       		   html += '<tr><td><input type="checkbox" class="checkbox" checked lay-ignore id="checkall" title="全选"></td><td colspan="4">总共检测到 '+i+' 个文件</td></tr>';
+	       		   $("#upfile").append(html);
+	       		   layer.close(lyindex);
+	       		   layer.msg('总共检测到 '+i+' 个文件需要更新！', {icon: 1});
+	       		   $('#check').text('重新检查');
+	       		   $('#down').show();
+      		  }else{
+      			 layer.close(lyindex);
+      			 layer.msg(response.data, {icon: 5});
+      		  }
+      		   
+           },
+           error:function(xhr,status,error){
+          	  layer.msg("检查更新发生错误!", {icon: 5});
+           }
+      	});
+   	});
+   	
+	//下载更新
+   	$("#down").on("click",function(){
+   	    var lyindex;
+   	    var layer;
+   	    layui.use('layer', function(){
+		  	layer = layui.layer;
+		  	lyindex = layer.open({
+			  type: 1,
+			  title:'下载更新',
+			  closeBtn:0,
+			  content: '<div style="padding:20px 10px;"><img src="{APP_THEME_DIR}/layui/css/modules/layer/default/loading-0.gif"><span id="layer-content">正在下载更新文件，请稍等...</span><div>'
+			});
+		});
+
+   		var url= $(this).data('url');
+   	 	$(".checkitem:checked").each(function(index,element){
+	  		 $.ajax({
+	     	  type: 'POST',
+	     	  url: url,
+	     	  dataType: 'json',
+	     	  async:false,
+	     	  data: {
+	     		  list:$(element).val()
+	     	  },
+	     	  success: function (response, status) {
+	     		 if(response.code==1){
+	     			 $('#layer-content').text(response.data);
+	     		 }else{
+	     			 layer.close(lyindex);
+	      			 layer.msg(response.data, {icon: 5}); 
+	     		 }
+	          },
+	          error:function(xhr,status,error){
+	         	  layer.msg("下载更新文件发生错误!", {icon: 5});
+	          }
+	     	});
+  	    });
+   	 	layer.close(lyindex);
+   	 	layer.open({
+		  type: 0,
+		  title:'下载更新',
+		  closeBtn:0,
+		  content: '所选文件全部下载完成!',
+		  yes: function(index, layero){
+			  window.location.href = '{url./admin/Upgrade/index/action/local}';
+			  layer.close(index); 
+		   }
+		});
+   	});
+   	
+	//执行更新,由于涉及到数据库升级文件先后顺序，所以必须一次性提交
+	$("#update").on("click",function(){
+   	    var lyindex;
+   	    var layer;
+   	    layui.use('layer', function(){
+		  	layer = layui.layer;
+		  	lyindex = layer.open({
+			  type: 1,
+			  title:'执行更新',
+			  closeBtn:0,
+			  content: '<div style="padding:20px 10px;"><img src="{APP_THEME_DIR}/layui/css/modules/layer/default/loading-0.gif"><span id="layer-content">正在执行更新文件，请稍等...</span><div>'
+			});
+		});
+	
+   		var url= $(this).data('url');
+   		var list='';
+   		$(".checkitem:checked").each(function(index,element){
+   			if(index==0){
+   				list += $(element).val();
+   			}else{
+   				list += ','+$(element).val();
+   			}
+   		});
+   	 	
+  		 $.ajax({
+	     	  type: 'POST',
+	     	  url: url,
+	     	  dataType: 'json',
+	     	  data: {
+	     		  list:list
+	     	  },
+	     	  success: function (response, status) {
+	     		 if(response.code==1){
+	     			layer.close(lyindex);
+	     			layer.open({
+     				  type: 0,
+     				  title:'执行更新',
+     				  closeBtn:0,
+     				  content: '所选文件全部更新完成!',
+     				  yes: function(index, layero){
+     					  window.location.href = '{url./admin/Upgrade/index}';
+     					  layer.close(index); 
+     				   }
+     				});
+	     		 }else{
+	     			 layer.close(lyindex);
+	      			 layer.msg(response.data, {icon: 5}); 
+	     		 }
+	          },
+	          error:function(xhr,status,error){
+	         	  layer.msg("执行更新文件发生错误!", {icon: 5});
+	          }
+     	});
+   	});
+   	
+   	//选择全部
+      $("#upfile").on("click","#checkall", function () {
+      	if($(this).prop("checked")){
+      		$(".checkitem:enabled").prop("checked", true);
+      	}else{
+      		$(".checkitem").prop("checked", false);
+      	} 
+      });     
+</script>
 
 {include file='common/foot.html'}

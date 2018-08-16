@@ -62,7 +62,7 @@ class IndexController extends Controller
         $this->assign('shortcuts', session('shortcuts'));
         $dbsecurity = true;
         // 如果是sqlite数据库，并且路径为默认的，则标记为不安全
-        if ($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') {
+        if (get_db_type() == 'sqlite') {
             if ($this->config('database.dbname') == '/data/#pbootcms.db' || $this->config('database.dbname') == '/data/pbootcms.db') {
                 $dbsecurity = false;
             }
@@ -103,7 +103,7 @@ class IndexController extends Controller
         );
         
         // 判断数据库写入权限
-        if (($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') && ! is_writable(ROOT_PATH . $this->config('database.dbname'))) {
+        if ((get_db_type() == 'sqlite') && ! is_writable(ROOT_PATH . $this->config('database.dbname'))) {
             json(0, '数据库目录写入权限不足！');
         }
         

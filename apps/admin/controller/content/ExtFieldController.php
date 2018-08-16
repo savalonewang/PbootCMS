@@ -110,7 +110,7 @@ class ExtFieldController extends Controller
             
             // 字段不存在时创建
             if (! $this->model->isExistField($name)) {
-                if ($this->config('database.type') == 'sqlite' || $this->config('database.type') == 'pdo_sqlite') {
+                if (get_db_type() == 'sqlite') {
                     $result = $this->model->amd("ALTER TABLE ay_content_ext ADD COLUMN $name $sqlite NULL");
                 } else {
                     $result = $this->model->amd("ALTER TABLE ay_content_ext ADD $name $mysql NULL COMMENT '$description'");
@@ -153,7 +153,7 @@ class ExtFieldController extends Controller
         if ($this->model->delExtField($id)) {
             // mysql数据库执行字段删除，sqlite暂时不支持
             if (! ! $name) {
-                if ($this->config('database.type') == 'mysqli' || $this->config('database.type') == 'pdo_mysql') {
+                if (get_db_type() == 'mysql') {
                     $result = $this->model->amd("ALTER TABLE ay_content_ext DROP COLUMN $name");
                 }
             }
