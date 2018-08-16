@@ -88,9 +88,9 @@
 		       		   $("#upfile").append(html);
 		       		   layer.close(lyindex);
 		       		   layer.msg('共检测到 '+i+' 个文件需要更新！', {icon: 1});
+		       			$('#down').show();
       			  }
 	       		   $('#check').text('重新检查');
-	       		   $('#down').show();
       		  }else{
       			 layer.close(lyindex);
       			 layer.msg(response.data, {icon: 5});
