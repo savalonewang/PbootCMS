@@ -5,7 +5,7 @@
  * @author XingMeng
  * @email hnxsh@foxmail.com
  * @date 2018年8月14日
- *  
+ *  在线更新
  */
 namespace app\admin\controller\system;
 
@@ -178,8 +178,12 @@ class UpgradeController extends Controller
                     }
                 }
                 
-                $this->log("系统更新成功!");
+                // 清理缓存
                 path_delete(RUN_PATH . '/upgrade', true);
+                path_delete(RUN_PATH . '/cache');
+                path_delete(RUN_PATH . '/complite');
+                path_delete(RUN_PATH . '/config');
+                $this->log("系统更新成功!");
                 json(1, '系统更新成功！');
             } else {
                 json(0, '请选择要更新的文件！');
