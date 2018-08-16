@@ -13,6 +13,7 @@
 	                        <th width="30">选择</th>
 	                        <th>更新文件</th>
 	                        <th>更新方式</th>
+	                        <th>本地时间</th>
 	                        <th>更新时间</th>
 	                    </tr>
 	                </thead>
@@ -22,6 +23,7 @@
 	                        <td><input type="checkbox" checked class="checkbox checkitem" lay-ignore name="list" value="[value->path]"></td>
 	                        <td>[value->path]</td>
 	                        <td>[value->type]</td>
+	                        <td>[value->ltime]</td>
 	                        <td>[value->ctime]</td>
 	                    </tr>
 	                    {/foreach}
@@ -73,15 +75,20 @@
       	  success: function (response, status) {
       		  if(response.code==1){
       			  var data=response.data;
-	      		  var html='';
-	       		   for(var i = 0; i < data.length; i++){
-	        	        	html += '<tr><td><input type="checkbox" checked class="checkbox checkitem" lay-ignore name="list" value="'+data[i].path+'"></td><td>'+data[i].path+'</td><td>'+data[i].type+'</td><td>'+data[i].ctime+'</td></tr>';
-	        	   		}
-	       		   html += '<tr><td><input type="checkbox" class="checkbox" checked lay-ignore id="checkall" title="全选"></td><td colspan="4">总共检测到 '+i+' 个文件</td></tr>';
-	       		  $("#upfile").html('');
-	       		   $("#upfile").append(html);
-	       		   layer.close(lyindex);
-	       		   layer.msg('共检测到 '+i+' 个文件需要更新！', {icon: 1});
+      			  if(!(data instanceof Array)){
+      				  layer.close(lyindex);
+		       		  layer.msg(data, {icon: 1});
+      			  }else{
+		      		   var html='';
+		       		   for(var i = 0; i < data.length; i++){
+		        	        html += '<tr><td><input type="checkbox" checked class="checkbox checkitem" lay-ignore name="list" value="'+data[i].path+'"></td><td>'+data[i].path+'</td><td>'+data[i].type+'</td><td>'+data[i].ltime+'</td><td>'+data[i].ctime+'</td></tr>';
+		        	   }
+		       		   html += '<tr><td><input type="checkbox" class="checkbox" checked lay-ignore id="checkall" title="全选"></td><td colspan="4">总共检测到 '+i+' 个文件</td></tr>';
+		       		   $("#upfile").html('');
+		       		   $("#upfile").append(html);
+		       		   layer.close(lyindex);
+		       		   layer.msg('共检测到 '+i+' 个文件需要更新！', {icon: 1});
+      			  }
 	       		   $('#check').text('重新检查');
 	       		   $('#down').show();
       		  }else{

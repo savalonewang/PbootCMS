@@ -51,33 +51,31 @@ class UpgradeController extends Controller
         check_dir(DOC_PATH . STATIC_DIR . '/backup/upgrade', true);
         
         $files = $this->getServerList();
-        if (! is_array($files)) {
-            json(0, $files);
-        } else {
-            $db = get_db_type();
-            foreach ($files as $key => $value) {
-                $file = ROOT_PATH . $value->path;
-                if (md5_file($file) != $value->md5) {
-                    // 筛选数据库更新脚本
-                    if (preg_match('/([\w]+)-([\w\.]+)-update\.sql/i', $file, $matches)) {
-                        if ($matches[1] != $db || ! $this->compareVersion($matches[2], APP_VERSION . '.' . RELEASE_TIME)) {
-                            continue;
-                        }
+        $db = get_db_type();
+        foreach ($files as $key => $value) {
+            $file = ROOT_PATH . $value->path;
+            if (md5_file($file) != $value->md5) {
+                // 筛选数据库更新脚本
+                if (preg_match('/([\w]+)-([\w\.]+)-update\.sql/i', $file, $matches)) {
+                    if ($matches[1] != $db || ! $this->compareVersion($matches[2], APP_VERSION . '.' . RELEASE_TIME)) {
+                        continue;
                     }
-                    if (file_exists($file)) {
-                        $files[$key]->type = '<span style="color:Red">覆盖</span>';
-                    } else {
-                        $files[$key]->type = '新增';
-                    }
-                    $files[$key]->ctime = date('Y-m-d H:i:s', $files[$key]->ctime);
-                    $upfile[] = $files[$key];
                 }
+                if (file_exists($file)) {
+                    $files[$key]->type = '<span style="color:Red">覆盖</span>';
+                    $files[$key]->ltime = date('Y-m-d H:i:s', filectime($file));
+                } else {
+                    $files[$key]->type = '新增';
+                    $files[$key]->ltime = '无';
+                }
+                $files[$key]->ctime = date('Y-m-d H:i:s', $files[$key]->ctime);
+                $upfile[] = $files[$key];
             }
-            if (! $upfile) {
-                json(0, '您的系统无任何文件需要更新！');
-            } else {
-                json(1, $upfile);
-            }
+        }
+        if (! $upfile) {
+            json(1, '您的系统无任何文件需要更新！');
+        } else {
+            json(1, $upfile);
         }
     }
 
@@ -94,13 +92,14 @@ class UpgradeController extends Controller
                 $len = count($list) ?: 0;
                 foreach ($list as $value) {
                     $path = RUN_PATH . '/upgrade' . $value;
+                    
                     $types = '.gif|.jpeg|.png|.bmp|.jpg|'; // 定义执行下载的类型
                     $ext = end(explode(".", basename($path))); // 扩展
                     if (preg_match('/\.' . $ext . '\|/i', $types)) {
                         if (! $this->getServerDown($value, $path)) {
                             if ($len == 1) {
-                                $this->log("更新文件 $value 下载失败!");
-                                json(0, "更新文件 $value 下载失败!");
+                                $this->log("更新文件  $value 下载失败!");
+                                json(0, "更新文件 " . basename($value) . " 下载失败!");
                             }
                         } else {
                             if ($len == 1) {
@@ -110,12 +109,13 @@ class UpgradeController extends Controller
                     } else {
                         $result = $this->getServerFile($value);
                     }
+                    
                     if ($result) {
                         check_dir(dirname($path), true);
                         if (! file_put_contents($path, $result)) {
                             if ($len == 1) {
-                                $this->log("更新文件 $value 下载失败!");
-                                json(0, "更新文件 $value 下载失败!");
+                                $this->log("更新文件  $value 下载失败!");
+                                json(0, "更新文件 " . basename($value) . " 下载失败!");
                             }
                         } else {
                             if ($len == 1) {
@@ -125,7 +125,7 @@ class UpgradeController extends Controller
                     }
                 }
                 if ($len > 1) {
-                    json(1, "更新文件 全部下载成功!");
+                    json(1, "更新文件全部下载成功!");
                 }
             } else {
                 json(0, '请选择要下载的文件！');
@@ -153,27 +153,29 @@ class UpgradeController extends Controller
                         $back_path = DOC_PATH . STATIC_DIR . '/backup/upgrade/' . $backdir . $value;
                         check_dir(dirname($des_path), true);
                         check_dir(dirname($back_path), true);
-                        if (file_exists($des_path)) { // 执行备份
+                        if (file_exists($des_path)) { // 文件存在时执行备份
                             copy($des_path, $back_path);
                         }
                         if (! copy($path, $des_path)) {
                             $this->log("文件 " . $value . " 更新失败!");
-                            json(0, "文件 $value 更新失败,请重试!");
+                            json(0, "文件 " . basename($value) . " 更新失败，请重试!");
                         }
                     }
                 }
                 
                 // 更新数据库
                 if (isset($sqls)) {
-                    sort($sqls);
+                    sort($sqls); // 排序
                     foreach ($sqls as $value) {
                         $path = RUN_PATH . '/upgrade' . $value;
-                        $des_path = ROOT_PATH . $value;
-                        check_dir(dirname($des_path), true);
-                        $sql = file_get_contents($path);
-                        if (! $this->upsql($sql)) {
-                            $this->log("数据库 $value 更新失败!");
-                            json(0, "数据库 $value 更新失败！");
+                        if (file_exists($path)) {
+                            $sql = file_get_contents($path);
+                            if (! $this->upsql($sql)) {
+                                $this->log("数据库 $value 更新失败!");
+                                json(0, "数据库" . basename($value) . " 更新失败！");
+                            }
+                        } else {
+                            json(0, "数据库文件" . basename($value) . "不存在！");
                         }
                     }
                 }
@@ -183,6 +185,7 @@ class UpgradeController extends Controller
                 path_delete(RUN_PATH . '/cache');
                 path_delete(RUN_PATH . '/complite');
                 path_delete(RUN_PATH . '/config');
+                
                 $this->log("系统更新成功!");
                 json(1, '系统更新成功！');
             } else {
@@ -200,8 +203,10 @@ class UpgradeController extends Controller
             $file = ROOT_PATH . $value->path;
             if (file_exists($file)) {
                 $files[$key]->type = '<span style="color:Red">覆盖</span>';
+                $files[$key]->ltime = date('Y-m-d H:i:s', filectime($file));
             } else {
                 $files[$key]->type = '新增';
+                $files[$key]->ltime = '无';
             }
             $files[$key]->ctime = date('Y-m-d H:i:s', $files[$key]->ctime);
             $upfile[] = $files[$key];
@@ -225,16 +230,19 @@ class UpgradeController extends Controller
     private function getServerList()
     {
         $url = $this->server . '/index.php/upgrate/getlist/version/' . APP_VERSION . '.' . RELEASE_TIME;
-        if (! ! $rs = get_url($url, '', '', true)) {
-            $rs = json_decode($rs);
-            if ($rs) {
-                return $rs->data;
+        if (! ! $rs = json_decode(get_url($url, '', '', true))) {
+            if ($rs->code) {
+                if (is_array($rs->data)) {
+                    return $rs->data;
+                } else {
+                    json(1, $rs->data);
+                }
             } else {
-                $this->log('连接更新服务器错误，请稍后再试！');
-                return '连接更新服务器错误，请稍后再试！';
+                json(0, $rs->data);
             }
         } else {
-            return '连接更新服务器错误，请稍后再试！';
+            $this->log('连接更新服务器发生错误，请稍后再试！');
+            return '连接更新服务器发生错误，请稍后再试！';
         }
     }
 
@@ -243,12 +251,11 @@ class UpgradeController extends Controller
     {
         $url = $this->server . '/index.php/upgrate/getFile';
         $data['path'] = $path;
-        if (! ! $rs = get_url($url, $data, '', true)) {
-            $rs = json_decode($rs);
+        if (! ! $rs = json_decode(get_url($url, $data, '', true))) {
             if ($rs->code) {
                 return base64_decode($rs->data);
             } else {
-                alert_back($rs->data);
+                json(0, $rs->data);
             }
         } else {
             $this->log('获取更新文件' . $path . '时发生服务器错误!');
