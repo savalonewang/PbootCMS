@@ -92,6 +92,7 @@ class UpgradeController extends Controller
                 $len = count($list) ?: 0;
                 foreach ($list as $value) {
                     $path = RUN_PATH . '/upgrade' . $value;
+                    check_dir(dirname($path), true); // 自动创建目录
                     $types = '.gif|.jpeg|.png|.bmp|.jpg|'; // 定义执行下载的类型
                     $pathinfo = explode(".", basename($path));
                     $ext = end($pathinfo); // 扩展
@@ -111,7 +112,6 @@ class UpgradeController extends Controller
                     }
                     
                     if ($result) {
-                        check_dir(dirname($path), true);
                         if (! file_put_contents($path, $result)) {
                             if ($len == 1) {
                                 $this->log("更新文件  $value 下载失败!");
@@ -267,22 +267,20 @@ class UpgradeController extends Controller
     private function getServerDown($source, $des)
     {
         $url = $this->server . $this->release . $source;
-        if (! ! $sfile = fopen($url, "rb")) {
-            if (! ! $cfile = fopen($des, "wb")) {
-                while (! feof($sfile)) {
-                    $fwrite = fwrite($cfile, fread($sfile, 1024 * 8), 1024 * 8);
-                    if ($fwrite === false) {
-                        return false;
-                    }
+        if (($sfile = fopen($url, "rb")) && ($dfile = fopen($des, "wb"))) {
+            while (! feof($sfile)) {
+                $fwrite = fwrite($dfile, fread($sfile, 1024 * 8), 1024 * 8);
+                if ($fwrite === false) {
+                    return false;
                 }
-                return true;
             }
+            return true;
         }
         if ($sfile) {
             fclose($sfile);
         }
-        if ($cfile) {
-            fclose($cfile);
+        if ($dfile) {
+            fclose($dfile);
         }
         return false;
     }
