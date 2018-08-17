@@ -1980,6 +1980,39 @@ class ParserController extends Controller
                         }
                     }
                     break;
+                case 'unit': // bytes转换未其它单位
+                    switch ($params['unit']) {
+                        case 'KB':
+                        case 'kb':
+                            $data = $data / 1024;
+                            break;
+                        case 'MB':
+                        case 'mb':
+                            $data = $data / (1024 * 1024);
+                            break;
+                        case 'GB':
+                        case 'gb':
+                            $data = $data / (1024 * 1024 * 1024);
+                            break;
+                        case 'TB':
+                        case 'tb':
+                            $data = $data / (1024 * 1024 * 1024 * 1024);
+                            break;
+                        case 'PB':
+                        case 'pb':
+                            $data = $data / (1024 * 1024 * 1024 * 1024 * 1024);
+                            break;
+                        case 'EB':
+                        case 'eb':
+                            $data = $data / (1024 * 1024 * 1024 * 1024 * 1024 * 1024);
+                            break;
+                    }
+                    break;
+                case 'decimal':
+                    if ($params['decimal']) {
+                        $data = number_format($data, $params['decimal']);
+                    }
+                    break;
             }
         }
         return $data;
@@ -2069,6 +2102,12 @@ class ParserController extends Controller
                     $content = str_replace($search, '', $content);
                 }
                 break;
+            case 'enclosuresize':
+                if ($data->enclosure && file_exists(ROOT_PATH . $data->enclosure)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, filesize(ROOT_PATH . $data->enclosure)), $content);
+                } else {
+                    $content = str_replace($search, 0, $content);
+                }
             case 'likeslink':
                 $content = str_replace($search, url('/home/Do/likes/id/' . $data->id), $content);
                 break;
@@ -2142,6 +2181,13 @@ class ParserController extends Controller
                     $content = str_replace($search, SITE_DIR . $data->enclosure, $content);
                 } else {
                     $content = str_replace($search, '', $content);
+                }
+                break;
+            case 'enclosuresize':
+                if ($data->enclosure && file_exists(ROOT_PATH . $data->enclosure)) {
+                    $content = str_replace($search, $this->adjustLabelData($params, filesize(ROOT_PATH . $data->enclosure)), $content);
+                } else {
+                    $content = str_replace($search, 0, $content);
                 }
                 break;
             case 'likeslink':
