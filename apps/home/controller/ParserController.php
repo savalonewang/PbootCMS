@@ -588,7 +588,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取一个或多个栏目数据
-                $data = $this->model->getMultSort($scode);
+                $data = $this->model->getMultSort(escape_string($scode));
                 
                 // 无数据直接跳过
                 if (! $data) {
@@ -768,7 +768,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取数据
-                if (! ! $data = $this->model->getSelect($field)) {
+                if (! ! $data = $this->model->getSelect(escape_string($field))) {
                     $data = explode(',', $data);
                 } else {
                     $data = array();
@@ -1094,7 +1094,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getContent($id)) {
+                if (! $data = $this->model->getContent(escape_string($id))) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1148,7 +1148,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取内容多图
-                if (! ! $pics = $this->model->getContentPics($id)) {
+                if (! ! $pics = $this->model->getContentPics(escape_string($id))) {
                     $pics = explode(',', $pics);
                 } else {
                     $pics = array();
@@ -1236,7 +1236,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取内容多图
-                if (! ! $checkboxs = $this->model->getContentCheckbox($id, $field)) {
+                if (! ! $checkboxs = $this->model->getContentCheckbox(escape_string($id), escape_string($field))) {
                     $data = explode(',', $checkboxs);
                 } else {
                     $data = array();
@@ -1312,7 +1312,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getSlides($gid, $num)) {
+                if (! $data = $this->model->getSlides(escape_string($gid), escape_string($num))) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1388,7 +1388,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getLinks($gid, $num)) {
+                if (! $data = $this->model->getLinks(escape_string($gid), escape_string($num))) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1455,7 +1455,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getMessage($num)) {
+                if (! $data = $this->model->getMessage(escape_string($num))) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1540,13 +1540,13 @@ class ParserController extends Controller
                 }
                 
                 // 获取表名称
-                if (! $table = $this->model->getFormTable($fcode)) {
+                if (! $table = $this->model->getFormTable(escape_string($fcode))) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getForm($table, $num)) {
+                if (! $data = $this->model->getForm($table, escape_string($num))) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1716,9 +1716,9 @@ class ParserController extends Controller
                         $field = explode('|', $field);
                         foreach ($field as $value) {
                             if ($fuzzy) {
-                                $like = " like '%" . escape_string($keyword) . "%'";
+                                $like = " like '%" . $keyword . "%'"; // 前面已经转义过
                             } else {
-                                $like = " like '" . escape_string($keyword) . "'";
+                                $like = " like '" . $keyword . "'"; // 前面已经转义过
                             }
                             if (isset($where2[0])) {
                                 $where2[0] .= ' OR ' . $value . $like;
@@ -1884,10 +1884,17 @@ class ParserController extends Controller
                 $danger = false;
                 
                 $white_fun = array(
-                    'date'
+                    'date',
+                    'in_array',
+                    'explode',
+                    'implode',
+                    'get',
+                    'post',
+                    'session',
+                    'cookie'
                 );
                 
-                // 不允许执行带有函数的条件语句
+                // 带有函数的条件语句进行安全校验
                 if (preg_match_all('/([\w]+)([\s]+)?\(/i', $matches[1][$i], $matches2)) {
                     foreach ($matches2[1] as $value) {
                         if (function_exists($value) && ! in_array($value, $white_fun)) {
@@ -1897,7 +1904,7 @@ class ParserController extends Controller
                     }
                 }
                 
-                // 如果有危险字符，则不解析该IF
+                // 如果有危险函数，则不解析该IF
                 if ($danger) {
                     continue;
                 } else {
