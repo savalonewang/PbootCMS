@@ -241,12 +241,14 @@ class CmsModel extends Model
     }
 
     // 列表内容
-    public function getList($acode, $scode, $num, $order, $where = array())
+    public function getList($acode, $scode, $num, $order, $where = array(), $fuzzy = true)
     {
         $fields = array(
             'a.*',
             'b.name as sortname',
+            'b.filename as sortfilename',
             'c.name as subsortname',
+            'c.filename as subfilename',
             'd.type',
             'e.*'
         );
@@ -294,10 +296,11 @@ class CmsModel extends Model
             'd.type=2'
         );
         
+        // 筛选条件支持模糊匹配
         return parent::table('ay_content a')->field($fields)
             ->where($where1, 'OR')
             ->where($where2)
-            ->where($where, 'AND', 'AND', true)
+            ->where($where, 'AND', 'AND', $fuzzy)
             ->join($join)
             ->order($order)
             ->page(1, $num)

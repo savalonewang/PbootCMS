@@ -26,7 +26,7 @@ class ContentController extends Controller
     {
         if (! ! $id = get('id', 'int')) {
             // 区域获取
-            $acode = get('acode') ?: $this->config('lgs.0.acode');
+            $acode = get('acode', 'var') ?: $this->config('lgs.0.acode');
             
             // 读取数据
             if (! ! $data = $this->model->getContent($acode, $id)) {

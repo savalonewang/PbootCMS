@@ -41,6 +41,10 @@
 		                               <i class="fa fa-folder-open-o" aria-hidden="true"></i>
 		                            {/if}
 		                            [value->name]
+		                            
+		                            {if($value->outlink)}
+		                            	<span class="layui-badge layui-bg-black">链</span>
+		                            {/if}
 		                        </td>
 		                        <td>[value->scode]</td>
 		                        <td>[value->pcode]</td>

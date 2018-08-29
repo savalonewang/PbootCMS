@@ -29,10 +29,10 @@ class CmsController extends Controller
     public function site()
     {
         // 获取参数
-        $acode = get('acode') ?: $this->lg;
+        $acode = get('acode', 'var') ?: $this->lg;
         
         // 读取数据
-        if (! $name = get('name')) {
+        if (! $name = get('name', 'var')) {
             $data = $this->model->getSiteAll($acode);
         } else {
             $data = $this->model->getSite($acode, $name);
@@ -46,10 +46,10 @@ class CmsController extends Controller
     public function company()
     {
         // 获取参数
-        $acode = get('acode') ?: $this->lg;
+        $acode = get('acode', 'var') ?: $this->lg;
         
         // 读取数据
-        if (! $name = get('name')) {
+        if (! $name = get('name', 'var')) {
             $data = $this->model->getCompanyAll($acode);
         } else {
             $data = $this->model->getCompany($acode, $name);
@@ -63,7 +63,7 @@ class CmsController extends Controller
     public function label()
     {
         // 获取全部或指定自定义标签
-        if (! $name = get('name')) {
+        if (! $name = get('name', 'var')) {
             $data = $this->model->getLabelAll();
         } else {
             $data = $this->model->getLabel($name);
@@ -77,10 +77,10 @@ class CmsController extends Controller
     public function nav()
     {
         // 获取参数
-        $acode = get('acode') ?: $this->lg;
+        $acode = get('acode', 'var') ?: $this->lg;
         
         // 获取栏目树
-        if (! $scode = get('scode')) {
+        if (! $scode = get('scode', 'var')) {
             $data = $this->model->getSorts($acode);
         } else { // 获取子类
             $data = $this->model->getSortsSon($acode, $scode);
@@ -93,9 +93,9 @@ class CmsController extends Controller
     public function position()
     {
         // 获取参数
-        $acode = get('acode') ?: $this->lg;
+        $acode = get('acode', 'var') ?: $this->lg;
         
-        if (! ! $scode = get('scode')) {
+        if (! ! $scode = get('scode', 'var')) {
             $data = $this->model->getPosition($acode, $scode);
             json(1, $data);
         } else {
@@ -107,9 +107,9 @@ class CmsController extends Controller
     public function sort()
     {
         // 获取参数
-        $acode = get('acode') ?: $this->lg;
+        $acode = get('acode', 'var') ?: $this->lg;
         
-        if (! ! $scode = get('scode')) {
+        if (! ! $scode = get('scode', 'var')) {
             $data = $this->model->getSort($acode, $scode);
             json(1, $data);
         } else {
@@ -120,8 +120,8 @@ class CmsController extends Controller
     // 内容多图
     public function pics()
     {
-        if (! ! $id = get('id')) {
-            $acode = get('acode') ?: $this->lg;
+        if (! ! $id = get('id', 'int')) {
+            $acode = get('acode', 'var') ?: $this->lg;
             if (! ! $pics = $this->model->getContentPics($acode, $id)) {
                 $pics = explode(',', $pics);
             } else {
@@ -136,9 +136,9 @@ class CmsController extends Controller
     // 幻灯片
     public function slide()
     {
-        if (! ! $gid = get('gid')) {
-            $acode = get('acode') ?: $this->lg;
-            $num = get('num') ?: 5;
+        if (! ! $gid = get('gid', 'var')) {
+            $acode = get('acode', 'var') ?: $this->lg;
+            $num = get('num', 'int') ?: 5;
             $data = $this->model->getSlides($acode, $gid, $num);
             json(1, $data);
         } else {
@@ -149,9 +149,9 @@ class CmsController extends Controller
     // 友情链接
     public function link()
     {
-        if (! ! $gid = get('gid')) {
-            $acode = get('acode') ?: $this->lg;
-            $num = get('num') ?: 10;
+        if (! ! $gid = get('gid', 'var')) {
+            $acode = get('acode', 'var') ?: $this->lg;
+            $num = get('num', 'int') ?: 10;
             $data = $this->model->getLinks($acode, $gid, $num);
             json(1, $data);
         } else {
@@ -166,9 +166,9 @@ class CmsController extends Controller
             json(0, '请使用POST提交！');
         }
         
-        $acode = get('acode') ?: $this->lg;
-        $num = get('num') ?: $this->config('pagesize');
-        $order = get('order') ?: 'date';
+        $acode = get('acode', 'var') ?: $this->lg;
+        $num = get('num', 'int') ?: $this->config('pagesize');
+        $order = get('order', 'var') ?: 'date';
         
         switch ($order) {
             case 'date':
@@ -186,27 +186,39 @@ class CmsController extends Controller
         $order .= ",sorting ASC,id DESC";
         
         // 获取主要参数
-        $field = post('field');
-        $keyword = post('keyword');
-        $scode = post('scode');
+        $field = post('field', 'var');
+        $scode = post('scode', 'var');
+        $fuzzy = post('fuzzy', 'int') ?: true;
+        $keyword = post('keyword', 'vars');
         
-        // 匹配单一字段及关键字搜索方式
-        $where = array();
-        if ($field && $keyword) {
-            $where[$field] = $keyword;
-        } elseif ($keyword) {
-            $where['title'] = $keyword;
+        if ($keyword) {
+            if (strpos($field, '|')) { // 匹配多字段的关键字搜索
+                $field = explode('|', $field);
+                foreach ($field as $value) {
+                    if ($fuzzy) {
+                        $like = " like '%" . $keyword . "%'"; // 前面已经转义过
+                    } else {
+                        $like = " like '" . $keyword . "'"; // 前面已经转义过
+                    }
+                    if (isset($where[0])) {
+                        $where[0] .= ' OR ' . $value . $like;
+                    } else {
+                        $where[0] = $value . $like;
+                    }
+                }
+            } else { // 匹配单一字段的关键字搜索
+                if ($field) {
+                    $where[$field] = $keyword;
+                } else {
+                    $where['title'] = $keyword;
+                }
+            }
         }
         
-        // 数据处理
-        $cond = array(
-            'd_source' => 'post',
-            'd_regular' => '/^[^\s]+$/'
-        );
-        foreach ($_POST as $key => $value) {
-            $where[$key] = filter($key, $cond);
-            if ($_POST[$key] && ! $where[$key]) {
-                json(0, '您的查询含有非法字符,已被系统拦截');
+        // 数据接收
+        foreach ($_GET as $key => $value) {
+            if (! ! $value = get($key, 'vars')) {
+                $where[$key] = $value;
             }
         }
         
@@ -215,14 +227,14 @@ class CmsController extends Controller
         unset($where['field']);
         unset($where['scode']);
         unset($where['page']);
+        unset($where2['from']);
+        unset($where2['isappinstalled']);
         unset($where['appid']);
         unset($where['timestamp']);
         unset($where['signature']);
-        unset($where2['from']);
-        unset($where2['isappinstalled']);
         
         // 读取数据
-        $data = $this->model->getList($acode, $scode, $num, $order, $where);
+        $data = $this->model->getList($acode, $scode, $num, $order, $where, $fuzzy);
         
         foreach ($data as $key => $value) {
             if ($value->outlink) {
@@ -246,8 +258,8 @@ class CmsController extends Controller
     public function msg()
     {
         // 获取参数
-        $acode = get('acode') ?: $this->lg;
-        $num = get('num') ?: $this->config('pagesize');
+        $acode = get('acode', 'var') ?: $this->lg;
+        $num = get('num', 'int') ?: $this->config('pagesize');
         
         // 获取栏目数
         $data = $this->model->getMessage($acode, $num);
@@ -283,7 +295,7 @@ class CmsController extends Controller
             
             // 设置其他字段
             if ($data) {
-                $data['acode'] = get('acode') ?: $this->lg;
+                $data['acode'] = get('acode', 'var') ?: $this->lg;
                 $data['user_ip'] = ip2long(get_user_ip());
                 $data['user_os'] = get_user_os();
                 $data['user_bs'] = get_user_bs();
@@ -315,10 +327,10 @@ class CmsController extends Controller
     public function form()
     {
         // 获取参数
-        $num = get('num') ?: $this->config('pagesize');
+        $num = get('num', 'int') ?: $this->config('pagesize');
         
         // 获取表单编码
-        if (! $fcode = get('fcode'))
+        if (! $fcode = get('fcode', 'var'))
             json(0, '必须传递表单编码fcode');
         
         // 获取表名称

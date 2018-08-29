@@ -25,10 +25,10 @@ class ListController extends Controller
     public function index()
     {
         // 获取参数
-        $acode = get('acode') ?: $this->config('lgs.0.acode');
-        $scode = get('scode') ?: - 1;
-        $num = get('num') ?: $this->config('pagesize');
-        $order = get('order') ?: 'date';
+        $acode = get('acode', 'var') ?: $this->config('lgs.0.acode');
+        $scode = get('scode', 'var') ?: - 1;
+        $num = get('num', 'int') ?: $this->config('pagesize');
+        $order = get('order', 'var') ?: 'date';
         switch ($order) {
             case 'date':
             case 'istop':

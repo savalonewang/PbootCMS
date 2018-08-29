@@ -72,6 +72,7 @@ class ContentSortController extends Controller
             $this->outData[$this->count]->pic = $value->pic;
             $this->outData[$this->count]->keywords = $value->keywords;
             $this->outData[$this->count]->description = $value->description;
+            $this->outData[$this->count]->outlink = $value->outlink;
             $this->outData[$this->count]->sorting = $value->sorting;
             $this->outData[$this->count]->status = $value->status;
             $this->outData[$this->count]->create_user = $value->create_user;

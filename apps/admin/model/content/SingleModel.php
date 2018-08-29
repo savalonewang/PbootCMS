@@ -27,7 +27,8 @@ class SingleModel extends Model
             'a.visits',
             'b.mcode',
             'a.ico',
-            'a.pics'
+            'a.pics',
+            'a.outlink'
         );
         $join = array(
             array(
@@ -64,7 +65,8 @@ class SingleModel extends Model
             'a.visits',
             'b.mcode',
             'a.ico',
-            'a.pics'
+            'a.pics',
+            'a.outlink'
         );
         $join = array(
             array(
