@@ -711,4 +711,25 @@ function get_db_type()
     return $db;
 }
 
+// 获取间隔的月份的起始及结束日期
+function get_month_days($date, $start = 0, $interval = 1, $retamp = false)
+{
+    $timestamp = strtotime($date) ?: $date;
+    $first_day = strtotime(date('Y', $timestamp) . '-' . date('m', $timestamp) . '-01 +' . $start . ' month');
+    $last_day = strtotime(date('Y-m-d', $first_day) . ' +' . $interval . ' month -1 day');
+    if ($retamp) {
+        $return = array(
+            'first' => $first_day,
+            'last' => $last_day
+        );
+    } else {
+        $return = array(
+            'first' => date('Y-m-d', $first_day),
+            'last' => date('Y-m-d', $last_day)
+        );
+    }
+    return $return;
+}
+
+
 

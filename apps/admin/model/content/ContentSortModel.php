@@ -44,7 +44,8 @@ class ContentSortModel extends Model
         $field = array(
             'a.pcode',
             'a.scode',
-            'a.name'
+            'a.name',
+            'a.outlink'
         );
         $join = array(
             'ay_model b',
@@ -53,6 +54,7 @@ class ContentSortModel extends Model
         );
         $result = parent::table('ay_content_sort a')->field($field)
             ->where('b.type=1')
+            ->where("a.outlink=''")
             ->where("a.acode='" . session('acode') . "'")
             ->notIn('a.scode', 'select scode from ay_content')
             ->join($join)
@@ -67,7 +69,8 @@ class ContentSortModel extends Model
         $field = array(
             'a.pcode',
             'a.scode',
-            'a.name'
+            'a.name',
+            'a.outlink'
         );
         $join = array(
             'ay_model b',
@@ -76,6 +79,7 @@ class ContentSortModel extends Model
         );
         $result = parent::table('ay_content_sort a')->field($field)
             ->where('b.type=2')
+            ->where("a.outlink=''")
             ->where("a.mcode='$mcode'")
             ->where("a.acode='" . session('acode') . "'")
             ->join($join)
