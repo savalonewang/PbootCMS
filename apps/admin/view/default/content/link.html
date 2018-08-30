@@ -9,6 +9,8 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
+	  		<form action="{url./admin/Link/mod}" method="post" class="layui-form" onkeydown="if(event.keyCode==13) return false;">
+		   	 <input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  		<table class="layui-table">
 	  			<thead>
                     <tr>
@@ -27,7 +29,10 @@
                         <td>[value->name]</td>
                         <td>[value->link]</td>
                         <td><img src="{SITE_DIR}[value->logo]" style="height:20px;"></td>
-                        <td>[value->sorting]</td>
+                        <td class="table-input">
+                        	<input type="hidden" name="listall[]" value="[value->id]">
+                        	<input type="text" lay-ignore class="layui-input" name="sorting[]" value="[value->sorting]">
+                        </td>
                         <td>
                             {fun=get_btn_del($value->id)}
                             {fun=get_btn_mod($value->id)}
@@ -36,6 +41,8 @@
                     {/foreach}
                 </tbody>
 	  		</table>
+	  		 <button type="submit" name="submit" value="sorting" class="layui-btn">保存排序</button>
+            </form>
 	  		<div class="page">{$pagebar}</div>
 	  	</div>
 	  	<div class="layui-tab-item">

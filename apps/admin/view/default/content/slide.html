@@ -9,6 +9,8 @@
 	  </ul>
 	  <div class="layui-tab-content">
 	  	<div class="layui-tab-item layui-show">
+	  		<form action="{url./admin/Slide/mod}" method="post" class="layui-form" onkeydown="if(event.keyCode==13) return false;">
+		    <input type="hidden" name="formcheck" value="{$formcheck}" > 
 	  		<table class="layui-table">
             	<thead>
                     <tr>
@@ -16,7 +18,7 @@
                         <th>图片</th>
                         <th>链接</th>
                         <th>标题</th>
-                        <th>描述</th>
+                        <th>副标题</th>
                         <th>排序</th>
                         <th>操作</th>
                     </tr>
@@ -29,7 +31,10 @@
                         <td>[value->link]</td>
                         <td>[value->title]</td>
                         <td>[value->subtitle]</td>
-                        <td>[value->sorting]</td>
+                        <td class="table-input">
+                        <input type="hidden" name="listall[]" value="[value->id]">
+                        <input type="text" lay-ignore class="layui-input" name="sorting[]" value="[value->sorting]">
+                        </td>
                         <td>
                             {fun=get_btn_del($value->id)}
                             {fun=get_btn_mod($value->id)}
@@ -38,6 +43,8 @@
                     {/foreach}
                 </tbody>
             </table>
+            <button type="submit" name="submit" value="sorting" class="layui-btn">保存排序</button>
+            </form> 
             <div class="page">{$pagebar}</div>
 	  	</div>
 	  	
@@ -88,9 +95,9 @@
                 </div>
                 
                 <div class="layui-form-item">
-                     <label class="layui-form-label">描述</label>
+                     <label class="layui-form-label">副标题</label>
                      <div class="layui-input-block">
-                     	<input type="text" name="subtitle" placeholder="请输入描述"  class="layui-input">
+                     	<input type="text" name="subtitle" placeholder="请输入副标题"  class="layui-input">
                      </div>
                 </div>
                 
@@ -166,9 +173,9 @@
                 </div>
                 
                  <div class="layui-form-item">
-                     <label class="layui-form-label">描述</label>
+                     <label class="layui-form-label">副标题</label>
                      <div class="layui-input-block">
-                     	<input type="text" name="subtitle" value="{$slide->subtitle}" placeholder="请输入描述"  class="layui-input">
+                     	<input type="text" name="subtitle" value="{$slide->subtitle}" placeholder="请输入副标题"  class="layui-input">
                      </div>
                 </div>
                 

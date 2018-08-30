@@ -314,7 +314,6 @@ class ContentController extends Controller
                     }
                     break;
             }
-            exit();
         }
         
         if (! $id = get('id', 'int')) {

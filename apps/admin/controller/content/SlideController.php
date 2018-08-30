@@ -110,6 +110,26 @@ class SlideController extends Controller
     // 轮播图修改
     public function mod()
     {
+        if (! ! $submit = post('submit')) {
+            switch ($submit) {
+                case 'sorting': // 修改列表排序
+                    $listall = post('listall');
+                    if ($listall) {
+                        $sorting = post('sorting');
+                        foreach ($listall as $key => $value) {
+                            if ($sorting[$key] === '' || ! is_numeric($sorting[$key]))
+                                $sorting[$key] = 255;
+                            $this->model->modSlide($value, "sorting=" . $sorting[$key]);
+                        }
+                        $this->log('批量修改轮播图排序成功！');
+                        success('修改成功！', - 1);
+                    } else {
+                        alert_back('排序失败，无任何内容！');
+                    }
+                    break;
+            }
+        }
+        
         if (! $id = get('id', 'int')) {
             error('传递的参数值错误！', - 1);
         }

@@ -345,7 +345,7 @@ function parse_info_tpl($info_tpl, $string, $jump_url, $time)
 }
 
 // 获取转义数据，支持字符串、数组、对象
-function escape_string($string)
+function escape_string($string, $dropStr = true)
 {
     if (! $string)
         return $string;
@@ -358,7 +358,10 @@ function escape_string($string)
             $string->$key = escape_string($value);
         }
     } else { // 字符串处理
-        $string = htmlspecialchars(trim($string), ENT_QUOTES);
+        if ($dropStr) {
+            $string = preg_replace('/(0x7e)|(0x27)|(0x22)|(updatexml)|(extractvalue)|(name_const)|(concat)/i', '', $string);
+        }
+        $string = htmlspecialchars(trim($string), ENT_QUOTES, 'UTF-8');
         $string = addslashes($string);
     }
     return $string;

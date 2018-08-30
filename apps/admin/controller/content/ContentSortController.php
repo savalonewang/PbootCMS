@@ -284,7 +284,6 @@ class ContentSortController extends Controller
                     }
                     break;
             }
-            exit();
         }
         
         if (! $scode = get('scode', 'var')) {
