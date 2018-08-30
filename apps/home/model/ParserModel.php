@@ -292,8 +292,8 @@ class ParserModel extends Model
         if ($scode) {
             // 获取所有子类分类编码
             $this->scodes = array(); // 先清空
-            $scode = explode(',', $scode);
-            foreach ($scode as $value) {
+            $arr = explode(',', $scode);
+            foreach ($arr as $value) {
                 $scodes = $this->getSubScodes(trim($value));
             }
             // 拼接条件
@@ -359,8 +359,8 @@ class ParserModel extends Model
         $this->scodes = array(); // 先清空
                                  
         // 获取多分类子类
-        $scode = explode(',', $scode);
-        foreach ($scode as $value) {
+        $arr = explode(',', $scode);
+        foreach ($arr as $value) {
             $scodes = $this->getSubScodes(trim($value));
         }
         

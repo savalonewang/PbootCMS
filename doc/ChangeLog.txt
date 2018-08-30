@@ -4,6 +4,7 @@
 3、优化后台内容页栏目显示逻辑；
 4、新增后台轮播、链接页面批量排序；
 5、升级layui到最新版本；
+6、新增列表标签isico、ispics、istop、isrecommend、isheadline调节参数；
 
 PbootCMS V1.1.9 build 2018-08-17
 1、系统优化及安全修复(重要)；

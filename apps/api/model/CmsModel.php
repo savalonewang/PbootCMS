@@ -246,9 +246,7 @@ class CmsModel extends Model
         $fields = array(
             'a.*',
             'b.name as sortname',
-            'b.filename as sortfilename',
             'c.name as subsortname',
-            'c.filename as subfilename',
             'd.type',
             'e.*'
         );
@@ -279,8 +277,8 @@ class CmsModel extends Model
         if ($scode) {
             // 获取所有子类分类编码
             $this->scodes = array(); // 先清空
-            $scode = explode(',', $scode);
-            foreach ($scode as $value) {
+            $arr = explode(',', $scode);
+            foreach ($arr as $value) {
                 $scodes = $this->getSubScodes(trim($value));
             }
             // 拼接条件

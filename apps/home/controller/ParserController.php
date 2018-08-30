@@ -836,6 +836,11 @@ class ParserController extends Controller
                 $num = $this->config('pagesize');
                 $order = 'date DESC';
                 $filter = '';
+                $ispics = '';
+                $isico = '';
+                $istop = '';
+                $isrecommend = '';
+                $isheadline = '';
                 
                 // 跳过带scode的指定列表
                 if (array_key_exists('scode', $params)) {
@@ -867,6 +872,21 @@ class ParserController extends Controller
                         case 'filter':
                             $filter = $value;
                             break;
+                        case 'ispics':
+                            $ispics = $value;
+                            break;
+                        case 'isico':
+                            $isico = $value;
+                            break;
+                        case 'istop':
+                            $istop = $value;
+                            break;
+                        case 'isrecommend':
+                            $isrecommend = $value;
+                            break;
+                        case 'isheadline':
+                            $isheadline = $value;
+                            break;
                     }
                 }
                 
@@ -891,6 +911,50 @@ class ParserController extends Controller
                 foreach ($_GET as $key => $value) {
                     if (substr($key, 0, 4) == 'ext_') { // 其他字段不加入
                         $where2[$key] = get($key);
+                    }
+                }
+                
+                // 判断多图调节参数
+                if ($ispics !== '') {
+                    if ($ispics) {
+                        $where2[] = "a.pics<>''";
+                    } else {
+                        $where2[] = "a.pics=''";
+                    }
+                }
+                // 判断缩略图调节参数
+                if ($isico !== '') {
+                    if ($isico) {
+                        $where2[] = "a.ico<>''";
+                    } else {
+                        $where2[] = "a.ico=''";
+                    }
+                }
+                
+                // 判断置顶调节参数
+                if ($istop !== '') {
+                    if ($istop) {
+                        $where2['a.istop'] = 1;
+                    } else {
+                        $where2['a.istop'] = 0;
+                    }
+                }
+                
+                // 判断推荐调节参数
+                if ($isrecommend !== '') {
+                    if ($isrecommend) {
+                        $where2['a.isrecommend'] = 1;
+                    } else {
+                        $where2['a.isrecommend'] = 0;
+                    }
+                }
+                
+                // 判断头条调节参数
+                if ($isheadline !== '') {
+                    if ($isheadline) {
+                        $where2['a.isheadline'] = 1;
+                    } else {
+                        $where2['a.isheadline'] = 0;
                     }
                 }
                 
@@ -944,7 +1008,12 @@ class ParserController extends Controller
                 $scode = - 1;
                 $filter = '';
                 $page = 0; // 默认不执行分页
-                           
+                $ispics = '';
+                $isico = '';
+                $istop = '';
+                $isrecommend = '';
+                $isheadline = '';
+                
                 // 跳过未指定scode的列表
                 if (! array_key_exists('scode', $params)) {
                     continue;
@@ -980,6 +1049,21 @@ class ParserController extends Controller
                             break;
                         case 'page':
                             $page = $value;
+                        case 'ispics':
+                            $ispics = $value;
+                            break;
+                        case 'isico':
+                            $isico = $value;
+                            break;
+                        case 'istop':
+                            $istop = $value;
+                            break;
+                        case 'isrecommend':
+                            $isrecommend = $value;
+                            break;
+                        case 'isheadline':
+                            $isheadline = $value;
+                            break;
                     }
                 }
                 
@@ -1008,6 +1092,50 @@ class ParserController extends Controller
                 foreach ($_GET as $key => $value) {
                     if (substr($key, 0, 4) == 'ext_') { // 其他字段不加入
                         $where2[$key] = get($key);
+                    }
+                }
+                
+                // 判断多图调节参数
+                if ($ispics !== '') {
+                    if ($ispics) {
+                        $where2[] = "a.pics<>''";
+                    } else {
+                        $where2[] = "a.pics=''";
+                    }
+                }
+                // 判断缩略图调节参数
+                if ($isico !== '') {
+                    if ($isico) {
+                        $where2[] = "a.ico<>''";
+                    } else {
+                        $where2[] = "a.ico=''";
+                    }
+                }
+                
+                // 判断置顶调节参数
+                if ($istop !== '') {
+                    if ($istop) {
+                        $where2['a.istop'] = 1;
+                    } else {
+                        $where2['a.istop'] = 0;
+                    }
+                }
+                
+                // 判断推荐调节参数
+                if ($isrecommend !== '') {
+                    if ($isrecommend) {
+                        $where2['a.isrecommend'] = 1;
+                    } else {
+                        $where2['a.isrecommend'] = 0;
+                    }
+                }
+                
+                // 判断头条调节参数
+                if ($isheadline !== '') {
+                    if ($isheadline) {
+                        $where2['a.isheadline'] = 1;
+                    } else {
+                        $where2['a.isheadline'] = 0;
                     }
                 }
                 
@@ -1957,7 +2085,9 @@ class ParserController extends Controller
                     break;
                 case 'len': // 长度截取
                     if ($params['len'] && is_string($data)) {
-                        $data = mb_substr($data, 0, $params['len'], 'utf-8');
+                        if(mb_strlen($data,'utf-8')>$params['len']){
+                             $data = mb_substr($data, 0, $params['len'], 'utf-8').'···';
+                        }
                     }
                     break;
                 case 'drophtml': // 去除html标签
