@@ -336,8 +336,10 @@ class ParserController extends Controller
             for ($i = 0; $i < $count; $i ++) {
                 $params = $this->parserParam($matches[1][$i]);
                 
-                $separator = '>>';
-                $indextext = '首页';
+                $separator = '';
+                $separatoricon = '';
+                $indextext = '';
+                $indexicon = '';
                 
                 // 分离参数
                 foreach ($params as $key => $value) {
@@ -345,11 +347,31 @@ class ParserController extends Controller
                         case 'separator':
                             $separator = $value;
                             break;
+                        case 'separatoricon':
+                            $separatoricon = $value;
+                            break;
                         case 'indextext':
                             $indextext = $value;
                             break;
+                        case 'indexicon':
+                            $indexicon = $value;
+                            break;
                     }
                 }
+                
+                // 已经设置图标，则图标优先，如果没有，则判断是否已经设置文字
+                if ($separatoricon) {
+                    $separator = '<i class="' . $separatoricon . '"></i>';
+                } elseif (! $separator) {
+                    $separator = '>>';
+                }
+                
+                if ($indexicon) {
+                    $indextext = '<i class="' . $indexicon . '"></i>';
+                } elseif (! $indextext) {
+                    $indextext = '首页';
+                }
+                
                 $out_html = '<a href="' . SITE_DIR . '/">' . $indextext . '</a>';
                 if ($page && $scode == 0) {
                     $out_html .= $separator . '<a href="' . $link . '">' . $page . '</a>';
@@ -2085,8 +2107,8 @@ class ParserController extends Controller
                     break;
                 case 'len': // 长度截取
                     if ($params['len'] && is_string($data)) {
-                        if(mb_strlen($data,'utf-8')>$params['len']){
-                             $data = mb_substr($data, 0, $params['len'], 'utf-8').'···';
+                        if (mb_strlen($data, 'utf-8') > $params['len']) {
+                            $data = mb_substr($data, 0, $params['len'], 'utf-8') . '···';
                         }
                     }
                     break;
