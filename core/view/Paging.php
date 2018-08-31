@@ -21,7 +21,7 @@ class Paging
     public $page;
 
     // 数字条数量
-    public $num = 5;
+    public $num = 3;
 
     // 总记录
     private $rowTotal = 0;
@@ -137,14 +137,14 @@ class Paging
     private function pageBar()
     {
         if (! $this->pageCount)
-            return '<span style="color:#999;">No data has been querying.</span>';
-        $string = "<span>{$this->pageStatus()}</span>";
-        $string .= "<span><a href='" . $this->pageIndex() . "'>首页</a></span>";
-        $string .= "<span><a href='" . $this->pagePre() . "'>前一页</a></span>";
-        $string .= "<span class='hidden-xs'>{$this->pageNumBar()}</span>";
-        $string .= "<span><a href='" . $this->pageNext() . "'>后一页</a></span>";
-        $string .= "<span><a href='" . $this->pageLast() . "'>尾页</a></span>";
-        $string .= "<span class='hidden-xs'>{$this->pageSelectBar()}</span>";
+            return "<span class='page-none'>No data has been querying.</span>";
+        $string = "<span class='page-status'>{$this->pageStatus()}</span>";
+        $string .= "<span class='page-index'><a href='" . $this->pageIndex() . "'>首页</a></span>";
+        $string .= "<span class='page-pre'><a href='" . $this->pagePre() . "'>前一页</a></span>";
+        $string .= "<span class='page-numbar'>{$this->pageNumBar()}</span>";
+        $string .= "<span class='page-next'><a href='" . $this->pageNext() . "'>后一页</a></span>";
+        $string .= "<span class='page-last'><a href='" . $this->pageLast() . "'>尾页</a></span>";
+        // $string .= "<span class='page-select'>{$this->pageSelectBar()}</span>";
         return $string;
     }
 
@@ -211,36 +211,35 @@ class Paging
                 if ($i > $this->pageCount)
                     break;
                 if ($this->page == $i) {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="pagenum absolutepage">' . $i . '</a> ';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
                 } else {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="pagenum">' . $i . '</a> ';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num">' . $i . '</a>';
                 }
             }
-            // if ($this->pageCount > $total)
-            // $num_html .= '<span>···</span>';
+            if ($this->pageCount > $total)
+                $num_html .= '<span class="page-num">···</span>';
         } elseif ($this->page + $half >= $this->pageCount) { // 当前页为倒数页以内
             
-            /*
-             * if ($this->pageCount > $total)
-             * $num_html .= '<span>···</span>';
-             */
+            if ($this->pageCount > $total)
+                $num_html .= '<span class="page-num">···</span>';
+            
             for ($i = $this->pageCount - $total + 1; $i <= $this->pageCount; $i ++) {
                 if ($this->page == $i) {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="pagenum absolutepage">' . $i . '</a> ';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
                 } else {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="pagenum">' . $i . '</a> ';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num">' . $i . '</a>';
                 }
             }
         } else { // 正常的前后各5页
-                 // $num_html .= '<span>···</span>';
+            $num_html .= '<span class="page-num">···</span>';
             for ($i = $this->page - $half; $i <= $this->page + $half; $i ++) {
                 if ($this->page == $i) {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="pagenum absolutepage">' . $i . '</a> ';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
                 } else {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="pagenum">' . $i . '</a> ';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num">' . $i . '</a>';
                 }
             }
-            // $num_html .= '<span>···</span>';
+            $num_html .= '<span class="page-num">···</span>';
         }
         return $num_html;
     }
@@ -253,9 +252,9 @@ class Paging
         $select_html = '<select onchange="changepage(this)" lay-ignore>';
         for ($i = 1; $i <= $this->pageCount; $i ++) {
             if ($i == $this->page) {
-                $select_html .= '<option value="' . $i . '" selected="selected">' . $i . '</option>';
+                $select_html .= '<option value="' . $i . '" selected="selected">跳到' . $i . '页</option>';
             } else {
-                $select_html .= '<option value="' . $i . '">' . $i . '</option>';
+                $select_html .= '<option value="' . $i . '">跳到' . $i . '页</option>';
             }
         }
         $select_html .= '</select><script>function changepage(tag){window.location.href="' . $this->getPreUrl() . '/page/"+tag.value+"' . Config::get('url_suffix') . $this->queryString() . '";}</script>';
