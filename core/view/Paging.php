@@ -21,7 +21,7 @@ class Paging
     public $page;
 
     // 数字条数量
-    public $num = 3;
+    public $num = 5;
 
     // 总记录
     private $rowTotal = 0;

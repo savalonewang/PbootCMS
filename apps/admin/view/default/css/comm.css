@@ -149,6 +149,9 @@
 	border-bottom:none;
 	color:#fff;
 }
+a.page-num-current:hover{
+	color:#fff;
+}
 .readonly {
 	background: #fafafa;
 }

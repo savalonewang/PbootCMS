@@ -361,9 +361,9 @@ class ParserController extends Controller
                 
                 // 已经设置图标，则图标优先，如果没有，则判断是否已经设置文字
                 if ($separatoricon) {
-                    $separator = '<i class="' . $separatoricon . '"></i>';
+                    $separator = ' <i class="' . $separatoricon . '"></i> ';
                 } elseif (! $separator) {
-                    $separator = '>>';
+                    $separator = ' >> ';
                 }
                 
                 if ($indexicon) {
@@ -1111,6 +1111,7 @@ class ParserController extends Controller
                 }
                 
                 // 数据筛选
+                $where2 = array();
                 foreach ($_GET as $key => $value) {
                     if (substr($key, 0, 4) == 'ext_') { // 其他字段不加入
                         $where2[$key] = get($key);

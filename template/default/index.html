@@ -1,104 +1,118 @@
-﻿ {include file=head.html}
+{include file=head.html}
 
-<div class="uk-slidenav-position" data-uk-slideshow>
-    <ul class="uk-slideshow">
-    	{pboot:slide num=3 gid=1}
-        <li>
-        	<img src="[slide:src]">
-        	<div class="uk-overlay-panel uk-overlay-background uk-overlay-fade uk-flex uk-flex-center uk-flex-middle uk-text-center">
-                <div>
-                    <h1 class="uk-hidden-small">PbootCMS</h1>
-                    <h3>PbootCMS 是一款高效、简洁、强悍的开源PHP企业网站开发建设管理系统.</h3>
-                    <a href="{label:downlink}"  class="uk-button uk-button-primary uk-hidden-small" target="_blank">下载</a>
-                </div>
-            </div>
-        </li>
-        {/pboot:slide}
-    </ul>
-    <a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"></a>
-    <a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next"></a>
+<!-- 幻灯片 -->
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+    	{pboot:slide num=5 gid=1}
+        	<div class="swiper-slide">
+        		<a href="[slide:link]">
+        			<img src="[slide:src]" class="d-block w-100" >
+        		</a>
+        		<div class="container">
+			    	<div class="position-absolute text-light" style="top:20%;">
+						<h1 class="d-none d-md-block">[slide:title]</h1>
+					 	<h4 class="d-none d-md-block">[slide:subtitle]</h4>
+					 	<h4 class="d-block d-md-none">[slide:title]</h4>
+					 	<h6 class="d-block d-md-none">[slide:subtitle]</h6>
+					</div>
+			    </div>
+        	</div>
+        {/pboot:slide} 
+    </div>
+    <div class="swiper-pagination"></div>
 </div>
 
-
-<div class="tm-section tm-section-color-2 tm-section-colored">
-    <div class="uk-container uk-container-center uk-text-center">
-        <h1 class="uk-heading-large">特点</h1>
-        <p class="uk-text-large">PbootCMS是翱云科技开发的全新内核的开源企业建站系统。</p>
-        <div class="uk-grid" data-uk-grid-margin data-uk-scrollspy="{cls:'uk-animation-scale-up', repeat: true, target:'> .list', delay:300}">
-            <div class="uk-width-medium-1-4 list">
-                <div class="uk-panel">
-                    <img class="tm-image-pull" src="{pboot:sitetplpath}/images/icon_less.svg" width="200" height="140">
-                    <h2 class="uk-margin-top-remove">便捷的CMS标签</h2>
-                    <p>采用高效、简洁的模板标签，只要懂HTML就可快速开发企业网站。</p>
-                </div>
-            </div>
-            
-            <div class="uk-width-medium-1-4 list">
-                <div class="uk-panel">
-                    <img class="tm-image-pull" src="{pboot:sitetplpath}/images/icon_themes.svg" width="200" height="140">
-                    <h2 class="uk-margin-top-remove">多数据库兼容</h2>
-                    <p>默认采用Sqlite轻型数据库，可选Mysql、Pgsql等数据库，满足各类存储需求。</p>
-                </div>
-            </div>
-            
-            <div class="uk-width-medium-1-4 list">
-                <div class="uk-panel">
-                    <img class="tm-image-pull" src="{pboot:sitetplpath}/images/icon_components.svg" width="200" height="140">
-                    <h2 class="uk-margin-top-remove">自主MVVM框架</h2>
-                    <p>采用PHP开发，使用自主研发的高速MVVM多层框架及多级缓存技术。</p>
-                </div>
-            </div>
-
-            <div class="uk-width-medium-1-4 list">
-                <div class="uk-panel">
-                    <img class="tm-image-pull" src="{pboot:sitetplpath}/images/icon_responsive.svg" width="200" height="140">
-                    <h2 class="uk-margin-top-remove">响应式管理后台</h2>
-                    <p>采用响应式管理后台，满足各类设备随时管理的需要。</p>
-                </div>
-            </div>
-        </div>
+<!--产品推荐-->
+<div class="bg-light pb-5 pt-5">
+    <div class="container">
+      <div class="title text-success">产品推荐</div>
+      <div class="subtitle text-secondary">-服务创造价值、存在造就未来-</div>
+      <div class="row">
+       {pboot:list scode=5 num=4 order=date}
+        <div class="col-12 col-sm-6 col-lg-3">
+              <div class="card">
+                  <div class="card-img"><a href="[list:link]"><img class="card-img-top" src="[list:ico]" alt="[list:title]"></a></div>
+                  <div class="card-body">
+                    <h5 class="card-title">[list:title len=20]</h5>
+                    <p class="card-text">[list:content drophtml=1 len=50]</p>
+                    <a href="[list:link]" class="btn btn-primary mt-3">查看详情</a>
+                  </div>
+               </div>
+         </div>
+        {/pboot:list}
+      </div>
     </div>
 </div>
 
+<!-- 关于我们 -->
+<div class="bg-white pb-5 pt-5">
+    <div class="container">
+      <div class="title text-info">关于我们</div>
+      <div class="subtitle text-secondary">-网站建设「一站式」服务商-</div>
+      {pboot:content id=1}
+      	<div class="row text-secondary mb-5 pr-3 pl-3" style="line-height:2;text-indent:30px;">
+            [content:content drophtml=1 len=300]
+      	</div>
+     	 <div class="text-center"><h4><a href="[content:link]" class="text-secondary">查看更多</a></h4></div>
+      {/pboot:content}
+    </div>
+</div>
 
-<div class="tm-section tm-section-color-white">
-    <div class="uk-container uk-container-center uk-text-center">
-    
-        <h1 class="tm-margin-large-bottom">相关资源</h1>
-        <div class="uk-grid tm-grid-margin-large" data-uk-grid-match="{target:'.uk-panel'}">
-            <div class="uk-width-medium-1-3">
-                <a class="uk-panel tm-panel-link" href="#" rel="nofollow" target="_blank">
-                    <div class="tm-icon">PBOOT</div>
-                    <h2>PbootCMS技术交流群</h2>
-                    <p>群号：137083872，本群为PbootCMS技术交流群，请大家踊跃参加，积极反馈，为新一代CMS的建设贡献自己的力量！</p>
-                </a>
-            </div>
-
-            <div class="uk-width-medium-1-3">
-                <a class="uk-panel tm-panel-link" href="#" rel="nofollow" target="_blank">
-                    <div class="tm-icon">ASPCMS</div>
-                    <h2>ASPCMS技术交流群</h2>
-                    <p>群号:127052598，ASPCMS是由上谷网络开发的开源企业建站系统，系统采用ASP+ACCESS开发,目前源码由星梦进行非官方维护！</p>
-                </a>
-            </div>
-
-            <div class="uk-width-medium-1-3">
-                <a class="uk-panel tm-panel-link" href="#" target="_blank">
-                    <div class="tm-icon">赞助开源</div>
-                    <p><img src="{pboot:sitetplpath}/images/pay2.png" style="height:115px;"></p>
-                </a>
-            </div>
+<!-- 新闻动态 -->
+<div class="bg-light  pb-5 pt-5">
+    <div class="container">
+      <div class="title text-warning">新闻动态</div>
+      <div class="subtitle text-secondary">-了解最新公司动态及行业资讯-</div>
+      <div class="row">
+      	<div class="col-12 col-lg-6 index-card-l mb-5">
+        	{pboot:list scode=2 num=1 order=date istop=1}
+        		<div class="news-img">
+                	<a href="[list:link]"><img src="[list:ico]"  width="100%" alt="[list:title]"></a>
+                </div>
+                <div class="news-text mt-3">[list:content drophtml=1 len=160]</div>
+        	{/pboot:list}
         </div>
         
-        <form action="{pboot:scaction}"  method="get" class="uk-form" style="margin-top:20px;">
-			搜索内容/标题：
-  			<input type="text" name="keyword" >
-  			<input type="hidden" name="field" value="content|title">
-			<input type="hidden" name="scode"  value="5,2" > <!--限定条件1（分类为5）-->
-			<button type="submit" class="uk-button">搜索</button>
-		</form>
+        <div class="col-12 col-lg-6 index-card-r"> 
+        	{pboot:list scode=2 num=3 order=date istop=0}
+            <div class="media mb-3">
+              <a href="[list:link]"> <img class="mr-3" src="[list:ico]" width="150" alt="[list:title]"></a>
+              <div class="media-body">
+                 <h5><a href="[list:link]">[list:title len=15]</a></h5>
+                 <p><a href="[list:link]" class="text-secondary">[list:content drophtml=1 len=40]</a></p>
+                 <p>[list:date style=Y-m-d]</p>
+              </div>
+            </div>
+        	{/pboot:list}
+         </div>
+      </div>
     </div>
 </div>
 
 
+<script src="{pboot:sitetplpath}/swiper-4.3.5/js/swiper.min.js"></script>
+<script>        
+  var mySwiper = new Swiper ('.swiper-container', {
+    direction: 'horizontal',
+    loop: true,
+    autoplay : {
+        delay:3500
+     },
+    
+    // 如果需要分页器
+    pagination: {
+      el: '.swiper-pagination',
+      clickable :true,
+    },
+    
+    // 如果需要前进后退按钮
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+   
+  })        
+</script>
+  
 {include file=foot.html}
+
