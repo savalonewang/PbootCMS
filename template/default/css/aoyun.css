@@ -105,20 +105,8 @@ p, dl, dt, dd, ul {
 	height:250px;
 	border: 5px solid #dee2e6;
 }
-.index-card-l .news-text{
-	line-height: 2;
-	color: #6c757d;
-	text-indent: 30px;
-}
 .index-card-r .media img {
 	border: 5px solid #dee2e6;
-}
-.index-card-r .media-body h5 a {
-	color: #444;
-}
-.index-card-r .media-body {
-	line-height: 2;
-	color: #777;
 }
 .footer {
 	padding-top: 50px;
