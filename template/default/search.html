@@ -20,6 +20,7 @@
     </div>
 
     <!-- 分页 -->
+    {pboot:if({page:rows}>0)}
     <nav aria-label="page navigation" class="mt-3 mb-5">
       <div class="pagination justify-content-center">
       	<a class="page-item page-link" href="{page:index}">首页</a>
@@ -29,6 +30,9 @@
         <a class="page-item page-link" href="{page:last}">尾页</a>
       </div>
     </nav>
+    {else}
+    	<div>未搜索到任何数据！</div>
+    {/pboot:if}
     
     <!-- 搜索-->
      <form class="form-inline mb-5 justify-content-center" action="{pboot:scaction}"  method="get">

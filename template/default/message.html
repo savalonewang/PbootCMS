@@ -5,8 +5,10 @@
 <div class="container pages">
 	<div class="text-right position mb-4">当前位置：{pboot:position separator='>'}</div>
 
+	{pboot:if({page:rows}>0)}
     <h5 class="border-bottom border-info pb-2"><i class="fa fa-tag" aria-hidden="true"></i> 留言列表</h5>
-	
+	 {/pboot:if}
+	 
 	<!-- 留言记录 -->
     {pboot:message num=2}
     <div class="media border-bottom pb-3 pt-3">
@@ -32,6 +34,8 @@
 	</div>
 	{/pboot:message}
 	
+	<!-- 分页 -->
+ 	{pboot:if({page:rows}>0)}
 	<nav aria-label="page navigation" class="mt-3 mb-5">
       <div class="pagination justify-content-center">
       	<a class="page-item page-link" href="{page:index}">首页</a>
@@ -41,6 +45,7 @@
         <a class="page-item page-link" href="{page:last}">尾页</a>
       </div>
     </nav>
+    {/pboot:if}
     
     <!-- 留言表单 -->
     <form class="mb-5" action="{pboot:msgaction}"  method="post">
