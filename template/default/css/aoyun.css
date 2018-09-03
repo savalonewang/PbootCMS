@@ -173,3 +173,88 @@ a.page-num:hover,.page-link:hover{
 .content img, .content iframe {
 	max-width: 100% !important;
 }
+
+.view {
+	max-width:500px;
+}
+.view .swiper-slide{
+	height:300px;
+	max-width:500px;
+	padding:0 3px;
+	box-sizing:border-box;
+	overflow:hidden;
+	text-align:center;
+}
+.view .swiper-slide img{
+	height:100%;
+}
+.view .arrow-left {
+	background: url(../images/index_tab_l.png) no-repeat left center;
+	position: absolute;
+	left: 10px;
+	width: 28px;
+	height: 300px;
+	z-index: 10;
+	display:none;
+}
+
+.view .arrow-right {
+	background: url(../images/index_tab_r.png) no-repeat right center;
+	position: absolute;
+	right: 10px;
+	width: 28px;
+	height: 300px;
+	z-index: 10;
+	display:none;
+}
+
+.preview{
+	position:relative;
+	width:440px;
+	left:30px;
+}
+.preview .swiper-slide{
+	width:87.5px;
+	height:70px;
+	margin:0 3px;
+	box-sizing:border-box;
+	overflow:hidden;
+	cursor:pointer;
+}
+.preview .swiper-slide img{
+	display:inline-block;
+	height:100%;	
+}
+.preview .active-nav{
+	border: 1px solid #F00;
+}
+.preview .arrow-left {
+	background:#fff  url(../images/feel3.png) no-repeat left center;
+	position: absolute;
+	left: -20px;
+	top: 0;
+	width:20px;
+	height:70px;
+	z-index: 10;
+}
+.preview .arrow-right {
+	background:#fff  url(../images/feel4.png) no-repeat right center;
+	position: absolute;
+	right: -20px;
+	top: 0;
+	width:20px;
+	height:70px;
+	z-index: 10;
+}
+@media only screen and (max-width: 750px) {
+	.view .swiper-slide{
+		height:200px;
+	}
+	.preview{
+		display:none;
+	}
+	.view .arrow-left,.view .arrow-right {
+		height: 200px;
+		display:block;
+	}
+}
