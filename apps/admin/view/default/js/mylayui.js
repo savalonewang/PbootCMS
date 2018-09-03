@@ -71,7 +71,7 @@ layui.use(['element','upload','laydate','form'], function(){
 	   var item = this.item;
 	   var des=$(item).data('des');
 	   layer.closeAll('loading'); //关闭loading
-	   if(res){
+	   if(res!=''){
 		   $('#'+des).val(res); 
 		   $('#'+des+'_box').html("<dl><dt><img src='"+sitedir+res+"' data-url='"+res+"' ></dt><dd>删除</dd></dl>"); 
 		   layer.msg('上传成功！'); 
@@ -111,7 +111,7 @@ layui.use(['element','upload','laydate','form'], function(){
   	    var des=$(item).data('des');
   	    
   	    layer.closeAll('loading'); //关闭loading
-	    if(files){
+	    if(files!=''){
 	       if($('#'+des).val()){
 	    	   $('#'+des).val($('#'+des).val()+','+files); 
 	       }else{
@@ -160,7 +160,7 @@ layui.use(['element','upload','laydate','form'], function(){
 	   var item = this.item;
 	   var des=$(item).data('des');
 	   layer.closeAll('loading'); //关闭loading
-	   if(res){
+	   if(res!=''){
 		   $('#'+des).val(res); 
 		   layer.msg('上传成功！'); 
 	   }else{
