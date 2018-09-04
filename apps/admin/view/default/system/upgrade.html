@@ -94,6 +94,7 @@
       		   
            },
            error:function(xhr,status,error){
+        	  layer.close(lyindex);
           	  layer.msg("检查更新发生错误!", {icon: 5});
            }
       	});
@@ -114,41 +115,49 @@
 		});
 
    		var url= $(this).data('url');
-   	 	$(".checkitem:checked").each(function(index,element){
+   		var checked = $(".checkitem:checked");
+   		var len = $(checked).length;
+   		var exe=0;
+   		
+   	 	$(checked).each(function(index,element){
 	  		 $.ajax({
-	     	  type: 'POST',
-	     	  url: url,
-	     	  dataType: 'json',
-	     	  async:false,
-	     	  data: {
-	     		  list:$(element).val()
-	     	  },
-	     	  success: function (response, status) {
-	     		 if(response.code==1){
-	     			 $('#layer-content').text(response.data);
-	     		 }else{
-	     			 layer.close(lyindex);
-	      			 layer.msg(response.data, {icon: 5}); 
-	     		 }
-	          },
-	          error:function(xhr,status,error){
-	         	  layer.msg("下载更新文件发生错误!", {icon: 5});
-	          }
+		     	  type: 'POST',
+		     	  url: url,
+		     	  dataType: 'json',
+		     	  async:true,
+		     	  data: {
+		     		  list:$(element).val()
+		     	  },
+		     	  success: function (response, status) {
+		     		 if(response.code==1){
+		     			 $('#layer-content').text(response.data);
+		     		 }else{
+		     			 layer.close(lyindex);
+		      			 layer.msg(response.data, {icon: 5}); 
+		     		 }
+		     		 exe++;
+		     		 if(exe==len){
+			  			layer.close(lyindex);
+			  	   	 	layer.open({
+			  			  type: 0,
+			  			  title:'下载更新',
+			  			  closeBtn:0,
+			  			  content: '所选文件全部下载完成!',
+			  			  yes: function(index, layero){
+			  				  window.location.href = '{url./admin/Upgrade/index/action/local}';
+			  				  layer.close(index); 
+			  			   }
+			  			});
+			  	   	 	$('#update').show();
+			  			$('#down').hide();
+			  		 } 
+		          },
+		          error:function(xhr,status,error){
+		        	  layer.close(lyindex);
+		         	  layer.msg("下载更新文件发生错误!", {icon: 5});
+		          }
 	     	});
   	    });
-   	 	layer.close(lyindex);
-   	 	layer.open({
-		  type: 0,
-		  title:'下载更新',
-		  closeBtn:0,
-		  content: '所选文件全部下载完成!',
-		  yes: function(index, layero){
-			  window.location.href = '{url./admin/Upgrade/index/action/local}';
-			  layer.close(index); 
-		   }
-		});
-   	 	$('#update').show();
-		$('#down').hide();
    	});
    	
 	//执行更新,由于涉及到数据库升级文件先后顺序，所以必须一次性提交
