@@ -38,7 +38,7 @@
 	             {if(get('action')=='local')}
 	             	<button class="layui-btn" id="check" data-url='{url./admin/Upgrade/check}'>重新检查</button>
 	             {else}
-	             	<button class="layui-btn" id="check" data-url='{url./admin/Upgrade/check}'>检查更新</button>
+	             	<button class="layui-btn" id="check" data-url='{url./admin/Upgrade/check}' id="check">检查更新</button>
 	             {/if}
 	             <button class="layui-btn" {if(![$upfile])}style="display:none"{/if} id="update" data-url='{url./admin/Upgrade/update}'>执行更新</button>
 	             <button class="layui-btn" style="display:none" id="down" data-url='{url./admin/Upgrade/down}'>下载更新</button>
@@ -222,7 +222,19 @@
       	}else{
       		$(".checkitem").prop("checked", false);
       	} 
-      });     
+      });  
+   	
+   	  //检查更新
+      $.ajax({
+    	    type: 'GET',
+    		url: 'https://www.pbootcms.com/index.php/upgrade/check/version/{APP_VERSION}{RELEASE_TIME}',
+    		dataType: 'json',
+    		success: function (response, status) {
+    			 if(response.code==1){
+    				 $("#check").html($("#check").html()+'<span class="layui-badge-dot"></span>');
+    			 }
+    	    }
+    	});
 </script>
 
 {include file='common/foot.html'}

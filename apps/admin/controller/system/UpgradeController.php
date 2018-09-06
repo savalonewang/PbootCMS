@@ -229,7 +229,7 @@ class UpgradeController extends Controller
     // 获取列表
     private function getServerList()
     {
-        $url = $this->server . '/index.php/upgrate/getlist/version/' . APP_VERSION . '.' . RELEASE_TIME;
+        $url = $this->server . '/index.php/upgrade/getlist/version/' . APP_VERSION . '.' . RELEASE_TIME;
         if (! ! $rs = json_decode(get_url($url, '', '', true))) {
             if ($rs->code) {
                 if (is_array($rs->data)) {
@@ -249,7 +249,7 @@ class UpgradeController extends Controller
     // 获取文件
     private function getServerFile($path)
     {
-        $url = $this->server . '/index.php/upgrate/getFile';
+        $url = $this->server . '/index.php/upgrade/getFile';
         $data['path'] = $path;
         if (! ! $rs = json_decode(get_url($url, $data, '', true))) {
             if ($rs->code) {
