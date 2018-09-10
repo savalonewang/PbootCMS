@@ -32,6 +32,9 @@ class Paging
     // 存储前置URL
     private $preUrl;
 
+    // 存储地址后缀
+    private $suffix;
+
     // 分页实例
     private static $paging;
 
@@ -64,6 +67,13 @@ class Paging
         
         // 计算页数
         $this->pageCount = @ceil($this->rowTotal / $this->pageSize);
+        
+        // 地址后缀
+        if (is_rewrite()) {
+            $this->suffix = Config::get('url_suffix');
+        } else {
+            $this->suffix = '';
+        }
         
         // 获取当前页面
         $this->page = $this->page();
@@ -119,7 +129,7 @@ class Paging
     {
         if (! isset($this->preUrl) && URL) {
             $url = parse_url(URL);
-            $path = preg_replace('/\/page\/[0-9]+/', '', $url['path']);
+            $path = preg_replace('/\/page\/[0-9]+/i', '', $url['path']);
             $url_html_suffix = Config::get('url_suffix');
             if (substr($path, - strlen($url_html_suffix)) == $url_html_suffix) {
                 $path = substr($path, 0, - strlen($url_html_suffix));
@@ -161,7 +171,7 @@ class Paging
     {
         if (! $this->pageCount)
             return;
-        return $this->getPreUrl() . '/page/1' . Config::get('url_suffix') . $this->queryString();
+        return $this->getPreUrl() . '/page/1' . $this->suffix . $this->queryString();
     }
 
     // 上一页链接
@@ -170,7 +180,7 @@ class Paging
         if (! $this->pageCount)
             return;
         if ($this->page > 1) {
-            $pre_page = $this->getPreUrl() . '/page/' . ($this->page - 1) . Config::get('url_suffix') . $this->queryString();
+            $pre_page = $this->getPreUrl() . '/page/' . ($this->page - 1) . $this->suffix . $this->queryString();
         } else {
             $pre_page = '';
         }
@@ -183,7 +193,7 @@ class Paging
         if (! $this->pageCount)
             return;
         if ($this->page < $this->pageCount) {
-            $next_page = $this->getPreUrl() . '/page/' . ($this->page + 1) . Config::get('url_suffix') . $this->queryString();
+            $next_page = $this->getPreUrl() . '/page/' . ($this->page + 1) . $this->suffix . $this->queryString();
         } else {
             $next_page = '';
         }
@@ -195,7 +205,7 @@ class Paging
     {
         if (! $this->pageCount)
             return;
-        return $this->getPreUrl() . '/page/' . $this->pageCount . Config::get('url_suffix') . $this->queryString();
+        return $this->getPreUrl() . '/page/' . $this->pageCount . $this->suffix . $this->queryString();
     }
 
     // 数字分页,要修改数字显示的条数，请修改类头部num属性值
@@ -211,9 +221,9 @@ class Paging
                 if ($i > $this->pageCount)
                     break;
                 if ($this->page == $i) {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
                 } else {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num">' . $i . '</a>';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num">' . $i . '</a>';
                 }
             }
             if ($this->pageCount > $total)
@@ -225,18 +235,18 @@ class Paging
             
             for ($i = $this->pageCount - $total + 1; $i <= $this->pageCount; $i ++) {
                 if ($this->page == $i) {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
                 } else {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num">' . $i . '</a>';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num">' . $i . '</a>';
                 }
             }
         } else { // 正常的前后各5页
             $num_html .= '<span class="page-num">···</span>';
             for ($i = $this->page - $half; $i <= $this->page + $half; $i ++) {
                 if ($this->page == $i) {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
                 } else {
-                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . Config::get('url_suffix') . $this->queryString() . '" class="page-num">' . $i . '</a>';
+                    $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num">' . $i . '</a>';
                 }
             }
             $num_html .= '<span class="page-num">···</span>';
@@ -257,7 +267,7 @@ class Paging
                 $select_html .= '<option value="' . $i . '">跳到' . $i . '页</option>';
             }
         }
-        $select_html .= '</select><script>function changepage(tag){window.location.href="' . $this->getPreUrl() . '/page/"+tag.value+"' . Config::get('url_suffix') . $this->queryString() . '";}</script>';
+        $select_html .= '</select><script>function changepage(tag){window.location.href="' . $this->getPreUrl() . '/page/"+tag.value+"' . $this->suffix . $this->queryString() . '";}</script>';
         return $select_html;
     }
 

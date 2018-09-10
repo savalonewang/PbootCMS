@@ -734,5 +734,16 @@ function get_month_days($date, $start = 0, $interval = 1, $retamp = false)
     return $return;
 }
 
+// 是否伪静态模式
+function is_rewrite()
+{
+    $indexfile = $_SERVER["SCRIPT_NAME"];
+    if (Config::get('url_type') == 2 && strrpos($indexfile, 'index.php') !== false) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 

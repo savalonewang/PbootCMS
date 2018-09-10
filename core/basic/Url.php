@@ -87,9 +87,13 @@ class Url
             
             // 保存处理过的地址
             if ($path) {
-                self::$urls[$path] = $host . self::getPrePath() . '/' . $path . $url_ext;
+                if (is_rewrite()) {
+                    self::$urls[$path] = $host . self::getPrePath() . '/' . $path . $url_ext;
+                } else {
+                    self::$urls[$path] = $host . self::getPrePath() . '/' . $path;
+                }
             } else {
-                self::$urls[$path] = $host . self::getPrePath();
+                self::$urls[$path] = $host . self::getPrePath(); // 获取根路径前置地址
             }
         }
         return self::$urls[$path];
@@ -98,21 +102,11 @@ class Url
     // 获取地址前缀
     private static function getPrePath()
     {
-        if (! isset(self::$urls['prepath'])) {
-            $indexfile = $_SERVER["SCRIPT_NAME"];
-            if (Config::get('url_type') == 1) { // 普通PATHINFO
-                $pre_path = $indexfile;
-            } elseif (Config::get('url_type') == 2) { // PATHINFO重写模式
-                if (strrpos($indexfile, 'index.php') === false) {
-                    $pre_path = $indexfile;
-                } else {
-                    $pre_path = SITE_DIR;
-                }
-            } else { // 兼容模式
-                $pre_path = $indexfile . '?s=';
-            }
-            self::$urls['prepath'] = $pre_path;
+        if (is_rewrite()) {
+            $pre_path = SITE_DIR;
+        } else {
+            $pre_path = $_SERVER["SCRIPT_NAME"];
         }
-        return self::$urls['prepath'];
+        return $pre_path;
     }
 }
