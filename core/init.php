@@ -28,7 +28,7 @@ if (isset($_SERVER['PATH_INFO'])) {
 $script_path = explode('/', $_SERVER['SCRIPT_NAME']); // 当前执行文件路径
 $file_path = str_replace('\\', '/', dirname(__DIR__)); // 系统部署路径
 if (count($script_path) > 2) { // 根目录下"/index.php"长度为2
-    if (! ! $path_pos = strrpos($file_path, '/' . $script_path[1])) {
+    if (! ! $path_pos = strripos($file_path, '/' . $script_path[1])) {
         define('SITE_DIR', substr($file_path, $path_pos));
     } else {
         define('SITE_DIR', '');
@@ -41,7 +41,7 @@ if (count($script_path) > 2) { // 根目录下"/index.php"长度为2
 define('ROOT_PATH', $file_path);
 
 // 定义站点物理路径
-define('DOC_PATH', preg_replace('/\\' . SITE_DIR . '$/', '', ROOT_PATH));
+define('DOC_PATH', preg_replace('{' . SITE_DIR . '$}i', '', ROOT_PATH));
 $_SERVER['DOCUMENT_ROOT'] = DOC_PATH; // 统一该环境变量值
                                       
 // 定义内核文件目录

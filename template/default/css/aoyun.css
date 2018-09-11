@@ -1,5 +1,6 @@
 html {
 	font-size: 14px;
+	overflow-x:hidden;
 }
 li {
 	list-style: none;
