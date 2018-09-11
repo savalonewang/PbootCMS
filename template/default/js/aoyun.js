@@ -3,5 +3,17 @@ $(document).ready(function(){
 	if (!(/msie [6|7|8|9]/i.test(navigator.userAgent))){
 	    new WOW().init();
 	};
+	
+	//在线客服
+	$('.scroll-top').click(function(){$('html,body').animate({scrollTop: '0px'}, 800);});
+	
+	$('.online dl').on("mouseover",function(){
+		$(this).find("dt").show();
+		$(this).siblings().find("dt").hide();
+	});
+	
+	$('.online dl').find('.remove').on("click",function(){
+		$(this).parents("dt").hide();
+	});
 
 });

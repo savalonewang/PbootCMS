@@ -76,7 +76,7 @@ CREATE TABLE `ay_company` (
 --
 
 INSERT INTO `ay_company` (`id`,`acode`,`name`,`address`,`postcode`,`contact`,`mobile`,`phone`,`fax`,`email`,`qq`,`weixin`,`blicense`,`other`) VALUES
-('1','cn','湖南翱云网络科技有限公司','湖南长沙岳麓区雷锋大道609号','410000','谢先生','13988886666','0731-88886666','0731-88886666','admin@qq.com','88886666','/static/upload/image/2017120111492170805.jpg','91430102567650888G','');
+('1','cn','湖南翱云网络科技有限公司','湖南长沙岳麓区雷锋大道609号','410000','谢先生','13988886666','0731-88886666','0731-88886666','admin@qq.com','88886666','/static/upload/image/20180715/1531651052464521.png','91430102567650888G','');
 
 -- --------------------------------------------------------
 
@@ -272,19 +272,6 @@ INSERT INTO `ay_content_sort` (`id`,`acode`,`mcode`,`pcode`,`scode`,`name`,`list
 ('9','cn','5','0','9','招贤纳士','joblist.html','job.html','1','','','','','','','','255','admin','admin','2018-04-11 17:30:02','2018-04-11 17:30:02'),
 ('10','cn','1','0','10','在线留言','','message.html','1','','','','','','','','255','admin','admin','2018-04-11 17:30:36','2018-04-12 10:55:31'),
 ('11','cn','1','0','11','联系我们','','about.html','1','','','','','','','','255','admin','admin','2018-04-11 17:31:29','2018-04-11 17:31:29');
-
--- --------------------------------------------------------
-
---
--- 表的结构 `ay_diy_aaaa`
---
-
-DROP TABLE IF EXISTS `ay_diy_aaaa`;
-CREATE TABLE `ay_diy_aaaa` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `create_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -852,7 +839,7 @@ CREATE TABLE `ay_site` (
 --
 
 INSERT INTO `ay_site` (`id`,`acode`,`title`,`subtitle`,`domain`,`logo`,`keywords`,`description`,`icp`,`theme`,`statistical`,`copyright`) VALUES
-('1','cn','PbootCMS','开源企业网站开发建设管理系统','www.pbootcms.com','/static/upload/image/2017120100155179053.jpg','PHP,ASP,Pboot,CMS,PHPCMS,PbootCMS,ASPCMS,免费开源,网站建设,网站开发,网站设计,网站管理,管理系统,网站源码','PbootCMS是翱云科技开发的全新内核的开源企业建站系统，系统以更优、更快、更便捷为开发目标，能够满足各类企业网站建设的需要；采用高效、简洁的模板标签，只要懂HTML就可快速开发企业网站；采用PHP语言开发，使用自主研发的高速MVVM多层开发框架及多级缓存技术；采用响应式管理后台，满足各类设备随时管理的需要。','湘ICP备13009888号-1','default','','Copyright © 2018-2019 PbootCMS All Rights Reserved.');
+('1','cn','PbootCMS','开源企业网站开发建设管理系统','www.pbootcms.com','/static/images/logo.png','PHP,ASP,Pboot,CMS,PHPCMS,PbootCMS,ASPCMS,免费开源,网站建设,网站开发,网站设计,网站管理,管理系统,网站源码','PbootCMS是翱云科技开发的全新内核的开源企业建站系统，系统以更优、更快、更便捷为开发目标，能够满足各类企业网站建设的需要；采用高效、简洁的模板标签，只要懂HTML就可快速开发企业网站；采用PHP语言开发，使用自主研发的高速MVVM多层开发框架及多级缓存技术；采用响应式管理后台，满足各类设备随时管理的需要。','湘ICP备13009888号-1','default','','Copyright © 2018-2019 PbootCMS All Rights Reserved.');
 
 -- --------------------------------------------------------
 
@@ -884,9 +871,9 @@ CREATE TABLE `ay_slide` (
 --
 
 INSERT INTO `ay_slide` (`id`,`acode`,`gid`,`pic`,`link`,`title`,`subtitle`,`sorting`,`create_user`,`update_user`,`create_time`,`update_time`) VALUES
-('1','cn','1','/static/upload/image/20180412/1523500997605565.jpg','http://www.pbootcms.com','PbootCMS','永久开源免费的PHPCMS','255','admin','admin','2018-03-01 16:19:03','2018-04-12 10:43:19'),
-('2','cn','1','/static/upload/image/20180412/1523501147676550.jpg','http://www.pbootcms.com','PbootCMS','高效、简洁、强悍的网站开发管理系统','255','admin','admin','2018-04-12 10:46:07','2018-04-12 10:46:07'),
-('3','cn','1','/static/upload/image/20180412/1523501459462835.jpg','http://www.pbootcms.com','PbootCMS','首创PHP+Sqlite网站运行模式','255','admin','admin','2018-04-12 10:51:12','2018-04-12 10:51:19');
+('1','cn','1','/static/upload/image/20180412/1523500997605565.jpg','http://www.pbootcms.com','PbootCMS','永久开源、免费的PHP网站开发管理系统','255','admin','admin','2018-03-01 16:19:03','2018-04-12 10:43:19'),
+('2','cn','1','/static/upload/image/20180412/1523501147676550.jpg','http://www.pbootcms.com','PbootCMS','高效、简洁、强悍的PHP网站开发管理系统','255','admin','admin','2018-04-12 10:46:07','2018-04-12 10:46:07'),
+('3','cn','1','/static/upload/image/20180412/1523501459462835.jpg','http://www.pbootcms.com','PbootCMS','首创PHP+SQLITE网站运行模式','255','admin','admin','2018-04-12 10:51:12','2018-04-12 10:51:19');
 
 -- --------------------------------------------------------
 
