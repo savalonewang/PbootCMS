@@ -27,24 +27,30 @@ class FormController extends Controller
     {
         if ($_POST) {
             
+            if (time() - session('lastsub') < 10) {
+                alert_back('您提交太频繁了，请稍后再试！');
+            }
+            
             if (! $fcode = get('fcode', 'var')) {
                 alert_back('传递的表单编码有误！');
             }
             
             if ($fcode == 1) {
-                alert_back('留言提交请使用留言专用地址!');
+                alert_back('表单提交地址有误，留言提交请使用留言专用地址!');
             }
             
             // 验证码验证
-            $checkcode = post('checkcode');
-            if ($this->config('message_check_code')) {
-                if (! $checkcode) {
-                    alert_back('验证码不能为空！');
-                }
-                if ($checkcode != session('checkcode')) {
-                    alert_back('验证码错误！');
-                }
-            }
+            /*
+             * $checkcode = post('checkcode');
+             * if ($this->config('message_check_code')) {
+             * if (! $checkcode) {
+             * alert_back('验证码不能为空！');
+             * }
+             * if ($checkcode != session('checkcode')) {
+             * alert_back('验证码错误！');
+             * }
+             * }
+             */
             
             // 读取字段
             if (! $form = $this->model->getFormField($fcode)) {
@@ -73,6 +79,7 @@ class FormController extends Controller
             
             // 写入数据
             if ($this->model->addForm($value->table_name, $data)) {
+                session('lastsub', time()); // 记录最后提交时间
                 $this->log('提交表单数据成功！');
                 if ($this->config('message_send_mail') && $this->config('message_send_to')) {
                     $mail_subject = "【PbootCMS】您有新的表单数据，请注意查收！";

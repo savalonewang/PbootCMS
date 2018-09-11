@@ -27,6 +27,10 @@ class MessageController extends Controller
     {
         if ($_POST) {
             
+            if (time() - session('lastsub') < 10) {
+                alert_back('您提交太频繁了，请稍后再试！');
+            }
+            
             // 验证码验证
             $checkcode = post('checkcode');
             if ($this->config('message_check_code')) {
@@ -72,6 +76,7 @@ class MessageController extends Controller
             }
             
             if ($this->model->addMessage($data)) {
+                session('lastsub', time()); // 记录最后提交时间
                 $this->log('留言提交成功！');
                 if ($this->config('message_send_mail') && $this->config('message_send_to')) {
                     $mail_subject = "【PbootCMS】您有新的表单数据，请注意查收！";
