@@ -1071,6 +1071,7 @@ class ParserController extends Controller
                             break;
                         case 'page':
                             $page = $value;
+                            break;
                         case 'ispics':
                             $ispics = $value;
                             break;
