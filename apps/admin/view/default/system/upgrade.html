@@ -232,7 +232,7 @@
    	  //检查更新
       $.ajax({
     	    type: 'GET',
-    		url: 'https://www.pbootcms.com/index.php/upgrade/check/version/{APP_VERSION}{RELEASE_TIME}',
+    		url: 'https://www.pbootcms.com/index.php/upgrade/check/version/{APP_VERSION}.{RELEASE_TIME}',
     		dataType: 'json',
     		success: function (response, status) {
     			 if(response.code==1){
