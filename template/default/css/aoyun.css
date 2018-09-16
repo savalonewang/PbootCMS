@@ -258,7 +258,7 @@ a.page-num:hover, .page-link:hover {
 }
 .online {
 	position: fixed;
-	bottom: 100px;
+	bottom: 150px;
 	right: 10px;
 	width: 60px;
 	z-index: 999;
