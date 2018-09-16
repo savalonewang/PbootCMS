@@ -142,10 +142,16 @@
 			  			  type: 0,
 			  			  title:'下载更新',
 			  			  closeBtn:0,
+			  			  btn: ['立即更新', '稍后更新'],
 			  			  content: '所选文件全部下载完成!',
 			  			  yes: function(index, layero){
-			  				  window.location.href = '{url./admin/Upgrade/index/action/local}';
 			  				  layer.close(index); 
+			  				  $('#update').click();
+			  				  
+			  			   },
+			  			  btn2: function(index, layero){
+			  				 layer.close(index); 
+			  				 window.location.href = '{url./admin/Upgrade/index/action/local}';
 			  			   }
 			  			});
 			  	   	 	$('#update').show();
@@ -183,7 +189,6 @@
    				list += ','+$(element).val();
    			}
    		});
-   	 	
   		 $.ajax({
 	     	  type: 'POST',
 	     	  url: url,

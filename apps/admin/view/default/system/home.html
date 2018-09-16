@@ -47,7 +47,11 @@
 				  <tbody>
 				     <tr>
 				      	<th width="100">应用版本</th>
-				      	<td>PbootCMS V{APP_VERSION}-{RELEASE_TIME} <a href="{url./admin/Upgrade/index}" class="layui-btn layui-btn-xs" id="check">在线更新</a></td>
+				      	<td>PbootCMS V{APP_VERSION}-{RELEASE_TIME} 
+				      	 {if(session('ucode')==10001)}
+				      		<a href="{url./admin/Upgrade/index}" class="layui-btn layui-btn-xs" id="check">在线更新</a>
+				         {/if}
+				      	</td>
 				     </tr>
 				     <tr>
 				      	<th>框架版本</th>
