@@ -27,6 +27,7 @@ class UpgradeController extends Controller
     public function __construct()
     {
         set_time_limit(0);
+        error_reporting(E_ALL ^ E_WARNING ^ E_NOTICE);
     }
 
     public function index()
@@ -168,7 +169,7 @@ class UpgradeController extends Controller
                     $db = new DatabaseController();
                     switch (get_db_type()) {
                         case 'sqlite':
-                            copy(DOC_PATH . $this->dbauth['dbname'], DOC_PATH . STATIC_DIR . '/backup/sql/' . date('YmdHis') . '_' . basename($this->dbauth['dbname']));
+                            copy(DOC_PATH . $this->config('database.dbname'), DOC_PATH . STATIC_DIR . '/backup/sql/' . date('YmdHis') . '_' . basename($this->config('database.dbname')));
                             break;
                         case 'mysql':
                             $db->backupDB();
