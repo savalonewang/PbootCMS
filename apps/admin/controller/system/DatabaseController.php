@@ -100,7 +100,7 @@ class DatabaseController extends Controller
                 }
                 break;
             case 'bfsqlite':
-                if (copy(DOC_PATH . $this->dbauth['dbname'], DOC_PATH . STATIC_DIR . '/backup/' . date('YmdHis') . '_' . basename($this->dbauth['dbname']))) {
+                if (copy(DOC_PATH . $this->dbauth['dbname'], DOC_PATH . STATIC_DIR . '/backup/sql/' . date('YmdHis') . '_' . basename($this->dbauth['dbname']))) {
                     $this->log('备份数据库成功！');
                     success('备份数据库成功！', - 1);
                 } else {

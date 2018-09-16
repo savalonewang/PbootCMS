@@ -165,6 +165,15 @@ class UpgradeController extends Controller
                 
                 // 更新数据库
                 if (isset($sqls)) {
+                    $db = new DatabaseController();
+                    switch (get_db_type()) {
+                        case 'sqlite':
+                            copy(DOC_PATH . $this->dbauth['dbname'], DOC_PATH . STATIC_DIR . '/backup/sql/' . date('YmdHis') . '_' . basename($this->dbauth['dbname']));
+                            break;
+                        case 'mysql':
+                            $db->backupDB();
+                            break;
+                    }
                     sort($sqls); // 排序
                     foreach ($sqls as $value) {
                         $path = RUN_PATH . '/upgrade' . $value;
