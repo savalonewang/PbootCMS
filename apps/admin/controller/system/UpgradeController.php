@@ -231,7 +231,9 @@ class UpgradeController extends Controller
         $model = new Model();
         foreach ($sql as $value) {
             $value = trim($value);
-            $model->amd($value);
+            if ($value) {
+                $model->amd($value);
+            }
         }
         return true;
     }
