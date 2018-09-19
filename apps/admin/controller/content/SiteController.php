@@ -54,6 +54,7 @@ class SiteController extends Controller
             'copyright' => post('copyright')
         );
         
+		path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
         if ($this->model->checkSite()) {
             if ($this->model->modSite($data)) {
                 $this->log('修改系统设置成功！');
