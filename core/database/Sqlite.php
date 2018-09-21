@@ -16,10 +16,21 @@ class Sqlite implements Builder
 
     protected static $sqlite;
 
-    protected $conn;
+    protected $master;
+
+    protected $slave;
+
+    private $begin = false;
 
     private function __construct()
     {}
+
+    public function __destruct()
+    {
+        if ($this->begin) { // 存在显式开启事务时提交事务
+            $this->master->exec('commit;');
+        }
+    }
 
     // 获取单一实例，使用单一实例数据库连接类
     public static function getInstance()
@@ -50,16 +61,22 @@ class Sqlite implements Builder
     public function query($sql, $type = 'master')
     {
         $time_s = microtime(true);
-        if (! $this->conn) {
+        if (! $this->master || ! $this->slave) {
             $cfg = ROOT_PATH . Config::get('database.dbname');
-            $this->conn = $this->conn($cfg);
+            $conn = $this->conn($cfg);
+            $this->master = $conn;
+            $this->slave = $conn;
         }
         switch ($type) {
             case 'master':
-                $result = $this->conn->exec($sql) or $this->error($sql, 'conn');
+                if (! $this->begin) { // 存在写入时显式开启事务，提高写入性能
+                    $this->master->exec('begin;');
+                    $this->begin = true;
+                }
+                $result = $this->master->exec($sql) or $this->error($sql, 'master');
                 break;
             case 'slave':
-                $result = $this->conn->query($sql) or $this->error($sql, 'conn');
+                $result = $this->slave->query($sql) or $this->error($sql, 'slave');
                 break;
         }
         return $result;
@@ -180,7 +197,7 @@ class Sqlite implements Builder
     // 最近一次插入数据的自增字段值，返回int数据
     public function insertId()
     {
-        return $this->conn->lastInsertRowID();
+        return $this->master->lastInsertRowID();
     }
 
     // 执行多条SQL模型，成功返回true,否则false
