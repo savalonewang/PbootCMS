@@ -153,9 +153,9 @@ class Model
     /**
      * 关闭自动提交，开启事务模式（非连贯，直接调用）
      */
-    final public function closeCommit()
+    final public function begin()
     {
-        $this->getDb()->closeCommit();
+        $this->getDb()->begin();
     }
 
     /**

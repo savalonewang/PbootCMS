@@ -79,7 +79,7 @@ class Pdo implements Builder
     }
 
     // 关闭自动提交，开启事务模式
-    public function closeCommit()
+    public function begin()
     {
         $this->master->beginTransaction();
         $this->commit = true;
