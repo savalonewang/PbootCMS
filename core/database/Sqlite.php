@@ -217,6 +217,10 @@ class Sqlite implements Builder
     // 显示执行错误
     protected function error($sql, $conn)
     {
+        if ($this->begin) { // 存在显式开启事务时进行回滚
+            $this->master->exec('rollback;');
+            $this->begin = false;
+        }
         error('执行SQL发生错误！错误：' . $this->$conn->lastErrorMsg() . '，语句：' . $sql);
     }
 }
