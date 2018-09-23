@@ -96,6 +96,7 @@ class UpgradeController extends Controller
                         $list
                     );
                 }
+                $len = count($list) ?: 0;
                 foreach ($list as $value) {
                     // 本地存储路径
                     $path = RUN_PATH . '/upgrade' . $value;
@@ -111,7 +112,11 @@ class UpgradeController extends Controller
                         $result = $this->getServerFile($value, $path);
                     }
                 }
-                json(1, "更新文件全部下载成功!");
+                if ($len == 1) {
+                    json(1, "更新文件 " . basename($value) . " 下载成功!");
+                } else {
+                    json(1, "更新文件" . basename($value) . "等文件全部下载成功!");
+                }
             } else {
                 json(0, '请选择要下载的文件！');
             }
