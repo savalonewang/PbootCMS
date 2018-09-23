@@ -54,6 +54,9 @@ class ConfigController extends Controller
                 case 'api':
                     success('修改成功！', url('/admin/Config/index?#tab=t2', false));
                     break;
+                case 'upgrade':
+                    success('修改成功！', url('/admin/Upgrade/index?#tab=t2', false));
+                    break;
                 default:
                     success('修改成功！', url('/admin/Config/index', false));
             }

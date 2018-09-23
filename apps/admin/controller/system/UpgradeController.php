@@ -16,10 +16,10 @@ class UpgradeController extends Controller
 {
 
     // 服务器地址
-    public $server = 'https://www.pbootcms.com';
+    private $server = 'https://www.pbootcms.com';
 
-    // 发布目录
-    public $release = '/release';
+    // 更新分支
+    private $branch;
 
     // 文件列表
     public $files = array();
@@ -27,7 +27,8 @@ class UpgradeController extends Controller
     public function __construct()
     {
         set_time_limit(0);
-        error_reporting(E_ALL ^ E_WARNING ^ E_NOTICE);
+        error_reporting(0);
+        $this->branch = $this->config('upgrade_branch') ?: 1;
     }
 
     public function index()
@@ -40,6 +41,7 @@ class UpgradeController extends Controller
                 $upfile = array();
         }
         $this->assign('upfile', $upfile);
+        $this->assign('branch', $this->branch);
         $this->display('system/upgrade.html');
     }
 
@@ -90,44 +92,22 @@ class UpgradeController extends Controller
                         $list
                     );
                 }
-                $len = count($list) ?: 0;
                 foreach ($list as $value) {
+                    // 本地存储路径
                     $path = RUN_PATH . '/upgrade' . $value;
                     check_dir(dirname($path), true); // 自动创建目录
-                    $types = '.gif|.jpeg|.png|.bmp|.jpg|'; // 定义执行下载的类型
+                                                     
+                    // 定义执行下载的类型
+                    $types = '.gif|.jpeg|.png|.bmp|.jpg|.zip|.rar|.doc|.docx|.ppt|.pptx|.xls|.xlsx|.chm|';
                     $pathinfo = explode(".", basename($path));
-                    $ext = end($pathinfo); // 扩展
+                    $ext = end($pathinfo); // 获取扩展
                     if (preg_match('/\.' . $ext . '\|/i', $types)) {
-                        if (! $this->getServerDown($value, $path)) {
-                            if ($len == 1) {
-                                $this->log("更新文件  $value 下载失败!");
-                                json(0, "更新文件 " . basename($value) . " 下载失败!");
-                            }
-                        } else {
-                            if ($len == 1) {
-                                json(1, "更新文件 " . basename($value) . " 下载成功!");
-                            }
-                        }
+                        $result = $this->getServerDown('/release/' . $this->branch . $value, $path);
                     } else {
-                        $result = $this->getServerFile($value);
-                    }
-                    
-                    if ($result) {
-                        if (! file_put_contents($path, $result)) {
-                            if ($len == 1) {
-                                $this->log("更新文件  $value 下载失败!");
-                                json(0, "更新文件 " . basename($value) . " 下载失败!");
-                            }
-                        } else {
-                            if ($len == 1) {
-                                json(1, "更新文件 " . basename($value) . " 下载成功!");
-                            }
-                        }
+                        $result = $this->getServerFile($value, $path);
                     }
                 }
-                if ($len > 1) {
-                    json(1, "更新文件全部下载成功!");
-                }
+                json(1, "更新文件全部下载成功!");
             } else {
                 json(0, '请选择要下载的文件！');
             }
@@ -241,7 +221,7 @@ class UpgradeController extends Controller
     // 获取列表
     private function getServerList()
     {
-        $url = $this->server . '/index.php/upgrade/getlist/version/' . APP_VERSION . '.' . RELEASE_TIME;
+        $url = $this->server . '/index.php/upgrade/getlist/version/' . APP_VERSION . '.' . RELEASE_TIME . '/branch/' . $this->branch;
         if (! ! $rs = json_decode(get_url($url, '', '', true))) {
             if ($rs->code) {
                 if (is_array($rs->data)) {
@@ -254,47 +234,57 @@ class UpgradeController extends Controller
             }
         } else {
             $this->log('连接更新服务器发生错误，请稍后再试！');
-            return '连接更新服务器发生错误，请稍后再试！';
+            json(0, '连接更新服务器发生错误，请稍后再试！');
         }
     }
 
     // 获取文件
-    private function getServerFile($path)
+    private function getServerFile($source, $des)
     {
-        $url = $this->server . '/index.php/upgrade/getFile';
-        $data['path'] = $path;
+        $url = $this->server . '/index.php/upgrade/getFile/branch/' . $this->branch;
+        $data['path'] = $source;
+        $file = basename($source);
         if (! ! $rs = json_decode(get_url($url, $data, '', true))) {
             if ($rs->code) {
-                return base64_decode($rs->data);
+                if (! file_put_contents($des, base64_decode($rs->data))) {
+                    $this->log("更新文件  " . $file . " 下载失败!");
+                    json(0, "更新文件 " . $file . " 下载失败!");
+                } else {
+                    return true;
+                }
             } else {
                 json(0, $rs->data);
             }
         } else {
-            $this->log('获取更新文件' . $path . '时发生服务器错误!');
-            error('获取更新文件' . $path . '时发生服务器错误!');
+            $this->log("更新文件 " . $file . " 获取失败!");
+            json(0, "更新文件 " . $file . " 获取失败!");
         }
     }
 
     // 获取非文本文件
     private function getServerDown($source, $des)
     {
-        $url = $this->server . $this->release . $source;
+        $url = $this->server . $source;
+        $file = basename($source);
         if (($sfile = fopen($url, "rb")) && ($dfile = fopen($des, "wb"))) {
             while (! feof($sfile)) {
                 $fwrite = fwrite($dfile, fread($sfile, 1024 * 8), 1024 * 8);
                 if ($fwrite === false) {
-                    return false;
+                    $this->log("更新文件 " . $file . " 下载失败!");
+                    json(0, "更新文件 " . $file . " 下载失败!");
                 }
             }
+            if ($sfile) {
+                fclose($sfile);
+            }
+            if ($dfile) {
+                fclose($dfile);
+            }
             return true;
+        } else {
+            $this->log("更新文件 " . $file . " 获取失败!");
+            json(0, "更新文件 " . $file . " 获取失败!");
         }
-        if ($sfile) {
-            fclose($sfile);
-        }
-        if ($dfile) {
-            fclose($dfile);
-        }
-        return false;
     }
 
     // 获取文件列表

@@ -4,6 +4,7 @@
 	<div class="layui-tab layui-tab-brief" lay-filter="tab">
 	  <ul class="layui-tab-title">
 	    <li class="layui-this" lay-id="t1">在线更新</li>
+	    <li lay-id="t2">更新设置</li>
 	  </ul>
 	  <div class="layui-tab-content">
 	  	   <div class="layui-tab-item layui-show">
@@ -35,6 +36,7 @@
 	                    {/if}
 	                </tbody> 
 	            </table>
+
 	             {if(get('action')=='local')}
 	             	<button class="layui-btn" id="check" data-url='{url./admin/Upgrade/check}'>重新检查</button>
 	             {else}
@@ -42,6 +44,31 @@
 	             {/if}
 	             <button class="layui-btn" {if(![$upfile])}style="display:none"{/if} id="update" data-url='{url./admin/Upgrade/update}'>执行更新</button>
 	             <button class="layui-btn" style="display:none" id="down" data-url='{url./admin/Upgrade/down}'>下载更新</button>
+	  	   </div>
+	  	   
+	  	   <div class="layui-tab-item">
+	  	   	   <form action="{url./admin/Config/index}" method="post" class="layui-form">
+	  	   	   	   <input type="hidden" name="formcheck" value="{$formcheck}" > 
+	  	   	   	   
+	  	   	   	   <div class="layui-form-item">
+	                     <label class="layui-form-label">更新分支</label>
+	                     <div class="layui-input-inline">
+	                     	 <select name="upgrade_branch">
+				             	<option value="1" {if([$branch]==1)}selected{/if}>1.X 稳定版</option>
+				             	<option value="1dev" {if([$branch]=='1dev')}selected{/if}>1.X 测试版</option>
+				             	<option value="2" {if([$branch]==2)}selected{/if}>2.X 稳定版</option>
+				             	<option value="2dev" {if([$branch]=='2dev')}selected{/if}>2.X 测试版</option>
+				             </select>
+	                     </div>
+	                </div>
+	                
+		            <div class="layui-form-item">
+						 <div class="layui-input-block">
+						    <button class="layui-btn" lay-submit name="submit" value="upgrade">保存</button>
+						    <button type="reset" class="layui-btn layui-btn-primary">重选</button>
+						 </div>
+					</div>
+	           </form>
 	  	   </div>
 	  </div>
 	</div>	
@@ -232,7 +259,7 @@
    	  //检查更新
       $.ajax({
     	    type: 'GET',
-    		url: 'https://www.pbootcms.com/index.php/upgrade/check/version/{APP_VERSION}.{RELEASE_TIME}',
+    		url: 'https://www.pbootcms.com/index.php/upgrade/check/version/{APP_VERSION}.{RELEASE_TIME}/branch/{$branch}',
     		dataType: 'json',
     		success: function (response, status) {
     			 if(response.code==1){
