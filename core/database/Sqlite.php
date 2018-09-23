@@ -5,7 +5,7 @@
  * @author XingMeng
  * @email hnxsh@foxmail.com
  * @date 2017年8月23日
- *  数据库Sqlite驱动   
+ *  数据库Sqlite驱动  ,写入数据时自动启用事务 
  */
 namespace core\database;
 
@@ -27,7 +27,7 @@ class Sqlite implements Builder
 
     public function __destruct()
     {
-        if ($this->begin) { // 存在显式开启事务时提交事务
+        if ($this->begin) { // 存在待提交的事务时自动进行提交
             $this->master->exec('commit;');
         }
     }
@@ -69,7 +69,7 @@ class Sqlite implements Builder
         }
         switch ($type) {
             case 'master':
-                if (! $this->begin) { // 存在写入时显式开启事务，提高写入性能
+                if (! $this->begin) { // 存在写入时自动开启显式事务，提高写入性能
                     $this->master->exec('begin;');
                     $this->begin = true;
                 }

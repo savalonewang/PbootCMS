@@ -20,10 +20,17 @@ class Pdo implements Builder
 
     protected $slave;
 
-    protected $commit;
+    protected $begin = false;
 
     private function __construct()
     {}
+
+    public function __destruct()
+    {
+        if ($this->begin) { // 存在待提交的事务时自动进行提交
+            $this->commit();
+        }
+    }
 
     // 获取单一实例，使用单一实例数据库连接类
     public static function getInstance()
@@ -82,14 +89,14 @@ class Pdo implements Builder
     public function begin()
     {
         $this->master->beginTransaction();
-        $this->commit = true;
+        $this->begin = true;
     }
 
     // 提交事务
     public function commit()
     {
         $this->master->commit();
-        $this->commit = false;
+        $this->begin = false;
     }
 
     // 执行SQL语句,接受完整SQL语句，返回结果集对象
@@ -102,11 +109,19 @@ class Pdo implements Builder
                     $cfg = Config::get('database');
                     $this->master = $this->conn($cfg);
                 }
+                
+                // sqlite时自动启动事务
+                if ($cfg['type'] == 'pdo_sqlite' && ! $this->begin) {
+                    $this->master->exec('begin;'); // 此方式比PDO启用事务的方法begin()快10倍以上
+                }
+                
+                // MySql写入规避严格模式
+                if ($cfg['type'] == 'pdo_mysql') {
+                    $this->master->exec("SET sql_mode='NO_ENGINE_SUBSTITUTION'");
+                }
+                
                 $result = $this->master->exec($sql);
                 if ($result === false) {
-                    if ($this->commit) { // 如果是事务模式，发生错误，则回滚
-                        $this->master->rollBack();
-                    }
                     $this->error($sql, 'master');
                 }
                 break;
@@ -123,9 +138,6 @@ class Pdo implements Builder
                         }
                     }
                     $this->slave = $this->conn($cfg);
-                    if (Config::get('database.type') == 'pdo_mysql') {
-                        $this->slave->exec("SET sql_mode='NO_ENGINE_SUBSTITUTION'"); // MySql写入规避严格模式
-                    }
                 }
                 $result = $this->slave->query($sql) or $this->error($sql, 'slave');
                 break;
@@ -274,6 +286,9 @@ class Pdo implements Builder
     // 显示执行错误
     protected function error($sql, $conn)
     {
+        if ($this->begin) { // 如果是事务模式，发生错误，则回滚
+            $this->$conn->rollBack();
+        }
         $err = $this->$conn->errorInfo();
         error('执行SQL发生错误！错误：' . $err[2] . '，语句：' . $sql);
     }

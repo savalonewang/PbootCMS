@@ -20,7 +20,7 @@ class Mysqli implements Builder
 
     protected $slave;
 
-    protected $commit;
+    protected $begin = false;
 
     private function __construct()
     {}
@@ -57,7 +57,7 @@ class Mysqli implements Builder
     public function begin()
     {
         $this->master->autocommit(false);
-        $this->commit = true;
+        $this->begin = true;
     }
 
     // 提交事务
@@ -65,7 +65,7 @@ class Mysqli implements Builder
     {
         $this->master->commit(); // 提交事务
         $this->master->autocommit(true); // 提交后恢复自动提交
-        $this->commit = false; // 关闭事务模式
+        $this->begin = false; // 关闭事务模式
     }
 
     // 执行SQL语句,接受完整SQL语句，返回结果集对象
@@ -79,13 +79,7 @@ class Mysqli implements Builder
                     $this->master = $this->conn($cfg);
                     $this->master->query("SET sql_mode='NO_ENGINE_SUBSTITUTION'"); // 写入规避严格模式
                 }
-                $result = $this->master->query($sql);
-                if (! $result) {
-                    if ($this->commit) { // 如果是事务模式，发生错误，则回滚
-                        $this->master->rollback();
-                    }
-                    $this->error($sql, 'master');
-                }
+                $result = $this->master->query($sql) or $this->error($sql, 'master');
                 break;
             case 'slave':
                 if (! $this->slave) {
@@ -239,6 +233,10 @@ class Mysqli implements Builder
     // 显示执行错误
     protected function error($sql, $conn)
     {
+        if ($this->begin) { // 如果是事务模式，发生错误，则回滚
+            $this->$conn->rollback();
+            $this->begin = false;
+        }
         error('执行SQL发生错误！错误：' . mysqli_error($this->$conn) . '，语句：' . $sql);
     }
 }
