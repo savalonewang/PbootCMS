@@ -21,6 +21,9 @@ class UpgradeController extends Controller
     // 更新分支
     private $branch;
 
+    // 强制同步文件
+    private $force;
+
     // 文件列表
     public $files = array();
 
@@ -29,6 +32,7 @@ class UpgradeController extends Controller
         set_time_limit(0);
         error_reporting(0);
         $this->branch = $this->config('upgrade_branch') ?: 1;
+        $this->force = $this->config('upgrade_force') ?: 0;
     }
 
     public function index()
@@ -42,6 +46,7 @@ class UpgradeController extends Controller
         }
         $this->assign('upfile', $upfile);
         $this->assign('branch', $this->branch);
+        $this->assign('force', $this->force);
         $this->display('system/upgrade.html');
     }
 
@@ -221,7 +226,7 @@ class UpgradeController extends Controller
     // 获取列表
     private function getServerList()
     {
-        $url = $this->server . '/index.php/upgrade/getlist/version/' . APP_VERSION . '.' . RELEASE_TIME . '/branch/' . $this->branch;
+        $url = $this->server . '/index.php/upgrade/getlist/version/' . APP_VERSION . '.' . RELEASE_TIME . '/branch/' . $this->branch . '/force/' . $this->force;
         if (! ! $rs = json_decode(get_url($url, '', '', true))) {
             if ($rs->code) {
                 if (is_array($rs->data)) {

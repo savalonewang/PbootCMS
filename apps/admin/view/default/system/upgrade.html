@@ -62,6 +62,15 @@
 	                     </div>
 	                </div>
 	                
+	                <div class="layui-form-item">
+	                     <label class="layui-form-label">强制文件同步</label>
+	                     <div class="layui-input-block">
+	                        <input type="hidden" name="upgrade_force" value="0"><!-- 默认0 -->
+	                     	<input type="checkbox" name="upgrade_force" value="1" {if([$force])}checked{/if} lay-skin="switch" lay-text="开启|关闭">
+	                     </div>
+	                    <div class="layui-form-mid layui-word-aux">适用有部分文件更新失败或检查文件与官方一致性。</div>
+	                </div>
+	                
 		            <div class="layui-form-item">
 						 <div class="layui-input-block">
 						    <button class="layui-btn" lay-submit name="submit" value="upgrade">保存</button>

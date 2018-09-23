@@ -145,7 +145,7 @@
 <script>
 $.ajax({
     type: 'GET',
-	url: 'https://www.pbootcms.com/index.php/upgrade/check/version/{APP_VERSION}.{RELEASE_TIME}',
+	url: 'https://www.pbootcms.com/index.php/upgrade/check/version/{APP_VERSION}.{RELEASE_TIME}/branch/{$branch}',
 	dataType: 'json',
 	success: function (response, status) {
 		 if(response.code==1){
