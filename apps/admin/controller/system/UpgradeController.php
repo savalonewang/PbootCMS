@@ -29,7 +29,6 @@ class UpgradeController extends Controller
 
     public function __construct()
     {
-        set_time_limit(0);
         error_reporting(0);
         $this->branch = $this->config('upgrade_branch') ?: 1;
         $this->force = $this->config('upgrade_force') ?: 0;
