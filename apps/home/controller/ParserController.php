@@ -17,6 +17,8 @@ class ParserController extends Controller
 
     protected $model;
 
+    protected $pre = array();
+
     public function __construct()
     {
         $this->model = new ParserModel();
@@ -30,6 +32,9 @@ class ParserController extends Controller
     // 解析全局前置公共标签
     public function parserBefore($content)
     {
+        // 处理模板中不需要解析的标签
+        $content = $this->savePreLabel($content);
+        
         // 实现自动页面关键字及描述
         if (C == 'List') {
             $content = str_replace('{pboot:pagetitle}', '{sort:name}-{pboot:sitetitle}-{pboot:sitesubtitle}', $content);
@@ -54,6 +59,7 @@ class ParserController extends Controller
     // 解析全局后置公共标签
     public function parserAfter($content)
     {
+        $content = $this->savePreLabel($content); // 处理读取正文后不需要解析的内容
         $content = $this->parserSingleLabel($content); // 单标签解析
         $content = $this->parserSiteLabel($content); // 站点标签
         $content = $this->parserCompanyLabel($content); // 公司标签
@@ -75,6 +81,35 @@ class ParserController extends Controller
         $content = $this->parserPageLabel($content); // CMS分页标签解析(需置后)
         $content = $this->parserLoopLabel($content); // LOOP语句(需置后)
         $content = $this->parserIfLabel($content); // IF语句(需置最后)
+        $content = $this->restorePreLabel($content); // 还原不需要解析的内容
+        return $content;
+    }
+
+    // 保存保留内容
+    public function savePreLabel($content)
+    {
+        $pattern = '/\{pboot:pre}([\s\S]*?)\{\/pboot:pre\}/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            for ($i = 0; $i < $count; $i ++) {
+                $this->pre[] = $matches[1][$i];
+                end($this->pre);
+                $content = str_replace($matches[0][$i], '{pre:' . key($this->pre) . '}', $content);
+            }
+        }
+        return $content;
+    }
+
+    // 还原保留内容
+    public function restorePreLabel($content)
+    {
+        $pattern = '/\{pre:([0-9]+)\}/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            for ($i = 0; $i < $count; $i ++) {
+                $content = str_replace($matches[0][$i], $this->pre[$matches[1][$i]], $content);
+            }
+        }
         return $content;
     }
 
