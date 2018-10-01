@@ -67,8 +67,8 @@ class FormController extends Controller
                 if ($value->required && ! $field_data) {
                     alert_back($value->description . '不能为空！');
                 } else {
-                    $data[$value->name] = post($value->name);
-                    $mail_body .= $value->description . '：' . post($value->name) . '<br>';
+                    $data[$value->name] = $field_data;
+                    $mail_body .= $value->description . '：' . $field_data . '<br>';
                 }
             }
             
