@@ -922,7 +922,7 @@ class ParserController extends Controller
                                     $order = $value . ' DESC';
                                     break;
                                 default:
-                                    $order = $value . ' ASC';
+                                    $order = $value;
                             }
                             $order .= ",sorting ASC,id DESC";
                             break;
@@ -1097,7 +1097,7 @@ class ParserController extends Controller
                                     $order = $value . ' DESC';
                                     break;
                                 default:
-                                    $order = $value . ' ASC';
+                                    $order = $value;
                             }
                             $order .= ",sorting ASC,id DESC";
                             break;
@@ -1874,7 +1874,7 @@ class ParserController extends Controller
                                     $order = $value . ' DESC';
                                     break;
                                 default:
-                                    $order = $value . ' ASC';
+                                    $order = $value;
                             }
                             $order .= ",sorting ASC,id DESC";
                             break;
