@@ -78,10 +78,11 @@ class ConfigController extends Controller
         if (! ! $action = get('action')) {
             switch ($action) {
                 case 'sendemail':
-                    if (! ! $rs = sendmail($this->config(), get('to'), '【PbootCMS】测试邮件', '欢迎您使用PbootCMS网站开发管理系统！')) {
+                    $rs = sendmail($this->config(), get('to'), '【PbootCMS】测试邮件', '欢迎您使用PbootCMS网站开发管理系统！');
+                    if ($rs === true) {
                         alert_back('测试邮件发送成功！');
                     } else {
-                        alert($rs);
+                        alert('发送失败：' . $rs);
                     }
                     break;
             }
@@ -93,6 +94,7 @@ class ConfigController extends Controller
                 $this->modDbConfig($key);
             }
             $this->log('修改邮件发送配置成功！');
+            path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
             success('修改成功！', url('/admin/Config/email'));
         }
         $this->assign('email', true);
