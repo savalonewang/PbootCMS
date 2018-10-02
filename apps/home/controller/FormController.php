@@ -83,7 +83,7 @@ class FormController extends Controller
                 $this->log('提交表单数据成功！');
                 if ($this->config('message_send_mail') && $this->config('message_send_to')) {
                     $mail_subject = "【PbootCMS】您有新的表单数据，请注意查收！";
-                    $mail_body .= '<br>来自网站' . get_http_url() . '（' . date('Y-m-d H:i:s') . '）';
+                    $mail_body .= '<br>来自网站 ' . get_http_url() . ' （' . date('Y-m-d H:i:s') . '）';
                     sendmail($this->config(), $this->config('message_send_to'), $mail_subject, $mail_body);
                 }
                 alert_location('提交成功！', '-1');
