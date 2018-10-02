@@ -117,23 +117,25 @@ function path_list($path)
  */
 function path_delete($path, $delDir = false)
 {
-    $handle = opendir($path);
-    if ($handle) {
-        $result = true;
-        while (false !== ($item = readdir($handle))) {
-            if ($item != "." && $item != "..")
-                $result = is_dir("$path/$item") ? path_delete("$path/$item", $delDir) : unlink("$path/$item");
-        }
-        closedir($handle);
-        if ($delDir)
-            return rmdir($path);
-        return $result;
-    } else {
-        if (file_exists($path)) {
-            return unlink($path);
+    $result = true;
+    if (is_dir($path)) {
+        if (! ! $dirs = scandir($path)) {
+            foreach ($dirs as $value) {
+                if ($value != "." && $value != "..") {
+                    $dir = $path . '/' . $value;
+                    $result = is_dir($dir) ? path_delete($dir, $delDir) : unlink($dir);
+                }
+            }
+            if ($result && $delDir) {
+                return rmdir($path);
+            } else {
+                return $result;
+            }
         } else {
             return false;
         }
+    } else {
+        return unlink($path);
     }
 }
 
