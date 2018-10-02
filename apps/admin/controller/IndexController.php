@@ -222,7 +222,12 @@ class IndexController extends Controller
     // 清理缓存
     public function clearCache()
     {
-        if (path_delete(RUN_PATH)) {
+        if (get('delall')) {
+            $rs = path_delete(RUN_PATH);
+        } else {
+            $rs = (path_delete(RUN_PATH . '/cache') && path_delete(RUN_PATH . '/complile') && path_delete(RUN_PATH . '/config') && path_delete(RUN_PATH . '/upgrade'));
+        }
+        if ($rs) {
             if (extension_loaded('Zend OPcache')) {
                 opcache_reset(); // 在启用了OPcache加速器时同时清理
             }

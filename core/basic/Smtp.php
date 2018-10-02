@@ -77,20 +77,20 @@ class Smtp
         if ($server) {
             $this->sendServer = $server;
             $this->port = $port;
-            $this->isSecurity = $isSecurity;
+            $this->isSecurity = $isSecurity ? true : false;
             $this->debug = $debug;
             $this->userName = empty($username) ? "" : base64_encode($username);
             $this->password = empty($password) ? "" : base64_encode($password);
             $this->from = $username;
         } else {
-            $smtp = Config::get('smtp');
-            $this->sendServer = $smtp['server'];
-            $this->port = $smtp['port'];
-            $this->isSecurity = $smtp['ssl'];
-            $this->debug = $smtp['debug'];
-            $this->userName = base64_encode($smtp['username']);
-            $this->password = base64_encode($smtp['password']);
-            $this->from = $smtp['username'];
+            $smtp = Config::get();
+            $this->sendServer = $smtp['smtp_server'];
+            $this->port = $smtp['smtp_port'];
+            $this->isSecurity = $smtp['smtp_ssl'] ? true : false;
+            $this->debug = $debug;
+            $this->userName = base64_encode($smtp['smtp_username']);
+            $this->password = base64_encode($smtp['smtp_password']);
+            $this->from = $smtp['smtp_username'];
         }
         return true;
     }
@@ -191,9 +191,9 @@ class Smtp
             $this->setMail($subject, $body);
         }
         $command = $this->getCommand();
-        $this->isSecurity ? $this->socketSecurity() : $this->socket();
+        $this->socket($this->isSecurity);
         foreach ($command as $value) {
-            $result = $this->isSecurity ? $this->sendCommandSecurity($value[0], $value[1]) : $this->sendCommand($value[0], $value[1]);
+            $result = $this->sendCommand($value[0], $value[1]);
             if ($result) {
                 continue;
             } else {
@@ -201,7 +201,7 @@ class Smtp
             }
         }
         // 关闭连接
-        $this->isSecurity ? $this->closeSecutity() : $this->close();
+        $this->close();
         return true;
     }
 
@@ -394,53 +394,6 @@ class Smtp
         if ($this->debug) {
             echo 'Send command:' . $command . ',expected code:' . $code . '<br />';
         }
-        // 发送命令给服务器
-        try {
-            if (socket_write($this->socket, $command, strlen($command))) {
-                // 当邮件内容分多次发送时，没有$code，服务器没有返回
-                if (empty($code)) {
-                    return true;
-                }
-                // 读取服务器返回
-                $data = trim(socket_read($this->socket, 1024));
-                if ($this->debug) {
-                    echo 'response:' . $data . '<br /><br />';
-                }
-                if ($data) {
-                    $pattern = "/^" . $code . "+?/";
-                    if (preg_match($pattern, $data)) {
-                        return true;
-                    } else {
-                        $this->errorMessage = "Error:" . $data . "|**| command:";
-                        return false;
-                    }
-                } else {
-                    $this->errorMessage = "Error:" . socket_strerror(socket_last_error());
-                    return false;
-                }
-            } else {
-                $this->errorMessage = "Error:" . socket_strerror(socket_last_error());
-                return false;
-            }
-        } catch (\Exception $e) {
-            $this->errorMessage = "Error:" . $e->getMessage();
-        }
-    }
-
-    /**
-     * 安全连接发送命令
-     *
-     * @param string $command
-     *            发送到服务器的smtp命令
-     * @param int $code
-     *            期望服务器返回的响应吗
-     * @return boolean
-     */
-    protected function sendCommandSecurity($command, $code)
-    {
-        if ($this->debug) {
-            echo 'Send command:' . $command . ',expected code:' . $code . '<br />';
-        }
         try {
             if (fwrite($this->socket, $command)) {
                 // 当邮件内容分多次发送时，没有$code，服务器没有返回
@@ -512,38 +465,7 @@ class Smtp
      *
      * @return boolean
      */
-    protected function socket()
-    {
-        // 创建socket资源
-        if (! extension_loaded('sockets')) {
-            error('您的服务器未开启php_sockets扩展，无法正常发信！');
-        }
-        $this->socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname('tcp'));
-        if (! $this->socket) {
-            $this->errorMessage = socket_strerror(socket_last_error());
-            return false;
-        }
-        // 设置阻塞模式
-        socket_set_block($this->socket);
-        // 连接服务器
-        if (! socket_connect($this->socket, $this->sendServer, $this->port)) {
-            $this->errorMessage = socket_strerror(socket_last_error());
-            return false;
-        }
-        $str = socket_read($this->socket, 1024);
-        if (! preg_match("/220+?/", $str)) {
-            $this->errorMessage = $str;
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 建立到服务器的SSL网络连接
-     *
-     * @return boolean
-     */
-    protected function socketSecurity()
+    protected function socket($ssl = true)
     {
         $remoteAddr = "tcp://" . $this->sendServer . ":" . $this->port;
         $this->socket = stream_socket_client($remoteAddr, $errno, $errstr, 30);
@@ -552,7 +474,7 @@ class Smtp
             return false;
         }
         // 设置加密连接，默认是ssl，如果需要tls连接，可以查看php手册streamsocket_enable_crypto函数的解释
-        stream_socket_enable_crypto($this->socket, true, STREAM_CRYPTO_METHOD_SSLv23_CLIENT);
+        stream_socket_enable_crypto($this->socket, $ssl, STREAM_CRYPTO_METHOD_SSLv23_CLIENT);
         stream_set_blocking($this->socket, 1); // 设置阻塞模式
         $str = fread($this->socket, 1024);
         if (! preg_match("/220+?/", $str)) {
@@ -563,26 +485,11 @@ class Smtp
     }
 
     /**
-     * 关闭socket
-     *
-     * @return boolean
-     */
-    protected function close()
-    {
-        if (isset($this->socket) && is_object($this->socket)) {
-            $this->socket->close();
-            return true;
-        }
-        $this->errorMessage = "No resource can to be close";
-        return false;
-    }
-
-    /**
      * 关闭安全socket
      *
      * @return boolean
      */
-    protected function closeSecutity()
+    protected function close()
     {
         if (isset($this->socket) && is_object($this->socket)) {
             stream_socket_shutdown($this->socket, STREAM_SHUT_WR);

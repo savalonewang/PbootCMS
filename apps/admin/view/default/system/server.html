@@ -84,11 +84,6 @@
 						     <th>GD库支持</th>
 						     <td>{$server->gd}</td>
 						</tr>
-						
-						<tr>
-						    <th>Sockets支持</th>
-						    <td>{$server->imap}（涉及邮件发送）</td>
-						</tr>
 						   
 						<tr>
 						    <th>Curl支持</th>
@@ -107,7 +102,7 @@
 						
 						<tr>
 						    <th>会话路径</th>
-						    <td>{$server->session_save_path}</td>
+						    <td>{$server->session_save_path} <a href="{url./admin/Index/clearCache/delall/1}">【清理会话】</a></td>
 						</tr>
 						
 						<tr>

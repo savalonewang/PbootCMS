@@ -112,7 +112,7 @@ class Pdo implements Builder
                 
                 // sqlite时自动启动事务
                 if ($cfg['type'] == 'pdo_sqlite' && ! $this->begin) {
-                    $this->master->exec('begin;'); // 此方式比PDO启用事务的方法begin()快10倍以上
+                    $this->begin();
                 }
                 
                 // MySql写入规避严格模式
