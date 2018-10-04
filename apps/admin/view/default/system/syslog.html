@@ -11,7 +11,6 @@
 	            	<thead>
 	                    <tr>
 	                        <th>序号</th>
-	                        <th>事件级别</th>
 	                        <th>事件内容</th>
 	                        <th>用户IP</th>
 	                        <th>操作系统</th>
@@ -24,7 +23,6 @@
 	                    {foreach $syslogs(key,value,num)}
 	                    <tr>
 	                        <td>[num]</td>
-	                        <td>[value->level]</td>
 	                        <td>[value->event]</td>
 	                        <td>{fun=long2ip($value->user_ip)}</td>
 	                        <td>[value->user_os]</td>
