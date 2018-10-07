@@ -25,6 +25,13 @@ class Mysqli implements Builder
     private function __construct()
     {}
 
+    public function __destruct()
+    {
+        if ($this->begin) { // 存在待提交的事务时自动进行提交
+            $this->commit();
+        }
+    }
+
     // 获取单一实例，使用单一实例数据库连接类
     public static function getInstance()
     {
@@ -78,6 +85,9 @@ class Mysqli implements Builder
                     $cfg = Config::get('database');
                     $this->master = $this->conn($cfg);
                     $this->master->query("SET sql_mode='NO_ENGINE_SUBSTITUTION'"); // 写入规避严格模式
+                }
+                if (Config::get('database.transaction') && ! $this->begin) { // 根据配置开启mysql事务，注意需要是InnoDB引擎
+                    $this->begin();
                 }
                 $result = $this->master->query($sql) or $this->error($sql, 'master');
                 break;

@@ -108,16 +108,16 @@ class Pdo implements Builder
                 if (! $this->master) {
                     $cfg = Config::get('database');
                     $this->master = $this->conn($cfg);
+                    if ($cfg['type'] == 'pdo_mysql') {
+                        $this->master->exec("SET sql_mode='NO_ENGINE_SUBSTITUTION'"); // MySql写入规避严格模式
+                    }
                 }
                 
                 // sqlite时自动启动事务
                 if ($cfg['type'] == 'pdo_sqlite' && ! $this->begin) {
                     $this->begin();
-                }
-                
-                // MySql写入规避严格模式
-                if ($cfg['type'] == 'pdo_mysql') {
-                    $this->master->exec("SET sql_mode='NO_ENGINE_SUBSTITUTION'");
+                } elseif ($cfg['type'] == 'pdo_mysql' && Config::get('database.transaction') && ! $this->begin) { // 根据配置开启mysql事务，注意需要是InnoDB引擎
+                    $this->begin();
                 }
                 
                 $result = $this->master->exec($sql);

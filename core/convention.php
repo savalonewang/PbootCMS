@@ -95,6 +95,7 @@ return array(
         'type' => 'mysqli', // 数据库连接驱动 mysqli,sqlite,pdo_mysql,pdo_sqlite,pdo_pgsql
         'prefix' => 'ay_', // 数据库表前缀
         'charset' => 'utf8', // 数据库编码
+        'transaction' => false, // 开启事务
         
         'host' => '127.0.0.1', // 数据库服务器
         'user' => 'root', // 数据库连接用户名
