@@ -15,12 +15,11 @@ $config = array(
     "allowFiles" => $CONFIG['catcherAllowFiles'],
     "oriName" => "remote.png"
 );
+$fieldName = $CONFIG['catcherFieldName'];
 
 if (defined('STATIC_DIR')) {
     $config['pathFormat'] = STATIC_DIR . $config['pathFormat'];
 }
-
-$fieldName = $CONFIG['catcherFieldName'];
 
 /* 抓取远程图片 */
 $list = array();

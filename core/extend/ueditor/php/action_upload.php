@@ -47,10 +47,11 @@ switch (htmlspecialchars($_GET['action'])) {
         break;
 }
 
-/* 生成上传实例对象并完成上传 */
 if (defined('STATIC_DIR')) {
     $config['pathFormat'] = STATIC_DIR . $config['pathFormat'];
 }
+
+/* 生成上传实例对象并完成上传 */
 $up = new Uploader($fieldName, $config, $base64);
 
 /**

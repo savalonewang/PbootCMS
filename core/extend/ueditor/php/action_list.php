@@ -22,17 +22,16 @@ switch ($_GET['action']) {
         $listSize = $CONFIG['imageManagerListSize'];
         $path = $CONFIG['imageManagerListPath'];
 }
-
-if (defined('STATIC_DIR')) {
-    $path = STATIC_DIR . $path;
-}
-
 $allowFiles = substr(str_replace(".", "|", join("", $allowFiles)), 1);
 
 /* 获取参数 */
 $size = isset($_GET['size']) ? htmlspecialchars($_GET['size']) : $listSize;
 $start = isset($_GET['start']) ? htmlspecialchars($_GET['start']) : 0;
 $end = $start + $size;
+
+if (defined('STATIC_DIR')) {
+    $path = STATIC_DIR . $path;
+}
 
 /* 获取文件列表 */
 $path = DOC_PATH . (substr($path, 0, 1) == "/" ? "" : "/") . $path;

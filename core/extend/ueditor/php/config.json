@@ -6,7 +6,7 @@
     "imageMaxSize": 20480000, /* 上传大小限制，单位B */
     "imageAllowFiles": [".png", ".jpg", ".jpeg", ".gif", ".bmp"], /* 上传图片格式显示 */
     "imageCompressEnable": false, /* 是否压缩图片,默认是true */
-    "imageCompressBorder": 1920, /* 图片压缩最长边限制 */
+    "imageCompressBorder": 1600, /* 图片压缩最长边限制 */
     "imageInsertAlign": "none", /* 插入的图片浮动方式 */
     "imageUrlPrefix": "", /* 图片访问路径前缀 */
     "imagePathFormat": "/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}", /* 上传保存路径,可以自定义保存路径和文件名格式 */
@@ -51,7 +51,7 @@
     "videoFieldName": "upfile", /* 提交的视频表单名称 */
     "videoPathFormat": "/upload/video/{yyyy}{mm}{dd}/{time}{rand:6}", /* 上传保存路径,可以自定义保存路径和文件名格式 */
     "videoUrlPrefix": "", /* 视频访问路径前缀 */
-    "videoMaxSize": 102400000, /* 上传大小限制，单位B，默认100MB */
+    "videoMaxSize": 204800000, /* 上传大小限制，单位B，默认100MB */
     "videoAllowFiles": [
         ".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg",
         ".ogg", ".ogv", ".mov", ".wmv", ".mp4", ".webm", ".mp3", ".wav", ".mid"], /* 上传视频格式显示 */
@@ -61,7 +61,7 @@
     "fileFieldName": "upfile", /* 提交的文件表单名称 */
     "filePathFormat": "/upload/file/{yyyy}{mm}{dd}/{time}{rand:6}", /* 上传保存路径,可以自定义保存路径和文件名格式 */
     "fileUrlPrefix": "", /* 文件访问路径前缀 */
-    "fileMaxSize": 51200000, /* 上传大小限制，单位B，默认50MB */
+    "fileMaxSize": 204800000, /* 上传大小限制，单位B，默认50MB */
     "fileAllowFiles": [
         ".png", ".jpg", ".jpeg", ".gif", ".bmp",
         ".flv", ".swf", ".mkv", ".avi", ".rm", ".rmvb", ".mpeg", ".mpg",

@@ -34,7 +34,7 @@
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义
         , toolbars: [[
-        	'fullscreen', 'source', '|', 'undo', 'redo', '|',
+            'fullscreen', 'source', '|', 'undo', 'redo', '|',
             'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
             'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
             'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
@@ -90,14 +90,14 @@
         //,indentValue:'2em'
 
         //,initialFrameWidth:1000  //初始化编辑器宽度,默认1000
-        ,initialFrameHeight:400  //初始化编辑器高度,默认320
+        //,initialFrameHeight:320  //初始化编辑器高度,默认320
 
         //,readonly : false //编辑器初始化结束后,编辑区域是否是只读的，默认是false
 
         //,autoClearEmptyNode : true //getContent时，是否删除空的inlineElement节点（包括嵌套的情况）
 
         //启用自动保存
-        ,enableAutoSave: false
+        //,enableAutoSave: true
         //自动保存间隔时间， 单位ms
         //,saveInterval: 500
 
@@ -277,7 +277,7 @@
 
         //autoHeightEnabled
         // 是否自动长高,默认true
-        ,autoHeightEnabled:false
+        //,autoHeightEnabled:true
 
         //scaleEnabled
         //是否可以拉伸长高,默认true(当开启时，自动长高失效)
@@ -289,7 +289,7 @@
         //是否保持toolbar的位置不动,默认true
         ,autoFloatEnabled:false
         //浮动时工具栏距离浏览器顶部的高度，用于某些具有固定头部的页面
-        //,topOffset:30
+        ,topOffset:50
         //编辑器底部距离工具栏高度(如果参数大于等于编辑器高度，则设置无效)
         //,toolbarTopOffset:400
 
@@ -352,7 +352,7 @@
 
         //默认过滤规则相关配置项目
         ,disabledTableInTable:false  //禁止表格嵌套
-        ,allowDivTransToP:false     //允许进入编辑器的div标签自动变成p标签
+        ,allowDivTransToP:false      //允许进入编辑器的div标签自动变成p标签
         //,rgb2Hex:true               //默认产出的数据中的color自动从rgb格式变成16进制格式
 
 		// xss 过滤是否开启,inserthtml等操作
@@ -364,7 +364,8 @@
 		// xss过滤白名单 名单来源: https://raw.githubusercontent.com/leizongmin/js-xss/master/lib/default.js
 		,whitList: {
 			iframe: ['frameborder','border','marginwidth','marginheight','width','height','src','id','class', 'style'],
-			a:      ['target', 'href', 'title', 'class', 'style'],
+			embed:  ['class', 'style', 'src', 'width', 'height', 'type', 'quality', 'allowfullscreen'],
+			a:      ['target', 'href', 'title', 'class', 'style','name','id'],
 			abbr:   ['title', 'class', 'style'],
 			address: ['class', 'style'],
 			area:   ['shape', 'coords', 'href', 'alt'],
@@ -374,9 +375,9 @@
 			b:      ['class', 'style'],
 			bdi:    ['dir'],
 			bdo:    ['dir'],
-			big:    [],
+			big:    ['class', 'style'],
 			blockquote: ['cite', 'class', 'style'],
-			br:     [],
+			br:     ['class', 'style'],
 			caption: ['class', 'style'],
 			center: ['class', 'style'],
 			cite:   ['class', 'style'],
@@ -390,7 +391,6 @@
 			dl:     ['class', 'style'],
 			dt:     ['class', 'style'],
 			em:     ['class', 'style'],
-			embed:  ['class', 'style', 'src', 'width', 'height', 'type', 'quality', 'allowfullscreen'],
 			font:   ['color', 'size', 'face'],
 			footer: ['class', 'style'],
 			h1:     ['class', 'style'],
@@ -402,7 +402,7 @@
 			header: ['class', 'style'],
 			hr:     ['class', 'style'],
 			i:      ['class', 'style'],
-			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src', 'loadingclass', 'class', 'data-latex', 'style'],
+			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src', 'loadingclass', 'class', 'data-latex','anchorname','word_img', 'style'],
 			ins:    ['datetime'],
 			li:     ['class', 'style'],
 			mark:   ['class', 'style'],

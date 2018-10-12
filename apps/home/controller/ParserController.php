@@ -1925,7 +1925,9 @@ class ParserController extends Controller
                 // 数据接收
                 foreach ($_GET as $key => $value) {
                     if (! ! $value = get($key, 'vars')) {
-                        $where2[$key] = $value;
+                        if (preg_match('^[\w]+$', $key)) { // 带有违规字符时不带入查询
+                            $where2[$key] = $value;
+                        }
                     }
                 }
                 
