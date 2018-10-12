@@ -124,6 +124,7 @@ class ParserController extends Controller
         $content = str_replace('{pboot:timestamp}', time(), $content); // 认证时间戳
         $content = str_replace('{pboot:signature}', md5(md5($this->config('api_appid') . $this->config('api_secret') . time())), $content); // API认证密钥
         $content = str_replace('{pboot:httpurl}', get_http_url(), $content); // 当前访问的域名地址
+        $content = str_replace('{pboot:pageurl}', get_current_url(), $content); // 当前页面的地址
         $content = str_replace('{pboot:keyword}', get('keyword'), $content); // 当前搜索的关键字
         $content = str_replace('{pboot:checkcodestatus}', $this->config('message_check_code'), $content); // 是否开启验证码
         return $content;
@@ -222,7 +223,10 @@ class ParserController extends Controller
                 switch ($matches[1][$i]) {
                     default:
                         if (isset($data[$matches[1][$i]])) {
-                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data[$matches[1][$i]]), $content);
+                            if ($data[$matches[1][$i]]['type'] == 3 && $data[$matches[1][$i]]['value']) {
+                                $data[$matches[1][$i]]['value'] = SITE_DIR . $data[$matches[1][$i]]['value'];
+                            }
+                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data[$matches[1][$i]]['value']), $content);
                         }
                 }
             }
@@ -966,8 +970,8 @@ class ParserController extends Controller
                 // 数据筛选
                 $where2 = array();
                 foreach ($_GET as $key => $value) {
-                    if (substr($key, 0, 4) == 'ext_') { // 其他字段不加入
-                        $where2[$key] = get($key);
+                    if (preg_match('/^ext_[\w]+$/', $key)) { // 其他字段不加入
+                        $where2[$key] = get($key, 'vars');
                     }
                 }
                 
@@ -1148,9 +1152,11 @@ class ParserController extends Controller
                 
                 // 数据筛选
                 $where2 = array();
-                foreach ($_GET as $key => $value) {
-                    if (substr($key, 0, 4) == 'ext_') { // 其他字段不加入
-                        $where2[$key] = get($key);
+                if ($page) { // 只在执行了分页的列表应用筛选，规避列表页互相干扰问题
+                    foreach ($_GET as $key => $value) {
+                        if (preg_match('/^ext_[\w]+$/', $key)) { // 其他字段不加入
+                            $where2[$key] = get($key, 'vars');
+                        }
                     }
                 }
                 
@@ -1987,13 +1993,13 @@ class ParserController extends Controller
                         $content = str_replace($matches[0][$i], $this->getVar('pagebar'), $content);
                         break;
                     case 'current':
-                        $content = str_replace($matches[0][$i], $this->getVar('pagecurrent'), $content);
+                        $content = str_replace($matches[0][$i], $this->getVar('pagecurrent') ?: 0, $content);
                         break;
                     case 'count':
-                        $content = str_replace($matches[0][$i], $this->getVar('pagecount'), $content);
+                        $content = str_replace($matches[0][$i], $this->getVar('pagecount') ?: 0, $content);
                         break;
                     case 'rows':
-                        $content = str_replace($matches[0][$i], $this->getVar('pagerows'), $content);
+                        $content = str_replace($matches[0][$i], $this->getVar('pagerows') ?: 0, $content);
                         break;
                     case 'index':
                         $content = str_replace($matches[0][$i], $this->getVar('pageindex'), $content);
@@ -2078,9 +2084,7 @@ class ParserController extends Controller
                     'explode',
                     'implode',
                     'get',
-                    'post',
-                    'session',
-                    'cookie'
+                    'post'
                 );
                 
                 // 带有函数的条件语句进行安全校验

@@ -40,7 +40,8 @@ function error($string, $jump_url = null, $time = 2)
     @ob_clean();
     if (! $string)
         $string = '未知错误！';
-    if (Config::get('return_data_type') == 'json') { // 接口模型返回格式数据
+    
+    if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
         Response::json(0, strip_tags($string));
     } else {
         $err_tpl = CORE_PATH . '/template/error.html';
@@ -63,7 +64,7 @@ function error($string, $jump_url = null, $time = 2)
  */
 function success($string, $jump_url = null, $time = 2)
 {
-    if (Config::get('return_data_type') == 'json') { // 接口模型返回格式数据
+    if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
         Response::json(1, strip_tags($string));
     } else {
         $err_tpl = CORE_PATH . '/template/success.html';

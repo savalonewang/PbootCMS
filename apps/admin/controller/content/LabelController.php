@@ -28,7 +28,11 @@ class LabelController extends Controller
         // 修改参数配置
         if ($_POST) {
             foreach ($_POST as $key => $value) {
-                $this->model->modValue($key, post($key));
+                if (preg_match('/^[\w-]+$/', $key)) { // 带有违规字符时不带入查询
+                    $data = post($key);
+                    $data = str_replace("\r\n", "<br>", $data); // 多行文本时替换回车
+                    $this->model->modValue($key, $data);
+                }
             }
             success('修改成功！', url('admin/Label/index'));
         }

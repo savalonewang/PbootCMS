@@ -168,22 +168,23 @@ class CmsController extends Controller
         
         $acode = get('acode', 'var') ?: $this->lg;
         $num = get('num', 'int') ?: $this->config('pagesize');
-        $order = get('order', 'var') ?: 'date';
-        
-        switch ($order) {
-            case 'date':
-            case 'istop':
-            case 'isrecommend':
-            case 'isheadline':
-            case 'visits':
-            case 'likes':
-            case 'oppose':
-                $order = $order . ' DESC';
-                break;
-            default:
-                $order = $order . ' ASC';
+        $order = get('order');
+        if (! preg_match('/^[\w-,\s]+$/', $order)) {
+            $order = 'date';
+        } else {
+            switch ($order) {
+                case 'date':
+                case 'istop':
+                case 'isrecommend':
+                case 'isheadline':
+                case 'visits':
+                case 'likes':
+                case 'oppose':
+                    $order = $order . ' DESC';
+                    break;
+            }
+            $order .= ",sorting ASC,id DESC";
         }
-        $order .= ",sorting ASC,id DESC";
         
         // 获取主要参数
         $field = post('field', 'var');
@@ -218,7 +219,9 @@ class CmsController extends Controller
         // 数据接收
         foreach ($_GET as $key => $value) {
             if (! ! $value = get($key, 'vars')) {
-                $where[$key] = $value;
+                if (preg_match('^[\w]+$', $key)) { // 带有违规字符时不带入查询
+                    $where2[$key] = $value;
+                }
             }
         }
         
@@ -285,11 +288,14 @@ class CmsController extends Controller
             $mail_body = '';
             foreach ($form as $value) {
                 $field_data = post($value->name);
+                if (is_array($field_data)) { // 如果是多选等情况时转换
+                    $field_data = implode(',', $field_data);
+                }
                 if ($value->required && ! $field_data) {
                     json(0, $value->description . '不能为空！');
                 } else {
-                    $data[$value->name] = post($value->name);
-                    $mail_body .= $value->description . '：' . post($value->name) . '<br>';
+                    $data[$value->name] = $field_data;
+                    $mail_body .= $value->description . '：' . $field_data . '<br>';
                 }
             }
             
@@ -366,11 +372,14 @@ class CmsController extends Controller
             $mail_body = '';
             foreach ($form as $value) {
                 $field_data = post($value->name);
+                if (is_array($field_data)) { // 如果是多选等情况时转换
+                    $field_data = implode(',', $field_data);
+                }
                 if ($value->required && ! $field_data) {
                     json(0, $value->description . '不能为空！');
                 } else {
-                    $data[$value->name] = post($value->name);
-                    $mail_body .= $value->description . '：' . post($value->name) . '<br>';
+                    $data[$value->name] = $field_data;
+                    $mail_body .= $value->description . '：' . $field_data . '<br>';
                 }
             }
             

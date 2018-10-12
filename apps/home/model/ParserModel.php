@@ -44,7 +44,7 @@ class ParserModel extends Model
     // 自定义标签
     public function getLabel()
     {
-        return parent::table('ay_label')->decode()->column('value', 'name');
+        return parent::table('ay_label')->decode()->column('value,type', 'name');
     }
 
     // 单个分类信息
@@ -306,7 +306,8 @@ class ParserModel extends Model
         $where2 = array(
             "a.acode='" . session('lg') . "'",
             'a.status=1',
-            'd.type=2'
+            'd.type=2',
+            "a.date<'" . date('Y-m-d H:i:s') . "'"
         );
         
         // 筛选条件支持模糊匹配
@@ -372,7 +373,8 @@ class ParserModel extends Model
         $where2 = array(
             "a.acode='" . session('lg') . "'",
             'a.status=1',
-            'd.type=2'
+            'd.type=2',
+            "a.date<'" . date('Y-m-d H:i:s') . "'"
         );
         
         return parent::table('ay_content a')->field($fields)

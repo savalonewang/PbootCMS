@@ -291,7 +291,8 @@ class CmsModel extends Model
         $where2 = array(
             "a.acode='" . $acode . "'",
             'a.status=1',
-            'd.type=2'
+            'd.type=2',
+            "a.date<'" . date('Y-m-d H:i:s') . "'"
         );
         
         // 筛选条件支持模糊匹配
@@ -354,7 +355,8 @@ class CmsModel extends Model
         $where2 = array(
             "a.acode='" . $acode . "'",
             'a.status=1',
-            'd.type=2'
+            'd.type=2',
+            "a.date<'" . date('Y-m-d H:i:s') . "'"
         );
         
         return parent::table('ay_content a')->field($fields)

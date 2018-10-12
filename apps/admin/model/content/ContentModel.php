@@ -61,7 +61,7 @@ class ContentModel extends Model
             ->where('d.type=2 OR d.type is null ')
             ->where("a.acode='" . session('acode') . "'")
             ->join($join)
-            ->order('a.sorting ASC,a.istop DESC,a.isrecommend DESC,a.id DESC')
+            ->order('a.sorting ASC,a.id DESC')
             ->page()
             ->select();
     }
@@ -115,7 +115,7 @@ class ContentModel extends Model
             ->in('a.scode', $scodes)
             ->like('a.title', $keyword)
             ->join($join)
-            ->order('a.sorting ASC,a.istop DESC,a.isrecommend DESC,a.id DESC')
+            ->order('a.sorting ASC,a.id DESC')
             ->page()
             ->select();
     }
@@ -166,7 +166,7 @@ class ContentModel extends Model
             ->where("a.acode='" . session('acode') . "'")
             ->like('a.title', $keyword)
             ->join($join)
-            ->order('a.sorting ASC,a.istop DESC,a.isrecommend DESC,a.id DESC')
+            ->order('a.sorting ASC,a.id DESC')
             ->page()
             ->select();
     }

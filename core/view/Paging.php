@@ -147,7 +147,7 @@ class Paging
     private function pageBar()
     {
         if (! $this->pageCount)
-            return "<span class='page-none'>No data has been querying.</span>";
+            return "<span class='page-none' style='color:#999'>未查询到任何数据!</span>";
         $string = "<span class='page-status'>{$this->pageStatus()}</span>";
         $string .= "<span class='page-index'><a href='" . $this->pageIndex() . "'>首页</a></span>";
         $string .= "<span class='page-pre'><a href='" . $this->pagePre() . "'>前一页</a></span>";
@@ -215,8 +215,14 @@ class Paging
             return;
         $num_html = '';
         $total = $this->num;
-        $half = intval($total / 2);
-        if ($this->page <= $half || $this->pageCount < $total) { // 当前页小于一半或页数小于总数
+        $halfl = intval($total / 2);
+        $halfu = ceil($total / 2);
+        
+        if ($this->page > $halfu) {
+            $num_html .= '<span class="page-num">···</span>';
+        }
+        
+        if ($this->page <= $halfl || $this->pageCount < $total) { // 当前页小于一半或页数小于总数
             for ($i = 1; $i <= $total; $i ++) {
                 if ($i > $this->pageCount)
                     break;
@@ -226,13 +232,7 @@ class Paging
                     $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num">' . $i . '</a>';
                 }
             }
-            if ($this->pageCount > $total)
-                $num_html .= '<span class="page-num">···</span>';
-        } elseif ($this->page + $half >= $this->pageCount) { // 当前页为倒数页以内
-            
-            if ($this->pageCount > $total)
-                $num_html .= '<span class="page-num">···</span>';
-            
+        } elseif ($this->page + $halfl >= $this->pageCount) { // 当前页为倒数页以内
             for ($i = $this->pageCount - $total + 1; $i <= $this->pageCount; $i ++) {
                 if ($this->page == $i) {
                     $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
@@ -241,16 +241,19 @@ class Paging
                 }
             }
         } else { // 正常的前后各5页
-            $num_html .= '<span class="page-num">···</span>';
-            for ($i = $this->page - $half; $i <= $this->page + $half; $i ++) {
+            for ($i = $this->page - $halfl; $i <= $this->page + $halfl; $i ++) {
                 if ($this->page == $i) {
                     $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num page-num-current">' . $i . '</a>';
                 } else {
                     $num_html .= '<a href="' . $this->getPreUrl() . '/page/' . $i . $this->suffix . $this->queryString() . '" class="page-num">' . $i . '</a>';
                 }
             }
+        }
+        
+        if ($this->pageCount > $total && $this->page < $this->pageCount - $halfl) {
             $num_html .= '<span class="page-num">···</span>';
         }
+        
         return $num_html;
     }
 

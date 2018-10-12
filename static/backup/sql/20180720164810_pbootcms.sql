@@ -864,16 +864,15 @@ CREATE TABLE `ay_slide` (
   PRIMARY KEY (`id`),
   KEY `ay_slide_acode` (`acode`),
   KEY `ay_slide_gid` (`gid`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_slide`
 --
 
 INSERT INTO `ay_slide` (`id`,`acode`,`gid`,`pic`,`link`,`title`,`subtitle`,`sorting`,`create_user`,`update_user`,`create_time`,`update_time`) VALUES
-('1','cn','1','/static/upload/image/20180412/1523500997605565.jpg','http://www.pbootcms.com','PbootCMS','永久开源、免费的PHP网站开发管理系统','255','admin','admin','2018-03-01 16:19:03','2018-04-12 10:43:19'),
-('2','cn','1','/static/upload/image/20180412/1523501147676550.jpg','http://www.pbootcms.com','PbootCMS','高效、简洁、强悍的PHP网站开发管理系统','255','admin','admin','2018-04-12 10:46:07','2018-04-12 10:46:07'),
-('3','cn','1','/static/upload/image/20180412/1523501459462835.jpg','http://www.pbootcms.com','PbootCMS','首创PHP+SQLITE网站运行模式','255','admin','admin','2018-04-12 10:51:12','2018-04-12 10:51:19');
+('1','cn','1','/static/upload/image/20180412/1523500997605565.jpg','http://www.pbootcms.com','PbootCMS','永久开源、免费的PHP建站系统','255','admin','admin','2018-03-01 16:19:03','2018-04-12 10:43:19'),
+('2','cn','1','/static/upload/image/20180412/1523501147676550.jpg','http://www.pbootcms.com','PbootCMS','高效、简洁、强悍的PHP建站源码','255','admin','admin','2018-04-12 10:46:07','2018-04-12 10:46:07');
 
 -- --------------------------------------------------------
 

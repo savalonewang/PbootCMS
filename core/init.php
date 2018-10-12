@@ -30,6 +30,7 @@ $file_path = str_replace('\\', '/', dirname(__DIR__)); // 系统部署路径
 if (count($script_path) > 2) { // 根目录下"/index.php"长度为2
     if (! ! $path_pos = strripos($file_path, '/' . $script_path[1])) {
         define('SITE_DIR', substr($file_path, $path_pos));
+        $_SERVER['SCRIPT_NAME'] = SITE_DIR . '/' . basename($_SERVER['SCRIPT_NAME']); // 规避大小写URL问题
     } else {
         define('SITE_DIR', '');
     }

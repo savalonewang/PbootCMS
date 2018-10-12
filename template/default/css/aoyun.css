@@ -46,12 +46,12 @@ p, dl, dt, dd, ul {
 	border-top: 1px dashed #dee2e6 !important;
 }
 .navbar-expand-lg .navbar-nav .nav-link {
-	padding-right: 1.5rem;
-	padding-left: 1.5rem;
-	font-size: 16px;
+	padding-right: 1rem;
+	padding-left: 1rem;
+	font-size: 14px;
 }
 .navbar-brand {
-	font-size: 20px;
+	font-size: 24px;
 	padding-top: 0px;
 	padding-bottom: 0px;
 }
@@ -59,7 +59,7 @@ p, dl, dt, dd, ul {
 	margin: 15px 0;
 }
 .card-img {
-	height: 200px;
+	height: 180px;
 	overflow: hidden;
 }
 .figure-img {

@@ -28,21 +28,24 @@ class ListController extends Controller
         $acode = get('acode', 'var') ?: $this->config('lgs.0.acode');
         $scode = get('scode', 'var') ?: - 1;
         $num = get('num', 'int') ?: $this->config('pagesize');
-        $order = get('order', 'var') ?: 'date';
-        switch ($order) {
-            case 'date':
-            case 'istop':
-            case 'isrecommend':
-            case 'isheadline':
-            case 'visits':
-            case 'likes':
-            case 'oppose':
-                $order = $order . ' DESC';
-                break;
-            default:
-                $order = $order . ' ASC';
+        
+        $order = get('order');
+        if (! preg_match('/^[\w-,\s]+$/', $order)) {
+            $order = 'date';
+        } else {
+            switch ($order) {
+                case 'date':
+                case 'istop':
+                case 'isrecommend':
+                case 'isheadline':
+                case 'visits':
+                case 'likes':
+                case 'oppose':
+                    $order = $order . ' DESC';
+                    break;
+            }
+            $order .= ",sorting ASC,id DESC";
         }
-        $order .= ",sorting ASC,id DESC";
         
         // 读取数据
         $data = $this->model->getList($acode, $scode, $num, $order);

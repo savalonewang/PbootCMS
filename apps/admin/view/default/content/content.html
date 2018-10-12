@@ -22,6 +22,7 @@
 	                     </div>
 	                     <div class="layui-input-inline">
 	                     	<button class="layui-btn" lay-submit>搜索</button>
+	                     	<a class="layui-btn layui-btn-primary"  href="{url./admin/Content/index/mcode/'.get('mcode').'}">清除搜索</a>
 	                     </div>
 	                </div>
                 </form>
@@ -35,7 +36,7 @@
 		                    	<th>ID</th>
 		                        <th>栏目</th>
 		                        <th>标题</th>
-		                        <th>时间</th>
+		                        <th>发布时间</th>
 		                        <th>排序</th>
 		                        <th>状态</th>
 		                        <th>置顶</th>
@@ -365,9 +366,10 @@
 			                 
 			                 <div class="layui-form-item">
 			                     <label class="layui-form-label">发布时间</label>
-			                     <div class="layui-input-block">
+			                     <div class="layui-input-inline">
 			                     	<input type="text" name="date" value="{fun=date('Y-m-d H:i:s')}" readonly placeholder="请选择发布时间"  class="layui-input datetime">
 			                     </div>
+			                     <div class="layui-form-mid layui-word-aux">温馨提示：设置未来时间可定时发布！</div>
 			                </div>
 			                
 			                <div class="layui-form-item">
@@ -698,9 +700,10 @@
 			                 
 			                 <div class="layui-form-item">
 			                     <label class="layui-form-label">发布时间</label>
-			                     <div class="layui-input-block">
+			                     <div class="layui-input-inline">
 			                     	<input type="text" name="date" value="{$content->date}" readonly placeholder="请选择发布时间"  class="layui-input datetime">
 			                     </div>
+			                     <div class="layui-form-mid layui-word-aux">温馨提示：设置未来时间可定时发布！</div>
 			                </div>
 			                
 			                <div class="layui-form-item">

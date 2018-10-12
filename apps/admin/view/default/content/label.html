@@ -16,44 +16,40 @@
 	  			{foreach $labels(key,value)}
 	  				{if($value->type==1)} <!-- 文本 -->
 		                <div class="layui-form-item">
-		                     <label class="layui-form-label">[value->description]</label>
+		                     <label class="layui-form-label">[value->description]<br><span class="layui-badge layui-bg-gray">{label:[value->name]}</span></label>
 		                     <div class="layui-input-block">
 		                     	<input type="text" name="[value->name]" value="[value->value]" placeholder="请输入[value->description]"  class="layui-input">
-		                     	<div class="layui-form-mid layui-word-aux">{label:[value->name]}</div>
 		                     </div>
 		                </div>
 	                {/if}
 	                
 	                {if($value->type==2)}<!-- 日期 -->
 	                	 <div class="layui-form-item">
-		                     <label class="layui-form-label">[value->description]</label>
+		                     <label class="layui-form-label">[value->description]<br><span class="layui-badge layui-bg-gray">{label:[value->name]}</span></label>
 		                     <div class="layui-input-block">
 		                     	<input type="text" name="[value->name]" readonly value="[value->value]" placeholder="请选择[value->description]"  class="layui-input datetime">
-		                     	<div class="layui-form-mid layui-word-aux">{label:[value->name]}</div>
 		                     </div>
 		                </div>
 	                {/if}
 	                
 	                {if($value->type==3)}<!-- 图片 -->
 	                	<div class="layui-form-item">
-		                     <label class="layui-form-label">[value->description]</label>
+		                     <label class="layui-form-label">[value->description]<br><span class="layui-badge layui-bg-gray">{label:[value->name]}</span></label>
 		                     <div class="layui-input-inline">
 		                     	<input type="text" name="[value->name]" id="[value->name]" value="[value->value]" placeholder="请上传[value->description]"  class="layui-input">
 		                     </div>
 		                     <button type="button" class="layui-btn upload" data-des="[value->name]">
 							 	 <i class="layui-icon">&#xe67c;</i>上传图片
 							 </button>
-							 <div class="layui-form-mid layui-word-aux">{label:[value->name]}</div>
 							 <div id="[value->name]_box" class="pic">{if($value->value)}<dl><dt><img src="{SITE_DIR}[value->value]" data-url="[value->value]"></dt><dd>删除</dd></dl>{/if}</div>
 		                </div>
 	                {/if}
 	                
 	                {if($value->type==4)}<!-- 文件 -->
 	                	<div class="layui-form-item">
-		                     <label class="layui-form-label">[value->description]</label>
+		                     <label class="layui-form-label">[value->description]<br><span class="layui-badge layui-bg-gray">{label:[value->name]}</span></label>
 		                     <div class="layui-input-inline">
 		                     	<input type="text" name="[value->name]" id="[value->name]" value="[value->value]" placeholder="请上传[value->description]"  class="layui-input">
-		                    	<div class="layui-form-mid layui-word-aux">{label:[value->name]}</div>
 		                     </div>
 		                     <button type="button" class="layui-btn file" data-des="[value->name]">
 							 	 <i class="layui-icon">&#xe67c;</i>上传文件
@@ -63,10 +59,9 @@
 	                
 	                {if($value->type==5)}<!-- 编辑器 -->
 	                	<div class="layui-form-item">
-		                     <label class="layui-form-label">[value->description]</label>
+		                     <label class="layui-form-label">[value->description]<br><span class="layui-badge layui-bg-gray">{label:[value->name]}</span></label>
 		                     <div class="layui-input-block">
 		                     	<script type="text/plain" id="[value->name]" name="[value->name]" style="width:100%;height:240px;">{fun=decode_string($value->value)}</script>
-		                     	<div class="layui-form-mid layui-word-aux">{label:[value->name]}</div>
 		                     </div>
 		                </div>
 		                <script>
@@ -81,12 +76,20 @@
 	                
 	                {if($value->type==6)} <!-- 开关 -->
 		                <div class="layui-form-item">
-		                     <label class="layui-form-label">[value->description]</label>
+		                     <label class="layui-form-label">[value->description]<br><span class="layui-badge layui-bg-gray">{label:[value->name]}</span></label>
 		                     <div class="layui-input-block">
 		                     	<input type="radio" name="[value->name]" value="1" title="开启" {if($value->value)}checked{/if}>
       							<input type="radio" name="[value->name]" value="0" title="关闭" {if(!$value->value)}checked{/if}>
 		                     </div>
-		                     <div class="layui-form-mid layui-word-aux">{label:[value->name]}</div>
+		                </div>
+	                {/if}
+	                
+	                {if($value->type==7)} <!-- 多行文本 -->
+		                <div class="layui-form-item">
+		                     <label class="layui-form-label">[value->description]<br><span class="layui-badge layui-bg-gray">{label:[value->name]}</span></label>
+		                     <div class="layui-input-block">
+		                     	<textarea name="[value->name]" class="layui-textarea" placeholder="请输入[value->description]">{fun=str_replace("<br>","\r\n",html_entity_decode($value->value))}</textarea>
+		                     </div>
 		                </div>
 	                {/if}
 	                
@@ -122,7 +125,8 @@
                         <td>[value->name]</td>
                         <td>[value->description]</td>
                         <td>
-                        {if($value->type==1)}文本{/if}
+                        {if($value->type==1)}单行文本{/if}
+                        {if($value->type==7)}多行文本{/if}
                         {if($value->type==2)}时间{/if}
                         {if($value->type==3)}图片{/if}
                         {if($value->type==4)}附件{/if}
@@ -166,7 +170,8 @@
                      <label class="layui-form-label">标签类型</label>
                      <div class="layui-input-block">
                      	<select name="type" lay-verify="required">
-	                    	<option value="1">文本</option>
+	                    	<option value="1">单行文本</option>
+	                    	<option value="7">多行文本</option>
 	                    	<option value="2">时间</option>
 	                    	<option value="3">图片</option>
 	                    	<option value="4">附件</option>
@@ -220,7 +225,8 @@
                      <label class="layui-form-label">标签类型</label>
                      <div class="layui-input-block">
                      	<select name="type" lay-verify="required">
-	                    	<option value="1" {if([$label->type]==1)}selected{/if}>文本</option>
+	                    	<option value="1" {if([$label->type]==1)}selected{/if}>单行文本</option>
+	                    	<option value="7" {if([$label->type]==7)}selected{/if}>多行文本</option>
 	                    	<option value="2" {if([$label->type]==2)}selected{/if}>时间</option>
 	                    	<option value="3" {if([$label->type]==3)}selected{/if}>图片</option>
 	                    	<option value="4" {if([$label->type]==4)}selected{/if}>附件</option>
