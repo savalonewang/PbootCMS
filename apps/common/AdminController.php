@@ -53,11 +53,7 @@ class AdminController extends Controller
         
         // POST表单提交校验
         if ($_POST && ! in_array(C, $nocheck) && session('formcheck') != post('formcheck')) {
-            if (is_ajax()) {
-                json(0, '表单提交校验失败！');
-            } else {
-                alert_back('表单提交校验失败！');
-            }
+            alert_back('表单提交校验失败！');
         }
         
         // 非上传接口提交后或页面首次加载时，生成页面验证码

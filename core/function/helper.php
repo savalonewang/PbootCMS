@@ -85,7 +85,11 @@ function success($string, $jump_url = null, $time = 2)
  */
 function alert($info)
 {
-    echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");</script>';
+    if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
+        Response::json(0, strip_tags($info));
+    } else {
+        echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");</script>';
+    }
 }
 
 /**
@@ -95,8 +99,12 @@ function alert($info)
  */
 function alert_back($info)
 {
-    echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");window.history.go(-1);</script>';
-    exit();
+    if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
+        Response::json(0, strip_tags($info));
+    } else {
+        echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");window.history.go(-1);</script>';
+        exit();
+    }
 }
 
 /**
@@ -121,11 +129,15 @@ function location($url)
  */
 function alert_location($info, $url)
 {
-    if ($url == '-1' && isset($_SERVER['HTTP_REFERER'])) {
-        $url = $_SERVER['HTTP_REFERER'];
+    if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
+        Response::json(0, strip_tags($info));
+    } else {
+        if ($url == '-1' && isset($_SERVER['HTTP_REFERER'])) {
+            $url = $_SERVER['HTTP_REFERER'];
+        }
+        echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");location.href="' . $url . '";</script>';
+        exit();
     }
-    echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");location.href="' . $url . '";</script>';
-    exit();
 }
 
 /**
@@ -135,8 +147,12 @@ function alert_location($info, $url)
  */
 function alert_close($info)
 {
-    echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");window.close();</script>';
-    exit();
+    if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
+        Response::json(0, strip_tags($info));
+    } else {
+        echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");window.close();</script>';
+        exit();
+    }
 }
 
 /**

@@ -970,7 +970,7 @@ class ParserController extends Controller
                 // 数据筛选
                 $where2 = array();
                 foreach ($_GET as $key => $value) {
-                    if (preg_match('/^ext_[\w]+$/', $key)) { // 其他字段不加入
+                    if (preg_match('/^ext_[\w-]+$/', $key)) { // 其他字段不加入
                         $where2[$key] = get($key, 'vars');
                     }
                 }
@@ -1154,7 +1154,7 @@ class ParserController extends Controller
                 $where2 = array();
                 if ($page) { // 只在执行了分页的列表应用筛选，规避列表页互相干扰问题
                     foreach ($_GET as $key => $value) {
-                        if (preg_match('/^ext_[\w]+$/', $key)) { // 其他字段不加入
+                        if (preg_match('/^ext_[\w-]+$/', $key)) { // 其他字段不加入
                             $where2[$key] = get($key, 'vars');
                         }
                     }
