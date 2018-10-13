@@ -1,18 +1,18 @@
-﻿{include file=head.html}
+﻿{include file=comm/head.html}
 
-{include file=top.html}
+{include file=comm/top.html}
 
 <div class="container pages">
-	<div class="text-right position mb-4">当前位置：{pboot:position separator='>'}</div>
+	{include file=comm/position.html}
 
 	{pboot:if({page:rows}>0)}
-    <h5 class="border-bottom border-info pb-2"><i class="fa fa-tag" aria-hidden="true"></i> 留言列表</h5>
-	 {/pboot:if}
+    	<h5 class="border-bottom border-info pb-2"><i class="fa fa-sliders" aria-hidden="true"></i> 留言记录</h5>
+	{/pboot:if}
 	 
 	<!-- 留言记录 -->
     {pboot:message num=2}
     <div class="media border-bottom pb-3 pt-3">
-	  <img class="mr-3" src="{pboot:sitepath}/static/images/logo.png" height="20">
+	  <img class="mr-3" src="{pboot:sitetplpath}/images/user.png" height="25">
 	  <div class="media-body">
 	    <h5 class="mt-0">[message:contacts]：</h5>
 	    <p>[message:content]</p>
@@ -23,7 +23,7 @@
 	    	<span class="badge badge-light text-secondary font-weight-normal">[message:askdate]</span>
 	    </p>
 	    <div class="media mt-3 border-top-dashed pt-3">
-	      <img class="mr-3" src="{pboot:sitepath}/static/images/logo.png" height="20">
+	      <img class="mr-3" src="{pboot:sitetplpath}/images/user.png" height="25">
 	      <div class="media-body">
 	        <h5 class="mt-0">管理员回复：</h5>
 	        <p>[message:recontent]</p>
@@ -36,7 +36,7 @@
 	
 	<!-- 分页 -->
  	{pboot:if({page:rows}>0)}
-	<nav aria-label="page navigation" class="mt-3 mb-5">
+	<nav aria-label="page navigation" class="my-4">
       <div class="pagination justify-content-center">
       	<a class="page-item page-link" href="{page:index}">首页</a>
         <a class="page-item page-link" href="{page:pre}">上一页</a>
@@ -90,4 +90,4 @@
     
 </div>
  
-{include file=foot.html}
+{include file=comm/foot.html}

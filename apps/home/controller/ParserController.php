@@ -197,6 +197,13 @@ class ParserController extends Controller
                 }
                 $params = $this->parserParam($matches[2][$i]);
                 switch ($matches[1][$i]) {
+                    case 'weixin':
+                        if (isset($data->weixin) && $data->weixin) {
+                            $content = str_replace($matches[0][$i], SITE_DIR . $data->weixin, $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], '', $content);
+                        }
+                        break;
                     default:
                         if (isset($data->{$matches[1][$i]})) {
                             $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data->{$matches[1][$i]}), $content);
@@ -895,7 +902,7 @@ class ParserController extends Controller
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize');
-                $order = 'date DESC';
+                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                 $filter = '';
                 $ispics = '';
                 $isico = '';
@@ -918,17 +925,23 @@ class ParserController extends Controller
                             switch ($value) {
                                 case 'date':
                                 case 'istop':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    break;
                                 case 'isrecommend':
+                                    $order = 'isrecommend DESC,istop DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    break;
                                 case 'isheadline':
+                                    $order = 'isheadline DESC,istop DESC,isrecommend DESC,sorting ASC,date DESC,id DESC';
+                                    break;
                                 case 'visits':
                                 case 'likes':
                                 case 'oppose':
-                                    $order = $value . ' DESC';
+                                case 'sorting':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $value . ' DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 default:
-                                    $order = $value;
+                                    $order = $value . ',sorting ASC,date DESC,id DESC';
                             }
-                            $order .= ",sorting ASC,id DESC";
                             break;
                         case 'filter':
                             $filter = $value;
@@ -1065,7 +1078,7 @@ class ParserController extends Controller
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $num = 10;
-                $order = 'date DESC';
+                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                 $scode = - 1;
                 $filter = '';
                 $page = 0; // 默认不执行分页
@@ -1093,17 +1106,23 @@ class ParserController extends Controller
                             switch ($value) {
                                 case 'date':
                                 case 'istop':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    break;
                                 case 'isrecommend':
+                                    $order = 'isrecommend DESC,istop DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    break;
                                 case 'isheadline':
+                                    $order = 'isheadline DESC,istop DESC,isrecommend DESC,sorting ASC,date DESC,id DESC';
+                                    break;
                                 case 'visits':
                                 case 'likes':
                                 case 'oppose':
-                                    $order = $value . ' DESC';
+                                case 'sorting':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $value . ' DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 default:
-                                    $order = $value;
+                                    $order = $value . ',sorting ASC,date DESC,id DESC';
                             }
-                            $order .= ",sorting ASC,id DESC";
                             break;
                         case 'filter':
                             $filter = $value;
@@ -1848,7 +1867,7 @@ class ParserController extends Controller
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize');
-                $order = 'date desc';
+                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                 $filter = '';
                 $fuzzy = true;
                 
@@ -1872,17 +1891,23 @@ class ParserController extends Controller
                             switch ($value) {
                                 case 'date':
                                 case 'istop':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    break;
                                 case 'isrecommend':
+                                    $order = 'isrecommend DESC,istop DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    break;
                                 case 'isheadline':
+                                    $order = 'isheadline DESC,istop DESC,isrecommend DESC,sorting ASC,date DESC,id DESC';
+                                    break;
                                 case 'visits':
                                 case 'likes':
                                 case 'oppose':
-                                    $order = $value . ' DESC';
+                                case 'sorting':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $value . ' DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 default:
-                                    $order = $value;
+                                    $order = $value . ',sorting ASC,date DESC,id DESC';
                             }
-                            $order .= ",sorting ASC,id DESC";
                             break;
                     }
                 }
@@ -2485,8 +2510,11 @@ class ParserController extends Controller
                 }
                 break;
             case 'content':
-                $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "' async='async'></script>";
-                $content = preg_replace('/(<\/body>)/i', $visits . "\n$1", $content);
+                if (! isset($addvisits)) {
+                    $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "' async='async'></script>";
+                    $content = preg_replace('/(<\/body>)/i', $visits . "\n$1", $content);
+                    $addvisits = true;
+                }
                 $content = str_replace($search, $this->adjustLabelData($params, $data->content), $content);
                 break;
             case 'keywords': // 如果内容关键字为空，则自动使用全局关键字

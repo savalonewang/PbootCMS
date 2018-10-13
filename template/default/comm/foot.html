@@ -1,33 +1,33 @@
 
-<div class="footer bg-light">
+<div class="footer mt-3 pt-5 border-top text-secondary bg-light">
 	<div class="container">
     	<div class="row pb-5">
             <div class="col-12 col-md-5">
             	<h5>{pboot:companyname}</h5>
-                <ul>
+                <ul class="lh-2">
                 	<li>营业执照：{pboot:companyblicense}  </li>
                     <li>备案号码：{pboot:siteicp} </li>
+                    <li>地址：{pboot:companyaddress} </li>
                 </ul>
             </div>
             <div class="col-12 col-md-5">
             	<div class="mt-4 d-block d-md-none"></div>
                 
             	<h5>联系我们</h5>
-                <ul>
-                	<li>地址：{pboot:companyaddress} </li>
+                <ul class="lh-2">
                     <li>电话：{pboot:companyphone} </li>
                     <li>邮箱：{pboot:companyemail} </li>
                     <li>Q&nbsp;&nbsp;Q：{pboot:companyqq} </li>
                 </ul>
             </div>
             <div class="col-12 col-md-2 text-center d-none d-md-block">
-            	{pboot:qrcode string={pboot:httpurl}{URL}} 
-                <p class="note">扫一扫手机访问</p>
+            	<p class="code">{pboot:qrcode string={pboot:httpurl}{URL}} </p>
+                <p class="small">扫一扫 手机访问</p>
             </div>
         </div>
 	</div>
-    <div class="border-top text-center py-3 d-none d-md-block">
-    	{pboot:sitecopyright} {pboot:runtime}
+    <div class="copyright border-top lh-3 text-center  d-none d-md-block">
+    	{pboot:sitecopyright}
     </div>
 </div>
 
@@ -103,7 +103,7 @@
 <script src="{pboot:sitetplpath}/js/popper.min.js"></script>
 <script src="{pboot:sitetplpath}/bootstrap/js/bootstrap.min.js"></script>
 <script src="{pboot:sitetplpath}/js/wow.min.js"></script>
-<script src="{pboot:sitetplpath}/js/aoyun.js?V1.2.2"></script>
+<script src="{pboot:sitetplpath}/js/aoyun.js?v=v1.2.2"></script>
 
 {pboot:sitestatistical}
 

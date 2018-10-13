@@ -1,64 +1,65 @@
-{include file=head.html}
+{include file=comm/head.html}
 
-{include file=top.html}
+{include file=comm/top.html}
 
 <div class="container pages">
-	<div class="text-right position mb-4">当前位置：{pboot:position separator='>'}</div>
+	{include file=comm/position.html}
     
     <div class="row">
-        	<div class="col-12 col-lg-6 mb-5">
-                <div class="view">
-                	<a class="arrow-left" href="#"></a>
-					<a class="arrow-right" href="#"></a>
-                    <div class="swiper-container">
-                        <div class="swiper-wrapper" >
-                        	<div class="swiper-slide">
-                                <img src="{content:ico}">
-                            </div>
-                            {pboot:pics num=10 id={content:id}}
-                            <div class="swiper-slide">
-                                <img src="[pics:src]">
-                            </div>
-                            {/pboot:pics}
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="preview mt-3">
-                    <a class="arrow-left" href="#"></a>
-                    <a class="arrow-right" href="#"></a>
-                    <div class="swiper-container" >
-                        <div class="swiper-wrapper">
-                        	<div class="swiper-slide active-nav swiper-slide-active">
-                                <img src="{content:ico}">
-                            </div>
-                            {pboot:pics num=10 id={content:id}}
-                            <div class="swiper-slide">
-                                <img src="[pics:src]">
-                            </div>
-                            {/pboot:pics}
-                        </div>
-                    </div>
-                </div>
-            </div>
+       	<div class="col-12 col-lg-6 mb-5">
+               <div class="view">
+               	<a class="arrow-left" href="#"></a>
+				<a class="arrow-right" href="#"></a>
+                   <div class="swiper-container">
+                       <div class="swiper-wrapper" >
+                       	   <div class="swiper-slide">
+                               <img src="{content:ico}">
+                           </div>
+                           {pboot:pics num=10 id={content:id}}
+                           <div class="swiper-slide">
+                               <img src="[pics:src]">
+                           </div>
+                           {/pboot:pics}
+                       </div>
+                   </div>
+               </div>
+               
+               <div class="preview mt-3">
+                   <a class="arrow-left" href="#"></a>
+                   <a class="arrow-right" href="#"></a>
+                   <div class="swiper-container" >
+                       <div class="swiper-wrapper">
+                       	<div class="swiper-slide active-nav swiper-slide-active">
+                               <img src="{content:ico}">
+                           </div>
+                           {pboot:pics num=10 id={content:id}}
+                           <div class="swiper-slide">
+                               <img src="[pics:src]">
+                           </div>
+                           {/pboot:pics}
+                       </div>
+                   </div>
+               </div>
+           </div>
+            
         	<div class="col-12 col-lg-6 mb-3 pr-3">
             	<h2 class="border-bottom pb-2">{content:title}</h2>
                 <div class="text-secondary my-3 border-bottom-dashed lh-3">
-                      上架时间：{content:date style=Y-m-d}
+                      	上架时间：{content:date style=Y-m-d}
                 </div>
                 <div class="text-secondary my-3 border-bottom-dashed lh-3">
-                      浏览次数：{content:visits}
-                </div>
-                
-                <div class="text-secondary my-3 border-bottom-dashed lh-3">
-                      产品类型：{content:ext_type}
+                      	浏览次数：{content:visits}
                 </div>
                 
                 <div class="text-secondary my-3 border-bottom-dashed lh-3">
-                      产品颜色：{content:ext_color}
+                      	产品类型：{content:ext_type}
+                </div>
+                
+                <div class="text-secondary my-3 border-bottom-dashed lh-3">
+                     	 产品颜色：{content:ext_color}
                 </div>
                  <div class="text-secondary my-3 border-bottom-dashed lh-3">
-                      产品价格：￥{content:ext_price}
+                     	 产品价格：￥{content:ext_price}
                 </div>
                 <div class="my-3 lh-3">
                      <a href="{pboot:siteindex}/about/11.html" class="btn btn-danger">马上咨询</a>
@@ -69,7 +70,7 @@
       <h5 class="border-bottom border-info pb-2 mb-2"><i class="fa fa-sliders" aria-hidden="true"></i> 产品详情</h5>
       <div class="content">{content:content}</div>
       
-      <div class="text-secondary mb-5">
+      <div class="text-secondary lh-2">
 			<p>上一篇：{content:precontent}</p>
 			<p>下一篇：{content:nextcontent}</p>
       </div>
@@ -128,4 +129,4 @@ function updateNavPosition() {
 	}
 </script>
 
-{include file=foot.html}
+{include file=comm/foot.html}

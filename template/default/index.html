@@ -1,4 +1,4 @@
-{include file=head.html}
+{include file=comm/head.html}
 
 <!-- 幻灯片 -->
 <div class="swiper-container">
@@ -10,8 +10,10 @@
         		</a>
         		<div class="container">
 			    	<div class="position-absolute text-light" style="top:20%;">
+						<!-- PC -->
 						<h1 class="d-none d-md-block wow slideInUp">[slide:title]</h1>
 					 	<h4 class="d-none d-md-block wow slideInUp">[slide:subtitle]</h4>
+					 	<!-- M -->
 					 	<h4 class="d-block d-md-none wow slideInUp">[slide:title]</h4>
 					 	<h6 class="d-block d-md-none wow slideInUp">[slide:subtitle]</h6>
 					</div>
@@ -27,31 +29,39 @@
 <!--产品推荐-->
 <div class="bg-white py-5">
     <div class="container">
-      <div class="title text-success wow fadeInDown">产品推荐</div>
-      <div class="subtitle text-secondary wow fadeInUp" data-wow-delay="1s">-服务创造价值、存在造就未来-</div>
+    
+      {pboot:sort scode=5}
+      	<div class="title text-success wow fadeInDown">[sort:name]</div>
+      	<div class="subtitle text-secondary wow fadeInUp" data-wow-delay="1s">-[sort:subname]-</div>
+      {/pboot:sort}
+      
       <div class="row">
        {pboot:list scode=5 num=4 order=date}
         <div class="col-12 col-sm-6 col-lg-3 wow zoomIn" data-wow-delay="[list:i]00ms" data-wow-duration="1s">
               <div class="card">
-                  <div class="card-img"><a href="[list:link]"><img class="card-img-top" src="[list:ico]" alt="[list:title]"></a></div>
+                  <div class="card-img-150"><a href="[list:link]"><img class="card-img-top" src="[list:ico]" alt="[list:title]"></a></div>
                   <div class="card-body">
-                    <h5 class="card-title"><a href="[list:link]">[list:title len=20]</a></h5>
+                    <h5 class="card-title"><a href="[list:link]">[list:title len=12]</a></h5>
                     <p class="card-text">[list:content drophtml=1 len=50]</p>
                   </div>
                </div>
          </div>
         {/pboot:list}
       </div>
+      
     </div>
 </div>
 
 <!-- 关于我们 -->
 <div class="bg-light py-5">
     <div class="container">
-      <div class="title text-info wow fadeInDown">关于我们</div>
-      <div class="subtitle text-secondary wow fadeInUp" data-wow-delay="1s">-网站建设「一站式」服务商-</div>
+      {pboot:sort scode=1}
+      	<div class="title text-info wow fadeInDown">[sort:name]</div>
+      	<div class="subtitle text-secondary wow fadeInUp" data-wow-delay="1s">-[sort:subname]-</div>
+      {/pboot:sort}
+      
       {pboot:content id=1}
-      	<div class="row text-secondary mb-5 pr-3 pl-3 wow fadeInDown" data-wow-delay="500ms" style="line-height:2;text-indent:30px;">
+      	<div class="row text-secondary mb-5 px-3 lh-2 wow fadeInDown" data-wow-delay="500ms" style="text-indent:30px;">
             [content:content drophtml=1 len=300]
       	</div>
      	<div class="text-center wow fadeInDown" data-wow-delay="1s"><h4><a href="[content:link]" class="text-secondary">查看更多</a></h4></div>
@@ -60,34 +70,26 @@
 </div>
 
 <!-- 新闻动态 -->
-<div class="bg-white py-5">
+<div class="bg-white  pb-5 pt-5">
     <div class="container">
-      <div class="title text-warning wow fadeInDown">新闻动态</div>
-      <div class="subtitle text-secondary wow fadeInUp" data-wow-delay="1s" >-了解最新公司动态及行业资讯-</div>
+      {pboot:sort scode=2}
+     	<div class="title text-warning wow fadeInDown">[sort:name]</div>
+      	<div class="subtitle text-secondary wow fadeInUp" data-wow-delay="1s" >— [sort:subname] —</div>
+      {/pboot:sort}
+      
       <div class="row">
-      	<div class="col-12 col-lg-6 index-card-l mb-5">
-        	{pboot:list scode=2 num=1 order=date istop=1}
-        		<div class="news-img wow bounceInLeft" data-wow-delay="200ms"  data-wow-duration="2s">
-                	<a href="[list:link]"><img src="[list:ico]"  width="100%" alt="[list:title]"></a>
+      	{pboot:list scode=2 num=4 order=date}
+            <div class="col-12 col-lg-6 mb-3 wow fadeInUp" data-wow-delay="500ms">
+                <div class="media mb-3">
+                  <div class="media-body">
+                     <h5><a href="[list:link]" title="[list:title]">[list:title len=20]</a></h5>
+                     <p><a href="[list:link]" class="text-secondary lh-2">[list:content drophtml=1 len=60] [list:date style=Y-m-d]</a></p>
+                  </div>
                 </div>
-                <h5 class="mt-3 wow bounceInLeft" data-wow-delay="400ms"  data-wow-duration="2s"><a href="[list:link]">[list:title len=30]</a></h5>
-                <div class="text-secondary lh-2 wow bounceInLeft" data-wow-delay="400ms"  data-wow-duration="2s"><a href="[list:link]">[list:content drophtml=1 len=120] 【[list:date style=Y-m-d]】</a></div>
-        	{/pboot:list}
-        </div>
-        
-        <div class="col-12 col-lg-6 index-card-r"> 
-        	{pboot:list scode=2 num=3 order=date istop=0}
-            <div class="media mb-3 wow bounceInRight" data-wow-delay="[list:i]00ms" data-wow-duration="2s">
-              <a href="[list:link]"> <img class="mr-3" src="[list:ico]" width="150" alt="[list:title]"></a>
-              <div class="media-body">
-                 <h5><a href="[list:link]">[list:title len=15]</a></h5>
-                 <p><a href="[list:link]" class="text-secondary lh-2">[list:content drophtml=1 len=40]</a></p>
-                 <p>[list:date style=Y-m-d]</p>
-              </div>
             </div>
-        	{/pboot:list}
-         </div>
+        {/pboot:list}
       </div>
+      <div class="text-center wow fadeInDown" data-wow-delay="1s"><h4><a href="{pboot:siteindex}/technology.html" class="text-secondary">查看更多</a></h4></div>
     </div>
 </div>
 
@@ -119,5 +121,5 @@
   })        
 </script>
   
-{include file=foot.html}
+{include file=comm/foot.html}
 

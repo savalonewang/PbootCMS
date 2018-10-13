@@ -1,32 +1,17 @@
-{include file=head.html}
+{include file=comm/head.html}
 
-{include file=top.html}
+{include file=comm/top.html}
 
 <div class="container pages">    
 
-  	 <div class="text-right position mb-4">当前位置：{pboot:position separator='>'}</div>
+  	 {include file=comm/position.html}
   	 
-  	  <!-- 分类导航 -->
-      <div class="sonsort mb-4">
-       	{pboot:if('{sort:scode}'=='{sort:tcode}')}
-			<a href="{sort:toplink}" class="btn btn-info">全部</a>
-        {else}
-           	<a href="{sort:toplink}" class="btn btn-light">全部</a>
-        {/pboot:if}
-
-      	{pboot:nav num=10 parent={sort:tcode}}
-        	{pboot:if('[nav:scode]'=='{sort:scode}')}
-        		<a href="[nav:link]" class="btn btn-info">[nav:name]</a>
-            {else}
-            	<a href="[nav:link]" class="btn btn-light">[nav:name]</a>
-            {/pboot:if}
-        {/pboot:nav}
-     </div>
+  	 {include file=comm/sortnav.html}
 
 	 <!-- 列表内容 -->
      <ul>
         {pboot:list num=10 order=date}
-            <li class="lh-3 border-bottom-dashed">
+        	<li class="lh-3 border-bottom-dashed">
                 <i class="fa fa-gg"></i>
                 <a href="[list:link]">
                 	<span class="d-none d-md-inline">[list:title len=30]</span><!-- PC端 -->
@@ -45,21 +30,9 @@
             </li>
         {/pboot:list}
     </ul>
-
- 	<!-- 分页 -->
- 	{pboot:if({page:rows}>0)}
-    <nav aria-label="page navigation" class="mt-3 mb-5">
-      <div class="pagination justify-content-center">
-      	<a class="page-item page-link" href="{page:index}">首页</a>
-        <a class="page-item page-link" href="{page:pre}">上一页</a>
-        {page:numbar}<!-- 数字条，小屏幕时自动隐藏-->
-        <a class="page-item page-link" href="{page:next}">下一页</a>
-        <a class="page-item page-link" href="{page:last}">尾页</a>
-      </div>
-    </nav>	
-    {else}
-    	<div>本分类下无任何数据！</div>
-    {/pboot:if}
+    
+	{include file=comm/page.html}
+ 	
 </div>
 
-{include file=foot.html}
+{include file=comm/foot.html}

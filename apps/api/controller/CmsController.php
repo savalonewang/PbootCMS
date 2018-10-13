@@ -170,20 +170,28 @@ class CmsController extends Controller
         $num = get('num', 'int') ?: $this->config('pagesize');
         $order = get('order');
         if (! preg_match('/^[\w-,\s]+$/', $order)) {
-            $order = 'date';
+            $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
         } else {
             switch ($order) {
                 case 'date':
                 case 'istop':
+                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                    break;
                 case 'isrecommend':
+                    $order = 'isrecommend DESC,istop DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                    break;
                 case 'isheadline':
+                    $order = 'isheadline DESC,istop DESC,isrecommend DESC,sorting ASC,date DESC,id DESC';
+                    break;
                 case 'visits':
                 case 'likes':
                 case 'oppose':
-                    $order = $order . ' DESC';
+                case 'sorting':
+                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $order . ' DESC,sorting ASC,date DESC,id DESC';
                     break;
+                default:
+                    $order = $order . ',sorting ASC,date DESC,id DESC';
             }
-            $order .= ",sorting ASC,id DESC";
         }
         
         // 获取主要参数
