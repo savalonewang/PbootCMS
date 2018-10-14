@@ -925,6 +925,7 @@ class ParserController extends Controller
                             switch ($value) {
                                 case 'date':
                                 case 'istop':
+                                case 'sorting':
                                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 case 'isrecommend':
@@ -936,7 +937,6 @@ class ParserController extends Controller
                                 case 'visits':
                                 case 'likes':
                                 case 'oppose':
-                                case 'sorting':
                                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $value . ' DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 default:
@@ -1106,6 +1106,7 @@ class ParserController extends Controller
                             switch ($value) {
                                 case 'date':
                                 case 'istop':
+                                case 'sorting':
                                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 case 'isrecommend':
@@ -1117,7 +1118,6 @@ class ParserController extends Controller
                                 case 'visits':
                                 case 'likes':
                                 case 'oppose':
-                                case 'sorting':
                                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $value . ' DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 default:
@@ -1891,6 +1891,7 @@ class ParserController extends Controller
                             switch ($value) {
                                 case 'date':
                                 case 'istop':
+                                case 'sorting':
                                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 case 'isrecommend':
@@ -1902,7 +1903,6 @@ class ParserController extends Controller
                                 case 'visits':
                                 case 'likes':
                                 case 'oppose':
-                                case 'sorting':
                                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $value . ' DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 default:
