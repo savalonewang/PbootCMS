@@ -117,7 +117,10 @@ function path_list($path)
  */
 function path_delete($path, $delDir = false)
 {
-    $result = true;
+    $result = true; // 对于空目录直接返回true状态
+    if (! file_exists($path)) {
+        return $result;
+    }
     if (is_dir($path)) {
         if (! ! $dirs = scandir($path)) {
             foreach ($dirs as $value) {
