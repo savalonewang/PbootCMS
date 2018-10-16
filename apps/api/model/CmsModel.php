@@ -418,6 +418,55 @@ class CmsModel extends Model
         return $result;
     }
 
+    // 单页详情
+    public function getAbout($acode, $scode)
+    {
+        $field = array(
+            'a.*',
+            'b.name as sortname',
+            'c.name as subsortname',
+            'd.type',
+            'e.*'
+        );
+        $join = array(
+            array(
+                'ay_content_sort b',
+                'a.scode=b.scode',
+                'LEFT'
+            ),
+            array(
+                'ay_content_sort c',
+                'a.subscode=c.scode',
+                'LEFT'
+            ),
+            array(
+                'ay_model d',
+                'b.mcode=d.mcode',
+                'LEFT'
+            ),
+            array(
+                'ay_content_ext e',
+                'a.id=e.contentid',
+                'LEFT'
+            )
+        );
+        $result = parent::table('ay_content a')->field($field)
+            ->where("a.scode='$scode' OR b.filename='$scode'")
+            ->where("a.acode='" . $acode . "'")
+            ->where('a.status=1')
+            ->join($join)
+            ->order('id DESC')
+            ->decode()
+            ->find();
+        if ($result) {
+            $data2 = array(
+                'visits' => '+=1'
+            );
+            parent::table('ay_content')->where("id={$result->id}")->update($data2);
+        }
+        return $result;
+    }
+
     // 指定内容多图
     public function getContentPics($acode, $id)
     {
