@@ -69,7 +69,7 @@ class IndexController extends Controller
         }
         $this->assign('dbsecurity', $dbsecurity);
         $this->assign('server', get_server_info());
-        $this->assign('branch', $this->config('upgrade_branch') ?: 1);
+        $this->assign('branch', $this->config('upgrade_branch') ?: '1.X');
         $this->display('system/home.html');
     }
 
