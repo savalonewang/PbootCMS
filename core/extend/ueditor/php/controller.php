@@ -8,10 +8,7 @@ require '../../../init.php';
 error_reporting(0);
 
 // 启动会话
-if (! ini_get('session.auto_start') && ! isset($_SESSION)) {
-    session_start();
-}
-if (! $_SESSION['sid']) {
+if (! session('sid')) {
     die('权限不足');
 }
 

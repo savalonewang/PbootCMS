@@ -12,11 +12,6 @@ class HomeController extends Controller
         // 自动缓存基础信息
         cache_config();
         
-        // 设置默认语言
-        if (! isset($_SESSION['lg'])) {
-            session('lg', $this->config('lgs.0.acode'));
-        }
-        
         // 手机自适应主题
         if ($this->config('open_wap') && (is_mobile() || $this->config('wap_domain') == get_http_host())) {
             $this->setTheme($this->config('theme') . '/wap');

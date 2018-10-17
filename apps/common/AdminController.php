@@ -57,9 +57,8 @@ class AdminController extends Controller
         }
         
         // 非上传接口提交后或页面首次加载时，生成页面验证码
-        if (($_POST || ! isset($_SESSION['formcheck'])) && ! (C == 'Index' && F == 'upload') && ! (C == 'Index' && F == 'login')) {
-            $uniqid = get_uniqid();
-            session('formcheck', $uniqid);
+        if (($_POST || ! issetSession('formcheck')) && ! (C == 'Index' && F == 'upload') && ! (C == 'Index' && F == 'login')) {
+            session('formcheck', get_uniqid());
         }
         
         $this->assign('formcheck', session('formcheck')); // 注入formcheck模板变量

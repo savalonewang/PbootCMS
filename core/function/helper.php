@@ -271,7 +271,7 @@ function filter($varname, $condition)
                 $data = @$_COOKIE[$varname];
                 break;
             case 'session':
-                $data = @$_SESSION[$varname];
+                $data = session($varname);
                 break;
             case 'both':
                 $data = @$_POST[$varname] ?: @$_GET[$varname];
@@ -552,6 +552,10 @@ function cookie($name, $value = null, $expire = null, $path = null)
  */
 function session($name, $value = null)
 {
+    if (! isset($_SESSION)) {
+        session_start(); // 自动启动会话
+    }
+    
     if (! is_null($value)) {
         if (isset($_SESSION[$name])) {
             if ($_SESSION[$name] != $value) {
@@ -598,6 +602,15 @@ function session($name, $value = null)
             }
         }
     }
+}
+
+// 检查会话参数是否存在
+function issetSession($name)
+{
+    if (! isset($_SESSION)) {
+        session_start(); // 自动启动会话
+    }
+    return isset($_SESSION[$name]);
 }
 
 /**

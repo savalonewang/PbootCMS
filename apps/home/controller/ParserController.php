@@ -22,6 +22,9 @@ class ParserController extends Controller
     public function __construct()
     {
         $this->model = new ParserModel();
+        if (! issetSession('lg')) {
+            session('lg', $this->config('lgs.0.acode'));
+        }
     }
 
     public function _empty()

@@ -65,7 +65,7 @@ class MessageController extends Controller
             
             // 设置额外数据
             if ($data) {
-                $data['acode'] = session('lg');
+                $data['acode'] = session('lg') ?: $this->config('lgs.0.acode');
                 $data['user_ip'] = ip2long(get_user_ip());
                 $data['user_os'] = get_user_os();
                 $data['user_bs'] = get_user_bs();

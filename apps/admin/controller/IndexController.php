@@ -54,7 +54,7 @@ class IndexController extends Controller
         }
         
         // 删除修改后老数据库（上一步无法直接删除）
-        if (isset($_SESSION['deldb'])) {
+        if (issetSession('deldb')) {
             @unlink(ROOT_PATH . session('deldb'));
             unset($_SESSION['deldb']);
         }

@@ -101,47 +101,10 @@ class Basic
                 if (! check_dir($save_path, true))
                     error('设置的会话路径目录创建失败！');
                 ini_set("session.save_handler", "files");
-                ini_set("session.save_path", '2;' . $save_path);
+                $depth = 2;
+                ini_set("session.save_path", $depth . ';' . $save_path);
                 if (! is_dir($save_path . '/0') || ! is_dir($save_path . '/v')) {
-                    $char = array(
-                        0,
-                        1,
-                        2,
-                        3,
-                        4,
-                        5,
-                        6,
-                        7,
-                        8,
-                        9,
-                        'a',
-                        'b',
-                        'c',
-                        'd',
-                        'e',
-                        'f',
-                        'g',
-                        'h',
-                        'i',
-                        'j',
-                        'k',
-                        'l',
-                        'm',
-                        'n',
-                        'o',
-                        'p',
-                        'q',
-                        'r',
-                        's',
-                        't',
-                        'u',
-                        'v'
-                    );
-                    foreach ($char as $value) {
-                        foreach ($char as $value2) {
-                            check_dir($save_path . $value . '/' . $value2, true);
-                        }
-                    }
+                    self::createSessionDir($save_path, $depth);
                 }
                 break;
         }
@@ -165,6 +128,55 @@ class Basic
             self::$models[$name] = new $class_name();
         }
         return self::$models[$name];
+    }
+
+    // 创建会话层级目录
+    private static function createSessionDir($path, $depth)
+    {
+        if ($depth < 1) {
+            return;
+        } else {
+            $depth --;
+        }
+        $char = array(
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'o',
+            'p',
+            'q',
+            'r',
+            's',
+            't',
+            'u',
+            'v'
+        );
+        
+        foreach ($char as $value) {
+            check_dir($path . '/' . $value, true);
+            self::createSessionDir($path . '/' . $value, $depth);
+        }
     }
 }
 
