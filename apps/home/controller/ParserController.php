@@ -2118,7 +2118,7 @@ class ParserController extends Controller
                 // 带有函数的条件语句进行安全校验
                 if (preg_match_all('/([\w]+)([\s]+)?\(/i', $matches[1][$i], $matches2)) {
                     foreach ($matches2[1] as $value) {
-                        if (function_exists($value) && ! in_array($value, $white_fun)) {
+                        if ((function_exists($value) || $value == 'eval') && ! in_array($value, $white_fun)) {
                             $danger = true;
                             break;
                         }

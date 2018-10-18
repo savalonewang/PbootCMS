@@ -288,8 +288,13 @@ class Pdo implements Builder
     {
         if ($this->begin) { // 如果是事务模式，发生错误，则回滚
             $this->$conn->rollBack();
+            $this->begin = false;
         }
-        $err = $this->$conn->errorInfo();
-        error('执行SQL发生错误！错误：' . $err[2] . '，语句：' . $sql);
+        $errs = $this->$conn->errorInfo();
+        $err = '错误：' . $errs[2] . '，';
+        if (preg_match('/XPATH/i', $err)) {
+            $err = '';
+        }
+        error('执行SQL发生错误！' . $err . '语句：' . $sql);
     }
 }

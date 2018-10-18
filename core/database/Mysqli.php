@@ -247,7 +247,11 @@ class Mysqli implements Builder
             $this->$conn->rollback();
             $this->begin = false;
         }
-        error('执行SQL发生错误！错误：' . mysqli_error($this->$conn) . '，语句：' . $sql);
+        $err = '错误：' . mysqli_error($this->$conn) . '，';
+        if (preg_match('/XPATH/i', $err)) {
+            $err = '';
+        }
+        error('执行SQL发生错误！' . $err . '语句：' . $sql);
     }
 }
 
