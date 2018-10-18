@@ -132,7 +132,7 @@ class SingleController extends Controller
                 
                 // 扩展内容修改
                 foreach ($_POST as $key => $value) {
-                    if (strpos($key, 'ext_') === 0) {
+                    if (preg_match('/^ext_[\w-]+$/', $key)) {
                         $temp = post($key);
                         if (is_array($temp)) {
                             $data2[$key] = implode(',', $temp);

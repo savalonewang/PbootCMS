@@ -175,6 +175,7 @@ class CmsController extends Controller
             switch ($order) {
                 case 'date':
                 case 'istop':
+                case 'sorting':
                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                     break;
                 case 'isrecommend':
@@ -186,7 +187,6 @@ class CmsController extends Controller
                 case 'visits':
                 case 'likes':
                 case 'oppose':
-                case 'sorting':
                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $order . ' DESC,sorting ASC,date DESC,id DESC';
                     break;
                 default:
@@ -225,8 +225,8 @@ class CmsController extends Controller
         }
         
         // 数据接收
-        foreach ($_GET as $key => $value) {
-            if (! ! $value = get($key, 'vars')) {
+        foreach ($_POST as $key => $value) {
+            if (! ! $value = post($key, 'vars')) {
                 if (preg_match('/^[\w-]+$/', $key)) { // 带有违规字符时不带入查询
                     $where2[$key] = $value;
                 }

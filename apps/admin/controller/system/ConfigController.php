@@ -29,6 +29,9 @@ class ConfigController extends Controller
         // 修改参数配置
         if ($_POST) {
             foreach ($_POST as $key => $value) {
+                if (! preg_match('/^[\w-]+$/', $key)) {
+                    continue;
+                }
                 $config = array(
                     'debug',
                     'sn',
@@ -91,6 +94,9 @@ class ConfigController extends Controller
         // 修改参数配置
         if ($_POST) {
             foreach ($_POST as $key => $value) {
+                if (! preg_match('/^[\w-]+$/', $key)) {
+                    continue;
+                }
                 $this->modDbConfig($key);
             }
             $this->log('修改邮件发送配置成功！');
