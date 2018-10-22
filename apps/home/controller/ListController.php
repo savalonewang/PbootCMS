@@ -41,7 +41,15 @@ class ListController extends Controller
                     error('请到后台设置分类栏目列表页模板！');
                 }
             } else {
-                error('您访问的分类不存在，请核对后再试！');
+                header('HTTP/1.1 404 Not Found');
+                header('status: 404 Not Found');
+                $file_404 = ROOT_PATH . '/404.html';
+                if (file_exists($file_404)) {
+                    require $file_404;
+                    exit();
+                } else {
+                    error('您访问的分类不存在，请核对后再试！');
+                }
             }
         } else {
             error('您访问的地址有误，必须传递栏目scode参数！');

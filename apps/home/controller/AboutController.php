@@ -31,7 +31,15 @@ class AboutController extends Controller
         if (! ! $scode = get('scode', 'vars')) {
             // 读取数据
             if (! $data = $this->model->getAbout($scode)) {
-                error('您访问的内容不存在，请核对后重试！');
+                header('HTTP/1.1 404 Not Found');
+                header('status: 404 Not Found');
+                $file_404 = ROOT_PATH . '/404.html';
+                if (file_exists($file_404)) {
+                    require $file_404;
+                    exit();
+                } else {
+                    error('您访问的内容不存在，请核对后重试！');
+                }
             }
             // 读取模板
             if (! ! $sort = $this->model->getSort($data->scode)) {
