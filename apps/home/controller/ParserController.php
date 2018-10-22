@@ -1848,7 +1848,7 @@ class ParserController extends Controller
                 if (! $string) { // 无内容不解析
                     continue;
                 }
-                $content = str_replace($matches[0][$i], '<img src="' . CORE_DIR . '/qrcode.php?string=' . $string . '" class="qrcode">', $content);
+                $content = str_replace($matches[0][$i], '<img src="' . CORE_DIR . '/qrcode.php?string=' . $string . '" class="qrcode" alt="二维码">', $content);
             }
         }
         return $content;
