@@ -40,14 +40,14 @@ class SitemapController extends Controller
                 } else {
                     $link = url('/home/about/index/scode/' . $value->scode);
                 }
-                $str .= $this->makeNode($link, date('Y-m-d'));
+                $str .= $this->makeNode($link, date('Y-m-d'), 0.8);
             } else {
                 if ($value->filename) {
                     $link = url('/home/list/index/scode/' . $value->filename);
                 } else {
                     $link = url('/home/list/index/scode/' . $value->scode);
                 }
-                $str .= $this->makeNode($link, date('Y-m-d'));
+                $str .= $this->makeNode($link, date('Y-m-d'), 0.8);
                 $contents = $this->model->getList($value->scode);
                 foreach ($contents as $value2) {
                     if ($value2->outlink) { // 外链
@@ -57,7 +57,7 @@ class SitemapController extends Controller
                     } else {
                         $link = url('/home/content/index/id/' . $value2->id);
                     }
-                    $str .= $this->makeNode($link, date('Y-m-d', strtotime($value2->date)));
+                    $str .= $this->makeNode($link, date('Y-m-d'), 0.6);
                 }
             }
         }
@@ -65,7 +65,7 @@ class SitemapController extends Controller
     }
 
     // 生成结点信息
-    private function makeNode($link, $date, $priority = 0.8)
+    private function makeNode($link, $date, $priority = 0.6)
     {
         $node = '
 <url>
