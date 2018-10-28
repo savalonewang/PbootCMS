@@ -336,6 +336,9 @@ class ParserController extends Controller
                                         $one_html = str_replace($matches2[0][$j], 0, $one_html);
                                     }
                                     break;
+                                case 'rows':
+                                    $one_html = str_replace($matches2[0][$j], $this->model->getSortRows($value['scode']), $one_html);
+                                    break;
                                 case 'ico':
                                     if ($value['ico']) {
                                         $one_html = str_replace($matches2[0][$j], SITE_DIR . $value['ico'], $one_html);
@@ -538,6 +541,21 @@ class ParserController extends Controller
                         }
                         $content = str_replace($matches[0][$i], $parentlink, $content);
                         break;
+                    case 'toprows':
+                        if (! isset($tcode))
+                            $tcode = $this->model->getSortTopScode($sort->scode);
+                        $content = str_replace($matches[0][$i], $this->model->getSortRows($tcode), $content);
+                        break;
+                    case 'parentrows':
+                        if ($sort->pcode == 0) {
+                            $content = str_replace($matches[0][$i], $this->model->getSortRows($sort->scode), $content);
+                        } else {
+                            $content = str_replace($matches[0][$i], $this->model->getSortRows($sort->pcode), $content);
+                        }
+                        break;
+                    case 'rows':
+                        $content = str_replace($matches[0][$i], $this->model->getSortRows($sort->scode), $content);
+                        break;
                     case 'ico':
                         if ($sort->ico) {
                             $content = str_replace($matches[0][$i], SITE_DIR . $sort->ico, $content);
@@ -717,6 +735,9 @@ class ParserController extends Controller
                                 } else {
                                     $one_html = str_replace($matches2[0][$j], '', $one_html);
                                 }
+                                break;
+                            case 'rows':
+                                $one_html = str_replace($matches2[0][$j], $this->model->getSortRows($value->scode), $one_html); // 获取分类包含子类的内容数量
                                 break;
                             default:
                                 if (isset($value->{$matches2[1][$j]})) {

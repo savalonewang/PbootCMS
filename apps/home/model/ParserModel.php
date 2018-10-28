@@ -127,6 +127,34 @@ class ParserModel extends Model
             ->select();
     }
 
+    // 指定分类数量
+    public function getSortRows($scode)
+    {
+        $this->scodes = array(); // 先清空
+                                 
+        // 获取多分类子类
+        $arr = explode(',', $scode);
+        foreach ($arr as $value) {
+            $scodes = $this->getSubScodes(trim($value));
+        }
+        
+        // 拼接条件
+        $where1 = array(
+            "scode in (" . implode_quot(',', $scodes) . ")",
+            "subscode='$scode'"
+        );
+        $where2 = array(
+            "acode='" . session('lg') . "'",
+            'status=1',
+            "date<'" . date('Y-m-d H:i:s') . "'"
+        );
+        
+        $result = parent::table('ay_content')->where($where1, 'OR')
+            ->where($where2)
+            ->column('id');
+        return count($result);
+    }
+
     // 分类栏目列表关系树
     public function getSortsTree()
     {
