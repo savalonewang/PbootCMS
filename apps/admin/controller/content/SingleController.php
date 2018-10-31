@@ -122,7 +122,7 @@ class SingleController extends Controller
                 'date' => $date,
                 'enclosure' => $enclosure,
                 'keywords' => $keywords,
-                'description' => $description,
+                'description' => clear_html_blank($description),
                 'status' => $status,
                 'update_user' => session('username')
             );
