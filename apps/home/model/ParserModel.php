@@ -281,8 +281,8 @@ class ParserModel extends Model
         return parent::table('ay_extfield')->where("name='$field'")->value('value');
     }
 
-    // 列表内容
-    public function getList($scode, $num, $order, $filter = array(), $where = array(), $fuzzy = true)
+    // 列表内容,带分页
+    public function getLists($scode, $num, $order, $filter = array(), $tags = array(), $select = array(), $fuzzy = true)
     {
         $fields = array(
             'a.*',
@@ -291,6 +291,7 @@ class ParserModel extends Model
             'c.name as subsortname',
             'c.filename as subfilename',
             'd.type',
+            'd.name as modelname',
             'e.*'
         );
         $join = array(
@@ -316,22 +317,22 @@ class ParserModel extends Model
             )
         );
         
-        $where1 = '';
+        $scode_arr = array();
         if ($scode) {
             // 获取所有子类分类编码
             $this->scodes = array(); // 先清空
-            $arr = explode(',', $scode);
+            $arr = explode(',', $scode); // 传递有多个分类时进行遍历
             foreach ($arr as $value) {
                 $scodes = $this->getSubScodes(trim($value));
             }
             // 拼接条件
-            $where1 = array(
+            $scode_arr = array(
                 "a.scode in (" . implode_quot(',', $scodes) . ")",
                 "a.subscode='$scode'"
             );
         }
         
-        $where2 = array(
+        $where = array(
             "a.acode='" . session('lg') . "'",
             'a.status=1',
             'd.type=2',
@@ -340,10 +341,11 @@ class ParserModel extends Model
         
         // 筛选条件支持模糊匹配
         return parent::table('ay_content a')->field($fields)
-            ->where($where1, 'OR')
-            ->where($where2)
-            ->where($where, 'AND', 'AND', $fuzzy)
-            ->where($filter, 'OR', 'AND')
+            ->where($scode_arr, 'OR')
+            ->where($where)
+            ->where($select, 'AND', 'AND', $fuzzy)
+            ->where($filter, 'OR')
+            ->where($tags, 'OR')
             ->join($join)
             ->order($order)
             ->page(1, $num)
@@ -351,8 +353,8 @@ class ParserModel extends Model
             ->select();
     }
 
-    // 指定列表内容，不分页
-    public function getSpecifyList($scode, $num, $order, $filter = array(), $where = array(), $fuzzy = true)
+    // 列表内容，不带分页
+    public function getList($scode, $num, $order, $filter = array(), $tags = array(), $select = array(), $fuzzy = true)
     {
         $fields = array(
             'a.*',
@@ -361,6 +363,7 @@ class ParserModel extends Model
             'c.name as subsortname',
             'c.filename as subfilename',
             'd.type',
+            'd.name as modelname',
             'e.*'
         );
         $join = array(
@@ -385,31 +388,36 @@ class ParserModel extends Model
                 'LEFT'
             )
         );
-        $this->scodes = array(); // 先清空
-                                 
-        // 获取多分类子类
-        $arr = explode(',', $scode);
-        foreach ($arr as $value) {
-            $scodes = $this->getSubScodes(trim($value));
+        
+        $scode_arr = array();
+        if ($scode) {
+            // 获取所有子类分类编码
+            $this->scodes = array(); // 先清空
+            $arr = explode(',', $scode); // 传递有多个分类时进行遍历
+            foreach ($arr as $value) {
+                $scodes = $this->getSubScodes(trim($value));
+            }
+            // 拼接条件
+            $scode_arr = array(
+                "a.scode in (" . implode_quot(',', $scodes) . ")",
+                "a.subscode='$scode'"
+            );
         }
         
-        // 拼接条件
-        $where1 = array(
-            "a.scode in (" . implode_quot(',', $scodes) . ")",
-            "a.subscode='$scode'"
-        );
-        $where2 = array(
+        $where = array(
             "a.acode='" . session('lg') . "'",
             'a.status=1',
             'd.type=2',
             "a.date<'" . date('Y-m-d H:i:s') . "'"
         );
         
+        // 筛选条件支持模糊匹配
         return parent::table('ay_content a')->field($fields)
-            ->where($where1, 'OR')
-            ->where($where2)
-            ->where($where, 'AND', 'AND', $fuzzy)
-            ->where($filter, 'OR', 'AND')
+            ->where($scode_arr, 'OR')
+            ->where($where)
+            ->where($select, 'AND', 'AND', $fuzzy)
+            ->where($filter, 'OR')
+            ->where($tags, 'OR')
             ->join($join)
             ->order($order)
             ->limit($num)
@@ -427,6 +435,7 @@ class ParserModel extends Model
             'c.name as subsortname',
             'c.filename as subfilename',
             'd.type',
+            'd.name as modelname',
             'e.*'
         );
         $join = array(
@@ -471,6 +480,7 @@ class ParserModel extends Model
             'c.name as subsortname',
             'c.filename as subfilename',
             'd.type',
+            'd.name as modelname',
             'e.*'
         );
         $join = array(
@@ -520,6 +530,52 @@ class ParserModel extends Model
     public function getContentCheckbox($id, $field)
     {
         $result = parent::table('ay_content_ext')->where("contentid='$id'")->value($field);
+        return $result;
+    }
+
+    // 指定内容标签调用
+    public function getContentTags($id)
+    {
+        $result = parent::table('ay_content')->field('scode,tags')
+            ->where("id='$id'")
+            ->find();
+        return $result;
+    }
+
+    // 指定分类标签调用
+    public function getAllTags($scode)
+    {
+        $join = array(
+            array(
+                'ay_content_sort b',
+                'a.scode=b.scode',
+                'LEFT'
+            ),
+            array(
+                'ay_model c',
+                'b.mcode=c.mcode',
+                'LEFT'
+            )
+        );
+        
+        $scode_arr = array();
+        if ($scode) {
+            // 获取所有子类分类编码
+            $this->scodes = array(); // 先清空
+            $scodes = $this->getSubScodes(trim($scode)); // 获取子类
+                                                         
+            // 拼接条件
+            $scode_arr = array(
+                "a.scode in (" . implode_quot(',', $scodes) . ")",
+                "a.subscode='$scode'"
+            );
+        }
+        
+        $result = parent::table('ay_content a')->where("c.type=2 AND a.tags<>''")
+            ->where($scode_arr, 'OR')
+            ->join($join)
+            ->order('a.visits DESC')
+            ->column('a.tags');
         return $result;
     }
 

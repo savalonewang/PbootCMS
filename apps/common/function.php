@@ -214,5 +214,23 @@ function cache_config($refresh = false)
     }
 }
 
+// 推送百度
+function post_baidu($api, $urls)
+{
+    $ch = curl_init();
+    $options = array(
+        CURLOPT_URL => $api,
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POSTFIELDS => implode("\n", $urls),
+        CURLOPT_HTTPHEADER => array(
+            'Content-Type: text/plain'
+        )
+    );
+    curl_setopt_array($ch, $options);
+    $result = json_decode(curl_exec($ch));
+    return $result;
+}
+
 
 

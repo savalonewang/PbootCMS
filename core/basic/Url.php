@@ -25,16 +25,17 @@ class Url
             return;
         
         if (! isset(self::$urls[$path])) {
-            // 未正常生成的，则无法跳转，如：未绑定的模块无法跳转！
             $cut_str = '';
             $host = '';
+            
             if ($addExt) {
                 $url_ext = Config::get('url_suffix'); // 地址后缀
             } else {
                 $url_ext = '';
             }
             $path = trim_slash($path); // 去除两端斜线
-                                       
+            $path_arr = explode('/', $path); // 地址数组
+                                             
             // 路由处理
             if (! ! $routes = Config::get('url_route')) {
                 foreach ($routes as $key => $value) {
@@ -67,7 +68,7 @@ class Url
             }
             
             // 入口文件绑定匹配
-            if (defined('URL_BLIND')) {
+            if (defined('URL_BLIND') && $path_arr[0] == M) {
                 $url_blind = trim_slash(URL_BLIND);
                 // 已经匹配过域名绑定
                 if ($cut_str) {
@@ -87,10 +88,19 @@ class Url
             
             // 保存处理过的地址
             if ($path) {
-                if (is_rewrite()) {
-                    self::$urls[$path] = $host . self::getPrePath() . '/' . $path . $url_ext;
+                if ($path_arr[0] != M && $path_arr[0] == 'home') { // 对于后台处理home模块链接做特殊处理
+                    $path = substr($path, 5);
+                    if (Config::get('url_type') == 2) {
+                        self::$urls[$path] = $host . SITE_DIR . '/' . $path . $url_ext;
+                    } else {
+                        self::$urls[$path] = $host . SITE_DIR . '/index.php/' . $path;
+                    }
                 } else {
-                    self::$urls[$path] = $host . self::getPrePath() . '/' . $path;
+                    if (is_rewrite()) {
+                        self::$urls[$path] = $host . self::getPrePath() . '/' . $path . $url_ext;
+                    } else {
+                        self::$urls[$path] = $host . self::getPrePath() . '/' . $path;
+                    }
                 }
             } else {
                 self::$urls[$path] = $host . self::getPrePath(); // 获取根路径前置地址

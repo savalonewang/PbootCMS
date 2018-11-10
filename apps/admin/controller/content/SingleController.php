@@ -61,6 +61,46 @@ class SingleController extends Controller
     // 单页内容修改
     public function mod()
     {
+        // 站长推送
+        if (! ! $scode = get('baiduzz')) {
+            $domain = get_http_url();
+            if (! $token = $this->config('baidu_zz_token')) {
+                alert_back('请先到系统配置中填写百度链接推送token值！');
+            }
+            $api = "http://data.zz.baidu.com/urls?site=$domain&token=$token";
+            $urls[] = $domain . url('/home/about/index/scode/' . $scode);
+            $result = post_baidu($api, $urls);
+            if (isset($result->error)) {
+                alert_back('推送发生错误：' . $result->message);
+            } elseif (isset($result->success)) {
+                alert_back('成功推送' . $result->success . '条，今天剩余可推送' . $result->remain . '条数!');
+            } else {
+                alert_back('发生未知错误！');
+            }
+        }
+        
+        // 熊掌号推送
+        if (! ! $scode = get('baiduxzh')) {
+            $domain = get_http_url();
+            $appid = $this->config('baidu_xzh_appid');
+            $token = $this->config('baidu_xzh_token');
+            if (! $appid || ! $token) {
+                alert_back('请先到系统配置中填写百度熊掌号推送appid及token值！');
+            }
+            $api = "http://data.zz.baidu.com/urls?appid=$appid&token=$token&type=realtime";
+            $urls[] = $domain . url('/home/about/index/scode/' . $scode);
+            $result = post_baidu($api, $urls);
+            if (isset($result->error)) {
+                alert_back('推送发生错误：' . $result->message);
+            } elseif (isset($result->success_realtime)) {
+                alert_back('成功推送' . $result->success_realtime . '条，今天剩余可推送' . $result->remain_realtime . '条数!');
+            } elseif (isset($result->success)) {
+                alert_back('推送失败，不合规地址' . count($result->not_same_site) . '条！');
+            } else {
+                alert_back('发生未知错误！');
+            }
+        }
+        
         if (! $id = get('id', 'int')) {
             error('传递的参数值错误！', - 1);
         }
@@ -79,12 +119,12 @@ class SingleController extends Controller
             
             // 获取数据
             $title = post('title');
-            $content = post('content');
             $author = post('author');
             $source = post('source');
             $ico = post('ico');
             $pics = post('pics');
-            
+            $content = post('content');
+            $tags = str_replace('，', ',', post('tags'));
             $titlecolor = post('titlecolor');
             $subtitle = post('subtitle');
             $outlink = post('outlink');
@@ -112,6 +152,7 @@ class SingleController extends Controller
             $data = array(
                 'title' => $title,
                 'content' => $content,
+                'tags' => $tags,
                 'author' => $author,
                 'source' => $source,
                 'ico' => $ico,

@@ -54,8 +54,14 @@ class ConfigController extends Controller
             $this->log('修改参数配置成功！');
             path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
             switch (post('submit')) {
-                case 'api':
+                case 'msg':
                     success('修改成功！', url('/admin/Config/index?#tab=t2', false));
+                    break;
+                case 'baidu':
+                    success('修改成功！', url('/admin/Config/index?#tab=t3', false));
+                    break;
+                case 'api':
+                    success('修改成功！', url('/admin/Config/index?#tab=t4', false));
                     break;
                 case 'upgrade':
                     success('修改成功！', url('/admin/Upgrade/index?#tab=t2', false));
@@ -111,6 +117,19 @@ class ConfigController extends Controller
     // 修改配置文件
     private function modConfig($key, $value)
     {
+        // 如果开启伪静态时自动拷贝文件
+        if ($key == 'url_type' && $value == 2) {
+            $soft = get_server_soft();
+            if ($soft == 'iis') {
+                if (! file_exists(ROOT_PATH . '/web.config')) {
+                    copy(ROOT_PATH . '/rewrite/web.config', ROOT_PATH . '/web.config');
+                }
+            } elseif ($soft == 'apache') {
+                if (! file_exists(ROOT_PATH . '/web.config')) {
+                    copy(ROOT_PATH . '/rewrite/.htaccess', ROOT_PATH . '/.htaccess');
+                }
+            }
+        }
         $config = file_get_contents(CONF_PATH . '/config.php');
         $value = str_replace(' ', '', $value); // 去除空格
         $value = str_replace('，', ',', $value); // 转换可能输入的中文逗号

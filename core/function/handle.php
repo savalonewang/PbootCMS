@@ -415,7 +415,7 @@ function encrypt_string($string)
 // 生成唯一标识符
 function get_uniqid()
 {
-    return encrypt_string(uniqid(rand(), true));
+    return encrypt_string(uniqid(mt_rand(), true));
 }
 
 // 清洗html代码的空白符号
@@ -425,7 +425,8 @@ function clear_html_blank($string)
     $string = str_replace("\n", '', $string); // 清除换行符
     $string = str_replace("\t", '', $string); // 清除制表符
     $string = str_replace(' ', '', $string); // 清除大空格
-    $string = preg_replace('/\s+/', '', $string); // 清除空格
+    $string = str_replace('&nbsp;', '', $string); // 清除 &nbsp;
+    $string = preg_replace('/\s+/', ' ', $string); // 清除空格
     return $string;
 }
 
@@ -742,6 +743,21 @@ function is_rewrite()
         return true;
     } else {
         return false;
+    }
+}
+
+// 获取服务端web软件
+function get_server_soft()
+{
+    $soft = strtolower($_SERVER["SERVER_SOFTWARE"]);
+    if (strpos($soft, 'iis')) {
+        return 'iis';
+    } elseif (strpos($soft, 'apache')) {
+        return 'apache';
+    } elseif (strpos($soft, 'nginx')) {
+        return 'nginx';
+    } else {
+        return 'other';
     }
 }
 

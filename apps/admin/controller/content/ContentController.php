@@ -83,6 +83,7 @@ class ContentController extends Controller
             $ico = post('ico');
             $pics = post('pics');
             $content = post('content');
+            $tags = str_replace('，', ',', post('tags'));
             $enclosure = post('enclosure');
             $keywords = post('keywords');
             $description = post('description');
@@ -132,6 +133,7 @@ class ContentController extends Controller
                 'ico' => $ico,
                 'pics' => $pics,
                 'content' => $content,
+                'tags' => $tags,
                 'enclosure' => $enclosure,
                 'keywords' => $keywords,
                 'description' => clear_html_blank($description),
@@ -313,6 +315,54 @@ class ContentController extends Controller
                         alert_back('移动内容失败！');
                     }
                     break;
+                case 'baiduzz':
+                    $list = post('list');
+                    if (! $list) {
+                        alert_back('请选择要推送的内容！');
+                    }
+                    // 依次推送
+                    $domain = get_http_url();
+                    if (! $token = $this->config('baidu_zz_token')) {
+                        alert_back('请先到系统配置中填写百度链接推送token值！');
+                    }
+                    $api = "http://data.zz.baidu.com/urls?site=$domain&token=$token";
+                    foreach ($list as $key => $value) {
+                        $urls[] = $domain . url('/home/content/index/id/' . $value);
+                    }
+                    $result = post_baidu($api, $urls);
+                    if (isset($result->error)) {
+                        alert_back('推送发生错误：' . $result->message);
+                    } elseif (isset($result->success)) {
+                        alert_back('成功推送' . $result->success . '条，今天剩余可推送' . $result->remain . '条数!');
+                    } else {
+                        alert_back('发生未知错误！');
+                    }
+                case 'baiduxzh':
+                    $list = post('list');
+                    if (! $list) {
+                        alert_back('请选择要推送的内容！');
+                    }
+                    // 依次推送
+                    $domain = get_http_url();
+                    $appid = $this->config('baidu_xzh_appid');
+                    $token = $this->config('baidu_xzh_token');
+                    if (! $appid || ! $token) {
+                        alert_back('请先到系统配置中填写百度熊掌号推送appid及token值！');
+                    }
+                    $api = "http://data.zz.baidu.com/urls?appid=$appid&token=$token&type=realtime";
+                    foreach ($list as $key => $value) {
+                        $urls[] = $domain . url('/home/content/index/id/' . $value);
+                    }
+                    $result = post_baidu($api, $urls);
+                    if (isset($result->error)) {
+                        alert_back('推送发生错误：' . $result->message);
+                    } elseif (isset($result->success_realtime)) {
+                        alert_back('成功推送' . $result->success_realtime . '条，今天剩余可推送' . $result->remain_realtime . '条数!');
+                    } elseif (isset($result->success)) {
+                        alert_back('推送失败，不合规地址' . count($result->not_same_site) . '条！');
+                    } else {
+                        alert_back('发生未知错误！');
+                    }
             }
         }
         
@@ -346,6 +396,7 @@ class ContentController extends Controller
             $ico = post('ico');
             $pics = post('pics');
             $content = post('content');
+            $tags = str_replace('，', ',', post('tags'));
             $enclosure = post('enclosure');
             $keywords = post('keywords');
             $description = post('description');
@@ -393,6 +444,7 @@ class ContentController extends Controller
                 'ico' => $ico,
                 'pics' => $pics,
                 'content' => $content,
+                'tags' => $tags,
                 'enclosure' => $enclosure,
                 'keywords' => $keywords,
                 'description' => clear_html_blank($description),

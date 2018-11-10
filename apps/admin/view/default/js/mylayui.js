@@ -15,7 +15,11 @@ layui.use(['element','upload','laydate','form'], function(){
 		location.hash = 'tab='+ this.getAttribute('lay-id');
 	}
   });
-	
+  
+  //提示
+  $(".tips").on("mouseover",function(){
+	layer.tips($(this).data('content'), this);
+  }) 
  
   //用户登陆验证
   form.on('submit(login-submit)', function(data){

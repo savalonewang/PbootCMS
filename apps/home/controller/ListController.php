@@ -35,7 +35,7 @@ class ListController extends Controller
                     $content = $this->parser->parserBefore($content); // CMS公共标签前置解析
                     $content = $this->parser->parserPositionLabel($content, $sort->scode); // CMS当前位置标签解析
                     $content = $this->parser->parserSortLabel($content, $sort); // CMS分类信息标签解析
-                    $content = $this->parser->parserCurrenListLabel($content, $sort->scode); // CMS分类列表标签解析
+                    $content = $this->parser->parserListLabel($content, $sort->scode); // CMS分类列表标签解析
                     $content = $this->parser->parserAfter($content); // CMS公共标签后置解析
                 } else {
                     error('请到后台设置分类栏目列表页模板！');

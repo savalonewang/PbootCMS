@@ -94,7 +94,7 @@
 			                    </td>
 			                    <td>[value->visits]</td>
 		                        <td>
-		                        	<a href="{SITE_DIR}/index.php/content/[value->id].html" class="layui-btn layui-btn-xs layui-btn-primary"  target="_blank">查看</a>
+		                        	<a href="{url./home/content/index/id/'.$value->id.'}?nocache=1" class="layui-btn layui-btn-xs layui-btn-primary"  target="_blank">查看</a>
 		                            {fun=get_btn_del($value->id)}
 		                            <a href="{url./admin/Content/mod/mcode/'.get('mcode').'/id/'.$value->id.'}?backurl={$backurl}" class="layui-btn layui-btn-xs" >修改</a>
 		                        </td>
@@ -114,6 +114,8 @@
                     <button type="submit" name="submit" value="move" class="layui-btn">移动</button>
 			     	<button type="submit" name="submit" onclick="return setDelAction();" class="layui-btn">批量删除</button>
 			     	<button type="submit" name="submit" value="sorting" class="layui-btn">保存排序</button>
+			     	<button type="submit" name="submit" value="baiduzz" class="layui-btn">百度推送</button>
+			     	<button type="submit" name="submit" value="baiduxzh" class="layui-btn">熊掌号推送</button>
 			     	<script>
 			     		function setDelAction(){
 			     			document.contentForm.action = "{url./admin/Content/del}"; 
@@ -280,6 +282,13 @@
 			                </div>
 			                
 			                <div class="layui-form-item">
+			                     <label class="layui-form-label">tags</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="tags" placeholder="请输入文章tag，英文逗号隔开" class="layui-input">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
 			                     <label class="layui-form-label">作者</label>
 			                     <div class="layui-input-block">
 			                     	<input type="text" name="author" placeholder="请输入作者" value="{$session.username}" class="layui-input">
@@ -383,16 +392,16 @@
 			                </div>
 			                
 			                <div class="layui-form-item">
-			                     <label class="layui-form-label">页面关键字</label>
+			                     <label class="layui-form-label">SEO关键字</label>
 			                     <div class="layui-input-block">
-			                     	<input type="text" name="keywords" placeholder="请输入页面关键字" class="layui-input">
+			                     	<input type="text" name="keywords" placeholder="请输入内容页SEO关键字" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
-			                     <label class="layui-form-label">页面描述</label>
+			                     <label class="layui-form-label">SEO描述</label>
 			                     <div class="layui-input-block">
-			                     	<textarea name="description" placeholder="请输入页面描述" class="layui-textarea"></textarea>
+			                     	<textarea name="description" placeholder="请输入内容页SEO描述" class="layui-textarea"></textarea>
 			                     </div>
 			                </div>
 			                
@@ -602,6 +611,13 @@
 			                </div>
 			                
 			                <div class="layui-form-item">
+			                     <label class="layui-form-label">tags</label>
+			                     <div class="layui-input-block">
+			                     	<input type="text" name="tags" placeholder="请输入文章tag，英文逗号隔开" value="{$content->tags}" class="layui-input">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
 			                     <label class="layui-form-label">作者</label>
 			                     <div class="layui-input-block">
 			                     	<input type="text" name="author" placeholder="请输入作者" value="{$content->author}" class="layui-input">
@@ -717,16 +733,16 @@
 			                </div>
 			                
 			                <div class="layui-form-item">
-			                     <label class="layui-form-label">页面关键字</label>
+			                     <label class="layui-form-label">SEO关键字</label>
 			                     <div class="layui-input-block">
-			                     	<input type="text" name="keywords" value="{$content->keywords}"  placeholder="请输入页面关键字" class="layui-input">
+			                     	<input type="text" name="keywords" value="{$content->keywords}"  placeholder="请输入内容页SEO关键字" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
-			                     <label class="layui-form-label">页面描述</label>
+			                     <label class="layui-form-label">SEO描述</label>
 			                     <div class="layui-input-block">
-			                     	<textarea name="description" placeholder="请输入页面描述" class="layui-textarea">{$content->description}</textarea>
+			                     	<textarea name="description" placeholder="请输入内容页SEO描述" class="layui-textarea">{$content->description}</textarea>
 			                     </div>
 			                </div>
 			                

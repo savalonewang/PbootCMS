@@ -192,7 +192,7 @@
 								 <div id="ico_box" class="pic"></div>
 			                </div>
 			                
-			                 <div class="layui-form-item">
+			                <div class="layui-form-item">
 			                     <label class="layui-form-label">栏目大图</label>
 			                     <div class="layui-input-inline">
 			                     	<input type="text" name="pic" id="pic" placeholder="请上传栏目大图"  class="layui-input">
@@ -204,16 +204,23 @@
 			                </div>
 			                
 			                <div class="layui-form-item">
-			                     <label class="layui-form-label">栏目关键字</label>
+			                     <label class="layui-form-label">SEO标题</label>
 			                     <div class="layui-input-block">
-			                     	<input type="text" name="keywords" placeholder="请输入栏目关键字" class="layui-input">
+			                     	<input type="text" name="title" placeholder="请输入栏目SEO标题，需前端调用" class="layui-input">
 			                     </div>
 			                </div>
 			                
 			                <div class="layui-form-item">
-			                     <label class="layui-form-label">栏目描述</label>
+			                     <label class="layui-form-label">SEO关键字</label>
 			                     <div class="layui-input-block">
-			                     	<textarea name="description" placeholder="请输入栏目描述" class="layui-textarea"></textarea>
+			                     	<input type="text" name="keywords" placeholder="请输入栏目SEO关键字，需前端调用" class="layui-input">
+			                     </div>
+			                </div>
+			                
+			                <div class="layui-form-item">
+			                     <label class="layui-form-label">SEO描述</label>
+			                     <div class="layui-input-block">
+			                     	<textarea name="description" placeholder="请输入栏目SEO描述，需前端调用" class="layui-textarea"></textarea>
 			                     </div>
 			                </div>
 					    </div>
@@ -361,16 +368,23 @@
 		                </div>
 		                
 		                <div class="layui-form-item">
-		                     <label class="layui-form-label">栏目关键字</label>
+		                     <label class="layui-form-label">SEO标题</label>
 		                     <div class="layui-input-block">
-		                     	<input type="text" name="keywords" value="{$sort->keywords}" placeholder="请输入栏目关键字" class="layui-input">
+		                     	<input type="text" name="title" value="{$sort->title}" placeholder="请输入栏目SEO标题，需前端调用" class="layui-input">
 		                     </div>
 		                </div>
 		                
 		                <div class="layui-form-item">
-		                     <label class="layui-form-label">栏目描述</label>
+		                     <label class="layui-form-label">SEO关键字</label>
 		                     <div class="layui-input-block">
-		                     	<textarea name="description" placeholder="请输入栏目描述" class="layui-textarea">{$sort->description}</textarea>
+		                     	<input type="text" name="keywords" value="{$sort->keywords}" placeholder="请输入栏目SEO关键字，需前端调用" class="layui-input">
+		                     </div>
+		                </div>
+		                
+		                <div class="layui-form-item">
+		                     <label class="layui-form-label">SEO描述</label>
+		                     <div class="layui-input-block">
+		                     	<textarea name="description" placeholder="请输入栏目SEO描述，需前端调用" class="layui-textarea">{$sort->description}</textarea>
 		                     </div>
 		                </div>
 				    </div>

@@ -71,10 +71,11 @@ class ParserController extends Controller
         $content = $this->parserSelectAllLabel($content); // CMS筛选全部标签解析
         $content = $this->parserSelectLabel($content); // CMS筛选标签解析
         $content = $this->parserSpecifySortLabel($content); // 指定分类
-        $content = $this->parserSpecifyListLabel($content); // 指定列表
+        $content = $this->parserListLabel($content); // 指定列表
         $content = $this->parserSpecifyContentLabel($content); // 指定内容
         $content = $this->parserContentPicsLabel($content); // 内容多图
         $content = $this->parserContentCheckboxLabel($content); // 内容多选调取
+        $content = $this->parserContentTagsLabel($content); // 内容tags调取
         $content = $this->parserSlideLabel($content); // 幻灯片
         $content = $this->parserLinkLabel($content); // 友情链接
         $content = $this->parserMessageLabel($content); // 留言板
@@ -915,8 +916,8 @@ class ParserController extends Controller
         return $content;
     }
 
-    // 解析当前分类列表标签
-    public function parserCurrenListLabel($content, $scode)
+    // 解析内容列表标签
+    public function parserListLabel($content, $scode = '')
     {
         $pattern = '/\{pboot:list(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:list\}/';
         $pattern2 = '/\[list:([\w]+)(\s+[^]]+)?\]/';
@@ -925,18 +926,27 @@ class ParserController extends Controller
             for ($i = 0; $i < $count; $i ++) {
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
-                $num = $this->config('pagesize');
-                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
-                $filter = '';
-                $ispics = '';
-                $isico = '';
-                $istop = '';
-                $isrecommend = '';
-                $isheadline = '';
-                
-                // 跳过带scode的指定列表
+                $num = $this->config('pagesize'); // 未设置条数时使用默认15
+                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC'; // 默认排序
+                $filter = ''; // 过滤
+                $tags = ''; // tag标签
+                $fuzzy = true; // 设置过滤、tag、筛选是否模糊匹配
+                $ispics = ''; // 是否多图
+                $isico = ''; // 是否缩略图
+                $istop = ''; // 是否置顶
+                $isrecommend = ''; // 是否推荐
+                $isheadline = ''; // 是否头条
+                                  
+                // list指定了scode时优先
                 if (array_key_exists('scode', $params)) {
-                    continue;
+                    $scode = $params['scode'];
+                    $page = false; // 如果指定分类默认不分页
+                } else {
+                    $page = true; // 如果未指定分类默认分页
+                }
+                
+                if ($scode == '*') {
+                    $scode = '';
                 }
                 
                 // 分离参数
@@ -947,9 +957,16 @@ class ParserController extends Controller
                             break;
                         case 'order':
                             switch ($value) {
+                                case 'id':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,id DESC,date DESC,sorting ASC';
+                                    break;
                                 case 'date':
-                                case 'istop':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,date DESC,sorting ASC,id DESC';
+                                    break;
                                 case 'sorting':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    break;
+                                case 'istop':
                                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 case 'isrecommend':
@@ -969,6 +986,12 @@ class ParserController extends Controller
                             break;
                         case 'filter':
                             $filter = $value;
+                            break;
+                        case 'fuzzy':
+                            $fuzzy = $value;
+                            break;
+                        case 'tags':
+                            $tags = $value;
                             break;
                         case 'ispics':
                             $ispics = $value;
@@ -984,277 +1007,120 @@ class ParserController extends Controller
                             break;
                         case 'isheadline':
                             $isheadline = $value;
-                            break;
-                    }
-                }
-                
-                // 内容过滤筛选
-                $where1 = array();
-                if ($filter) {
-                    $filter = explode('|', $filter);
-                    if (count($filter) == 2) {
-                        $keys = explode(',', $filter[1]);
-                        foreach ($keys as $value) {
-                            if ($value) {
-                                $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
-                            } else {
-                                $where1[] = $filter[0] . "='" . escape_string($value) . "'";
-                            }
-                        }
-                    }
-                }
-                
-                // 数据筛选
-                $where2 = array();
-                foreach ($_GET as $key => $value) {
-                    if (preg_match('/^ext_[\w-]+$/', $key)) { // 其他字段不加入
-                        $where2[$key] = get($key, 'vars');
-                    }
-                }
-                
-                // 判断多图调节参数
-                if ($ispics !== '') {
-                    if ($ispics) {
-                        $where2[] = "a.pics<>''";
-                    } else {
-                        $where2[] = "a.pics=''";
-                    }
-                }
-                // 判断缩略图调节参数
-                if ($isico !== '') {
-                    if ($isico) {
-                        $where2[] = "a.ico<>''";
-                    } else {
-                        $where2[] = "a.ico=''";
-                    }
-                }
-                
-                // 判断置顶调节参数
-                if ($istop !== '') {
-                    if ($istop) {
-                        $where2['a.istop'] = 1;
-                    } else {
-                        $where2['a.istop'] = 0;
-                    }
-                }
-                
-                // 判断推荐调节参数
-                if ($isrecommend !== '') {
-                    if ($isrecommend) {
-                        $where2['a.isrecommend'] = 1;
-                    } else {
-                        $where2['a.isrecommend'] = 0;
-                    }
-                }
-                
-                // 判断头条调节参数
-                if ($isheadline !== '') {
-                    if ($isheadline) {
-                        $where2['a.isheadline'] = 1;
-                    } else {
-                        $where2['a.isheadline'] = 0;
-                    }
-                }
-                
-                // 读取数据
-                if (! isset($data)) { // 避免同页面多次调用无分类参数列表出现分页错误，多次调用取相同数据
-                    $data = $this->model->getList($scode, $num, $order, $where1, $where2);
-                }
-                
-                // 无数据直接替换
-                if (! $data) {
-                    $content = str_replace($matches[0][$i], '', $content);
-                    continue;
-                }
-                
-                // 匹配到内部标签
-                if (preg_match_all($pattern2, $matches[2][$i], $matches2)) {
-                    $count2 = count($matches2[0]); // 循环内的内容标签数量
-                } else {
-                    $count2 = 0;
-                }
-                
-                $out_html = '';
-                $key = 1;
-                foreach ($data as $value) { // 按查询数据条数循环
-                    $one_html = $matches[2][$i];
-                    for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
-                        $params = $this->parserParam($matches2[2][$j]);
-                        $one_html = $this->parserList($matches2[1][$j], $matches2[0][$j], $one_html, $value, $params, $key);
-                    }
-                    $key ++;
-                    $out_html .= $one_html;
-                }
-                $content = str_replace($matches[0][$i], $out_html, $content);
-            }
-        }
-        return $content;
-    }
-
-    // 解析指定分类列表标签
-    public function parserSpecifyListLabel($content)
-    {
-        $pattern = '/\{pboot:list(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:list\}/';
-        $pattern2 = '/\[list:([\w]+)(\s+[^]]+)?\]/';
-        if (preg_match_all($pattern, $content, $matches)) {
-            $count = count($matches[0]);
-            for ($i = 0; $i < $count; $i ++) {
-                // 获取调节参数
-                $params = $this->parserParam($matches[1][$i]);
-                $num = 10;
-                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
-                $scode = - 1;
-                $filter = '';
-                $page = 0; // 默认不执行分页
-                $ispics = '';
-                $isico = '';
-                $istop = '';
-                $isrecommend = '';
-                $isheadline = '';
-                
-                // 跳过未指定scode的列表
-                if (! array_key_exists('scode', $params)) {
-                    continue;
-                }
-                
-                // 分离参数
-                foreach ($params as $key => $value) {
-                    switch ($key) {
-                        case 'scode':
-                            $scode = $value;
-                            break;
-                        case 'num':
-                            $num = $value;
-                            break;
-                        case 'order':
-                            switch ($value) {
-                                case 'date':
-                                case 'istop':
-                                case 'sorting':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
-                                    break;
-                                case 'isrecommend':
-                                    $order = 'isrecommend DESC,istop DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
-                                    break;
-                                case 'isheadline':
-                                    $order = 'isheadline DESC,istop DESC,isrecommend DESC,sorting ASC,date DESC,id DESC';
-                                    break;
-                                case 'visits':
-                                case 'likes':
-                                case 'oppose':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $value . ' DESC,sorting ASC,date DESC,id DESC';
-                                    break;
-                                default:
-                                    $order = $value . ',sorting ASC,date DESC,id DESC';
-                            }
-                            break;
-                        case 'filter':
-                            $filter = $value;
                             break;
                         case 'page':
                             $page = $value;
                             break;
-                        case 'ispics':
-                            $ispics = $value;
-                            break;
-                        case 'isico':
-                            $isico = $value;
-                            break;
-                        case 'istop':
-                            $istop = $value;
-                            break;
-                        case 'isrecommend':
-                            $isrecommend = $value;
-                            break;
-                        case 'isheadline':
-                            $isheadline = $value;
-                            break;
                     }
                 }
                 
-                // 避免传递分类为0读取全部数据
-                if (! $scode) {
-                    $scode = - 1;
-                }
-                
-                // 内容过滤筛选
+                // filter数据筛选
                 $where1 = array();
                 if ($filter) {
                     $filter = explode('|', $filter);
                     if (count($filter) == 2) {
-                        $keys = explode(',', $filter[1]);
-                        foreach ($keys as $value) {
+                        $filter_arr = explode(',', $filter[1]);
+                        foreach ($filter_arr as $value) {
                             if ($value) {
-                                $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
-                            } else {
-                                $where1[] = $filter[0] . "='" . escape_string($value) . "'";
+                                if ($fuzzy) {
+                                    $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
+                                } else {
+                                    $where1[] = $filter[0] . "='" . escape_string($value) . "'";
+                                }
                             }
                         }
                     }
                 }
                 
-                // 数据筛选
+                // tags数据参数筛选
                 $where2 = array();
-                if ($page) { // 只在执行了分页的列表应用筛选，规避列表页互相干扰问题
-                    foreach ($_GET as $key => $value) {
-                        if (preg_match('/^ext_[\w-]+$/', $key)) { // 其他字段不加入
-                            $where2[$key] = get($key, 'vars');
+                if ($tags) {
+                    $tags_arr = explode(',', $tags);
+                    foreach ($tags_arr as $value) {
+                        if ($value) {
+                            if ($fuzzy) {
+                                $where2[] = "tags like '%" . escape_string($value) . "%'";
+                            } else {
+                                $where2[] = "tags='" . escape_string($value) . "'";
+                            }
                         }
+                    }
+                }
+                
+                // tags数据传值筛选
+                if (! ! $get_tags = get('tags', 'vars')) {
+                    if ($fuzzy) {
+                        $where2[] = "tags like '%" . $get_tags . "%'";
+                    } else {
+                        $where2[] = "tags='" . $get_tags . "'";
+                    }
+                }
+                
+                // 扩展字段数据筛选
+                $where3 = array();
+                foreach ($_GET as $key => $value) {
+                    if (preg_match('/^ext_[\w-]+$/', $key)) { // 其他字段不加入
+                        $where3[$key] = get($key, 'vars');
                     }
                 }
                 
                 // 判断多图调节参数
                 if ($ispics !== '') {
                     if ($ispics) {
-                        $where2[] = "a.pics<>''";
+                        $where3[] = "a.pics<>''";
                     } else {
-                        $where2[] = "a.pics=''";
+                        $where3[] = "a.pics=''";
                     }
                 }
+                
                 // 判断缩略图调节参数
                 if ($isico !== '') {
                     if ($isico) {
-                        $where2[] = "a.ico<>''";
+                        $where3[] = "a.ico<>''";
                     } else {
-                        $where2[] = "a.ico=''";
+                        $where3[] = "a.ico=''";
                     }
                 }
                 
                 // 判断置顶调节参数
                 if ($istop !== '') {
                     if ($istop) {
-                        $where2['a.istop'] = 1;
+                        $where3[] = "a.istop=1";
                     } else {
-                        $where2['a.istop'] = 0;
+                        $where3[] = "a.istop=0";
                     }
                 }
                 
                 // 判断推荐调节参数
                 if ($isrecommend !== '') {
                     if ($isrecommend) {
-                        $where2['a.isrecommend'] = 1;
+                        $where3[] = "a.isrecommend=1";
                     } else {
-                        $where2['a.isrecommend'] = 0;
+                        $where3[] = "a.isrecommend=0";
                     }
                 }
                 
                 // 判断头条调节参数
                 if ($isheadline !== '') {
                     if ($isheadline) {
-                        $where2['a.isheadline'] = 1;
+                        $where3[] = "a.isheadline=1";
                     } else {
-                        $where2['a.isheadline'] = 0;
+                        $where3[] = "a.isheadline=0";
                     }
                 }
                 
-                // 读取数据
                 if ($page) {
-                    $data = $this->model->getList($scode, $num, $order, $where1, $where2);
+                    if (isset($paging)) {
+                        error('请不要在一个页面使用多个具有分页的列表，您可将多余的使用page=0关闭分页！');
+                    } else {
+                        $paging = true;
+                        $data = $this->model->getLists($scode, $num, $order, $where1, $where2, $where3, $fuzzy);
+                    }
                 } else {
-                    $data = $this->model->getSpecifyList($scode, $num, $order, $where1, $where2);
+                    $data = $this->model->getList($scode, $num, $order, $where1, $where2, $where3, $fuzzy);
                 }
                 
-                // 无数据直接替换为空
+                // 无数据直接替换
                 if (! $data) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
@@ -1303,7 +1169,7 @@ class ParserController extends Controller
         return $content;
     }
 
-    // 解析指定内容标签
+    // 解析指定内容标签,单页支持使用scode调用
     public function parserSpecifyContentLabel($content)
     {
         $pattern = '/\{pboot:content(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:content\}/';
@@ -1314,23 +1180,21 @@ class ParserController extends Controller
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $id = - 1;
+                $scode = - 1;
                 
-                // 跳过未指定id的列表
-                if (! array_key_exists('id', $params)) {
+                // 跳过未指定id和scode的列表
+                if (array_key_exists('id', $params)) {
+                    $id = $params['id'];
+                    $data = $this->model->getContent(escape_string($id));
+                } elseif (array_key_exists('scode', $params)) {
+                    $scode = $params['scode'];
+                    $data = $this->model->getContent(escape_string($scode));
+                } else {
                     continue;
                 }
                 
-                // 分离参数
-                foreach ($params as $key => $value) {
-                    switch ($key) {
-                        case 'id':
-                            $id = $value;
-                            break;
-                    }
-                }
-                
                 // 读取数据
-                if (! $data = $this->model->getContent(escape_string($id))) {
+                if (! $data) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1505,6 +1369,104 @@ class ParserController extends Controller
                                 break;
                             case 'text':
                                 $one_html = str_replace($matches2[0][$j], $value, $one_html);
+                                break;
+                        }
+                    }
+                    $key ++;
+                    $out_html .= $one_html;
+                }
+                $content = str_replace($matches[0][$i], $out_html, $content);
+            }
+        }
+        return $content;
+    }
+
+    // 解析内容tags
+    public function parserContentTagsLabel($content)
+    {
+        $pattern = '/\{pboot:tags(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:tags\}/';
+        $pattern2 = '/\[tags:([\w]+)(\s+[^]]+)?\]/';
+        if (preg_match_all($pattern, $content, $matches)) {
+            $count = count($matches[0]);
+            for ($i = 0; $i < $count; $i ++) {
+                // 获取调节参数
+                $params = $this->parserParam($matches[1][$i]);
+                $id = ''; // 调取指定内容的tags
+                $scode = ''; // 调取指定分类的tags
+                             
+                // 分离参数
+                foreach ($params as $key => $value) {
+                    switch ($key) {
+                        case 'id':
+                            $id = $value;
+                            break;
+                        case 'scode':
+                            $scode = $value;
+                            break;
+                    }
+                }
+                
+                // 获取数据
+                $data = array();
+                if ($id) { // 获取单个内容的tags
+                    if (strpos($scode, ',') !== false) {
+                        error('模板中指定id输出tags时不允许scode指定多个栏目！');
+                    }
+                    $rs = $this->model->getContentTags(escape_string($id));
+                    $tags = explode(',', $rs->tags);
+                    $scode = $scode ?: $rs->scode;
+                    foreach ($tags as $key => $value) {
+                        $data[] = array(
+                            'scode' => $scode,
+                            'tags' => $value
+                        );
+                    }
+                } elseif ($scode) { // 获取指定栏目的tags
+                    $scodes = explode(',', $scode); // 多个栏目是分别获取
+                    foreach ($scodes as $key => $value) {
+                        $tags = implode(',', $this->model->getAllTags($value)); // 先把所有列串起来
+                        $tags = array_unique(explode(',', $tags)); // 再把所有tags组成数组
+                        foreach ($tags as $key2 => $value2) {
+                            $data[] = array(
+                                'scode' => $value,
+                                'tags' => $value2
+                            );
+                        }
+                    }
+                } else {
+                    continue; // 未指定任何时不解析
+                }
+                
+                // 无内容直接替换为空并跳过
+                if (! $data) {
+                    $content = str_replace($matches[0][$i], '', $content);
+                    continue;
+                }
+                
+                // 匹配到内部标签
+                if (preg_match_all($pattern2, $matches[2][$i], $matches2)) {
+                    $count2 = count($matches2[0]); // 循环内的内容标签数量
+                } else {
+                    $count2 = 0;
+                }
+                
+                $out_html = '';
+                $key = 1;
+                foreach ($data as $value) { // 按条数循环
+                    $one_html = $matches[2][$i];
+                    for ($j = 0; $j < $count2; $j ++) { // 循环替换数据
+                        switch ($matches2[1][$j]) {
+                            case 'n':
+                                $one_html = str_replace($matches2[0][$j], $key - 1, $one_html);
+                                break;
+                            case 'i':
+                                $one_html = str_replace($matches2[0][$j], $key, $one_html);
+                                break;
+                            case 'text':
+                                $one_html = str_replace($matches2[0][$j], $value['tags'], $one_html);
+                                break;
+                            case 'link':
+                                $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value['scode'] . '?tags=' . $value['tags']), $one_html);
                                 break;
                         }
                     }
@@ -1883,39 +1845,51 @@ class ParserController extends Controller
         if (preg_match_all($pattern, $content, $matches)) {
             $count = count($matches[0]);
             $field = get('field', 'var');
-            $scode = get('scode', 'var');
             $keyword = get('keyword', 'vars');
+            $scode = get('scode');
+            if (! preg_match('/^[\w,]+$/', $scode)) {
+                $scode = '';
+            }
             
             for ($i = 0; $i < $count; $i ++) {
                 
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
-                $num = $this->config('pagesize');
-                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
-                $filter = '';
-                $fuzzy = true;
+                $num = $this->config('pagesize'); // 未设置条数时使用默认15
+                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC'; // 默认排序
+                $filter = ''; // 过滤
+                $tags = ''; // tag标签
+                $fuzzy = true; // 设置过滤、tag、筛选是否模糊匹配
+                $ispics = ''; // 是否多图
+                $isico = ''; // 是否缩略图
+                $istop = ''; // 是否置顶
+                $isrecommend = ''; // 是否推荐
+                $isheadline = ''; // 是否头条
+                $page = true; // 搜索默认分页
                 
                 foreach ($params as $key => $value) {
                     switch ($key) {
-                        case 'num':
-                            $num = $value;
-                            break;
                         case 'field':
                             $field = $value;
                             break;
                         case 'scode':
                             $scode = $value;
                             break;
-                        case 'filter':
-                            $filter = $value;
-                        case 'fuzzy':
-                            $fuzzy = $value;
+                        case 'num':
+                            $num = $value;
                             break;
                         case 'order':
                             switch ($value) {
+                                case 'id':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,id DESC,date DESC,sorting ASC';
+                                    break;
                                 case 'date':
-                                case 'istop':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,date DESC,sorting ASC,id DESC';
+                                    break;
                                 case 'sorting':
+                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    break;
+                                case 'istop':
                                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                                     break;
                                 case 'isrecommend':
@@ -1933,24 +1907,74 @@ class ParserController extends Controller
                                     $order = $value . ',sorting ASC,date DESC,id DESC';
                             }
                             break;
+                        case 'filter':
+                            $filter = $value;
+                        case 'fuzzy':
+                            $fuzzy = $value;
+                            break;
+                        case 'tags':
+                            $tags = $value;
+                            break;
+                        case 'ispics':
+                            $ispics = $value;
+                            break;
+                        case 'isico':
+                            $isico = $value;
+                            break;
+                        case 'istop':
+                            $istop = $value;
+                            break;
+                        case 'isrecommend':
+                            $isrecommend = $value;
+                            break;
+                        case 'isheadline':
+                            $isheadline = $value;
+                            break;
+                        case 'page':
+                            $page = $value;
+                            break;
                     }
                 }
                 
-                // 内容过滤筛选,过滤为“或”关系
+                if ($scode == '*') {
+                    $scode = '';
+                }
+                
+                // filter数据筛选
                 $where1 = array();
                 if ($filter) {
                     $filter = explode('|', $filter);
                     if (count($filter) == 2) {
-                        $keys = explode(',', $filter[1]);
-                        foreach ($keys as $value) {
-                            if ($value)
-                                $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
+                        $filter_arr = explode(',', $filter[1]);
+                        foreach ($filter_arr as $value) {
+                            if ($value) {
+                                if ($fuzzy) {
+                                    $where1[] = $filter[0] . " like '%" . escape_string($value) . "%'";
+                                } else {
+                                    $where1[] = $filter[0] . "='" . escape_string($value) . "'";
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // tags数据筛选
+                $where2 = array();
+                if ($tags) {
+                    $tags_arr = explode(',', $tags);
+                    foreach ($tags_arr as $value) {
+                        if ($value) {
+                            if ($fuzzy) {
+                                $where2[] = "tags like '%" . escape_string($value) . "%'";
+                            } else {
+                                $where2[] = "tags='" . escape_string($value) . "'";
+                            }
                         }
                     }
                 }
                 
                 // 存储搜索条件，条件为“并列”关系，由于为模糊匹配，条件为空时意味着“任意”
-                $where2 = array();
+                $where3 = array();
                 
                 // 采取keyword方式
                 if ($keyword) {
@@ -1962,17 +1986,20 @@ class ParserController extends Controller
                             } else {
                                 $like = " like '" . $keyword . "'"; // 前面已经转义过
                             }
-                            if (isset($where2[0])) {
-                                $where2[0] .= ' OR ' . $value . $like;
+                            if (isset($where3[0])) {
+                                $where3[0] .= ' OR ' . $value . $like;
                             } else {
-                                $where2[0] = $value . $like;
+                                $where3[0] = $value . $like;
                             }
+                        }
+                        if (count($field) > 1) {
+                            $where3[0] = '(' . $where3[0] . ')';
                         }
                     } else { // 匹配单一字段的关键字搜索
                         if ($field) {
-                            $where2[$field] = $keyword;
+                            $where3[$field] = $keyword;
                         } else {
-                            $where2['title'] = $keyword;
+                            $where3['title'] = $keyword;
                         }
                     }
                 }
@@ -1981,27 +2008,84 @@ class ParserController extends Controller
                 foreach ($_GET as $key => $value) {
                     if (! ! $value = get($key, 'vars')) {
                         if (preg_match('/^[\w-]+$/', $key)) { // 带有违规字符时不带入查询
-                            $where2[$key] = $value;
+                            $where3[$key] = $value;
                         }
                     }
                 }
                 
                 // 去除特殊键值
-                unset($where2['keyword']);
-                unset($where2['field']);
-                unset($where2['scode']);
-                unset($where2['page']);
-                unset($where2['from']);
-                unset($where2['isappinstalled']);
+                unset($where3['keyword']);
+                unset($where3['field']);
+                unset($where3['scode']);
+                unset($where3['page']);
+                unset($where3['from']);
+                unset($where3['isappinstalled']);
                 
                 // 无任何条件不显示内容
-                if (! $where2) {
+                if (! $where3) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
                 
+                // 判断多图调节参数
+                if ($ispics !== '') {
+                    if ($ispics) {
+                        $where3[] = "a.pics<>''";
+                    } else {
+                        $where3[] = "a.pics=''";
+                    }
+                }
+                
+                // 判断缩略图调节参数
+                if ($isico !== '') {
+                    if ($isico) {
+                        $where3[] = "a.ico<>''";
+                    } else {
+                        $where3[] = "a.ico=''";
+                    }
+                }
+                
+                // 判断置顶调节参数
+                if ($istop !== '') {
+                    if ($istop) {
+                        $where3[] = "a.istop=1";
+                    } else {
+                        $where3[] = "a.istop=0";
+                    }
+                }
+                
+                // 判断推荐调节参数
+                if ($isrecommend !== '') {
+                    if ($isrecommend) {
+                        $where3[] = "a.isrecommend=1";
+                    } else {
+                        $where3[] = "a.isrecommend=0";
+                    }
+                }
+                
+                // 判断头条调节参数
+                if ($isheadline !== '') {
+                    if ($isheadline) {
+                        $where3[] = "a.isheadline=1";
+                    } else {
+                        $where3[] = "a.isheadline=0";
+                    }
+                }
+                
                 // 读取数据
-                if (! $data = $this->model->getList($scode, $num, $order, $where1, $where2, $fuzzy)) {
+                if ($page) {
+                    if (isset($paging)) {
+                        error('请不要在一个页面使用多个具有分页的列表，您可将多余的使用page=0关闭分页！');
+                    } else {
+                        $paging = true;
+                        $data = $this->model->getLists($scode, $num, $order, $where1, $where2, $where3, $fuzzy);
+                    }
+                } else {
+                    $data = $this->model->getList($scode, $num, $order, $where1, $where2, $where3, $fuzzy);
+                }
+                
+                // 无数据直接替换
+                if (! $data) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -2346,6 +2430,13 @@ class ParserController extends Controller
                     $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
                 }
                 break;
+            case 'isico':
+                if ($data->ico) {
+                    $content = str_replace($search, 1, $content);
+                } else {
+                    $content = str_replace($search, 0, $content);
+                }
+                break;
             case 'enclosure':
                 if ($data->enclosure) {
                     $content = str_replace($search, SITE_DIR . $data->enclosure, $content);
@@ -2425,6 +2516,13 @@ class ParserController extends Controller
                     $content = str_replace($search, SITE_DIR . $data->ico, $content);
                 } else {
                     $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
+                }
+                break;
+            case 'isico':
+                if ($data->ico) {
+                    $content = str_replace($search, 1, $content);
+                } else {
+                    $content = str_replace($search, 0, $content);
                 }
                 break;
             case 'enclosure':

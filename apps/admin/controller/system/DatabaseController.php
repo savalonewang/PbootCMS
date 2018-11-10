@@ -160,7 +160,7 @@ class DatabaseController extends Controller
             $sql .= '-- --------------------------------------------------------' . PHP_EOL . PHP_EOL;
         }
         // 写入文件
-        $filename = date('YmdHis') . "_" . $this->dbauth['dbname'] . '.sql';
+        $filename = date('YmdHis') . '_' . $this->dbauth['dbname'] . '_' . get_uniqid() . '.sql';
         return $this->writeFile($filename, $sql);
     }
 
