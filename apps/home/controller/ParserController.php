@@ -1400,6 +1400,9 @@ class ParserController extends Controller
                         case 'scode':
                             $scode = $value;
                             break;
+                        case 'num':
+                            $num = $value;
+                            break;
                     }
                 }
                 
@@ -1469,6 +1472,10 @@ class ParserController extends Controller
                     }
                     $key ++;
                     $out_html .= $one_html;
+                    if (isset($num) && $key > $num) {
+                        unset($num);
+                        break;
+                    }
                 }
                 $content = str_replace($matches[0][$i], $out_html, $content);
             }
@@ -1844,7 +1851,7 @@ class ParserController extends Controller
             $field = get('field', 'var');
             $keyword = get('keyword', 'vars');
             $scode = get('scode');
-            if (! preg_match('/^[\w,]+$/', $scode)) {
+            if (! preg_match('/^[\w,\s]+$/', $scode)) {
                 $scode = '';
             }
             

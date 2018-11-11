@@ -24,9 +24,9 @@ class ContentController extends Controller
 
     public function index()
     {
-        if (! ! $id = get('id', 'int')) {
+        if (! ! $id = request('id', 'int')) {
             // 区域获取
-            $acode = get('acode', 'var') ?: $this->config('lgs.0.acode');
+            $acode = request('acode', 'var') ?: $this->config('lgs.0.acode');
             
             // 读取数据
             if (! ! $data = $this->model->getContent($acode, $id)) {

@@ -4,7 +4,7 @@
  * @license This is not a freeware, use is subject to license terms
  * @author XingMeng
  * @email hnxsh@foxmail.com
- * @date 2018年4月20日
+ * @date 2018年11月11日
  *  单页内容通过分类编码调用接口控制器
  */
 namespace app\api\controller;
@@ -24,9 +24,9 @@ class AboutController extends Controller
 
     public function index()
     {
-        if (! ! $scode = get('scode', 'var')) {
+        if (! ! $scode = request('scode', 'var')) {
             // 区域获取
-            $acode = get('acode', 'var') ?: $this->config('lgs.0.acode');
+            $acode = request('acode', 'var') ?: $this->config('lgs.0.acode');
             
             // 读取数据
             if (! ! $data = $this->model->getAbout($acode, $scode)) {

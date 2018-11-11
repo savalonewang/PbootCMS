@@ -25,18 +25,24 @@ class ListController extends Controller
     public function index()
     {
         // 获取参数
-        $acode = get('acode', 'var') ?: $this->config('lgs.0.acode');
-        $scode = get('scode', 'var') ?: - 1;
-        $num = get('num', 'int') ?: $this->config('pagesize');
-        
+        $acode = request('acode', 'var') ?: $this->config('lgs.0.acode');
+        $scode = request('scode', 'var') ?: '';
+        $num = request('num', 'int') ?: $this->config('pagesize');
         $order = get('order');
         if (! preg_match('/^[\w-,\s]+$/', $order)) {
             $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
         } else {
             switch ($order) {
+                case 'id':
+                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,id DESC,date DESC,sorting ASC';
+                    break;
                 case 'date':
-                case 'istop':
+                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,date DESC,sorting ASC,id DESC';
+                    break;
                 case 'sorting':
+                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                    break;
+                case 'istop':
                     $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
                     break;
                 case 'isrecommend':
@@ -56,7 +62,7 @@ class ListController extends Controller
         }
         
         // 读取数据
-        $data = $this->model->getList($acode, $scode, $num, $order);
+        $data = $this->model->getLists($acode, $scode, $num, $order);
         
         foreach ($data as $key => $value) {
             if ($value->outlink) {

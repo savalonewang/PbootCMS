@@ -349,8 +349,8 @@ function filter($varname, $condition)
                 }
                 break;
             case 'vars':
-                if (! preg_match('/^[\x{4e00}-\x{9fa5}\w\-\.]+$/u', $data)) {
-                    $err = '只能包含中文、字母、数字、横线、点！';
+                if (! preg_match('/^[\x{4e00}-\x{9fa5}\w\-\.,\s]+$/u', $data)) {
+                    $err = '只能包含中文、字母、数字、横线、点、逗号、空格！';
                 }
                 break;
             default:

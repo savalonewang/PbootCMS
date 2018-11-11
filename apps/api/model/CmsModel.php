@@ -240,14 +240,15 @@ class CmsModel extends Model
         return $this->scodes;
     }
 
-    // 列表内容
-    public function getList($acode, $scode, $num, $order, $where = array(), $fuzzy = true)
+    // 列表内容,带分页
+    public function getLists($acode, $scode, $num, $order, $filter = array(), $tags = array(), $select = array(), $fuzzy = true)
     {
         $fields = array(
             'a.*',
             'b.name as sortname',
             'c.name as subsortname',
             'd.type',
+            'd.name as modelname',
             'e.*'
         );
         $join = array(
@@ -273,22 +274,22 @@ class CmsModel extends Model
             )
         );
         
-        $where1 = '';
+        $scode_arr = array();
         if ($scode) {
             // 获取所有子类分类编码
             $this->scodes = array(); // 先清空
-            $arr = explode(',', $scode);
+            $arr = explode(',', $scode); // 传递有多个分类时进行遍历
             foreach ($arr as $value) {
                 $scodes = $this->getSubScodes(trim($value));
             }
             // 拼接条件
-            $where1 = array(
+            $scode_arr = array(
                 "a.scode in (" . implode_quot(',', $scodes) . ")",
                 "a.subscode='$scode'"
             );
         }
         
-        $where2 = array(
+        $where = array(
             "a.acode='" . $acode . "'",
             'a.status=1',
             'd.type=2',
@@ -297,9 +298,11 @@ class CmsModel extends Model
         
         // 筛选条件支持模糊匹配
         return parent::table('ay_content a')->field($fields)
-            ->where($where1, 'OR')
-            ->where($where2)
-            ->where($where, 'AND', 'AND', $fuzzy)
+            ->where($scode_arr, 'OR')
+            ->where($where)
+            ->where($select, 'AND', 'AND', $fuzzy)
+            ->where($filter, 'OR')
+            ->where($tags, 'OR')
             ->join($join)
             ->order($order)
             ->page(1, $num)
@@ -307,14 +310,15 @@ class CmsModel extends Model
             ->select();
     }
 
-    // 指定列表内容，不带分页
-    public function getSpecifyList($acode, $scode, $num, $order, $where = array())
+    // 列表内容，不带分页
+    public function getList($acode, $scode, $num, $order, $filter = array(), $tags = array(), $select = array(), $fuzzy = true)
     {
         $fields = array(
             'a.*',
             'b.name as sortname',
             'c.name as subsortname',
             'd.type',
+            'd.name as modelname',
             'e.*'
         );
         $join = array(
@@ -339,30 +343,36 @@ class CmsModel extends Model
                 'LEFT'
             )
         );
-        $this->scodes = array(); // 先清空
-                                 
-        // 获取多分类子类
-        $scode = explode(',', $scode);
-        foreach ($scode as $value) {
-            $scodes = $this->getSubScodes(trim($value));
+        
+        $scode_arr = array();
+        if ($scode) {
+            // 获取所有子类分类编码
+            $this->scodes = array(); // 先清空
+            $arr = explode(',', $scode); // 传递有多个分类时进行遍历
+            foreach ($arr as $value) {
+                $scodes = $this->getSubScodes(trim($value));
+            }
+            // 拼接条件
+            $scode_arr = array(
+                "a.scode in (" . implode_quot(',', $scodes) . ")",
+                "a.subscode='$scode'"
+            );
         }
         
-        // 拼接条件
-        $where1 = array(
-            "a.scode in (" . implode_quot(',', $scodes) . ")",
-            "a.subscode='$scode'"
-        );
-        $where2 = array(
+        $where = array(
             "a.acode='" . $acode . "'",
             'a.status=1',
             'd.type=2',
             "a.date<'" . date('Y-m-d H:i:s') . "'"
         );
         
+        // 筛选条件支持模糊匹配
         return parent::table('ay_content a')->field($fields)
-            ->where($where1, 'OR')
-            ->where($where2)
-            ->where($where, 'AND', 'AND', true)
+            ->where($scode_arr, 'OR')
+            ->where($where)
+            ->where($select, 'AND', 'AND', $fuzzy)
+            ->where($filter, 'OR')
+            ->where($tags, 'OR')
             ->join($join)
             ->order($order)
             ->limit($num)
@@ -378,6 +388,7 @@ class CmsModel extends Model
             'b.name as sortname',
             'c.name as subsortname',
             'd.type',
+            'd.name as modelname',
             'e.*'
         );
         $join = array(
@@ -426,6 +437,7 @@ class CmsModel extends Model
             'b.name as sortname',
             'c.name as subsortname',
             'd.type',
+            'd.name as modelname',
             'e.*'
         );
         $join = array(

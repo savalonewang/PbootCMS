@@ -18,12 +18,12 @@ return array(
     
     // 访问页面规则，如禁用浏览器、操作系统类型
     'access_rule' => array(
-        'deny_bs' => 'IE6,IE7,IE8'
+        'deny_bs' => 'IE6,IE7'
     ),
     
     // 上传配置
     'upload' => array(
-        'format' => 'jpg,png,gif,xls,xlsx,doc,docx,ppt,pptx,rar,zip,pdf,txt,mp4,avi,flv,rmvb,mp3',
+        'format' => 'jpg,jpeg,png,gif,xls,xlsx,doc,docx,ppt,pptx,rar,zip,pdf,txt,mp4,avi,flv,rmvb,mp3',
         'max_width' => '1920',
         'max_height' => ''
     ),

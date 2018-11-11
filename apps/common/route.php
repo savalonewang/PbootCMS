@@ -33,6 +33,7 @@ return array(
         'home/list' => 'home/list/index/scode',
         'home/about' => 'home/about/index/scode',
         'home/content' => 'home/content/index/id',
+        'home/sitemap.xml' => 'home/Sitemap/index',
         
         // =======接口路由============API路径统一小写URL，此处也用小写
         'api/list' => 'api/list/index/scode',

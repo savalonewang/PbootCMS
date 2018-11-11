@@ -25,7 +25,7 @@ class DoController extends Controller
     // 点赞
     public function likes()
     {
-        if (! ! $id = get('id', 'int')) {
+        if (! ! $id = request('id', 'int')) {
             $this->model->addLikes($id);
             json(1, '点赞成功');
         } else {
@@ -36,7 +36,7 @@ class DoController extends Controller
     // 反对
     public function oppose()
     {
-        if (! ! $id = get('id', 'int')) {
+        if (! ! $id = request('id', 'int')) {
             $this->model->addOppose($id);
             json(1, '反对成功');
         } else {
