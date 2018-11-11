@@ -54,6 +54,7 @@ class AreaController extends Controller
             $this->outData[$this->count]->id = $value->id;
             $this->outData[$this->count]->blank = $this->blank;
             $this->outData[$this->count]->name = $value->name;
+            $this->outData[$this->count]->domain = $value->domain;
             $this->outData[$this->count]->acode = $value->acode;
             $this->outData[$this->count]->pcode = $value->pcode;
             $this->outData[$this->count]->is_default = $value->is_default;
@@ -88,6 +89,7 @@ class AreaController extends Controller
             $acode = post('acode', 'var');
             $pcode = post('pcode', 'var');
             $name = post('name');
+            $domain = post('domain');
             $is_default = post('is_default');
             
             if (! $acode) {
@@ -112,6 +114,7 @@ class AreaController extends Controller
                 'acode' => $acode,
                 'pcode' => $pcode,
                 'name' => $name,
+                'domain' => $domain,
                 'is_default' => $is_default,
                 'create_user' => session('username'),
                 'update_user' => session('username')
@@ -210,6 +213,7 @@ class AreaController extends Controller
             $acode_new = post('acode', 'var');
             $pcode = post('pcode', 'var');
             $name = post('name');
+            $domain = post('domain');
             $is_default = post('is_default');
             
             if ($acode == 'cn') {
@@ -238,6 +242,7 @@ class AreaController extends Controller
                 'acode' => $acode_new,
                 'pcode' => $pcode,
                 'name' => $name,
+                'domain' => $domain,
                 'is_default' => $is_default,
                 'update_user' => session('username')
             );

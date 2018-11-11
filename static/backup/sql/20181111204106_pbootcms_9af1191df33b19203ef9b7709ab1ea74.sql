@@ -1,20 +1,11 @@
 -- Online Database Management SQL Dump
 -- 数据库名: pbootcms
--- 生成日期: 2018-11-11 03:34:58
+-- 生成日期: 2018-11-11 20:41:06
 -- PHP 版本: 5.6.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+08:00";
 SET NAMES utf8;
-
--- --------------------------------------------------------
-
---
--- 数据库名 `pbootcms`
---
-
-CREATE DATABASE IF NOT EXISTS `pbootcms` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `pbootcms`;
 
 -- --------------------------------------------------------
 
@@ -35,7 +26,7 @@ CREATE TABLE `ay_area` (
   `create_time` datetime NOT NULL COMMENT '添加时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `ay_area_acode` (`acode`),
+  UNIQUE KEY `ay_area_acode` (`acode`),
   KEY `ay_area_pcode` (`pcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
@@ -77,7 +68,7 @@ CREATE TABLE `ay_company` (
 --
 
 INSERT INTO `ay_company` (`id`,`acode`,`name`,`address`,`postcode`,`contact`,`mobile`,`phone`,`fax`,`email`,`qq`,`weixin`,`blicense`,`other`) VALUES
-('1','cn','湖南翱云网络科技有限公司','湖南长沙岳麓区雷锋大道609号','410000','谢先生','13988886666','0731-88886666','0731-88886666','admin@qq.com','88886666','/static/upload/image/20180715/1531651052464521.png','91430102567650888G','');
+('1','cn','湖南翱云网络科技有限公司','湖南长沙岳麓区桐梓坡西路雅阁国际','410000','谢先生','13988886666','0731-88886666','0731-88886666','admin@hnaoyun.com','88886666','/static/upload/image/20180715/1531651052464521.png','91430102567650888G','');
 
 -- --------------------------------------------------------
 
@@ -94,7 +85,7 @@ CREATE TABLE `ay_config` (
   `sorting` int(10) unsigned NOT NULL DEFAULT '255' COMMENT '排序',
   `description` varchar(30) NOT NULL COMMENT '描述文本',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_config`
@@ -116,7 +107,10 @@ INSERT INTO `ay_config` (`id`,`name`,`value`,`type`,`sorting`,`description`) VAL
 ('13','api_open','0','2','255','API开关'),
 ('14','api_auth','1','2','255','API强制认证'),
 ('15','api_appid','','2','255','API认证用户'),
-('16','api_secret','','2','255','API认证密钥');
+('16','api_secret','','2','255','API认证密钥'),
+('17','baidu_zz_token','','2','255','百度站长密钥'),
+('18','baidu_xzh_appid','','2','255','熊掌号appid'),
+('19','baidu_xzh_token','','2','255','熊掌号token');
 
 -- --------------------------------------------------------
 
@@ -219,8 +213,7 @@ INSERT INTO `ay_content_ext` (`extid`,`contentid`,`ext_price`,`ext_type`,`ext_co
 ('2','10','999','基础版','黄色,绿色'),
 ('3','11','1999','旗舰版','蓝色,紫色'),
 ('4','12','2999','专业版','黄色,绿色'),
-('5','13','150','基础版','红色,橙色'),
-('6','3','','','');
+('5','13','150','基础版','红色,橙色');
 
 -- --------------------------------------------------------
 
@@ -254,7 +247,7 @@ CREATE TABLE `ay_content_sort` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `ay_content_sort_pcode` (`pcode`),
-  KEY `ay_content_sort_scode` (`scode`),
+  UNIQUE KEY `ay_content_sort_scode` (`scode`),
   KEY `ay_content_sort_acode` (`acode`),
   KEY `ay_content_sort_mcode` (`mcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
@@ -275,19 +268,6 @@ INSERT INTO `ay_content_sort` (`id`,`acode`,`mcode`,`pcode`,`scode`,`name`,`list
 ('9','cn','5','0','9','招贤纳士','joblist.html','job.html','1','','诚聘优秀人士加入我们的团队','','','','','','','255','admin','admin','2018-04-11 17:30:02','2018-04-11 17:30:02'),
 ('10','cn','1','0','10','在线留言','','message.html','1','','有什么问题欢迎您随时反馈','','','','','','','255','admin','admin','2018-04-11 17:30:36','2018-04-12 10:55:31'),
 ('11','cn','1','0','11','联系我们','','about.html','1','','能为您服务是我们的荣幸','','','','','','','255','admin','admin','2018-04-11 17:31:29','2018-04-11 17:31:29');
-
--- --------------------------------------------------------
-
---
--- 表的结构 `ay_diy_aaaa`
---
-
-DROP TABLE IF EXISTS `ay_diy_aaaa`;
-CREATE TABLE `ay_diy_aaaa` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `create_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -326,7 +306,7 @@ INSERT INTO `ay_extfield` (`id`,`mcode`,`name`,`type`,`value`,`description`,`sor
 DROP TABLE IF EXISTS `ay_form`;
 CREATE TABLE `ay_form` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `fcode` varchar(20) NOT NULL COMMENT '表但编码',
+  `fcode` varchar(20) NOT NULL COMMENT '表单编码',
   `form_name` varchar(30) NOT NULL COMMENT '表单名称',
   `table_name` varchar(30) NOT NULL COMMENT '表名称',
   `create_user` varchar(30) NOT NULL COMMENT '添加人员',
@@ -334,7 +314,7 @@ CREATE TABLE `ay_form` (
   `create_time` datetime NOT NULL COMMENT '添加时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `ay_form_fcode` (`fcode`)
+  UNIQUE KEY `ay_form_fcode` (`fcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
@@ -432,7 +412,7 @@ CREATE TABLE `ay_link` (
 --
 
 INSERT INTO `ay_link` (`id`,`acode`,`gid`,`name`,`link`,`logo`,`sorting`,`create_user`,`update_user`,`create_time`,`update_time`) VALUES
-('1','cn','1','PbootCMS','http://www.pbootcms.com','/static/upload/image/20180412/1523501605180536.png','255','admin','admin','2018-04-12 10:53:06','2018-04-12 10:53:26');
+('1','cn','1','PbootCMS','https://www.pbootcms.com','/static/upload/image/20180412/1523501605180536.png','255','admin','admin','2018-04-12 10:53:06','2018-04-12 10:53:26');
 
 -- --------------------------------------------------------
 
@@ -456,7 +436,7 @@ CREATE TABLE `ay_menu` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `ay_menu_mcode` (`mcode`),
+  UNIQUE KEY `ay_menu_mcode` (`mcode`),
   KEY `ay_menu_pcode` (`pcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
 
@@ -634,7 +614,7 @@ CREATE TABLE `ay_model` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `ay_model_mcode` (`mcode`)
+  UNIQUE KEY `ay_model_mcode` (`mcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
@@ -665,7 +645,7 @@ CREATE TABLE `ay_role` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `ay_role_rcode` (`rcode`)
+  UNIQUE KEY `ay_role_rcode` (`rcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
@@ -907,7 +887,7 @@ CREATE TABLE `ay_syslog` (
   `create_user` varchar(30) NOT NULL COMMENT '创建人员',
   `create_time` datetime NOT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -963,7 +943,7 @@ CREATE TABLE `ay_user` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `ay_user_ucode` (`ucode`),
+  UNIQUE KEY `ay_user_ucode` (`ucode`),
   KEY `ay_user_username` (`username`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 

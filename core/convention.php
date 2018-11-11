@@ -11,7 +11,7 @@ return array(
     'sn' => '281BE285D7',
     
     // 内核版本
-    'core_version' => '1.4.5',
+    'core_version' => '1.4.6',
     
     // 配置模块
     'public_app' => 'home,admin,api',

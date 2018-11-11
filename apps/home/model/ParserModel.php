@@ -32,13 +32,13 @@ class ParserModel extends Model
     // 站点配置信息
     public function getSite()
     {
-        return parent::table('ay_site')->where("acode='" . session('lg') . "'")->find();
+        return parent::table('ay_site')->where("acode='" . get_lg() . "'")->find();
     }
 
     // 公司信息
     public function getCompany()
     {
-        return parent::table('ay_company')->where("acode='" . session('lg') . "'")->find();
+        return parent::table('ay_company')->where("acode='" . get_lg() . "'")->find();
     }
 
     // 自定义标签
@@ -81,7 +81,7 @@ class ParserModel extends Model
             )
         );
         return parent::table('ay_content_sort a')->field($field)
-            ->where("a.acode='" . session('lg') . "'")
+            ->where("a.acode='" . get_lg() . "'")
             ->where("a.scode='$scode' OR a.filename='$scode'")
             ->join($join)
             ->find();
@@ -121,7 +121,7 @@ class ParserModel extends Model
             )
         );
         return parent::table('ay_content_sort a')->field($field)
-            ->where("a.acode='" . session('lg') . "'")
+            ->where("a.acode='" . get_lg() . "'")
             ->in('a.scode', $scodes)
             ->join($join)
             ->select();
@@ -144,7 +144,7 @@ class ParserModel extends Model
             "subscode='$scode'"
         );
         $where2 = array(
-            "acode='" . session('lg') . "'",
+            "acode='" . get_lg() . "'",
             'status=1',
             "date<'" . date('Y-m-d H:i:s') . "'"
         );
@@ -180,7 +180,7 @@ class ParserModel extends Model
             'a.mcode=b.mcode',
             'LEFT'
         );
-        $result = parent::table('ay_content_sort a')->where("a.acode='" . session('lg') . "'")
+        $result = parent::table('ay_content_sort a')->where("a.acode='" . get_lg() . "'")
             ->where('a.status=1')
             ->join($join)
             ->order('a.pcode,a.sorting,a.id')
@@ -268,7 +268,7 @@ class ParserModel extends Model
                 'a.mcode=b.mcode',
                 'LEFT'
             );
-            $this->sorts = parent::table('ay_content_sort a')->where("a.acode='" . session('lg') . "'")
+            $this->sorts = parent::table('ay_content_sort a')->where("a.acode='" . get_lg() . "'")
                 ->join($join)
                 ->column($fields, 'scode');
         }
@@ -333,7 +333,7 @@ class ParserModel extends Model
         }
         
         $where = array(
-            "a.acode='" . session('lg') . "'",
+            "a.acode='" . get_lg() . "'",
             'a.status=1',
             'd.type=2',
             "a.date<'" . date('Y-m-d H:i:s') . "'"
@@ -405,7 +405,7 @@ class ParserModel extends Model
         }
         
         $where = array(
-            "a.acode='" . session('lg') . "'",
+            "a.acode='" . get_lg() . "'",
             'a.status=1',
             'd.type=2',
             "a.date<'" . date('Y-m-d H:i:s') . "'"
@@ -462,7 +462,7 @@ class ParserModel extends Model
         );
         $result = parent::table('ay_content a')->field($field)
             ->where("a.id='$id' OR a.filename='$id'")
-            ->where("a.acode='" . session('lg') . "'")
+            ->where("a.acode='" . get_lg() . "'")
             ->where('a.status=1')
             ->join($join)
             ->decode()
@@ -507,7 +507,7 @@ class ParserModel extends Model
         );
         $result = parent::table('ay_content a')->field($field)
             ->where("a.scode='$scode' OR b.filename='$scode'")
-            ->where("a.acode='" . session('lg') . "'")
+            ->where("a.acode='" . get_lg() . "'")
             ->where('a.status=1')
             ->join($join)
             ->decode()
@@ -520,7 +520,7 @@ class ParserModel extends Model
     public function getContentPics($id)
     {
         $result = parent::table('ay_content')->where("id='$id'")
-            ->where("acode='" . session('lg') . "'")
+            ->where("acode='" . get_lg() . "'")
             ->where('status=1')
             ->value('pics');
         return $result;
@@ -588,7 +588,7 @@ class ParserModel extends Model
             $this->pre = parent::table('ay_content')->field('id,title,filename')
                 ->where("id<$id")
                 ->in('scode', $scodes)
-                ->where("acode='" . session('lg') . "'")
+                ->where("acode='" . get_lg() . "'")
                 ->where('status=1')
                 ->order('id DESC')
                 ->find();
@@ -605,7 +605,7 @@ class ParserModel extends Model
             $this->next = parent::table('ay_content')->field('id,title,filename')
                 ->where("id>$id")
                 ->in('scode', $scodes)
-                ->where("acode='" . session('lg') . "'")
+                ->where("acode='" . get_lg() . "'")
                 ->where('status=1')
                 ->order('id ASC')
                 ->find();
@@ -617,7 +617,7 @@ class ParserModel extends Model
     public function getSlides($gid, $num)
     {
         $result = parent::table('ay_slide')->where("gid='$gid'")
-            ->where("acode='" . session('lg') . "'")
+            ->where("acode='" . get_lg() . "'")
             ->order('sorting ASC,id ASC')
             ->limit($num)
             ->select();
@@ -628,7 +628,7 @@ class ParserModel extends Model
     public function getLinks($gid, $num)
     {
         $result = parent::table('ay_link')->where("gid='$gid'")
-            ->where("acode='" . session('lg') . "'")
+            ->where("acode='" . get_lg() . "'")
             ->order('sorting ASC,id ASC')
             ->limit($num)
             ->select();
@@ -639,7 +639,7 @@ class ParserModel extends Model
     public function getMessage($num)
     {
         return parent::table('ay_message')->where("status=1")
-            ->where("acode='" . session('lg') . "'")
+            ->where("acode='" . get_lg() . "'")
             ->order('id DESC')
             ->decode(false)
             ->page(1, $num)

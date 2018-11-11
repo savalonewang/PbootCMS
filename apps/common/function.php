@@ -181,37 +181,74 @@ function get_btn($btnName, $theme, $btnAction, $idValue, $id = 'id')
 // 缓存基础信息
 function cache_config($refresh = false)
 {
-    // 判断是否已经设置语言
-    $lg = isset($_COOKIE['lg']) ? cookie('lg') : '';
-    $path = RUN_PATH . '/config/' . md5('config' . $lg) . '.php';
-    if (! file_exists($path) || $refresh) {
-        
+    // 多语言缓存，不存在时自动缓存
+    $lg_comm = RUN_PATH . '/config/' . md5('language') . '.php';
+    if (! file_exists($lg_comm) || $refresh) {
         $model = model('admin.system.Config');
-        
-        // 系统配置
-        $data = $model->getConfig();
-        
-        // 获取区域信息
         $area = $model->getArea();
         if (! isset($area[0])) {
             error('系统没有任何可用区域，请核对后再试！');
         }
-        $data['lgs'] = $area;
+        $lgs['lgs'] = $area;
+        // 缓存语言配置并注入
+        Config::set(md5('language'), $lgs, false);
+    }
+    Config::assign($lg_comm); // 注入多语言
+                              
+    // 语言绑定域名， 如果匹配到多语言绑定则自动设置语言
+    $lgs = Config::get('lgs');
+    if (count($lgs) > 1) {
+        $domain = get_http_host();
+        foreach ($lgs as $value) {
+            if ($value['domain'] == $domain) {
+                cookie('lg', $value['acode']);
+            }
+        }
+    }
+    
+    // 语言配置缓存，不存在时自动缓存，未设置时使用默认语言
+    if (! isset($_COOKIE['lg'])) {
+        $lg = Config::get('lgs.0.acode');
+        cookie('lg', $lg);
+    } else {
+        $lg = cookie('lg');
+    }
+    $lg_config = RUN_PATH . '/config/' . md5('config' . $lg) . '.php';
+    if (! file_exists($lg_config) || $refresh) {
+        
+        // 获取模型
+        if (! isset($model)) {
+            $model = model('admin.system.Config');
+        }
+        
+        // 系统配置
+        $data = $model->getConfig();
         
         // 获取系统设置的主题
-        if (! preg_match('/^[\w]+$/', $lg)) { // 过滤非法参数
-            unset($_COOKIE['lg']);
-            $lg = '';
-        }
-        if (! ! $theme = $model->getTheme($lg ?: $area[0]['acode'])) {
+        if (! ! $theme = $model->getTheme($lg)) {
             $data['theme'] = $theme;
         } else {
             $data['theme'] = 'default';
         }
-        Config::set(md5('config' . $lg), $data, false); // 缓存语言配置并注入
-    } else {
-        Config::assign($path);
+        
+        // 缓存语言配置
+        Config::set(md5('config' . $lg), $data, false);
     }
+    Config::assign($lg_config); // 注入语言配置
+}
+
+// 获取语言并进行安全处理
+function get_lg()
+{
+    if (! cookie('lg')) {
+        cookie('lg', Config::get('lgs.0.acode'));
+    }
+    $lg = cookie('lg');
+    if (! preg_match('/^[\w-]+$/', $lg)) {
+        $lg = Config::get('lgs.0.acode');
+        cookie('lg', $lg);
+    }
+    return $lg;
 }
 
 // 推送百度
@@ -231,6 +268,7 @@ function post_baidu($api, $urls)
     $result = json_decode(curl_exec($ch));
     return $result;
 }
+
 
 
 

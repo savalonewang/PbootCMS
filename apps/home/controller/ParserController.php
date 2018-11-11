@@ -22,9 +22,6 @@ class ParserController extends Controller
     public function __construct()
     {
         $this->model = new ParserModel();
-        if (! issetSession('lg')) {
-            session('lg', $this->config('lgs.0.acode'));
-        }
     }
 
     public function _empty()
@@ -161,7 +158,7 @@ class ParserController extends Controller
                         $content = str_replace($matches[0][$i], APP_THEME_DIR, $content);
                         break;
                     case 'language':
-                        $content = str_replace($matches[0][$i], session('lg'), $content);
+                        $content = str_replace($matches[0][$i], get_lg(), $content);
                         break;
                     case 'statistical':
                         if (isset($data->statistical)) {

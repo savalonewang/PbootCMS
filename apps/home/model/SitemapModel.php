@@ -32,7 +32,7 @@ class SitemapModel extends Model
             'LEFT'
         );
         $result = parent::table('ay_content_sort a')->field($fields)
-            ->where("a.acode='" . session('lg') . "'")
+            ->where("a.acode='" . get_lg() . "'")
             ->where('a.status=1')
             ->join($join)
             ->order('a.pcode,a.sorting,a.id')
@@ -63,7 +63,7 @@ class SitemapModel extends Model
         );
         
         $where = array(
-            "a.acode='" . session('lg') . "'",
+            "a.acode='" . get_lg() . "'",
             'a.status=1',
             'c.type=2'
         );

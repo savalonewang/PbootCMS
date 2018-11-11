@@ -49,6 +49,11 @@
                 	{/pboot:if}
                 	[list:content drophtml=1 len=50]
                 	</p>
+                	<p>
+                	{pboot:tags id=[list:id] scode={sort:tcode}}
+                  		<a href="[tags:link]"><span class="badge badge-secondary">[tags:text]</span></a>
+					{/pboot:tags}
+					</p>
                   </div>
                </div>
          	</div>

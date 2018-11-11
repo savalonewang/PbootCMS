@@ -43,7 +43,7 @@ class ConfigModel extends Model
     // 获取区域列表
     public function getArea()
     {
-        return parent::table('ay_area')->field('acode,name,is_default')
+        return parent::table('ay_area')->field('acode,name,domain,is_default')
             ->order('is_default DESC')
             ->select(1);
     }
