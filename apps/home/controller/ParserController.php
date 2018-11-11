@@ -1647,17 +1647,20 @@ class ParserController extends Controller
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize');
+                $page = true;
                 
                 foreach ($params as $key => $value) {
                     switch ($key) {
                         case 'num':
                             $num = $value;
                             break;
+                        case 'page':
+                            $page = $value;
                     }
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getMessage(escape_string($num))) {
+                if (! $data = $this->model->getMessage(escape_string($num), $page)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1724,6 +1727,7 @@ class ParserController extends Controller
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize');
                 $fcode = - 1;
+                $page = true;
                 
                 // 跳过未指定fcode的标签
                 if (! array_key_exists('fcode', $params)) {
@@ -1738,6 +1742,9 @@ class ParserController extends Controller
                         case 'fcode':
                             $fcode = $value;
                             break;
+                        case 'page':
+                            $page = $value;
+                            break;
                     }
                 }
                 
@@ -1748,7 +1755,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getForm($table, escape_string($num))) {
+                if (! $data = $this->model->getForm($table, escape_string($num), $page)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }

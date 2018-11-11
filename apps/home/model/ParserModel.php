@@ -636,14 +636,23 @@ class ParserModel extends Model
     }
 
     // 获取留言
-    public function getMessage($num)
+    public function getMessage($num, $page)
     {
-        return parent::table('ay_message')->where("status=1")
-            ->where("acode='" . get_lg() . "'")
-            ->order('id DESC')
-            ->decode(false)
-            ->page(1, $num)
-            ->select();
+        if ($page) {
+            return parent::table('ay_message')->where("status=1")
+                ->where("acode='" . get_lg() . "'")
+                ->order('id DESC')
+                ->decode(false)
+                ->page(1, $num)
+                ->select();
+        } else {
+            return parent::table('ay_message')->where("status=1")
+                ->where("acode='" . get_lg() . "'")
+                ->order('id DESC')
+                ->decode(false)
+                ->limit($num)
+                ->select();
+        }
     }
 
     // 新增留言
@@ -682,12 +691,19 @@ class ParserModel extends Model
     }
 
     // 获取表单数据
-    public function getForm($table, $num)
+    public function getForm($table, $num, $page)
     {
-        return parent::table($table)->order('id DESC')
-            ->decode(false)
-            ->page(1, $num)
-            ->select();
+        if ($page) {
+            return parent::table($table)->order('id DESC')
+                ->decode(false)
+                ->page(1, $num)
+                ->select();
+        } else {
+            return parent::table($table)->order('id DESC')
+                ->decode(false)
+                ->limit($num)
+                ->select();
+        }
     }
 
     // 新增表单数据
