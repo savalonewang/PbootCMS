@@ -940,6 +940,9 @@ class ParserController extends Controller
                     $scode = $params['scode'];
                     $page = false; // 如果指定分类默认不分页
                 } else {
+                    if ($cscode == '') {
+                        continue;
+                    }
                     $scode = $cscode;
                     $page = true; // 如果未指定分类默认分页
                 }
