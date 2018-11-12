@@ -914,13 +914,14 @@ class ParserController extends Controller
     }
 
     // 解析内容列表标签
-    public function parserListLabel($content, $scode = '')
+    public function parserListLabel($content, $cscode = '')
     {
         $pattern = '/\{pboot:list(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:list\}/';
         $pattern2 = '/\[list:([\w]+)(\s+[^]]+)?\]/';
         if (preg_match_all($pattern, $content, $matches)) {
             $count = count($matches[0]);
             for ($i = 0; $i < $count; $i ++) {
+                
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize'); // 未设置条数时使用默认15
@@ -939,6 +940,7 @@ class ParserController extends Controller
                     $scode = $params['scode'];
                     $page = false; // 如果指定分类默认不分页
                 } else {
+                    $scode = $cscode;
                     $page = true; // 如果未指定分类默认分页
                 }
                 
