@@ -51,22 +51,9 @@ class ParserModel extends Model
     public function getSort($scode)
     {
         $field = array(
-            'a.id',
-            'a.pcode',
+            'a.*',
             'c.name AS parentname',
-            'a.scode',
-            'a.name',
-            'a.subname',
-            'b.type',
-            'a.filename',
-            'a.outlink',
-            'a.listtpl',
-            'a.contenttpl',
-            'a.ico',
-            'a.pic',
-            'a.keywords',
-            'a.description',
-            'a.sorting'
+            'b.type'
         );
         $join = array(
             array(
@@ -91,22 +78,9 @@ class ParserModel extends Model
     public function getMultSort($scodes)
     {
         $field = array(
-            'a.id',
-            'a.pcode',
+            'a.*',
             'c.name AS parentname',
-            'a.scode',
-            'a.name',
-            'a.subname',
-            'b.type',
-            'a.filename',
-            'a.outlink',
-            'a.listtpl',
-            'a.contenttpl',
-            'a.ico',
-            'a.pic',
-            'a.keywords',
-            'a.description',
-            'a.sorting'
+            'b.type'
         );
         $join = array(
             array(
@@ -159,21 +133,8 @@ class ParserModel extends Model
     public function getSortsTree()
     {
         $fields = array(
-            'a.id',
-            'a.pcode',
-            'a.scode',
-            'a.name',
-            'a.subname',
-            'b.type',
-            'a.filename',
-            'a.outlink',
-            'a.listtpl',
-            'a.contenttpl',
-            'a.ico',
-            'a.pic',
-            'a.keywords',
-            'a.description',
-            'a.sorting'
+            'a.*',
+            'b.type'
         );
         $join = array(
             'ay_model b',
