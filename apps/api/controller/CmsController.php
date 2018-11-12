@@ -185,34 +185,34 @@ class CmsController extends Controller
         $fuzzy = request('fuzzy', 'int') ?: true;
         
         if (! preg_match('/^[\w-,\s]+$/', $order)) {
-            $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+            $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
         } else {
             switch ($order) {
                 case 'id':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,id DESC,date DESC,sorting ASC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.id DESC,a.date DESC,a.sorting ASC';
                     break;
                 case 'date':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,date DESC,sorting ASC,id DESC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.date DESC,a.sorting ASC,a.id DESC';
                     break;
                 case 'sorting':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 case 'istop':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 case 'isrecommend':
-                    $order = 'isrecommend DESC,istop DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.isrecommend DESC,a.istop DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 case 'isheadline':
-                    $order = 'isheadline DESC,istop DESC,isrecommend DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.isheadline DESC,a.istop DESC,a.isrecommend DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 case 'visits':
                 case 'likes':
                 case 'oppose':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $order . ' DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,' . $order . ' DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 default:
-                    $order = $order . ',sorting ASC,date DESC,id DESC';
+                    $order = $order . ',a.sorting ASC,a.date DESC,a.id DESC';
             }
         }
         
@@ -225,9 +225,9 @@ class CmsController extends Controller
             foreach ($tags_arr as $value) {
                 if ($value) {
                     if ($fuzzy) {
-                        $where2[] = "tags like '%" . escape_string($value) . "%'";
+                        $where2[] = "a.tags like '%" . escape_string($value) . "%'";
                     } else {
-                        $where2[] = "tags='" . escape_string($value) . "'";
+                        $where2[] = "a.tags='" . escape_string($value) . "'";
                     }
                 }
             }
@@ -241,6 +241,9 @@ class CmsController extends Controller
             if (strpos($field, '|')) { // 匹配多字段的关键字搜索
                 $field = explode('|', $field);
                 foreach ($field as $value) {
+                    if ($value == 'title') {
+                        $value = 'a.title';
+                    }
                     if ($fuzzy) {
                         $like = " like '%" . $keyword . "%'"; // 前面已经转义过
                     } else {
@@ -257,17 +260,29 @@ class CmsController extends Controller
                 }
             } else { // 匹配单一字段的关键字搜索
                 if ($field) {
+                    if ($field == 'title') {
+                        $field = 'a.title';
+                    }
                     $where3[$field] = $keyword;
                 } else {
-                    $where3['title'] = $keyword;
+                    $where3['a.title'] = $keyword;
                 }
             }
         }
         
         // 数据接收
-        foreach ($_POST as $key => $value) {
-            if (! ! $value = post($key, 'vars')) {
-                if (preg_match('/^[\w-]+$/', $key)) { // 带有违规字符时不带入查询
+        if ($_POST) {
+            $receive = $_POST;
+        } else {
+            $receive = $_GET;
+        }
+        
+        foreach ($receive as $key => $value) {
+            if (! ! $value = request($key, 'vars')) {
+                if ($key == 'title') {
+                    $key = 'a.title';
+                }
+                if (preg_match('/^[\w-\.]+$/', $key)) { // 带有违规字符时不带入查询
                     $where3[$key] = $value;
                 }
             }

@@ -924,7 +924,7 @@ class ParserController extends Controller
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize'); // 未设置条数时使用默认15
-                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC'; // 默认排序
+                $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC'; // 默认排序
                 $filter = ''; // 过滤
                 $tags = ''; // tag标签
                 $fuzzy = true; // 设置过滤、tag、筛选是否模糊匹配
@@ -955,30 +955,30 @@ class ParserController extends Controller
                         case 'order':
                             switch ($value) {
                                 case 'id':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,id DESC,date DESC,sorting ASC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.id DESC,a.date DESC,a.sorting ASC';
                                     break;
                                 case 'date':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,date DESC,sorting ASC,id DESC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.date DESC,a.sorting ASC,a.id DESC';
                                     break;
                                 case 'sorting':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 case 'istop':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 case 'isrecommend':
-                                    $order = 'isrecommend DESC,istop DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.isrecommend DESC,a.istop DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 case 'isheadline':
-                                    $order = 'isheadline DESC,istop DESC,isrecommend DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.isheadline DESC,a.istop DESC,a.isrecommend DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 case 'visits':
                                 case 'likes':
                                 case 'oppose':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $value . ' DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,' . $value . ' DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 default:
-                                    $order = $value . ',sorting ASC,date DESC,id DESC';
+                                    $order = $value . ',a.sorting ASC,a.date DESC,a.id DESC';
                             }
                             break;
                         case 'filter':
@@ -1017,6 +1017,9 @@ class ParserController extends Controller
                     $filter = explode('|', $filter);
                     if (count($filter) == 2) {
                         $filter_arr = explode(',', $filter[1]);
+                        if ($filter[0] == 'title') {
+                            $filter[0] = 'a.title';
+                        }
                         foreach ($filter_arr as $value) {
                             if ($value) {
                                 if ($fuzzy) {
@@ -1036,9 +1039,9 @@ class ParserController extends Controller
                     foreach ($tags_arr as $value) {
                         if ($value) {
                             if ($fuzzy) {
-                                $where2[] = "tags like '%" . escape_string($value) . "%'";
+                                $where2[] = "a.tags like '%" . escape_string($value) . "%'";
                             } else {
-                                $where2[] = "tags='" . escape_string($value) . "'";
+                                $where2[] = "a.tags='" . escape_string($value) . "'";
                             }
                         }
                     }
@@ -1047,9 +1050,9 @@ class ParserController extends Controller
                 // tags数据传值筛选
                 if (! ! $get_tags = get('tags', 'vars')) {
                     if ($fuzzy) {
-                        $where2[] = "tags like '%" . $get_tags . "%'";
+                        $where2[] = "a.tags like '%" . $get_tags . "%'";
                     } else {
-                        $where2[] = "tags='" . $get_tags . "'";
+                        $where2[] = "a.tags='" . $get_tags . "'";
                     }
                 }
                 
@@ -1855,9 +1858,9 @@ class ParserController extends Controller
         $pattern2 = '/\[search:([\w]+)(\s+[^]]+)?\]/';
         if (preg_match_all($pattern, $content, $matches)) {
             $count = count($matches[0]);
-            $field = get('field', 'var');
-            $keyword = get('keyword', 'vars');
-            $scode = get('scode');
+            $field = request('field', 'var');
+            $keyword = request('keyword', 'vars');
+            $scode = request('scode');
             if (! preg_match('/^[\w,\s]+$/', $scode)) {
                 $scode = '';
             }
@@ -1867,7 +1870,7 @@ class ParserController extends Controller
                 // 获取调节参数
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize'); // 未设置条数时使用默认15
-                $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC'; // 默认排序
+                $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC'; // 默认排序
                 $filter = ''; // 过滤
                 $tags = ''; // tag标签
                 $fuzzy = true; // 设置过滤、tag、筛选是否模糊匹配
@@ -1892,30 +1895,30 @@ class ParserController extends Controller
                         case 'order':
                             switch ($value) {
                                 case 'id':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,id DESC,date DESC,sorting ASC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.id DESC,a.date DESC,a.sorting ASC';
                                     break;
                                 case 'date':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,date DESC,sorting ASC,id DESC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.date DESC,a.sorting ASC,a.id DESC';
                                     break;
                                 case 'sorting':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 case 'istop':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 case 'isrecommend':
-                                    $order = 'isrecommend DESC,istop DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.isrecommend DESC,a.istop DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 case 'isheadline':
-                                    $order = 'isheadline DESC,istop DESC,isrecommend DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.isheadline DESC,a.istop DESC,a.isrecommend DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 case 'visits':
                                 case 'likes':
                                 case 'oppose':
-                                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $value . ' DESC,sorting ASC,date DESC,id DESC';
+                                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,' . $value . ' DESC,a.sorting ASC,a.date DESC,a.id DESC';
                                     break;
                                 default:
-                                    $order = $value . ',sorting ASC,date DESC,id DESC';
+                                    $order = $value . ',a.sorting ASC,a.date DESC,a.id DESC';
                             }
                             break;
                         case 'filter':
@@ -1957,6 +1960,9 @@ class ParserController extends Controller
                     $filter = explode('|', $filter);
                     if (count($filter) == 2) {
                         $filter_arr = explode(',', $filter[1]);
+                        if ($filter[0] == 'title') {
+                            $filter[0] = 'a.title';
+                        }
                         foreach ($filter_arr as $value) {
                             if ($value) {
                                 if ($fuzzy) {
@@ -1976,9 +1982,9 @@ class ParserController extends Controller
                     foreach ($tags_arr as $value) {
                         if ($value) {
                             if ($fuzzy) {
-                                $where2[] = "tags like '%" . escape_string($value) . "%'";
+                                $where2[] = "a.tags like '%" . escape_string($value) . "%'";
                             } else {
-                                $where2[] = "tags='" . escape_string($value) . "'";
+                                $where2[] = "a.tags='" . escape_string($value) . "'";
                             }
                         }
                     }
@@ -1992,6 +1998,9 @@ class ParserController extends Controller
                     if (strpos($field, '|')) { // 匹配多字段的关键字搜索
                         $field = explode('|', $field);
                         foreach ($field as $value) {
+                            if ($value == 'title') {
+                                $value = 'a.title';
+                            }
                             if ($fuzzy) {
                                 $like = " like '%" . $keyword . "%'"; // 前面已经转义过
                             } else {
@@ -2008,17 +2017,29 @@ class ParserController extends Controller
                         }
                     } else { // 匹配单一字段的关键字搜索
                         if ($field) {
+                            if ($field == 'title') {
+                                $field = 'a.title';
+                            }
                             $where3[$field] = $keyword;
                         } else {
-                            $where3['title'] = $keyword;
+                            $where3['a.title'] = $keyword;
                         }
                     }
                 }
                 
                 // 数据接收
-                foreach ($_GET as $key => $value) {
-                    if (! ! $value = get($key, 'vars')) {
-                        if (preg_match('/^[\w-]+$/', $key)) { // 带有违规字符时不带入查询
+                if ($_POST) {
+                    $receive = $_POST;
+                } else {
+                    $receive = $_GET;
+                }
+                
+                foreach ($receive as $key => $value) {
+                    if (! ! $value = request($key, 'vars')) {
+                        if ($key == 'title') {
+                            $key = 'a.title';
+                        }
+                        if (preg_match('/^[\w-\.]+$/', $key)) { // 带有违规字符时不带入查询
                             $where3[$key] = $value;
                         }
                     }

@@ -30,34 +30,34 @@ class ListController extends Controller
         $num = request('num', 'int') ?: $this->config('pagesize');
         $order = get('order');
         if (! preg_match('/^[\w-,\s]+$/', $order)) {
-            $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+            $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
         } else {
             switch ($order) {
                 case 'id':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,id DESC,date DESC,sorting ASC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.id DESC,a.date DESC,a.sorting ASC';
                     break;
                 case 'date':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,date DESC,sorting ASC,id DESC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.date DESC,a.sorting ASC,a.id DESC';
                     break;
                 case 'sorting':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 case 'istop':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 case 'isrecommend':
-                    $order = 'isrecommend DESC,istop DESC,isheadline DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.isrecommend DESC,a.istop DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 case 'isheadline':
-                    $order = 'isheadline DESC,istop DESC,isrecommend DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.isheadline DESC,a.istop DESC,a.isrecommend DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 case 'visits':
                 case 'likes':
                 case 'oppose':
-                    $order = 'istop DESC,isrecommend DESC,isheadline DESC,' . $order . ' DESC,sorting ASC,date DESC,id DESC';
+                    $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,' . $order . ' DESC,a.sorting ASC,a.date DESC,a.id DESC';
                     break;
                 default:
-                    $order = $order . ',sorting ASC,date DESC,id DESC';
+                    $order = $order . ',a.sorting ASC,a.date DESC,a.id DESC';
             }
         }
         
