@@ -65,20 +65,8 @@ class CmsModel extends Model
     public function getSort($acode, $scode)
     {
         $field = array(
-            'a.id',
-            'a.pcode',
-            'a.scode',
-            'a.name',
-            'a.subname',
-            'b.type',
-            'a.outlink',
-            'a.listtpl',
-            'a.contenttpl',
-            'a.ico',
-            'a.pic',
-            'a.keywords',
-            'a.description',
-            'a.sorting'
+            'a.*',
+            'b.type'
         );
         $join = array(
             'ay_model b',
@@ -96,20 +84,8 @@ class CmsModel extends Model
     public function getSorts($acode)
     {
         $fields = array(
-            'a.id',
-            'a.pcode',
-            'a.scode',
-            'a.name',
-            'a.subname',
-            'b.type',
-            'a.outlink',
-            'a.listtpl',
-            'a.contenttpl',
-            'a.ico',
-            'a.pic',
-            'a.keywords',
-            'a.description',
-            'a.sorting'
+            'a.*',
+            'b.type'
         );
         $join = array(
             'ay_model b',
@@ -129,20 +105,8 @@ class CmsModel extends Model
     public function getSortsSon($acode, $scode)
     {
         $fields = array(
-            'a.id',
-            'a.pcode',
-            'a.scode',
-            'a.name',
-            'a.subname',
-            'b.type',
-            'a.outlink',
-            'a.listtpl',
-            'a.contenttpl',
-            'a.ico',
-            'a.pic',
-            'a.keywords',
-            'a.description',
-            'a.sorting'
+            'a.*',
+            'b.type'
         );
         $join = array(
             'ay_model b',

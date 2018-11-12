@@ -96,7 +96,9 @@
 		                        <td>
 		                        	<a href="{url./home/content/index/id/'.$value->id.'}?nocache=1" class="layui-btn layui-btn-xs layui-btn-primary"  target="_blank">查看</a>
 		                            {fun=get_btn_del($value->id)}
-		                            <a href="{url./admin/Content/mod/mcode/'.get('mcode').'/id/'.$value->id.'}?backurl={$backurl}" class="layui-btn layui-btn-xs" >修改</a>
+		                            {if(check_level('mod'))}
+		                            	<a href="{url./admin/Content/mod/mcode/'.get('mcode').'/id/'.$value->id.'}?backurl={$backurl}" class="layui-btn layui-btn-xs" >修改</a>
+		                            {/if}
 		                        </td>
 		                    </tr>
 		                    {/foreach}
@@ -110,12 +112,18 @@
 	                             {$search_select}
 	                     </select>
                     </div>
+                    {if(check_level('mod'))}
                     <button type="submit" name="submit" value="copy" class="layui-btn">复制</button>
                     <button type="submit" name="submit" value="move" class="layui-btn">移动</button>
+                    {/if}
+                    {if(check_level('del'))}
 			     	<button type="submit" name="submit" onclick="return setDelAction();" class="layui-btn">批量删除</button>
+			     	{/if}
+			     	{if(check_level('mod'))}
 			     	<button type="submit" name="submit" value="sorting" class="layui-btn">保存排序</button>
 			     	<button type="submit" name="submit" value="baiduzz" class="layui-btn">百度推送</button>
 			     	<button type="submit" name="submit" value="baiduxzh" class="layui-btn">熊掌号推送</button>
+			     	 {/if}
 			     	<script>
 			     		function setDelAction(){
 			     			document.contentForm.action = "{url./admin/Content/del}"; 

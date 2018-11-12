@@ -256,6 +256,8 @@ function post_baidu($api, $urls)
 {
     $ch = curl_init();
     $options = array(
+        CURLOPT_CONNECTTIMEOUT => 30,
+        CURLOPT_TIMEOUT => 90,
         CURLOPT_URL => $api,
         CURLOPT_POST => true,
         CURLOPT_RETURNTRANSFER => true,

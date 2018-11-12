@@ -129,40 +129,40 @@ function get_url($url, $fields = array(), $UserAgent = null, $vfSSL = false)
 {
     $SSL = substr($url, 0, 8) == "https://" ? true : false;
     
-    $ci = curl_init();
+    $ch = curl_init();
     if ($UserAgent) { // 在HTTP请求中包含一个"User-Agent: "头的字符串。
-        curl_setopt($ci, CURLOPT_USERAGENT, $UserAgent);
+        curl_setopt($ch, CURLOPT_USERAGENT, $UserAgent);
     } else {
-        curl_setopt($ci, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
+        curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
     }
-    curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 60); // 在发起连接前等待的时间，如果设置为0，则无限等待
-    curl_setopt($ci, CURLOPT_TIMEOUT, 90); // 设置cURL允许执行的最长秒数
-    curl_setopt($ci, CURLOPT_URL, $url); // 设置请求地址
-    curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1); // 设置cURL 参数，要求结果保存到字符串中还是输出到屏幕上。
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60); // 在发起连接前等待的时间，如果设置为0，则无限等待
+    curl_setopt($ch, CURLOPT_TIMEOUT, 90); // 设置cURL允许执行的最长秒数
+    curl_setopt($ch, CURLOPT_URL, $url); // 设置请求地址
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 设置cURL 参数，要求结果保存到字符串中还是输出到屏幕上。
                                                  
     // SSL验证
     if ($SSL) {
         if ($vfSSL) {
-            curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, true);
-            curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, 2);
-            curl_setopt($ci, CURLOPT_CAINFO, CORE_PATH . '/cacert.pem');
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($ch, CURLOPT_CAINFO, CORE_PATH . '/cacert.pem');
         } else {
-            curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, false); // 信任任何证书
-            curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, 0); // 不检查证书中是否设置域名
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // 信任任何证书
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // 不检查证书中是否设置域名
         }
     }
     
     // 数据字段
     if ($fields) {
-        curl_setopt($ci, CURLOPT_POST, true);
-        curl_setopt($ci, CURLOPT_POSTFIELDS, http_build_query($fields));
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
     }
     
-    $output = curl_exec($ci);
-    if (curl_errno($ci)) {
-        error('请求远程地址错误：' . curl_error($ci));
+    $output = curl_exec($ch);
+    if (curl_errno($ch)) {
+        error('请求远程地址错误：' . curl_error($ch));
     }
-    curl_close($ci);
+    curl_close($ch);
     return $output;
 }
 
