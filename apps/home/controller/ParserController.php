@@ -935,11 +935,6 @@ class ParserController extends Controller
                 $isrecommend = ''; // 是否推荐
                 $isheadline = ''; // 是否头条
                                   
-                // 解析当前列表时，带有scode不解析
-                if ($cscode && array_key_exists('scode', $params)) {
-                    continue;
-                }
-                
                 // 判断当前栏目和指定栏目
                 if ($cscode && ! array_key_exists('scode', $params)) { // 解析当前
                     $scode = $cscode;
