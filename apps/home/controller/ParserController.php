@@ -1469,7 +1469,7 @@ class ParserController extends Controller
                                 $one_html = str_replace($matches2[0][$j], $value['tags'], $one_html);
                                 break;
                             case 'link':
-                                $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value['scode'] . '?tags=' . $value['tags']), $one_html);
+                                $one_html = str_replace($matches2[0][$j], url('/home/list/index/scode/' . $value['scode']) . '?tags=' . $value['tags'], $one_html);
                                 break;
                         }
                     }
