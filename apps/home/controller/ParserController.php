@@ -935,16 +935,20 @@ class ParserController extends Controller
                 $isrecommend = ''; // 是否推荐
                 $isheadline = ''; // 是否头条
                                   
-                // list指定了scode时优先
-                if (array_key_exists('scode', $params)) {
+                // 解析当前列表时，带有scode不解析
+                if ($cscode && array_key_exists('scode', $params)) {
+                    continue;
+                }
+                
+                // 判断当前栏目和指定栏目
+                if ($cscode && ! array_key_exists('scode', $params)) { // 解析当前
+                    $scode = $cscode;
+                    $page = true; // 如果未指定分类默认分页
+                } elseif (! $cscode && array_key_exists('scode', $params)) { // 解析指定
                     $scode = $params['scode'];
                     $page = false; // 如果指定分类默认不分页
                 } else {
-                    if ($cscode == '') {
-                        continue;
-                    }
-                    $scode = $cscode;
-                    $page = true; // 如果未指定分类默认分页
+                    continue;
                 }
                 
                 if ($scode == '*') {
