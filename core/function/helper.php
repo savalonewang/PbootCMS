@@ -536,7 +536,7 @@ function cookie($name, $value = null, $expire = null, $path = null, $domain = nu
     if (! is_null($value)) {
         $path = SITE_DIR . '/';
         if (is_string($value))
-            $value = base64_encode(trim($value));
+            $value = trim($value);
         
         $_COOKIE[$name] = $value; // 让cookie立即生效
         if (! is_null($expire)) {
@@ -546,7 +546,7 @@ function cookie($name, $value = null, $expire = null, $path = null, $domain = nu
         }
     } else {
         if (isset($_COOKIE[$name])) {
-            return escape_string(base64_decode($_COOKIE[$name]));
+            return escape_string($_COOKIE[$name]);
         } else {
             return null;
         }
