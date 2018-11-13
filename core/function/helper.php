@@ -47,6 +47,9 @@ function error($string, $jump_url = null, $time = 2)
         $err_tpl = CORE_PATH . '/template/error.html';
         if ($jump_url == '-1' && isset($_SERVER['HTTP_REFERER'])) {
             $jump_url = $_SERVER['HTTP_REFERER'];
+            if (strpos($jump_url, get_http_url()) !== 0) {
+                $jump_url = '/';
+            }
         } elseif ($jump_url == '-1') {
             $jump_url = null;
         }
@@ -70,6 +73,9 @@ function success($string, $jump_url = null, $time = 2)
         $err_tpl = CORE_PATH . '/template/success.html';
         if ($jump_url == '-1' && isset($_SERVER['HTTP_REFERER'])) {
             $jump_url = $_SERVER['HTTP_REFERER'];
+            if (strpos($jump_url, get_http_url()) !== 0) {
+                $jump_url = '/';
+            }
         } elseif ($jump_url == '-1') {
             $jump_url = null;
         }
@@ -116,6 +122,9 @@ function location($url)
 {
     if ($url == '-1' && isset($_SERVER['HTTP_REFERER'])) {
         $url = $_SERVER['HTTP_REFERER'];
+        if (strpos($url, get_http_url()) !== 0) {
+            $url = '/';
+        }
     }
     header('Location:' . $url);
     exit();
@@ -134,6 +143,9 @@ function alert_location($info, $url)
     } else {
         if ($url == '-1' && isset($_SERVER['HTTP_REFERER'])) {
             $url = $_SERVER['HTTP_REFERER'];
+            if (strpos($url, get_http_url()) !== 0) {
+                $url = '/';
+            }
         }
         echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");location.href="' . $url . '";</script>';
         exit();
@@ -519,22 +531,22 @@ function request($name, $type = null, $require = false, $vartext = null, $defaul
  * @param string $path
  *            路径，默认站点目录
  */
-function cookie($name, $value = null, $expire = null, $path = null)
+function cookie($name, $value = null, $expire = null, $path = null, $domain = null, $secure = null, $httponly = true)
 {
     if (! is_null($value)) {
         $path = SITE_DIR . '/';
         if (is_string($value))
-            $value = trim($value);
+            $value = base64_encode(trim($value));
         
         $_COOKIE[$name] = $value; // 让cookie立即生效
         if (! is_null($expire)) {
-            return setcookie($name, $value, time() + $expire, $path);
+            return setcookie($name, $value, time() + $expire, $path, $domain, $secure, $httponly);
         } else {
-            return setcookie($name, $value, 0, $path);
+            return setcookie($name, $value, 0, $path, $domain, $secure, $httponly);
         }
     } else {
         if (isset($_COOKIE[$name])) {
-            return escape_string($_COOKIE[$name]);
+            return escape_string(base64_decode($_COOKIE[$name]));
         } else {
             return null;
         }
