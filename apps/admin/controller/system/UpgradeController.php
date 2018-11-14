@@ -181,9 +181,11 @@ class UpgradeController extends Controller
                 
                 // 替换文件
                 if (isset($files)) {
-                    if (! copy($files['sfile'], $files['dfile'])) {
-                        $this->log("文件 " . $value . " 更新失败!");
-                        json(0, "文件 " . basename($value) . " 更新失败，请重试!");
+                    foreach ($files as $value) {
+                        if (! copy($value['sfile'], $value['dfile'])) {
+                            $this->log("文件 " . $value['dfile'] . " 更新失败!");
+                            json(0, "文件 " . basename($value['dfile']) . " 更新失败，请重试!");
+                        }
                     }
                 }
                 
