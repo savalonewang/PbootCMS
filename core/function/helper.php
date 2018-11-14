@@ -89,10 +89,10 @@ function success($string, $jump_url = null, $time = 2)
  *
  * @param string $info信息            
  */
-function alert($info)
+function alert($info, $status = 0)
 {
     if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
-        Response::json(0, strip_tags($info));
+        Response::json($status, strip_tags($info));
     } else {
         echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");</script>';
     }
@@ -103,10 +103,10 @@ function alert($info)
  *
  * @param string $info信息            
  */
-function alert_back($info)
+function alert_back($info, $status = 0)
 {
     if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
-        Response::json(0, strip_tags($info));
+        Response::json($status, strip_tags($info));
     } else {
         echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");window.history.go(-1);</script>';
         exit();
@@ -136,10 +136,10 @@ function location($url)
  * @param string $info信息            
  * @param string $url跳转地址            
  */
-function alert_location($info, $url)
+function alert_location($info, $url, $status = 0)
 {
     if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
-        Response::json(0, strip_tags($info));
+        Response::json($status, strip_tags($info));
     } else {
         if ($url == '-1' && isset($_SERVER['HTTP_REFERER'])) {
             $url = $_SERVER['HTTP_REFERER'];
@@ -157,10 +157,10 @@ function alert_location($info, $url)
  *
  * @param string $info信息            
  */
-function alert_close($info)
+function alert_close($info, $status = 0)
 {
     if (Config::get('return_data_type') == 'json' || is_ajax()) { // 接口模型返回格式数据
-        Response::json(0, strip_tags($info));
+        Response::json($status, strip_tags($info));
     } else {
         echo '<script type="text/javascript">alert("' . clear_html_blank($info) . '");window.close();</script>';
         exit();

@@ -86,7 +86,7 @@ class FormController extends Controller
                     $mail_body .= '<br>来自网站 ' . get_http_url() . ' （' . date('Y-m-d H:i:s') . '）';
                     sendmail($this->config(), $this->config('message_send_to'), $mail_subject, $mail_body);
                 }
-                alert_location('提交成功！', '-1');
+                alert_location('提交成功！', '-1', 1);
             } else {
                 $this->log('提交表单数据失败！');
                 alert_back('提交失败！');

@@ -133,7 +133,7 @@ class UpgradeController extends Controller
                 $list = explode(',', $list);
                 $backdir = date('YmdHis');
                 
-                // 更新文件
+                // 分离文件
                 foreach ($list as $value) {
                     if (stripos($value, '/script/') !== false) {
                         $sqls[] = $value;
@@ -141,15 +141,15 @@ class UpgradeController extends Controller
                         $path = RUN_PATH . '/upgrade' . $value;
                         $des_path = ROOT_PATH . $value;
                         $back_path = DOC_PATH . STATIC_DIR . '/backup/upgrade/' . $backdir . $value;
-                        check_dir(dirname($des_path), true);
+                        check_dir(dirname($des_path), true); // 检查目录并字段创建
                         if (file_exists($des_path)) { // 文件存在时执行备份
                             check_dir(dirname($back_path), true);
                             copy($des_path, $back_path);
                         }
-                        if (! copy($path, $des_path)) {
-                            $this->log("文件 " . $value . " 更新失败!");
-                            json(0, "文件 " . basename($value) . " 更新失败，请重试!");
-                        }
+                        $files[] = array(
+                            'sfile' => $path,
+                            'dfile' => $des_path
+                        );
                     }
                 }
                 
@@ -176,6 +176,14 @@ class UpgradeController extends Controller
                         } else {
                             json(0, "数据库文件" . basename($value) . "不存在！");
                         }
+                    }
+                }
+                
+                // 替换文件
+                if (isset($files)) {
+                    if (! copy($files['sfile'], $files['dfile'])) {
+                        $this->log("文件 " . $value . " 更新失败!");
+                        json(0, "文件 " . basename($value) . " 更新失败，请重试!");
                     }
                 }
                 
