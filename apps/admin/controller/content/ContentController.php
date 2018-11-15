@@ -327,7 +327,9 @@ class ContentController extends Controller
                     }
                     $api = "http://data.zz.baidu.com/urls?site=$domain&token=$token";
                     foreach ($list as $key => $value) {
-                        $urls[] = $domain . url('/home/content/index/id/' . $value);
+                        $url = $domain . url('/home/content/index/id/' . $value);
+                        $this->log('百度推送：' . $url);
+                        $urls[] = $url;
                     }
                     $result = post_baidu($api, $urls);
                     if (isset($result->error)) {
@@ -351,7 +353,9 @@ class ContentController extends Controller
                     }
                     $api = "http://data.zz.baidu.com/urls?appid=$appid&token=$token&type=realtime";
                     foreach ($list as $key => $value) {
-                        $urls[] = $domain . url('/home/content/index/id/' . $value);
+                        $url = $domain . url('/home/content/index/id/' . $value);
+                        $this->log('熊掌号推送：' . $url);
+                        $urls[] = $url;
                     }
                     $result = post_baidu($api, $urls);
                     if (isset($result->error)) {
