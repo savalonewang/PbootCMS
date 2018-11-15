@@ -1192,7 +1192,7 @@ class ParserController extends Controller
                     $data = $this->model->getContent(escape_string($id));
                 } elseif (array_key_exists('scode', $params)) {
                     $scode = $params['scode'];
-                    $data = $this->model->getContent(escape_string($scode));
+                    $data = $this->model->getAbout(escape_string($scode));
                 } else {
                     continue;
                 }
