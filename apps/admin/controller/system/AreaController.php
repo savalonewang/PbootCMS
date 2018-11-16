@@ -101,7 +101,19 @@ class AreaController extends Controller
             }
             
             if (! $name) {
-                alert_back('区域名不能为空！');
+                alert_back('区域名称不能为空！');
+            }
+            
+            $reg = '{^(https://|http://)?([\w-.]+)[\/]+?$}';
+            if (preg_match($reg, $domain)) {
+                $domain = preg_replace($reg, '$2', $domain);
+            } else {
+                alert_back('要绑定的域名输入有错！');
+            }
+            
+            // 检查绑定
+            if ($this->model->checkArea("domain='$domain'")) {
+                alert_back('该域名已经绑定其他区域，不能再使用！');
             }
             
             // 检查编码
@@ -216,10 +228,6 @@ class AreaController extends Controller
             $domain = post('domain');
             $is_default = post('is_default');
             
-            if ($acode == 'cn') {
-                $acode_new = 'cn';
-            }
-            
             if (! $acode_new) {
                 alert_back('编码不能为空！');
             }
@@ -229,7 +237,19 @@ class AreaController extends Controller
             }
             
             if (! $name) {
-                alert_back('区域名不能为空！');
+                alert_back('区域名称不能为空！');
+            }
+            
+            $reg = '{^(https://|http://)?([\w-.]+)[\/]+?$}';
+            if (preg_match($reg, $domain)) {
+                $domain = preg_replace($reg, '$2', $domain);
+            } else {
+                alert_back('要绑定的域名输入有错！');
+            }
+            
+            // 检查绑定
+            if ($this->model->checkArea("domain='$domain' AND acode<>'$acode'")) {
+                alert_back('该域名已经绑定其他区域，不能再使用！');
             }
             
             // 检查编码

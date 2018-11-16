@@ -86,8 +86,12 @@ class IndexController extends Controller
         }
         
         // 就收数据
-        $username = post('username', 'vars', true);
+        $username = post('username');
         $password = post('password');
+        
+        if (! preg_match('/^[\x{4e00}-\x{9fa5}\w\-\.@]+$/u', $username)) {
+            json(0, '用户名含有特殊字符！');
+        }
         
         if (! $username) {
             json(0, '用户名不能为空！');
@@ -170,6 +174,10 @@ class IndexController extends Controller
             }
             if (! $cpassword) {
                 alert_back('当前密码不能为空！');
+            }
+            
+            if (! preg_match('/^[\x{4e00}-\x{9fa5}\w\-\.@]+$/u', $username)) {
+                alert_back('用户名含有不允许的特殊字符！');
             }
             
             $data = array(
