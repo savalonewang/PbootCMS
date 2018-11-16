@@ -90,7 +90,7 @@ class IndexController extends Controller
         $password = post('password');
         
         if (! preg_match('/^[\x{4e00}-\x{9fa5}\w\-\.@]+$/u', $username)) {
-            json(0, '用户名含有特殊字符！');
+            json(0, '用户名含有不允许的特殊字符！');
         }
         
         if (! $username) {
