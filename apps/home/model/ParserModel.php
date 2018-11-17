@@ -243,7 +243,7 @@ class ParserModel extends Model
     }
 
     // 列表内容,带分页
-    public function getLists($scode, $num, $order, $filter = array(), $tags = array(), $select = array(), $fuzzy = true)
+    public function getLists($scode, $num, $order, $filter = array(), $tags = array(), $select = array(), $fuzzy = true, $start = 1)
     {
         $fields = array(
             'a.*',
@@ -309,13 +309,13 @@ class ParserModel extends Model
             ->where($tags, 'OR')
             ->join($join)
             ->order($order)
-            ->page(1, $num)
+            ->page(1, $num, $start)
             ->decode()
             ->select();
     }
 
     // 列表内容，不带分页
-    public function getList($scode, $num, $order, $filter = array(), $tags = array(), $select = array(), $fuzzy = true)
+    public function getList($scode, $num, $order, $filter = array(), $tags = array(), $select = array(), $fuzzy = true, $start = 1)
     {
         $fields = array(
             'a.*',
@@ -381,7 +381,7 @@ class ParserModel extends Model
             ->where($tags, 'OR')
             ->join($join)
             ->order($order)
-            ->limit($num)
+            ->limit($start - 1, $num)
             ->decode()
             ->select();
     }
@@ -575,43 +575,43 @@ class ParserModel extends Model
     }
 
     // 幻灯片
-    public function getSlides($gid, $num)
+    public function getSlides($gid, $num, $start = 1)
     {
         $result = parent::table('ay_slide')->where("gid='$gid'")
             ->where("acode='" . get_lg() . "'")
             ->order('sorting ASC,id ASC')
-            ->limit($num)
+            ->limit($start - 1, $num)
             ->select();
         return $result;
     }
 
     // 友情链接
-    public function getLinks($gid, $num)
+    public function getLinks($gid, $num, $start = 1)
     {
         $result = parent::table('ay_link')->where("gid='$gid'")
             ->where("acode='" . get_lg() . "'")
             ->order('sorting ASC,id ASC')
-            ->limit($num)
+            ->limit($start - 1, $num)
             ->select();
         return $result;
     }
 
     // 获取留言
-    public function getMessage($num, $page)
+    public function getMessage($num, $page = true, $start = 1)
     {
         if ($page) {
             return parent::table('ay_message')->where("status=1")
                 ->where("acode='" . get_lg() . "'")
                 ->order('id DESC')
                 ->decode(false)
-                ->page(1, $num)
+                ->page(1, $num, $start)
                 ->select();
         } else {
             return parent::table('ay_message')->where("status=1")
                 ->where("acode='" . get_lg() . "'")
                 ->order('id DESC')
                 ->decode(false)
-                ->limit($num)
+                ->limit($start - 1, $num)
                 ->select();
         }
     }
@@ -652,17 +652,17 @@ class ParserModel extends Model
     }
 
     // 获取表单数据
-    public function getForm($table, $num, $page)
+    public function getForm($table, $num, $page = true, $start = 1)
     {
         if ($page) {
             return parent::table($table)->order('id DESC')
                 ->decode(false)
-                ->page(1, $num)
+                ->page(1, $num, $start)
                 ->select();
         } else {
             return parent::table($table)->order('id DESC')
                 ->decode(false)
-                ->limit($num)
+                ->limit($start - 1, $num)
                 ->select();
         }
     }

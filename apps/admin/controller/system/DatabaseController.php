@@ -113,10 +113,10 @@ class DatabaseController extends Controller
                 foreach ($sql as $value) {
                     $value = trim($value);
                     // 不允许执行删除操作
-                    if ($value && ! preg_match('/(^|[\s]+)(drop|truncate|set)[\s]+/i', $value)) {
+                    if ($value && preg_match('/(^|[\s]+)(insert|delete|update|select|create|alter)[\s]+/i', $value)) {
                         $this->model->amd($value);
                     } else {
-                        error('存在不允许执行的语句!', - 1);
+                        error('存在不允许执行的语句：' . $value);
                     }
                 }
                 $this->log('执行数据库脚本成功！');

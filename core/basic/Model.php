@@ -841,6 +841,9 @@ class Model
             }
             $paging->page = $var_arr[0];
             $paging->pageSize = $var_arr[1];
+            if (isset($var_arr[2])) {
+                $paging->start = $var_arr[2];
+            }
         } else {
             $paging->page = $args;
         }

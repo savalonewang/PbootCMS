@@ -934,7 +934,8 @@ class ParserController extends Controller
                 $istop = ''; // 是否置顶
                 $isrecommend = ''; // 是否推荐
                 $isheadline = ''; // 是否头条
-                                  
+                $start = 1; // 起始条数，默认第一条开始
+                            
                 // 判断当前栏目和指定栏目
                 if ($cscode && ! array_key_exists('scode', $params)) { // 解析当前
                     $scode = $cscode;
@@ -1011,6 +1012,9 @@ class ParserController extends Controller
                             break;
                         case 'page':
                             $page = $value;
+                            break;
+                        case 'start':
+                            $start = $value;
                             break;
                     }
                 }
@@ -1113,15 +1117,20 @@ class ParserController extends Controller
                     }
                 }
                 
+                // 起始数校验
+                if (! is_numeric($start) || $start < 1) {
+                    $start = 1;
+                }
+                
                 if ($page) {
                     if (isset($paging)) {
                         error('请不要在一个页面使用多个具有分页的列表，您可将多余的使用page=0关闭分页！');
                     } else {
                         $paging = true;
-                        $data = $this->model->getLists($scode, $num, $order, $where1, $where2, $where3, $fuzzy);
+                        $data = $this->model->getLists($scode, $num, $order, $where1, $where2, $where3, $fuzzy, $start);
                     }
                 } else {
-                    $data = $this->model->getList($scode, $num, $order, $where1, $where2, $where3, $fuzzy);
+                    $data = $this->model->getList($scode, $num, $order, $where1, $where2, $where3, $fuzzy, $start);
                 }
                 
                 // 无数据直接替换
@@ -1502,6 +1511,7 @@ class ParserController extends Controller
                 $params = $this->parserParam($matches[1][$i]);
                 $gid = 1;
                 $num = 5;
+                $start = 1;
                 
                 // 跳过未指定gid的标签
                 if (! array_key_exists('gid', $params)) {
@@ -1517,11 +1527,19 @@ class ParserController extends Controller
                         case 'num':
                             $num = $value;
                             break;
+                        case 'start':
+                            $start = $value;
+                            break;
                     }
                 }
                 
+                // 起始数校验
+                if (! is_numeric($start) || $start < 1) {
+                    $start = 1;
+                }
+                
                 // 读取数据
-                if (! $data = $this->model->getSlides(escape_string($gid), escape_string($num))) {
+                if (! $data = $this->model->getSlides(escape_string($gid), escape_string($num), $start)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1579,6 +1597,7 @@ class ParserController extends Controller
                 $params = $this->parserParam($matches[1][$i]);
                 $gid = 1;
                 $num = 10;
+                $start = 1;
                 
                 // 跳过未指定gid的标签
                 if (! array_key_exists('gid', $params)) {
@@ -1593,11 +1612,19 @@ class ParserController extends Controller
                         case 'num':
                             $num = $value;
                             break;
+                        case 'start':
+                            $start = $value;
+                            break;
                     }
                 }
                 
+                // 起始数校验
+                if (! is_numeric($start) || $start < 1) {
+                    $start = 1;
+                }
+                
                 // 读取数据
-                if (! $data = $this->model->getLinks(escape_string($gid), escape_string($num))) {
+                if (! $data = $this->model->getLinks(escape_string($gid), escape_string($num), $start)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1655,6 +1682,7 @@ class ParserController extends Controller
                 $params = $this->parserParam($matches[1][$i]);
                 $num = $this->config('pagesize');
                 $page = true;
+                $start = 1;
                 
                 foreach ($params as $key => $value) {
                     switch ($key) {
@@ -1663,11 +1691,20 @@ class ParserController extends Controller
                             break;
                         case 'page':
                             $page = $value;
+                            break;
+                        case 'start':
+                            $start = $value;
+                            break;
                     }
                 }
                 
+                // 起始数校验
+                if (! is_numeric($start) || $start < 1) {
+                    $start = 1;
+                }
+                
                 // 读取数据
-                if (! $data = $this->model->getMessage(escape_string($num), $page)) {
+                if (! $data = $this->model->getMessage(escape_string($num), $page, $start)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }
@@ -1735,6 +1772,7 @@ class ParserController extends Controller
                 $num = $this->config('pagesize');
                 $fcode = - 1;
                 $page = true;
+                $start = 1;
                 
                 // 跳过未指定fcode的标签
                 if (! array_key_exists('fcode', $params)) {
@@ -1752,7 +1790,15 @@ class ParserController extends Controller
                         case 'page':
                             $page = $value;
                             break;
+                        case 'start':
+                            $start = $value;
+                            break;
                     }
+                }
+                
+                // 起始数校验
+                if (! is_numeric($start) || $start < 1) {
+                    $start = 1;
                 }
                 
                 // 获取表名称
@@ -1762,7 +1808,7 @@ class ParserController extends Controller
                 }
                 
                 // 读取数据
-                if (! $data = $this->model->getForm($table, escape_string($num), $page)) {
+                if (! $data = $this->model->getForm($table, escape_string($num), $page, $start)) {
                     $content = str_replace($matches[0][$i], '', $content);
                     continue;
                 }

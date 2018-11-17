@@ -23,6 +23,9 @@ class Paging
     // 数字条数量
     public $num = 5;
 
+    // 调整数量
+    public $start = 1;
+
     // 总记录
     private $rowTotal = 0;
 
@@ -55,9 +58,17 @@ class Paging
     // 限制语句
     public function limit($total = null, $morePageStr = false)
     {
+        // 起始数据调整
+        if (! is_numeric($this->start) || $this->start < 1) {
+            $this->start = 1;
+        }
+        if ($this->start > $total) {
+            $this->start = $total + 1;
+        }
+        
         // 设置总数
         if ($total) {
-            $this->rowTotal = $total;
+            $this->rowTotal = $total - ($this->start - 1);
         }
         
         // 设置分页大小
@@ -88,7 +99,7 @@ class Paging
         $this->assign($morePageStr);
         
         // 返回限制语句
-        return ($this->page - 1) * $this->pageSize . ",$this->pageSize";
+        return ($this->page - 1) * $this->pageSize + ($this->start - 1) . ",$this->pageSize";
     }
 
     // 注入页面相关信息,用于模板调用，如：{$pagebar}调用分页条

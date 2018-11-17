@@ -71,6 +71,10 @@ class UserController extends Controller
                 alert_back('确认密码不正确！');
             }
             
+            if (! preg_match('/^[\x{4e00}-\x{9fa5}\w\-\.@]+$/u', $username)) {
+                json(0, '用户名含有不允许的特殊字符！');
+            }
+            
             // 检查编码重复
             if ($this->model->checkUser("ucode='$ucode'")) {
                 alert_back('该用户编号已经存在，不能再使用！');
@@ -164,6 +168,10 @@ class UserController extends Controller
             }
             if (! $realname) {
                 alert_back('真实名字不能为空！');
+            }
+            
+            if (! preg_match('/^[\x{4e00}-\x{9fa5}\w\-\.@]+$/u', $username)) {
+                json(0, '用户名含有不允许的特殊字符！');
             }
             
             // 检查用户名重复
