@@ -1911,6 +1911,7 @@ class ParserController extends Controller
             $field = request('field', 'var');
             $keyword = request('keyword', 'vars');
             $scode = request('scode');
+            $start = 1;
             if (! preg_match('/^[\w,\s]+$/', $scode)) {
                 $scode = '';
             }
@@ -1996,6 +1997,9 @@ class ParserController extends Controller
                             break;
                         case 'page':
                             $page = $value;
+                            break;
+                        case 'start':
+                            $start = $value;
                             break;
                     }
                 }
@@ -2154,16 +2158,21 @@ class ParserController extends Controller
                     }
                 }
                 
+                // 起始数校验
+                if (! is_numeric($start) || $start < 1) {
+                    $start = 1;
+                }
+                
                 // 读取数据
                 if ($page) {
                     if (isset($paging)) {
                         error('请不要在一个页面使用多个具有分页的列表，您可将多余的使用page=0关闭分页！');
                     } else {
                         $paging = true;
-                        $data = $this->model->getLists($scode, $num, $order, $where1, $where2, $where3, $fuzzy);
+                        $data = $this->model->getLists($scode, $num, $order, $where1, $where2, $where3, $fuzzy, $start);
                     }
                 } else {
-                    $data = $this->model->getList($scode, $num, $order, $where1, $where2, $where3, $fuzzy);
+                    $data = $this->model->getList($scode, $num, $order, $where1, $where2, $where3, $fuzzy, $start);
                 }
                 
                 // 无数据直接替换
