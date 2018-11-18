@@ -25,7 +25,6 @@ class Parser
         self::$content = ltrim($content, "\xEF\xBB\xBF"); // 去除内容Bom信息;
                                                           
         // =====以下为直接输出方法=========
-        self::replaceStr(); // 替换过滤掉特殊字符
         self::parOutputUrl(); // 输出地址输出
         self::parOutputDefine(); // 输出常量
         self::parOutputVar(); // 输出变量
@@ -64,24 +63,6 @@ class Parser
                         
         // 返回解释的内容
         return self::$content;
-    }
-
-    // 替换注释特殊字符
-    private static function replaceStr()
-    {
-        self::$content = preg_replace('/(eval([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(phpinfo([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(system([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(passthru([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(exec([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(shell_exec([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(ini_set([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(ini_alter([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(ini_restore([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(dl([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(putenv([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(popen([\s]+)?\()/i', '//$1', self::$content);
-        self::$content = preg_replace('/(symlink([\s]+)?\()/i', '//$1', self::$content);
     }
 
     // 解析地址输出 {url./home/index/index}
