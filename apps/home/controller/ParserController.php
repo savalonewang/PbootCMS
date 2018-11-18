@@ -59,7 +59,6 @@ class ParserController extends Controller
     // 解析全局后置公共标签
     public function parserAfter($content)
     {
-        $content = $this->savePreLabel($content); // 处理读取正文后不需要解析的内容
         $content = $this->parserSingleLabel($content); // 单标签解析
         $content = $this->parserSiteLabel($content); // 站点标签
         $content = $this->parserCompanyLabel($content); // 公司标签
@@ -2547,6 +2546,11 @@ class ParserController extends Controller
             case 'opposelink':
                 $content = str_replace($search, url('/home/Do/oppose/id/' . $data->id), $content);
                 break;
+            case 'content':
+                $this->pre[] = $this->adjustLabelData($params, $data->content); // 保存内容避免解析
+                end($this->pre); // 指向最后一个元素
+                $content = str_replace($search, '{pre:' . key($this->pre) . '}', $content); // 占位替换
+                break;
             default:
                 if (isset($data->$label)) {
                     $content = str_replace($search, $this->adjustLabelData($params, $data->$label), $content);
@@ -2728,7 +2732,9 @@ class ParserController extends Controller
                     $content = preg_replace('/(<\/body>)/i', $visits . "\n$1", $content);
                     $addvisits = true;
                 }
-                $content = str_replace($search, $this->adjustLabelData($params, $data->content), $content);
+                $this->pre[] = $this->adjustLabelData($params, $data->content); // 保存内容避免解析
+                end($this->pre); // 指向最后一个元素
+                $content = str_replace($search, '{pre:' . key($this->pre) . '}', $content); // 占位替换
                 break;
             case 'keywords': // 如果内容关键字为空，则自动使用全局关键字
                 if ($data->keywords) {
