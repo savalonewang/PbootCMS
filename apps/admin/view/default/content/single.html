@@ -45,7 +45,7 @@
 	                    	<td>[value->id]</td>
 	                        <td title="[value->scode]">[value->sort_name]</td>
 	                         <td title="[value->title]">
-		                        {fun=mb_substr($value->title,0,15,'utf8')}
+		                        {fun=substr_both($value->title,0,15)}
 		                        {if($value->ico)}
 		                        	<span class="layui-badge layui-bg-orange">缩</span>
 		                        {/if}
