@@ -169,7 +169,10 @@ class CmsController extends Controller
         $acode = request('acode', 'var') ?: $this->lg;
         
         // 获取主要参数
-        $field = request('field', 'var');
+        $field = request('field');
+        if (! preg_match('/^[\w\|\s]+$/', $field)) {
+            $field = '';
+        }
         $keyword = request('keyword', 'vars');
         $scode = request('scode'); // 支持多个分类逗号隔开
         if (! preg_match('/^[\w,\s]+$/', $scode)) {
@@ -289,15 +292,15 @@ class CmsController extends Controller
         }
         
         // 去除特殊键值
-        unset($where['keyword']);
-        unset($where['field']);
-        unset($where['scode']);
-        unset($where['page']);
-        unset($where2['from']);
-        unset($where2['isappinstalled']);
-        unset($where['appid']);
-        unset($where['timestamp']);
-        unset($where['signature']);
+        unset($where3['keyword']);
+        unset($where3['field']);
+        unset($where3['scode']);
+        unset($where3['page']);
+        unset($where3['from']);
+        unset($where3['isappinstalled']);
+        unset($where3['appid']);
+        unset($where3['timestamp']);
+        unset($where3['signature']);
         
         // 读取数据
         $data = $this->model->getLists($acode, $scode, $num, $order, $where1, $where2, $where3, $fuzzy);
