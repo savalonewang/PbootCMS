@@ -36,7 +36,7 @@
               <div class="card">
                   <div class="card-img-150"><a href="[list:link]"><img class="card-img-top" src="[list:ico]" alt="[list:title]"></a></div>
                   <div class="card-body">
-                    <h5 class="card-title"><a href="[list:link]">[list:title len=12]</a></h5>
+                    <h5 class="card-title"><a href="[list:link]">[list:title lencn=12]</a></h5>
                     <p class="card-text">
                     {pboot:if([list:istop]==1)}
                 		<span class="badge badge-danger">置顶</span>
@@ -47,7 +47,7 @@
                 	{pboot:if([list:isheadline]==1)}
                 		<span class="badge badge-info">头条</span>
                 	{/pboot:if}
-                	[list:content drophtml=1 len=50]
+                	[list:content drophtml=1 lencn=50]
                 	</p>
                 	<p>
                 	{pboot:tags id=[list:id] scode={sort:tcode}}
