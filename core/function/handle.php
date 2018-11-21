@@ -810,4 +810,55 @@ function create_session_dir($path, $depth)
     }
 }
 
+// 中英混合的字符串截取,以一个汉字为一个单位长度，英文为半个
+function substr_both($string, $strat, $length)
+{
+    $s = 0; // 起始位置
+    $i = 0; // 实际Byte计数
+    $n = 0; // 字符串长度计数
+    $str_length = strlen($string); // 字符串的字节长度
+    while (($n < $length) and ($i < $str_length)) {
+        $ascnum = Ord(substr($string, $i, 1)); // 得到字符串中第$i位字符的ascii码
+        if ($ascnum >= 224) { // 根据UTF-8编码规范，将3个连续的字符计为单个字符
+            $i += 3;
+            $n ++;
+        } elseif ($ascnum >= 192) { // 根据UTF-8编码规范，将2个连续的字符计为单个字符
+            $i += 2;
+            $n ++;
+        } else {
+            $i += 1;
+            $n += 0.5;
+        }
+        if ($s == 0 && $strat > 0 && $n >= $strat) {
+            $s = $i; // 记录起始位置
+        }
+    }
+    if ($n < $strat) { // 起始位置大于字符串长度
+        return;
+    }
+    return substr($string, $s, $i);
+}
+
+// 中英混合的字符串长度,以一个汉字为一个单位长度，英文为半个
+function strlen_both($string)
+{
+    $i = 0; // 实际Byte计数
+    $n = 0; // 字符串长度计数
+    $str_length = strlen($string); // 字符串的字节长度
+    while ($i < $str_length) {
+        $ascnum = Ord(substr($string, $i, 1)); // 得到字符串中第$i位字符的ascii码
+        if ($ascnum >= 224) { // 根据UTF-8编码规范，将3个连续的字符计为单个字符
+            $i += 3;
+            $n ++;
+        } elseif ($ascnum >= 192) { // 根据UTF-8编码规范，将2个连续的字符计为单个字符
+            $i += 2;
+            $n ++;
+        } else {
+            $i += 1;
+            $n += 0.5;
+        }
+    }
+    return $n;
+}
+
 

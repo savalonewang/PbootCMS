@@ -2380,6 +2380,13 @@ class ParserController extends Controller
                         }
                     }
                     break;
+                case 'lencn': // 以中文占位长度方式截取，英文算半个
+                    if ($params['len'] && is_string($data)) {
+                        if (strlen_both($data) > $params['len']) {
+                            $data = substr_both($data, 0, $params['len']) . '···';
+                        }
+                    }
+                    break;
                 case 'drophtml': // 去除html标签
                     if ($params['drophtml']) {
                         $data = strip_tags($data);
