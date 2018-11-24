@@ -98,6 +98,7 @@ class ParserModel extends Model
             ->where("a.acode='" . get_lg() . "'")
             ->in('a.scode', $scodes)
             ->join($join)
+            ->order('a.sorting,a.id')
             ->select();
     }
 
