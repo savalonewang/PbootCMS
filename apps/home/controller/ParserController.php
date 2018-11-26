@@ -1761,7 +1761,7 @@ class ParserController extends Controller
     // 解析表单数据标签
     public function parserFormLabel($content)
     {
-        $pattern = '/\{pboot:form(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:form\}/';
+        $pattern = '/\{pboot:formlist(\s+[^}]+)?\}([\s\S]*?)\{\/pboot:formlist\}/';
         $pattern2 = '/\[form:([\w]+)(\s+[^]]+)?\]/';
         if (preg_match_all($pattern, $content, $matches)) {
             $count = count($matches[0]);
