@@ -28,6 +28,6 @@ $code = new Code();
 $code->height = 45;
 $code->width = 120;
 $code->fontsize = 18;
-$code->charset = '123456789';
+$code->charset = 'ABCDEFGHKMNPRTUVWXY23456789';
 $code->doimg();
 session('checkcode', $code->getCode());
