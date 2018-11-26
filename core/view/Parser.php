@@ -95,7 +95,7 @@ class Parser
     // 解析输出对象变量 如：{$user->name}
     private static function parOutputObjVal()
     {
-        $pattern = '/\{\$([\w]+)(->)(\{?)([^}]+)(\}?)\}/';
+        $pattern = '/\{\$([\w]+)(\->)(\{?)([^}]+)(\}?)\}/';
         if (preg_match($pattern, self::$content)) {
             self::$content = preg_replace($pattern, "<?php echo @\$this->getVar('$1')$2$3$4$5;?>", self::$content);
         }
@@ -104,7 +104,7 @@ class Parser
     // 解析输出数组变量 如：{$user['name']}
     private static function parOutputArrVal()
     {
-        $pattern = '/\{\$([\w]+)(\[[\w\'\"-\[\]]+\])\}/';
+        $pattern = '/\{\$([\w]+)(\[[\w\'\"\-\[\]]+\])\}/';
         if (preg_match($pattern, self::$content)) {
             self::$content = preg_replace($pattern, "<?php echo @\$this->vars['$1']$2;?>", self::$content);
         }
@@ -234,7 +234,7 @@ class Parser
     // 解析循环语句嵌套 {foreach $value->name(key,value,num)}...[num][value->name]或[value]...{/foreach}
     private static function parSubForeach()
     {
-        $pattern_foreach = '/\{foreach\s+\$([\w][\w->]+)\(([\w]+),([\w]+)(,([\w]+))?\)\}/';
+        $pattern_foreach = '/\{foreach\s+\$([\w][\w\->]+)\(([\w]+),([\w]+)(,([\w]+))?\)\}/';
         $pattern_end_foreach = '/\{\/foreach\}/';
         
         if (preg_match_all($pattern_foreach, self::$content, $matches)) {
