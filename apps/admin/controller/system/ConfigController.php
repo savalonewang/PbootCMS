@@ -29,7 +29,7 @@ class ConfigController extends Controller
         // 修改参数配置
         if ($_POST) {
             foreach ($_POST as $key => $value) {
-                if (! preg_match('/^[\w-]+$/', $key)) {
+                if (! preg_match('/^[\w\-]+$/', $key)) {
                     continue;
                 }
                 $config = array(
@@ -100,7 +100,7 @@ class ConfigController extends Controller
         // 修改参数配置
         if ($_POST) {
             foreach ($_POST as $key => $value) {
-                if (! preg_match('/^[\w-]+$/', $key)) {
+                if (! preg_match('/^[\w\-]+$/', $key)) {
                     continue;
                 }
                 $this->modDbConfig($key);

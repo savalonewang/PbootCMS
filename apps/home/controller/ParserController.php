@@ -1066,7 +1066,7 @@ class ParserController extends Controller
                 // 扩展字段数据筛选
                 $where3 = array();
                 foreach ($_GET as $key => $value) {
-                    if (preg_match('/^ext_[\w-]+$/', $key)) { // 其他字段不加入
+                    if (preg_match('/^ext_[\w\-]+$/', $key)) { // 其他字段不加入
                         $where3[$key] = get($key, 'vars');
                     }
                 }
@@ -2092,7 +2092,7 @@ class ParserController extends Controller
                         if ($key == 'title') {
                             $key = 'a.title';
                         }
-                        if (preg_match('/^[\w-\.]+$/', $key)) { // 带有违规字符时不带入查询
+                        if (preg_match('/^[\w\-\.]+$/', $key)) { // 带有违规字符时不带入查询
                             $where3[$key] = $value;
                         }
                     }

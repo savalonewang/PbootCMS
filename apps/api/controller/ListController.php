@@ -29,7 +29,7 @@ class ListController extends Controller
         $scode = request('scode', 'var') ?: '';
         $num = request('num', 'int') ?: $this->config('pagesize');
         $order = get('order');
-        if (! preg_match('/^[\w-,\s]+$/', $order)) {
+        if (! preg_match('/^[\w\-,\s]+$/', $order)) {
             $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
         } else {
             switch ($order) {

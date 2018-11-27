@@ -187,7 +187,7 @@ class CmsController extends Controller
         $tags = request('tags', 'vars');
         $fuzzy = request('fuzzy', 'int') ?: true;
         
-        if (! preg_match('/^[\w-,\s]+$/', $order)) {
+        if (! preg_match('/^[\w\-,\s]+$/', $order)) {
             $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
         } else {
             switch ($order) {
@@ -285,7 +285,7 @@ class CmsController extends Controller
                 if ($key == 'title') {
                     $key = 'a.title';
                 }
-                if (preg_match('/^[\w-\.]+$/', $key)) { // 带有违规字符时不带入查询
+                if (preg_match('/^[\w\-\.]+$/', $key)) { // 带有违规字符时不带入查询
                     $where3[$key] = $value;
                 }
             }

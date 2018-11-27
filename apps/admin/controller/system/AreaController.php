@@ -105,7 +105,7 @@ class AreaController extends Controller
             }
             
             if ($domain) {
-                $reg = '{^(https://|http://)?([\w-.]+)[\/]+?$}';
+                $reg = '{^(https://|http://)?([\w\-.]+)[\/]+?$}';
                 if (preg_match($reg, $domain)) {
                     $domain = preg_replace($reg, '$2', $domain);
                 } else {
@@ -243,7 +243,7 @@ class AreaController extends Controller
             }
             
             if ($domain) {
-                $reg = '{^(https://|http://)?([\w-.]+)[\/]+?$}';
+                $reg = '{^(https://|http://)?([\w\-.]+)([\/]+)?$}';
                 if (preg_match($reg, $domain)) {
                     $domain = preg_replace($reg, '$2', $domain);
                 } else {

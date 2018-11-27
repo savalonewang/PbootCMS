@@ -153,7 +153,7 @@ class ContentController extends Controller
             if (! ! $id = $this->model->addContent($data)) {
                 // 扩展内容添加
                 foreach ($_POST as $key => $value) {
-                    if (preg_match('/^ext_[\w-]+$/', $key)) {
+                    if (preg_match('/^ext_[\w\-]+$/', $key)) {
                         if (! isset($data2['contentid'])) {
                             $data2['contentid'] = $id;
                         }
@@ -463,7 +463,7 @@ class ContentController extends Controller
             if ($this->model->modContent($id, $data)) {
                 // 扩展内容修改
                 foreach ($_POST as $key => $value) {
-                    if (preg_match('/^ext_[\w-]+$/', $key)) {
+                    if (preg_match('/^ext_[\w\-]+$/', $key)) {
                         $temp = post($key);
                         if (is_array($temp)) {
                             $data2[$key] = implode(',', $temp);

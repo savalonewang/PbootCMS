@@ -244,7 +244,7 @@ function get_lg()
         cookie('lg', Config::get('lgs.0.acode'));
     }
     $lg = cookie('lg');
-    if (! preg_match('/^[\w-]+$/', $lg)) {
+    if (! preg_match('/^[\w\-]+$/', $lg)) {
         $lg = Config::get('lgs.0.acode');
         cookie('lg', $lg);
     }
