@@ -125,7 +125,7 @@ class ParserController extends Controller
         $content = str_replace('{pboot:signature}', md5(md5($this->config('api_appid') . $this->config('api_secret') . time())), $content); // API认证密钥
         $content = str_replace('{pboot:httpurl}', get_http_url(), $content); // 当前访问的域名地址
         $content = str_replace('{pboot:pageurl}', get_current_url(), $content); // 当前页面的地址
-        $content = str_replace('{pboot:keyword}', get('keyword'), $content); // 当前搜索的关键字
+        $content = str_replace('{pboot:keyword}', get('keyword', 'vars'), $content); // 当前搜索的关键字
         $content = str_replace('{pboot:checkcodestatus}', $this->config('message_check_code'), $content); // 是否开启验证码
         return $content;
     }
@@ -805,7 +805,7 @@ class ParserController extends Controller
                     $qs = '';
                 }
                 // 如果有对本字段进行筛选，则不高亮
-                if (get($field)) {
+                if (get($field, 'vars')) {
                     $out_html = '<a href="' . $path . $qs . '" class="' . $class . '">' . $text . '</a>';
                 } else {
                     $out_html = '<a href="' . $path . $qs . '" class="' . $active . '">' . $text . '</a>';
@@ -893,7 +893,7 @@ class ParserController extends Controller
                                 $one_html = str_replace($matches2[0][$j], $value, $one_html);
                                 break;
                             case 'current':
-                                $one_html = str_replace($matches2[0][$j], get($field), $one_html);
+                                $one_html = str_replace($matches2[0][$j], get($field, 'vars'), $one_html);
                                 break;
                             case 'link':
                                 $qs = $output;
@@ -2313,7 +2313,7 @@ class ParserController extends Controller
                 );
                 
                 // 带有函数的条件语句进行安全校验
-                if (preg_match_all('/([\w]+)([\s]+)?\(/i', $matches[1][$i], $matches2)) {
+                if (preg_match_all('/([\w]+)([\\\s]+)?\(/i', $matches[1][$i], $matches2)) {
                     foreach ($matches2[1] as $value) {
                         if ((function_exists($value) || preg_match('/^eval$/i', $value)) && ! in_array($value, $white_fun)) {
                             $danger = true;

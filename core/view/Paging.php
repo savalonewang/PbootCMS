@@ -292,8 +292,8 @@ class Paging
             parse_str($qs, $output);
             if (isset($output['page'])) {
                 unset($output['page']);
-                $qs = http_build_query($output);
             }
+            $qs = http_build_query($output);
             if ($qs)
                 return '?' . $qs;
         }
