@@ -19,6 +19,8 @@ class ParserController extends Controller
 
     protected $pre = array();
 
+    protected $var = array();
+
     public function __construct()
     {
         $this->model = new ParserModel();
@@ -94,7 +96,7 @@ class ParserController extends Controller
             for ($i = 0; $i < $count; $i ++) {
                 $this->pre[] = $matches[1][$i];
                 end($this->pre);
-                $content = str_replace($matches[0][$i], '{pre:' . key($this->pre) . '}', $content);
+                $content = str_replace($matches[0][$i], '#pre:' . key($this->pre) . '#', $content);
             }
         }
         return $content;
@@ -103,7 +105,7 @@ class ParserController extends Controller
     // 还原保留内容
     public function restorePreLabel($content)
     {
-        $pattern = '/\{pre:([0-9]+)\}/';
+        $pattern = '/\#pre:([0-9]+)\#/';
         if (preg_match_all($pattern, $content, $matches)) {
             $count = count($matches[0]);
             for ($i = 0; $i < $count; $i ++) {
@@ -1054,20 +1056,23 @@ class ParserController extends Controller
                     }
                 }
                 
-                // tags数据传值筛选
-                if (! ! $get_tags = get('tags', 'vars')) {
-                    if ($fuzzy) {
-                        $where2[] = "a.tags like '%" . $get_tags . "%'";
-                    } else {
-                        $where2[] = "a.tags='" . $get_tags . "'";
+                // 只对有分页的列表有效
+                if ($page) {
+                    // tags数据传值筛选
+                    if (! ! $get_tags = get('tags', 'vars')) {
+                        if ($fuzzy) {
+                            $where2[] = "a.tags like '%" . $get_tags . "%'";
+                        } else {
+                            $where2[] = "a.tags='" . $get_tags . "'";
+                        }
                     }
-                }
-                
-                // 扩展字段数据筛选
-                $where3 = array();
-                foreach ($_GET as $key => $value) {
-                    if (preg_match('/^ext_[\w\-]+$/', $key)) { // 其他字段不加入
-                        $where3[$key] = get($key, 'vars');
+                    
+                    // 扩展字段数据筛选
+                    $where3 = array();
+                    foreach ($_GET as $key => $value) {
+                        if (preg_match('/^ext_[\w\-]+$/', $key)) { // 其他字段不加入
+                            $where3[$key] = get($key, 'vars');
+                        }
                     }
                 }
                 
@@ -2307,10 +2312,14 @@ class ParserController extends Controller
                     'date',
                     'in_array',
                     'explode',
-                    'implode',
-                    'get',
-                    'post'
+                    'implode'
                 );
+                
+                // 还原可能包含的保留内容，避免判断失效
+                $matches[1][$i] = $this->restorePreLabel($matches[1][$i]);
+                
+                // 解码条件字符串
+                $matches[1][$i] = decode_string($matches[1][$i]);
                 
                 // 带有函数的条件语句进行安全校验
                 if (preg_match_all('/([\w]+)([\\\s]+)?\(/i', $matches[1][$i], $matches2)) {
@@ -2322,11 +2331,14 @@ class ParserController extends Controller
                     }
                 }
                 
+                // 不允许从外部获取数据
+                if (preg_match('/(\$_GET\[)|(\$_POST\[)|(\$_REQUEST\[)|(\$_COOKIE\[)|(\$_SESSION\[)/i', $matches[1][$i])) {
+                    $danger = true;
+                }
+                
                 // 如果有危险函数，则不解析该IF
                 if ($danger) {
                     continue;
-                } else {
-                    $matches[1][$i] = decode_string($matches[1][$i]); // 解码条件字符串
                 }
                 
                 eval('if(' . $matches[1][$i] . '){$flag="if";}else{$flag="else";}');
@@ -2558,7 +2570,7 @@ class ParserController extends Controller
             case 'content':
                 $this->pre[] = $this->adjustLabelData($params, $data->content); // 保存内容避免解析
                 end($this->pre); // 指向最后一个元素
-                $content = str_replace($search, '{pre:' . key($this->pre) . '}', $content); // 占位替换
+                $content = str_replace($search, '#pre:' . key($this->pre) . '#', $content); // 占位替换
                 break;
             default:
                 if (isset($data->$label)) {
@@ -2570,9 +2582,16 @@ class ParserController extends Controller
         return $content;
     }
 
-    // 解析内容标签
+    // 解析内容详情标签
     protected function ParserContent($label, $search, $content, $data, $params, $sort)
     {
+        // 新增计数代码
+        if (! isset($this->var['addvisits'])) {
+            $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "' async='async'></script>";
+            $content = preg_replace('/(<\/body>)/i', $visits . "\n$1", $content);
+            $this->var['addvisits'] = true;
+        }
+        
         switch ($label) {
             case 'link':
                 if ($data->outlink) {
@@ -2736,14 +2755,9 @@ class ParserController extends Controller
                 }
                 break;
             case 'content':
-                if (! isset($addvisits)) {
-                    $visits = "<script src='" . url('/home/Do/visits/id/' . $data->id) . "' async='async'></script>";
-                    $content = preg_replace('/(<\/body>)/i', $visits . "\n$1", $content);
-                    $addvisits = true;
-                }
                 $this->pre[] = $this->adjustLabelData($params, $data->content); // 保存内容避免解析
                 end($this->pre); // 指向最后一个元素
-                $content = str_replace($search, '{pre:' . key($this->pre) . '}', $content); // 占位替换
+                $content = str_replace($search, '#pre:' . key($this->pre) . '#', $content); // 占位替换
                 break;
             case 'keywords': // 如果内容关键字为空，则自动使用全局关键字
                 if ($data->keywords) {

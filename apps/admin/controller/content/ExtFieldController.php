@@ -56,7 +56,6 @@ class ExtFieldController extends Controller
             if (! ! $value = post('value')) {
                 $value = str_replace("\r\n", ",", $value); // 替换回车
                 $value = str_replace("，", ",", $value); // 替换中文逗号分割符
-                $value = str_replace(" ", "", $value); // 替换空格
             }
             $description = post('description');
             $sorting = post('sorting', 'int');
@@ -190,7 +189,6 @@ class ExtFieldController extends Controller
             if (! ! $value = post('value')) {
                 $value = str_replace("\r\n", ",", $value); // 替换回车
                 $value = str_replace("，", ",", $value); // 替换中文逗号分割符
-                $value = str_replace(" ", "", $value); // 替换空格
             }
             $description = post('description');
             $sorting = post('sorting', 'int');
