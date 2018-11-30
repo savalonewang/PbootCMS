@@ -1,7 +1,7 @@
 -- Online Database Management SQL Dump
 -- 数据库名: pbootcms
--- 生成日期: 2018-11-11 20:41:06
--- PHP 版本: 5.6.33
+-- 生成日期: 2018-11-30 15:19:54
+-- PHP 版本: 7.2.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+08:00";
@@ -246,8 +246,8 @@ CREATE TABLE `ay_content_sort` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
-  KEY `ay_content_sort_pcode` (`pcode`),
   UNIQUE KEY `ay_content_sort_scode` (`scode`),
+  KEY `ay_content_sort_pcode` (`pcode`),
   KEY `ay_content_sort_acode` (`acode`),
   KEY `ay_content_sort_mcode` (`mcode`)
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
@@ -268,6 +268,20 @@ INSERT INTO `ay_content_sort` (`id`,`acode`,`mcode`,`pcode`,`scode`,`name`,`list
 ('9','cn','5','0','9','招贤纳士','joblist.html','job.html','1','','诚聘优秀人士加入我们的团队','','','','','','','255','admin','admin','2018-04-11 17:30:02','2018-04-11 17:30:02'),
 ('10','cn','1','0','10','在线留言','','message.html','1','','有什么问题欢迎您随时反馈','','','','','','','255','admin','admin','2018-04-11 17:30:36','2018-04-12 10:55:31'),
 ('11','cn','1','0','11','联系我们','','about.html','1','','能为您服务是我们的荣幸','','','','','','','255','admin','admin','2018-04-11 17:31:29','2018-04-11 17:31:29');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `ay_diy_telephone`
+--
+
+DROP TABLE IF EXISTS `ay_diy_telephone`;
+CREATE TABLE `ay_diy_telephone` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `create_time` datetime NOT NULL,
+  `tel` varchar(20) DEFAULT NULL COMMENT '电话号码',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -315,14 +329,15 @@ CREATE TABLE `ay_form` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ay_form_fcode` (`fcode`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_form`
 --
 
 INSERT INTO `ay_form` (`id`,`fcode`,`form_name`,`table_name`,`create_user`,`update_user`,`create_time`,`update_time`) VALUES
-('1','1','在线留言','ay_message','admin','admin','2018-04-11 17:31:29','2018-04-11 17:31:29');
+('1','1','在线留言','ay_message','admin','admin','2018-04-11 17:31:29','2018-04-11 17:31:29'),
+('2','2','搜集电话','ay_diy_telephone','admin','admin','2018-11-30 15:17:40','2018-11-30 15:17:40');
 
 -- --------------------------------------------------------
 
@@ -345,7 +360,7 @@ CREATE TABLE `ay_form_field` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `ay_form_field_fcode` (`fcode`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `ay_form_field`
@@ -354,7 +369,8 @@ CREATE TABLE `ay_form_field` (
 INSERT INTO `ay_form_field` (`id`,`fcode`,`name`,`length`,`required`,`description`,`sorting`,`create_user`,`update_user`,`create_time`,`update_time`) VALUES
 ('1','1','contacts','10','1','联系人','255','admin','admin','2018-07-14 18:24:02','2018-07-15 17:47:43'),
 ('2','1','mobile','12','1','手机','255','admin','admin','2018-07-14 18:24:02','2018-07-15 17:47:44'),
-('3','1','content','500','1','内容','255','admin','admin','2018-07-14 18:24:02','2018-07-15 17:47:45');
+('3','1','content','500','1','内容','255','admin','admin','2018-07-14 18:24:02','2018-07-15 17:47:45'),
+('4','2','tel','20','1','电话号码','255','admin','admin','2018-11-30 15:18:00','2018-11-30 15:18:00');
 
 -- --------------------------------------------------------
 
@@ -887,7 +903,7 @@ CREATE TABLE `ay_syslog` (
   `create_user` varchar(30) NOT NULL COMMENT '创建人员',
   `create_time` datetime NOT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
