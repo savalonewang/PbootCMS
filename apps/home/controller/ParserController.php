@@ -1056,6 +1056,9 @@ class ParserController extends Controller
                     }
                 }
                 
+                // 重置存储条件
+                $where3 = array();
+                
                 // 只对有分页的列表有效
                 if ($page) {
                     // tags数据传值筛选
@@ -1068,7 +1071,6 @@ class ParserController extends Controller
                     }
                     
                     // 扩展字段数据筛选
-                    $where3 = array();
                     foreach ($_GET as $key => $value) {
                         if (preg_match('/^ext_[\w\-]+$/', $key)) { // 其他字段不加入
                             $where3[$key] = get($key, 'vars');
