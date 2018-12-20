@@ -2396,14 +2396,24 @@ class ParserController extends Controller
                 case 'len': // 长度截取
                     if ($params['len'] && is_string($data)) {
                         if (mb_strlen($data, 'utf-8') > $params['len']) {
-                            $data = mb_substr($data, 0, $params['len'], 'utf-8') . '···';
+                            if (isset($params['more'])) {
+                                $more = $params['more'];
+                            } else {
+                                $more = '···';
+                            }
+                            $data = mb_substr($data, 0, $params['len'], 'utf-8') . $more;
                         }
                     }
                     break;
                 case 'lencn': // 以中文占位长度方式截取，英文算半个
                     if ($params['lencn'] && is_string($data)) {
                         if (strlen_both($data) > $params['lencn']) {
-                            $data = substr_both($data, 0, $params['lencn']) . '···';
+                            if (isset($params['more'])) {
+                                $more = $params['more'];
+                            } else {
+                                $more = '···';
+                            }
+                            $data = substr_both($data, 0, $params['lencn']) . $more;
                         }
                     }
                     break;
@@ -2478,8 +2488,9 @@ class ParserController extends Controller
         if (! $string = trim($string))
             return array();
         $string = preg_replace('/\s+/', ' ', $string); // 多空格处理
+        $string = strip_tags($string);
         $param = array();
-        if (preg_match_all('/([\w]+)[\s]?=[\s]?(\'([^\']+)\'|([^\s]+))/', $string, $matches)) {
+        if (preg_match_all('/([\w]+)[\s]?=[\s]?([\'\"]([^\']+)?[\'\"]|([^\s]+))/', $string, $matches)) {
             foreach ($matches[1] as $key => $value) {
                 if ($matches[3][$key]) {
                     $param[$value] = $matches[3][$key];

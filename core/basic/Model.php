@@ -1400,8 +1400,10 @@ class Model
     // 检测key值
     private function checkKey($key)
     {
-        if (! preg_match('/^[\w]+$/', $key)) {
-            error('SQL中含有非法字符:' . $key);
+        if (! $key)
+            return;
+        if (! preg_match('/^[\w\.\-]+$/', $key)) {
+            error('传递的SQL数据中含有非法字符:' . $key);
         }
     }
 }
