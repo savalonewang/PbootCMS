@@ -50,7 +50,7 @@ layui.use(['element','upload','laydate','form'], function(){
       },
       error:function(xhr,status,error){
     	  layer.msg("登入请求发生错误!", {icon: 5});
-    	  $('#note').html('登入请求发生错误，您可通过如下方式查看原因：<br>1、打开F12查看网络Ajax请求的返回信息；<br>2、如果是nginx，请确认已经配置好pathinfo支持;<br>3、如果已开启伪静态，请检查伪静态配置。');
+    	  $('#note').html('登入请求发生错误，请按照如下方式排查：<br>1、前台内页是否正常访问？否则检查phpinfo配置；<br>2、如果前台正常，请删除根目录下runtime目录重试;<br>3、如果还是不行，请检查目录写入权限是否正确。<br>4、如果还不行那就出钱请人部署吧！');
       }
 	});
     return false;

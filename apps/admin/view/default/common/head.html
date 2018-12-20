@@ -90,11 +90,18 @@
           <a class="" href="javascript:;"><i class="fa [value->ico]" aria-hidden="true"></i>[value->name]</a>
           <dl class="layui-nav-child">
 			{foreach $value->son(key2,value2,num2)}
-            <dd><a href="{url.'.$value2->url.'}"><i class="fa [value2->ico]" aria-hidden="true"></i>[value2->name]</a></dd>
+				{if($value2->mcode!='M159'&&$value2->mcode!='M131')}
+            		<dd><a href="{url.'.$value2->url.'}"><i class="fa [value2->ico]" aria-hidden="true"></i>[value2->name]</a></dd>
+            	{/if}
 			{/foreach}
 			{if($value->mcode=='M130')}
 				 {foreach $menu_models(key3,value3,num3)}
+				 	{if($value3->type==1)}
+					<dd><a href="{url./admin/Single/index}"><i class="fa fa-file-text-o" aria-hidden="true"></i>[value3->name]内容</a></dd>
+					{/if}
+					{if($value3->type==2)}
 					<dd><a href="{url./admin/Content/index/mcode/'.$value3->mcode.'}"><i class="fa fa-file-text-o" aria-hidden="true"></i>[value3->name]内容</a></dd>
+					{/if}
 				 {/foreach}
 		    {/if}
           </dl>

@@ -793,7 +793,10 @@ class ParserController extends Controller
                 // 获取地址路径
                 $url = parse_url(URL);
                 $path = preg_replace('/\/page\/[0-9]+/', '', $url['path']); // 去除路径方式分页，回到第一页
-                                                                            
+                if ($path == SITE_DIR . '/index.html' || $path == SITE_DIR . '/index.php/index') {
+                    $path = '/'; // 避免首页分页后出现多种链接分权
+                }
+                
                 // 分离字符串参数
                 $output = array();
                 if (isset($_SERVER["QUERY_STRING"]) && ! ! $qs = $_SERVER["QUERY_STRING"]) {
@@ -831,7 +834,10 @@ class ParserController extends Controller
             // 获取地址路径
             $url = parse_url(URL);
             $path = preg_replace('/\/page\/[0-9]+/', '', $url['path']); // 去除路径方式分页，回到第一页
-                                                                        
+            if ($path == SITE_DIR . '/index.html' || $path == SITE_DIR . '/index.php/index') {
+                $path = '/'; // 避免首页分页后出现多种链接分权
+            }
+            
             // 分离字符串参数
             if (isset($_SERVER["QUERY_STRING"]) && ! ! $qs = $_SERVER["QUERY_STRING"]) {
                 parse_str($qs, $output);

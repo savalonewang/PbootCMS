@@ -32,7 +32,7 @@ class MessageController extends Controller
             }
             
             // 验证码验证
-            $checkcode = post('checkcode');
+            $checkcode = strtolower(post('checkcode', 'var'));
             if ($this->config('message_check_code')) {
                 if (! $checkcode) {
                     alert_back('验证码不能为空！');

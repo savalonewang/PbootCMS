@@ -37,14 +37,34 @@ class ModelModel extends Model
     }
 
     // 获取内容模型选择
-    public function getSelectMunu()
+    public function getModelMenu()
     {
-        return parent::table('ay_model')->field('mcode,name')
+        return parent::table('ay_model')->field('mcode,name,type')
             ->where('status=1')
-            ->where('type=2')
-            ->where('issystem=0')
             ->order('id ASC')
             ->select();
+    }
+
+    // 获取模型内容数量
+    public function getModelCount($mcode)
+    {
+        $join = array(
+            array(
+                'ay_content_sort b',
+                'a.scode=b.scode',
+                'LEFT'
+            ),
+            array(
+                'ay_model d',
+                'b.mcode=d.mcode',
+                'LEFT'
+            )
+        );
+        return parent::table('ay_content a')->field('count(*) as count')
+            ->where("b.mcode='$mcode'")
+            ->where("a.acode='" . session('acode') . "'")
+            ->join($join)
+            ->find();
     }
 
     // 获取内容模型选择

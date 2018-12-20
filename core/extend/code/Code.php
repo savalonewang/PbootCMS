@@ -48,6 +48,7 @@ class Code
     // 生成随机码
     private function createCode()
     {
+        $this->charset = str_shuffle($this->charset);
         $_len = strlen($this->charset) - 1;
         for ($i = 0; $i < $this->codelen; $i ++) {
             $this->code .= $this->charset[mt_rand(0, $_len)];
@@ -58,17 +59,17 @@ class Code
     private function createBg()
     {
         $this->img = imagecreatetruecolor($this->width, $this->height);
-        $color = imagecolorallocate($this->img, mt_rand(157, 255), mt_rand(157, 255), mt_rand(157, 255));
+        $color = imagecolorallocate($this->img, mt_rand(200, 255), mt_rand(200, 255), mt_rand(200, 255));
         imagefilledrectangle($this->img, 0, $this->height, $this->width, 0, $color);
     }
 
     // 生成文字
     private function createFont()
     {
-        $_x = $this->width / $this->codelen;
+        $_x = ($this->width - 10) / $this->codelen;
         for ($i = 0; $i < $this->codelen; $i ++) {
-            $this->fontcolor = imagecolorallocate($this->img, mt_rand(0, 156), mt_rand(0, 156), mt_rand(0, 156));
-            imagettftext($this->img, $this->fontsize, mt_rand(- 30, 30), $_x * $i + mt_rand(5, 8), $this->height / 1.4, $this->fontcolor, $this->font, $this->code[$i]);
+            $this->fontcolor = imagecolorallocate($this->img, mt_rand(0, 100), mt_rand(0, 100), mt_rand(0, 100));
+            imagettftext($this->img, $this->fontsize, mt_rand(- 20, 20), $_x * $i + $_x / 3, $this->height / 1.4, $this->fontcolor, $this->font, $this->code[$i]);
         }
     }
 
@@ -76,7 +77,7 @@ class Code
     private function createLine()
     {
         for ($i = 0; $i < 6; $i ++) {
-            $color = imagecolorallocate($this->img, mt_rand(0, 156), mt_rand(0, 156), mt_rand(0, 156));
+            $color = imagecolorallocate($this->img, mt_rand(100, 200), mt_rand(100, 200), mt_rand(100, 200));
             imageline($this->img, mt_rand(0, $this->width), mt_rand(0, $this->height), mt_rand(0, $this->width), mt_rand(0, $this->height), $color);
         }
         for ($i = 0; $i < 100; $i ++) {
@@ -107,6 +108,6 @@ class Code
     // 获取验证码
     public function getCode()
     {
-        return $this->code;
+        return strtolower($this->code);
     }
 }

@@ -18,7 +18,7 @@ return array(
     
     // 访问页面规则，如禁用浏览器、操作系统类型
     'access_rule' => array(
-        'deny_bs' => 'IE6,IE7'
+        'deny_bs' => 'MJ12bot,IE6,IE7'
     ),
     
     // 上传配置

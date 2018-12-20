@@ -70,6 +70,16 @@ class IndexController extends Controller
         $this->assign('dbsecurity', $dbsecurity);
         $this->assign('server', get_server_info());
         $this->assign('branch', $this->config('upgrade_branch') ?: '1.X');
+        
+        $this->assign('sum_msg', $this->model->rows('ay_message'));
+        
+        // 内容模型菜单
+        $model = model('admin.content.Model');
+        $models = $model->getModelMenu();
+        foreach ($models as $key => $value) {
+            $models[$key]->count = $model->getModelCount($value->mcode)->count;
+        }
+        $this->assign('model_msg', $models);
         $this->display('system/home.html');
     }
 
@@ -81,7 +91,7 @@ class IndexController extends Controller
         }
         
         // 在安装了gd库时才执行验证码验证
-        if (extension_loaded("gd") && $this->config('admin_check_code') && post('checkcode') != session('checkcode')) {
+        if (extension_loaded("gd") && $this->config('admin_check_code') && strtolower(post('checkcode', 'var')) != session('checkcode')) {
             json(0, '验证码错误！');
         }
         

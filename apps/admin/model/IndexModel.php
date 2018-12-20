@@ -27,27 +27,6 @@ class IndexModel extends Model
             $this->updateLogin($where); // 执行更新登陆记录
             $menus = $this->getUserMenu($result->ucode); // 用户菜单
             $result->menus = get_tree($menus, 0, 'mcode', 'pcode'); // 用户菜单树
-            
-            $shortcuts = array();
-            $models = model('admin.content.Model')->getSelectMunu(); // 内容模型菜单注入
-            foreach ($menus as $key => $value) { // 获取用户二级菜单桌面图标
-                if ($value->shortcut) {
-                    $value->color = 'rgb(' . mt_rand(0, 156) . ',' . mt_rand(0, 156) . ',' . mt_rand(0, 156) . ')';
-                    $shortcuts[] = $value;
-                    if ($value->mcode == 'M159') {
-                        foreach ($models as $key2 => $value2) {
-                            $temp = new \stdClass();
-                            $temp->color = 'rgb(' . mt_rand(0, 156) . ',' . mt_rand(0, 156) . ',' . mt_rand(0, 156) . ')';
-                            $temp->ico = $value->ico;
-                            $temp->url = '/admin/Content/index/mcode/' . $value2->mcode;
-                            $temp->name = $value2->name . '内容';
-                            $shortcuts[] = $temp;
-                        }
-                    }
-                }
-            }
-            
-            $result->shortcuts = $shortcuts;
             $result->rcodes = $this->getUserRcode($result->ucode); // 用户角色
             $result->levels = $this->getUserLevel($result->ucode); // 用户权限
             

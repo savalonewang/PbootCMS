@@ -11,7 +11,7 @@
 use core\basic\Config;
 
 // 获取用户浏览器类型
-function get_user_bs()
+function get_user_bs($bs = null)
 {
     if (isset($_SERVER["HTTP_USER_AGENT"])) {
         $user_agent = strtolower($_SERVER["HTTP_USER_AGENT"]);
@@ -19,6 +19,16 @@ function get_user_bs()
         return null;
     }
     
+    // 直接检测传递的值
+    if ($bs) {
+        if (strpos($user_agent, strtolower($bs))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    // 固定检测
     if (strpos($user_agent, 'micromessenger')) {
         $user_bs = 'Weixin';
     } elseif (strpos($user_agent, 'qq')) {
@@ -47,6 +57,8 @@ function get_user_bs()
         $user_bs = 'Chrome';
     } elseif (strpos($user_agent, 'safari')) {
         $user_bs = 'Safari';
+    } elseif (strpos($user_agent, 'mj12bot')) {
+        $user_bs = 'MJ12bot';
     } else {
         $user_bs = 'Other';
     }
@@ -54,13 +66,23 @@ function get_user_bs()
 }
 
 // 获取用户操作系统类型
-function get_user_os()
+function get_user_os($osstr = null)
 {
     if (isset($_SERVER["HTTP_USER_AGENT"])) {
         $user_agent = strtolower($_SERVER["HTTP_USER_AGENT"]);
     } else {
         return null;
     }
+    
+    // 直接检测传递的值
+    if ($osstr) {
+        if (strpos($user_agent, strtolower($osstr))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     if (strpos($user_agent, 'windows nt 5.0')) {
         $user_os = 'Windows 2000';
     } elseif (strpos($user_agent, 'windows nt 9')) {
@@ -358,9 +380,6 @@ function escape_string($string, $dropStr = true)
             $string->$key = escape_string($value);
         }
     } else { // 字符串处理
-        if ($dropStr) {
-            $string = preg_replace('/(0x7e)|(0x27)|(0x22)|(updatexml)|(extractvalue)|(name_const)|(concat)/i', '', $string);
-        }
         $string = htmlspecialchars(trim($string), ENT_QUOTES, 'UTF-8');
         $string = addslashes($string);
     }

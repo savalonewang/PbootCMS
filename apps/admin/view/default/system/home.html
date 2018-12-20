@@ -1,8 +1,9 @@
 {include file='common/head.html'}
   
 <div class="layui-body">
-	<div class="layui-row" style="color:red;">
-		{if(![$dbsecurity])}
+	
+	<blockquote class="layui-elem-quote layui-text-red" >
+      {if(![$dbsecurity])}
 		<p>
 			<i class="fa fa-info-circle" aria-hidden="true"></i>
 			您的数据库文件存在安全隐患，可能被下载，请尽快修改数据库路径！<a class="layui-btn  layui-btn-sm" href="?action=moddb">自动修改</a>
@@ -15,26 +16,38 @@
 			 您的账号密码太简单，存在安全隐患，请尽快修改密码！<a class="layui-btn  layui-btn-sm" href="{url./admin/Index/ucenter}">立即修改</a>
 		</p>
 		{/if}
+    </blockquote>
 	
-	</div>
-	
-	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-	  <legend>快捷操作</legend>
-	</fieldset>
-	<div class="layui-row">
-		 {foreach $shortcuts(key,value)}
-	    	<div class="layui-col-xs6 layui-col-sm4 layui-col-md3 layui-col-lg2">
-	    		<a href="{url.'.$value->url.'}">
-		      		<dl class="deskbox center-block">
-	                     <dd>
-	                         <i class="fa [value->ico]" aria-hidden="true"></i>
-	                     </dd>
-	                     <dt>[value->name]</dt>
-	                 </dl>
-                 </a>
-	   	   </div>
-	     {/foreach}
-	 </div>
+	<fieldset class="layui-elem-field">
+		<legend>快捷操作</legend>
+		<div class="layui-field-box">	
+			<div class="layui-row">
+				{foreach $model_msg(key,value)}
+				<div class="layui-col-xs6 layui-col-sm4 layui-col-md3 layui-col-lg2">
+		    		{if($value->type==1)}
+		    		<a href="{url./admin/Single/index}">
+		    		{else}
+		    		<a href="{url./admin/Content/index/mcode/'.$value->mcode.'}">
+		    		{/if}
+			      		<dl class="deskbox center-block">
+			      			 <dt>[value->name]</dt>
+		                     <dd>[value->count]</dd>
+		                 </dl>
+		             </a>
+		   	    </div>
+	   	    	{/foreach}
+	   	    	
+				<div class="layui-col-xs6 layui-col-sm4 layui-col-md3 layui-col-lg2">
+		    		<a href="{url./admin/Message/index}">
+			      		<dl class="deskbox center-block">
+			      			 <dt>留言</dt>
+		                     <dd>{$sum_msg}</dd>
+		                 </dl>
+		             </a>
+		   	    </div>
+	   	    </div>
+		 </div>
+	 </fieldset>
 	 
 	 <div class="layui-row layui-col-space10">
 	 	<div class="layui-col-xs12 layui-col-md6">

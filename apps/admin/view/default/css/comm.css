@@ -58,6 +58,9 @@
 	z-index: 9999;
 	max-height: 250px;
 }
+.layui-text-red{
+	color:red;
+}
 /*菜单显示按钮*/
 .menu {
 	position: absolute !important;
@@ -102,15 +105,17 @@
 	margin: 5px;
 }
 .deskbox:hover {
-	background: #63BA79;
-	color: #fff;
+	background: #f0f0f0;
 }
 .deskbox dd {
 	font-size: 30px;
-	padding-top: 13px;
+	padding-top: 10px;
 	line-height: 40px;
+	color:#009688;
 }
 .deskbox dt {
+	padding-top:10px;
+	color:#999;
 	font-weight: normal;
 }
 .page {

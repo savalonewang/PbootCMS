@@ -44,7 +44,7 @@ class AdminController extends Controller
         
         // 内容模型菜单注入
         $models = model('admin.content.Model');
-        $this->assign('menu_models', $models->getSelectMunu());
+        $this->assign('menu_models', $models->getModelMenu());
         
         // 不进行表单检验的控制器
         $nocheck = array(
