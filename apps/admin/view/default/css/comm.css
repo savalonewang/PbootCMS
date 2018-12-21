@@ -101,20 +101,19 @@
 	border-radius: 5px;
 	color: #666;
 	text-align: center;
-	background: #fafafa;
+	background: #f2f2f2;
 	margin: 5px;
 }
 .deskbox:hover {
-	background: #f0f0f0;
+	background: #e0e0e0;
 }
 .deskbox dd {
 	font-size: 30px;
-	padding-top: 10px;
-	line-height: 40px;
+	line-height: 50px;
 	color:#009688;
 }
 .deskbox dt {
-	padding-top:10px;
+	padding-top:15px;
 	color:#999;
 	font-weight: normal;
 }

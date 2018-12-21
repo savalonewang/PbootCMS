@@ -150,7 +150,7 @@ class ParserController extends Controller
                         break;
                     case 'logo':
                         if (isset($data->logo) && $data->logo) {
-                            $content = str_replace($matches[0][$i], SITE_DIR . $data->logo, $content);
+                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, SITE_DIR . $data->logo), $content);
                         } else {
                             $content = str_replace($matches[0][$i], STATIC_DIR . '/images/logo.png', $content);
                         }
@@ -201,7 +201,7 @@ class ParserController extends Controller
                 switch ($matches[1][$i]) {
                     case 'weixin':
                         if (isset($data->weixin) && $data->weixin) {
-                            $content = str_replace($matches[0][$i], SITE_DIR . $data->weixin, $content);
+                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, SITE_DIR . $data->weixin), $content);
                         } else {
                             $content = str_replace($matches[0][$i], '', $content);
                         }
@@ -233,7 +233,7 @@ class ParserController extends Controller
                     default:
                         if (isset($data[$matches[1][$i]])) {
                             if ($data[$matches[1][$i]]['type'] == 3 && $data[$matches[1][$i]]['value']) {
-                                $data[$matches[1][$i]]['value'] = SITE_DIR . $data[$matches[1][$i]]['value'];
+                                $data[$matches[1][$i]]['value'] = $this->adjustLabelData($params, SITE_DIR . $data[$matches[1][$i]]['value']);
                             }
                             $content = str_replace($matches[0][$i], $this->adjustLabelData($params, $data[$matches[1][$i]]['value']), $content);
                         }
@@ -340,14 +340,14 @@ class ParserController extends Controller
                                     break;
                                 case 'ico':
                                     if ($value['ico']) {
-                                        $one_html = str_replace($matches2[0][$j], SITE_DIR . $value['ico'], $one_html);
+                                        $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, SITE_DIR . $value['ico']), $one_html);
                                     } else {
                                         $one_html = str_replace($matches2[0][$j], '', $one_html);
                                     }
                                     break;
                                 case 'pic':
                                     if ($value['pic']) {
-                                        $one_html = str_replace($matches2[0][$j], SITE_DIR . $value['pic'], $one_html);
+                                        $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, SITE_DIR . $value['pic']), $one_html);
                                     } else {
                                         $one_html = str_replace($matches2[0][$j], '', $one_html);
                                     }
@@ -557,14 +557,14 @@ class ParserController extends Controller
                         break;
                     case 'ico':
                         if ($sort->ico) {
-                            $content = str_replace($matches[0][$i], SITE_DIR . $sort->ico, $content);
+                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, SITE_DIR . $sort->ico), $content);
                         } else {
                             $content = str_replace($matches[0][$i], '', $content);
                         }
                         break;
                     case 'pic':
                         if ($sort->pic) {
-                            $content = str_replace($matches[0][$i], SITE_DIR . $sort->pic, $content);
+                            $content = str_replace($matches[0][$i], $this->adjustLabelData($params, SITE_DIR . $sort->pic), $content);
                         } else {
                             $content = str_replace($matches[0][$i], '', $content);
                         }
@@ -723,14 +723,14 @@ class ParserController extends Controller
                                 break;
                             case 'ico':
                                 if ($value->ico) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->ico, $one_html);
+                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, SITE_DIR . $value->ico), $one_html);
                                 } else {
                                     $one_html = str_replace($matches2[0][$j], '', $one_html);
                                 }
                                 break;
                             case 'pic':
                                 if ($value->pic) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->pic, $one_html);
+                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, SITE_DIR . $value->pic), $one_html);
                                 } else {
                                     $one_html = str_replace($matches2[0][$j], '', $one_html);
                                 }
@@ -1306,7 +1306,7 @@ class ParserController extends Controller
                                 break;
                             case 'src':
                                 if ($value) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value, $one_html);
+                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, SITE_DIR . $value), $one_html);
                                 } else {
                                     $one_html = str_replace($matches2[0][$j], '', $one_html);
                                 }
@@ -1577,7 +1577,7 @@ class ParserController extends Controller
                                 break;
                             case 'src':
                                 if ($value->pic) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->pic, $one_html);
+                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, SITE_DIR . $value->pic), $one_html);
                                 } else {
                                     $one_html = str_replace($matches2[0][$j], '', $one_html);
                                 }
@@ -1662,7 +1662,7 @@ class ParserController extends Controller
                                 break;
                             case 'logo':
                                 if ($value->logo) {
-                                    $one_html = str_replace($matches2[0][$j], SITE_DIR . $value->logo, $one_html);
+                                    $one_html = str_replace($matches2[0][$j], $this->adjustLabelData($params, SITE_DIR . $value->logo), $one_html);
                                 } else {
                                     $one_html = str_replace($matches2[0][$j], '', $one_html);
                                 }
@@ -1907,7 +1907,7 @@ class ParserController extends Controller
                 if (! $string) { // 无内容不解析
                     continue;
                 }
-                $content = str_replace($matches[0][$i], '<img src="' . CORE_DIR . '/qrcode.php?string=' . $string . '" class="qrcode" alt="二维码">', $content);
+                $content = str_replace($matches[0][$i], '<img src="' . CORE_DIR . '/qrcode.php?string=' . urlencode($string) . '" class="qrcode" alt="二维码">', $content);
             }
         }
         return $content;
@@ -2386,6 +2386,37 @@ class ParserController extends Controller
     {
         if (! $params || ! $data)
             return $data;
+        
+        // 图片缩放功能
+        if (isset($params['maxwidth']) || isset($params['maxheight'])) {
+            $maxwidth = isset($params['maxwidth']) ? $params['maxwidth'] : null;
+            $maxheight = isset($params['maxheight']) ? $params['maxheight'] : null;
+            $max_src_file = ROOT_PATH . $data;
+            $max_out_file = RUN_PATH . '/image/mw' . $maxwidth . '_mh' . $maxheight . '_' . basename($data);
+            if (! file_exists($max_out_file) && file_exists($max_src_file)) {
+                if (resize_img($max_src_file, $max_out_file, $maxwidth, $maxheight)) {
+                    $data = str_replace(ROOT_PATH, '', $max_out_file);
+                }
+            } elseif (file_exists($max_out_file) && file_exists($max_src_file)) {
+                $data = str_replace(ROOT_PATH, '', $max_out_file);
+            }
+        }
+        
+        // 图片固定大小
+        if (isset($params['width']) || isset($params['height'])) {
+            $width = isset($params['width']) ? $params['width'] : null;
+            $height = isset($params['height']) ? $params['height'] : null;
+            $src_file = ROOT_PATH . $data;
+            $out_file = RUN_PATH . '/image/w' . $width . '_h' . $height . '_' . basename($data);
+            if (! file_exists($out_file) && file_exists($src_file)) {
+                if (cut_img($src_file, $out_file, $width, $height)) {
+                    $data = str_replace(ROOT_PATH, '', $out_file);
+                }
+            } elseif (file_exists($out_file) && file_exists($src_file)) {
+                $data = str_replace(ROOT_PATH, '', $out_file);
+            }
+        }
+        
         foreach ($params as $key => $value) {
             switch ($key) {
                 case 'style': // 时间样式
@@ -2555,9 +2586,9 @@ class ParserController extends Controller
                 break;
             case 'ico':
                 if ($data->ico) {
-                    $content = str_replace($search, SITE_DIR . $data->ico, $content);
+                    $content = str_replace($search, $this->adjustLabelData($params, SITE_DIR . $data->ico), $content);
                 } else {
-                    $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
+                    $content = str_replace($search, $this->adjustLabelData($params, STATIC_DIR . '/images/nopic.png'), $content);
                 }
                 break;
             case 'isico':
@@ -2655,9 +2686,9 @@ class ParserController extends Controller
                 break;
             case 'ico':
                 if ($data->ico) {
-                    $content = str_replace($search, SITE_DIR . $data->ico, $content);
+                    $content = str_replace($search, $this->adjustLabelData($params, SITE_DIR . $data->ico), $content);
                 } else {
-                    $content = str_replace($search, STATIC_DIR . '/images/nopic.png', $content);
+                    $content = str_replace($search, $this->adjustLabelData($params, STATIC_DIR . '/images/nopic.png'), $content);
                 }
                 break;
             case 'isico':

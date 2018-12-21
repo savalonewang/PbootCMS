@@ -75,17 +75,17 @@ layui.use(['element','upload','laydate','form'], function(){
 	   var item = this.item;
 	   var des=$(item).data('des');
 	   layer.closeAll('loading'); //关闭loading
-	   if(res!=''){
-		   $('#'+des).val(res); 
-		   $('#'+des+'_box').html("<dl><dt><img src='"+sitedir+res+"' data-url='"+res+"' ></dt><dd>删除</dd></dl>"); 
+	   if(res.code==1){
+		   $('#'+des).val(res.data[0]); 
+		   $('#'+des+'_box').html("<dl><dt><img src='"+sitedir+res.data[0]+"' data-url='"+res.data[0]+"' ></dt><dd>删除</dd></dl>"); 
 		   layer.msg('上传成功！'); 
 	   }else{
-		   layer.msg('上传失败！'); 
+		   layer.msg('上传失败：'+res.data); 
 	   }
 	}
 	,error: function(){
 		layer.closeAll('loading'); //关闭loading
-		layer.msg('上传发生错误！'); 
+		layer.msg('上传发生错误!'); 
 	}
   });
   
@@ -103,12 +103,16 @@ layui.use(['element','upload','laydate','form'], function(){
 		layer.load(); //上传loading
 	}
 	,done: function(res){
-	   if(files){
-		   files+=','+res;
+	   if(res.code==1){
+		   if(files){
+			   files+=','+res.data[0];
+		   }else{
+			   files+=res.data[0];
+		   }
+		   html += "<dl><dt><img src='"+sitedir+res.data[0]+"' data-url='"+res.data[0]+"'></dt><dd>删除</dd></dl>";
 	   }else{
-		   files+=res;
-	   }
-	   html += "<dl><dt><img src='"+sitedir+res+"' data-url='"+res+"'></dt><dd>删除</dd></dl>";
+		   layer.msg('有文件上传失败：'+res.data); 
+	   } 
 	}
   	,allDone: function(obj){
   		var item = this.item;
@@ -164,11 +168,11 @@ layui.use(['element','upload','laydate','form'], function(){
 	   var item = this.item;
 	   var des=$(item).data('des');
 	   layer.closeAll('loading'); //关闭loading
-	   if(res!=''){
-		   $('#'+des).val(res); 
+	   if(res.code==1){
+		   $('#'+des).val(res.data[0]); 
 		   layer.msg('上传成功！'); 
 	   }else{
-		   layer.msg('上传失败！'); 
+		   layer.msg('上传失败：'+res.data); 
 	   }
 	}
 	,error: function(){

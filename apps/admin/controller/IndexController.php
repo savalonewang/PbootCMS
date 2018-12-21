@@ -39,7 +39,7 @@ class IndexController extends Controller
         if (get('action') == 'moddb') {
             $file = CONF_PATH . '/database.php';
             $sname = $this->config('database.dbname');
-            $dname = '/data/#' . time() . mt_rand(1000, 9999) . '.db';
+            $dname = '/data/#' . get_uniqid() . '.db';
             $sconfig = file_get_contents($file);
             $dconfig = str_replace($sname, $dname, $sconfig);
             if (file_put_contents($file, $dconfig)) {
@@ -59,11 +59,10 @@ class IndexController extends Controller
             unset($_SESSION['deldb']);
         }
         
-        $this->assign('shortcuts', session('shortcuts'));
         $dbsecurity = true;
         // 如果是sqlite数据库，并且路径为默认的，则标记为不安全
         if (get_db_type() == 'sqlite') {
-            if ($this->config('database.dbname') == '/data/#pbootcms.db' || $this->config('database.dbname') == '/data/pbootcms.db') {
+            if (strpos($this->config('database.dbname'), 'pbootcms') !== false) {
                 $dbsecurity = false;
             }
         }
@@ -243,7 +242,7 @@ class IndexController extends Controller
         if (get('delall')) {
             $rs = path_delete(RUN_PATH);
         } else {
-            $rs = (path_delete(RUN_PATH . '/cache') && path_delete(RUN_PATH . '/complile') && path_delete(RUN_PATH . '/config') && path_delete(RUN_PATH . '/upgrade'));
+            $rs = (path_delete(RUN_PATH . '/cache') && path_delete(RUN_PATH . '/complile') && path_delete(RUN_PATH . '/config') && path_delete(RUN_PATH . '/upgrade') && path_delete(RUN_PATH . '/image'));
         }
         if ($rs) {
             if (extension_loaded('Zend OPcache')) {
@@ -261,6 +260,10 @@ class IndexController extends Controller
     public function upload()
     {
         $upload = upload('upload');
-        echo json_encode($upload);
+        if (is_array($upload)) {
+            json(1, $upload);
+        } else {
+            json(0, $upload);
+        }
     }
 }
