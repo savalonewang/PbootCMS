@@ -296,6 +296,9 @@ function resize_img($src_image, $out_image = null, $max_width = null, $max_heigh
     // 获取图片属性
     list ($width, $height, $type, $attr) = getimagesize($src_image);
     
+    // 检查输出目录
+    check_dir(dirname($out_image), true);
+    
     // 无需缩放的图片
     if ($width <= $max_width && $height <= $max_height) {
         if ($src_image != $out_image) { // 存储地址不一致时进行拷贝
@@ -340,7 +343,6 @@ function resize_img($src_image, $out_image = null, $max_width = null, $max_heigh
         }
         
         imagecopyresampled($new_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height); // 重绘图像
-        check_dir(dirname($out_image), true); // 检查输出目录
         
         switch ($type) {
             case 1:
