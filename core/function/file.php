@@ -289,9 +289,9 @@ function resize_img($src_image, $out_image = null, $max_width = null, $max_heigh
     
     // 读取配置文件设置
     if (! $max_width)
-        $max_width = Config::get('upload.max_width');
+        $max_width = Config::get('upload.max_width') ?: 999999999;
     if (! $max_height)
-        $max_height = Config::get('upload.max_height');
+        $max_height = Config::get('upload.max_height') ?: 999999999;
     
     // 获取图片属性
     list ($width, $height, $type, $attr) = getimagesize($src_image);

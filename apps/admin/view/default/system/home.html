@@ -2,8 +2,9 @@
   
 <div class="layui-body">
 	
+	{if(![$dbsecurity]||![$session.pwsecurity])}
 	<blockquote class="layui-elem-quote layui-text-red" id="note">
-      {if(![$dbsecurity])}
+        {if(![$dbsecurity])}
 		<p>
 			<i class="fa fa-info-circle" aria-hidden="true"></i>
 			您的数据库文件存在安全隐患，可能被下载，请尽快修改数据库路径！<a class="layui-btn  layui-btn-sm" href="?action=moddb">自动修改</a>
@@ -16,12 +17,8 @@
 			 您的账号密码太简单，存在安全隐患，请尽快修改密码！<a class="layui-btn  layui-btn-sm" href="{url./admin/Index/ucenter}">立即修改</a>
 		</p>
 		{/if}
-		
-		<p id="update-note" style="display:none">
-			<i class="fa fa-info-circle" aria-hidden="true"></i>
-			发现新的版本，请及时更新！<a class="layui-btn  layui-btn-sm" href="{url./admin/Upgrade/index}">立即查看</a>
-		</p>
     </blockquote>
+    {/if}
 	
 	<fieldset class="layui-elem-field">
 		<legend>快捷操作</legend>
@@ -167,7 +164,7 @@ $.ajax({
 	dataType: 'json',
 	success: function (response, status) {
 		 if(response.code==1){
-			 $("#update-note").show();
+			 $("#check").html($("#check").html()+'<span class="layui-badge-dot"></span>');
 		 }
     }
 });
