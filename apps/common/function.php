@@ -35,40 +35,6 @@ function get_type($tcode)
     }
 }
 
-// 解析无限菜单为HTML
-function make_tree_html($tree, $name, $url, $sonName = 'son')
-{
-    $tree_html = '';
-    foreach ($tree as $value) {
-        if (is_array($value)) {
-            if ($value[$sonName] == '') {
-                $tree_html .= "<li><a href='" . url($value[$url]) . "'>{$value[$name]}</a></li>";
-            } else {
-                $tree_html .= "<li><a href='" . url($value[$url]) . "'>{$value[$name]}</a>";
-                $tree_html .= make_tree_html($value[$sonName], $name, $url, $sonName);
-                $tree_html = $tree_html . "</li>";
-            }
-        } else {
-            $menu_url = '';
-            if (! $value->pcode) { // 顶级菜单指向第一个子菜单
-                if (isset($value->son[0])) {
-                    $menu_url = url($value->son[0]->url);
-                }
-            } else {
-                $menu_url = url($value->$url);
-            }
-            if ($value->$sonName == '') {
-                $tree_html .= "<li><a href='$menu_url'>{$value->$name}</a></li>";
-            } else {
-                $tree_html .= "<li><a href='$menu_url'>{$value->$name}</a>";
-                $tree_html .= make_tree_html($value->$sonName, $name, $url, $sonName);
-                $tree_html = $tree_html . "</li>";
-            }
-        }
-    }
-    return $tree_html ? '<ul>' . $tree_html . '</ul>' : $tree_html;
-}
-
 // 生成区域选择
 function make_area_Select($tree, $selectid = null)
 {

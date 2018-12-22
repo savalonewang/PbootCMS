@@ -70,7 +70,8 @@ class IndexModel extends Model
                 'url',
                 'shortcut',
                 'ico',
-                'sorting'
+                'sorting',
+                'status'
             );
             $order = array(
                 'sorting',
@@ -79,7 +80,6 @@ class IndexModel extends Model
             );
             $result = parent::table('ay_menu')->distinct()
                 ->field($field)
-                ->where('status=1')
                 ->order($order)
                 ->select();
         } else {
@@ -98,15 +98,15 @@ class IndexModel extends Model
                 'ay_menu.url',
                 'ay_menu.shortcut',
                 'ay_menu.ico',
-                'ay_menu.sorting'
+                'ay_menu.sorting',
+                'ay_menu.status'
             );
             $where = array(
                 "ay_user.ucode='$ucode'",
                 "ay_user.ucode=ay_user_role.ucode",
                 "ay_role.rcode=ay_user_role.rcode",
                 "ay_role.rcode=ay_role_level.rcode",
-                "ay_menu.url=ay_role_level.level",
-                "ay_menu.status=1"
+                "ay_menu.url=ay_role_level.level"
             );
             $order = array(
                 'ay_menu.sorting',

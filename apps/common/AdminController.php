@@ -23,7 +23,6 @@ class AdminController extends Controller
             
             $this->getSecondMenu(); // 获取同级菜单
             $this->assign('menu_tree', session('menu_tree')); // 注入菜单树
-            $this->assign('menu_html', session('menu_html')); // 菜单HTML数
             
             if (session('area_tree')) {
                 $area_html = make_area_Select(session('area_tree'), session('acode'));
@@ -168,6 +167,7 @@ class AdminController extends Controller
                 }
             }
         }
+        
         $this->assign('primary_menu_url', $primary_menu_url);
         $this->assign('second_menu', $second_menu);
     }

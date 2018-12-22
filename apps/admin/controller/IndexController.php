@@ -146,10 +146,6 @@ class IndexController extends Controller
             session('rcodes', $login->rcodes); // 用户角色代码表
             session('levels', $login->levels); // 用户权限URL列表
             session('menu_tree', $login->menus); // 菜单树
-            $menu_html = make_tree_html($login->menus, 'name', 'url');
-            session('menu_html', $menu_html); // 菜单HTML代码
-            session('shortcuts', $login->shortcuts); // 桌面图标
-            
             session('area_map', $login->area_map); // 区域代码名称映射表
             session('area_tree', $login->area_tree); // 用户区域树
             

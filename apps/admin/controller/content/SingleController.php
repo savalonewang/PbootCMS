@@ -37,6 +37,10 @@ class SingleController extends Controller
             } else {
                 $result = $this->model->getList();
             }
+            $this->assign('baidu_zz_token', $this->config('baidu_zz_token'));
+            $this->assign('baidu_xzh_appid', $this->config('baidu_xzh_appid'));
+            $this->assign('baidu_xzh_token', $this->config('baidu_xzh_token'));
+            
             $this->assign('contents', $result);
         }
         $this->display('content/single.html');
