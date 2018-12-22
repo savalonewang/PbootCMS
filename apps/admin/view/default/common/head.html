@@ -100,7 +100,7 @@
 				 {/foreach}
 			{else}
 				{foreach $value->son(key2,value2,num2)}
-					{if($value2->status!=0)}
+					{if(!isset($value2->status)|| $value2->status==1)}<!-- 兼容老版本升级问题 -->
 	            		<dd><a href="{url.'.$value2->url.'}"><i class="fa [value2->ico]" aria-hidden="true"></i>[value2->name]</a></dd>
 	            	{/if}
 				{/foreach}
