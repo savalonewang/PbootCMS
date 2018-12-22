@@ -59,6 +59,10 @@ class ContentController extends Controller
             
             // 扩展字段
             $this->assign('extfield', model('admin.content.ExtField')->getModelField($mcode));
+            
+            $this->assign('baidu_zz_token', $this->config('baidu_zz_token'));
+            $this->assign('baidu_xzh_appid', $this->config('baidu_xzh_appid'));
+            $this->assign('baidu_xzh_token', $this->config('baidu_xzh_token'));
         }
         
         $this->display('content/content.html');
