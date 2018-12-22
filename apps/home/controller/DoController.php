@@ -28,10 +28,8 @@ class DoController extends Controller
         $lg = request('lg', 'var');
         if ($lg) {
             $lgs = $this->config('lgs');
-            foreach ($lgs as $value) {
-                if ($value['acode'] == $lg) {
-                    cookie('lg', $lg);
-                }
+            if (isset($lgs[$lg])) {
+                cookie('lg', $lg);
             }
             location(SITE_DIR . '/');
         }

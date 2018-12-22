@@ -22,7 +22,7 @@ class CmsController extends Controller
     public function __construct()
     {
         $this->model = new CmsModel();
-        $this->lg = $this->config('lgs.0.acode');
+        $this->lg = get_default_lg();
     }
 
     // 站点基础信息

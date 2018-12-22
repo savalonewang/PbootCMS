@@ -147,21 +147,25 @@ function get_btn($btnName, $theme, $btnAction, $idValue, $id = 'id')
 // 缓存基础信息
 function cache_config($refresh = false)
 {
+    
     // 多语言缓存，不存在时自动缓存
-    $lg_comm = RUN_PATH . '/config/' . md5('language') . '.php';
-    if (! file_exists($lg_comm) || $refresh) {
+    $lg_cache = RUN_PATH . '/config/' . md5('language') . '.php';
+    if (! file_exists($lg_cache) || $refresh) {
         $model = model('admin.system.Config');
-        $area = $model->getArea();
-        if (! isset($area[0])) {
+        $area = $model->getAreaTheme(); // 获取所有语言
+        $map = array();
+        foreach ($area as $key => $value) {
+            $map[$value['acode']] = $value;
+        }
+        if (! $map) {
             error('系统没有任何可用区域，请核对后再试！');
         }
-        $lgs['lgs'] = $area;
-        // 缓存语言配置并注入
+        $lgs['lgs'] = $map;
         Config::set(md5('language'), $lgs, false);
     }
-    Config::assign($lg_comm); // 注入多语言
-                              
-    // 语言绑定域名， 如果匹配到多语言绑定则自动设置语言
+    Config::assign($lg_cache); // 注入多语言
+                               
+    // 语言绑定域名， 如果匹配到多语言绑定则自动设置当前语言
     $lgs = Config::get('lgs');
     if (count($lgs) > 1) {
         $domain = get_http_host();
@@ -172,49 +176,46 @@ function cache_config($refresh = false)
         }
     }
     
-    // 语言配置缓存，不存在时自动缓存，未设置时使用默认语言
+    // 未设置语言时使用默认语言
     if (! isset($_COOKIE['lg'])) {
-        $lg = Config::get('lgs.0.acode');
-        cookie('lg', $lg);
-    } else {
-        $lg = cookie('lg');
+        cookie('lg', get_default_lg());
     }
-    $lg_config = RUN_PATH . '/config/' . md5('config' . $lg) . '.php';
-    if (! file_exists($lg_config) || $refresh) {
-        
-        // 获取模型
+    
+    // 系统配置缓存
+    $config_cache = RUN_PATH . '/config/' . md5('config') . '.php';
+    if (! file_exists($config_cache) || $refresh) {
         if (! isset($model)) {
             $model = model('admin.system.Config');
         }
-        
-        // 系统配置
-        $data = $model->getConfig();
-        
-        // 获取系统设置的主题
-        if (! ! $theme = $model->getTheme($lg)) {
-            $data['theme'] = $theme;
-        } else {
-            $data['theme'] = 'default';
-        }
-        
-        // 缓存语言配置
-        Config::set(md5('config' . $lg), $data, false);
+        Config::set(md5('config'), $model->getConfig(), false);
     }
-    Config::assign($lg_config); // 注入语言配置
+    Config::assign($config_cache); // 注入语言配置
 }
 
-// 获取语言并进行安全处理
+// 获取默认语言
+function get_default_lg()
+{
+    $default = current(Config::get('lgs'));
+    return $default['acode'];
+}
+
+// 获取当前语言并进行安全处理
 function get_lg()
 {
-    if (! cookie('lg')) {
-        cookie('lg', Config::get('lgs.0.acode'));
-    }
     $lg = cookie('lg');
-    if (! preg_match('/^[\w\-]+$/', $lg)) {
-        $lg = Config::get('lgs.0.acode');
+    if (! $lg || ! preg_match('/^[\w\-]+$/', $lg)) {
+        $lg = get_default_lg();
         cookie('lg', $lg);
     }
     return $lg;
+}
+
+// 获取当前语言主题
+function get_theme()
+{
+    $lgs = Config::get('lgs');
+    $lg = get_lg();
+    return $lgs[$lg]['theme'];
 }
 
 // 推送百度

@@ -49,12 +49,12 @@ class SiteController extends Controller
             'keywords' => post('keywords'),
             'description' => post('description'),
             'icp' => post('icp'),
-            'theme' => post('theme'),
+            'theme' => post('theme') ?: 'default',
             'statistical' => post('statistical'),
             'copyright' => post('copyright')
         );
         
-		path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
+        path_delete(RUN_PATH . '/config'); // 清理缓存的配置文件
         if ($this->model->checkSite()) {
             if ($this->model->modSite($data)) {
                 $this->log('修改系统设置成功！');

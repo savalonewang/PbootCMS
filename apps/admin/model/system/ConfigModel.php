@@ -40,16 +40,22 @@ class ConfigModel extends Model
         return parent::table('ay_config')->where("name='$name'")->update("value='$value'");
     }
 
-    // 获取区域列表
-    public function getArea()
+    // 获取区域及主题
+    public function getAreaTheme()
     {
-        return parent::table('ay_area')->order('is_default DESC')->select(1);
-    }
-
-    // 获取主题
-    public function getTheme($acode)
-    {
-        return parent::table('ay_site')->where("acode='" . $acode . "'")->value('theme');
+        $field = array(
+            'a.*',
+            'b.theme'
+        );
+        $join = array(
+            'ay_site b',
+            'a.acode=b.acode',
+            'LEFT'
+        );
+        return parent::table('ay_area a')->field($field)
+            ->join($join)
+            ->order('is_default DESC')
+            ->select(1);
     }
 
     // 获取配置参数

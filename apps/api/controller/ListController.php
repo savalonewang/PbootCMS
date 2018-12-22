@@ -25,7 +25,7 @@ class ListController extends Controller
     public function index()
     {
         // 获取参数
-        $acode = request('acode', 'var') ?: $this->config('lgs.0.acode');
+        $acode = request('acode', 'var') ?: get_default_lg();
         $scode = request('scode', 'var') ?: '';
         $num = request('num', 'int') ?: $this->config('pagesize');
         $order = get('order');

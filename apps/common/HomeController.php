@@ -14,9 +14,9 @@ class HomeController extends Controller
         
         // 手机自适应主题
         if ($this->config('open_wap') && (is_mobile() || $this->config('wap_domain') == get_http_host())) {
-            $this->setTheme($this->config('theme') . '/wap');
+            $this->setTheme(get_theme() . '/wap');
         } else {
-            $this->setTheme($this->config('theme'));
+            $this->setTheme(get_theme());
         }
     }
 }
