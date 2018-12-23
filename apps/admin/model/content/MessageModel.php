@@ -56,4 +56,13 @@ class MessageModel extends Model
             ->order('sorting ASC,id ASC')
             ->select();
     }
+
+    // 获取留言数量
+    public function getCount()
+    {
+        $rs = parent::table('ay_message')->field('count(*) as count')
+            ->where("acode='" . session('acode') . "'")
+            ->find();
+        return $rs->count ?: 0;
+    }
 }

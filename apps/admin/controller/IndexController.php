@@ -70,7 +70,7 @@ class IndexController extends Controller
         $this->assign('server', get_server_info());
         $this->assign('branch', $this->config('upgrade_branch') ?: '1.X');
         
-        $this->assign('sum_msg', $this->model->rows('ay_message'));
+        $this->assign('sum_msg', model('admin.content.Message')->getCount());
         
         // 内容模型菜单
         $model = model('admin.content.Model');
