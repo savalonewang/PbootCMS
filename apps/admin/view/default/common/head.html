@@ -91,7 +91,7 @@
           <dl class="layui-nav-child">
 			{if($value->mcode=='M130')}
 				 {foreach $menu_models(key3,value3,num3)}
-				 	{if($value3->type==1)}
+				 	{if($value3->type==1 && $value3->mcode==1)}
 						<dd><a href="{url./admin/Single/index}"><i class="fa fa-file-text-o" aria-hidden="true"></i>[value3->name]内容</a></dd>
 					{/if}
 					{if($value3->type==2)}
