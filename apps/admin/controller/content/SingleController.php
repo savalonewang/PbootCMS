@@ -144,7 +144,7 @@ class SingleController extends Controller
             
             // 自动提起前一百个字符为描述
             if (! $description && isset($_POST['content'])) {
-                $description = escape_string(substr_both(strip_tags($_POST['content']), 0, 150));
+                $description = escape_string(clear_html_blank(substr_both(strip_tags($_POST['content']), 0, 150)));
             }
             
             // 缩放缩略图
