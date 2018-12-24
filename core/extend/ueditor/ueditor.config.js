@@ -364,7 +364,8 @@
 		// xss过滤白名单 名单来源: https://raw.githubusercontent.com/leizongmin/js-xss/master/lib/default.js
 		,whitList: {
 			iframe: ['frameborder','border','marginwidth','marginheight','width','height','src','id','class', 'style'],
-			embed:  ['class', 'style', 'src', 'width', 'height', 'type', 'quality', 'allowfullscreen'],
+			embed:  ['class', 'style', 'src', 'width', 'height', 'type', 'wmode','loop','menu','controls','preload','play','quality', 'allowfullscreen'],
+			source: ['src','type'],
 			a:      ['target', 'href', 'title', 'class', 'style','name','id'],
 			abbr:   ['title', 'class', 'style'],
 			address: ['class', 'style'],
@@ -402,7 +403,7 @@
 			header: ['class', 'style'],
 			hr:     ['class', 'style'],
 			i:      ['class', 'style'],
-			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src', 'loadingclass', 'class', 'data-latex','anchorname','word_img', 'style'],
+			img:    ['src', 'alt', 'title', 'width', 'height', 'id', '_src','_url', 'loadingclass', 'class', 'data-latex','anchorname','word_img', 'style'],
 			ins:    ['datetime'],
 			li:     ['class', 'style'],
 			mark:   ['class', 'style'],
