@@ -9,13 +9,9 @@
         			<img src="[slide:src]" class="d-block w-100" >
         		</a>
         		<div class="container">
-			    	<div class="position-absolute text-light" style="top:20%;">
-						<!-- PC -->
-						<h1 class="d-none d-md-block wow slideInUp">[slide:title]</h1>
-					 	<h4 class="d-none d-md-block wow slideInUp">[slide:subtitle]</h4>
-					 	<!-- M -->
-					 	<h4 class="d-block d-md-none wow slideInUp">[slide:title]</h4>
-					 	<h6 class="d-block d-md-none wow slideInUp">[slide:subtitle]</h6>
+			    	<div class="position-absolute text-light" style="top:30%;">
+						<h1 class="fs-20 fs-sm-32 wow slideInUp">[slide:title]</h1>
+					 	<h4 class="fs-14 fs-sm-20 wow slideInUp">[slide:subtitle]</h4>
 					</div>
 			    </div>
         	</div>
@@ -31,8 +27,8 @@
     <div class="container">
     
       {pboot:sort scode=5}
-      	<div class="title text-success wow fadeInDown">[sort:name]</div>
-      	<div class="subtitle text-secondary wow fadeInUp" data-wow-delay="1s">-[sort:subname]-</div>
+      	<div class="text-center fs-26 fs-sm-28 text-success wow fadeInDown">[sort:name]</div>
+      	<div class="text-center fs-14 fs-sm-16 mb-4 text-secondary wow fadeInUp" data-wow-delay="1s">- [sort:subname] -</div>
       {/pboot:sort}
       
       <div class="row">
@@ -60,7 +56,7 @@
         {/pboot:list}
       </div>
 	  {pboot:sort scode=5}
-			<div class="text-center mt-4 wow fadeInDown" data-wow-delay="1s"><h4><a href="[sort:link]" class="text-secondary">查看更多</a></h4></div>
+			<div class="text-center mt-4 wow fadeInDown" data-wow-delay="1s"><h4><a href="[sort:link]" class="text-secondary fs-14 fs-sm-16">查看更多</a></h4></div>
 	  {/pboot:sort}
     </div>
 </div>
@@ -69,25 +65,25 @@
 <div class="bg-light py-5">
     <div class="container">
       {pboot:sort scode=1}
-      	<div class="title text-info wow fadeInDown">[sort:name]</div>
-      	<div class="subtitle text-secondary wow fadeInUp" data-wow-delay="1s">-[sort:subname]-</div>
+      	<div class="text-center fs-26 fs-sm-28 text-info wow fadeInDown">[sort:name]</div>
+      	<div class="text-center fs-14 fs-sm-16 mb-4 text-secondary wow fadeInUp" data-wow-delay="1s">- [sort:subname] -</div>
       {/pboot:sort}
       
       {pboot:content id=1}
       	<div class="row text-secondary mb-5 px-3 lh-2 wow fadeInDown" data-wow-delay="500ms" style="text-indent:30px;">
             [content:content drophtml=1 len=300]
       	</div>
-     	<div class="text-center wow fadeInDown" data-wow-delay="1s"><h4><a href="[content:link]" class="text-secondary">查看更多</a></h4></div>
+     	<div class="text-center wow fadeInDown" data-wow-delay="1s"><h4><a href="[content:link]" class="text-secondary fs-14 fs-sm-16">查看更多</a></h4></div>
       {/pboot:content}
     </div>
 </div>
 
 <!-- 新闻动态 -->
-<div class="bg-white  pb-5 pt-5">
+<div class="bg-white py-5">
     <div class="container">
       {pboot:sort scode=2}
-     	<div class="title text-warning wow fadeInDown">[sort:name]</div>
-      	<div class="subtitle text-secondary wow fadeInUp" data-wow-delay="1s" >— [sort:subname] —</div>
+      	<div class="text-center fs-26 fs-sm-28 text-warning wow fadeInDown">[sort:name]</div>
+      	<div class="text-center fs-14 fs-sm-16 mb-5 text-secondary wow fadeInUp" data-wow-delay="1s">- [sort:subname] -</div>
       {/pboot:sort}
       
       <div class="row">
@@ -103,7 +99,7 @@
         {/pboot:list}
       </div>
 	  {pboot:sort scode=2}
-		<div class="text-center wow fadeInDown" data-wow-delay="1s"><h4><a href="[sort:link]" class="text-secondary">查看更多</a></h4></div>
+		<div class="text-center wow fadeInDown" data-wow-delay="1s"><h4><a href="[sort:link]" class="text-secondary fs-14 fs-sm-16">查看更多</a></h4></div>
 	  {/pboot:sort}
     </div>
 </div>
