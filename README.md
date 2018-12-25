@@ -6,16 +6,14 @@
 * 系统默认采用Sqlite轻型数据库，放入PHP空间即可直接使用，可选Mysql. Pgsql等数据库，满足各类存储需求。
 * 系统采用响应式管理后台，满足各类设备随时管理的需要。
 
-
 ##  特色功能：
 * 支持自定义内容模型；
 * 支持多语言区域建站；
-* 支持小程序. APP等对接；
+* 支持小程序、APP等对接；
 * 支持自定义留言表单；
 * 支持多条件筛选及搜索；
 * 支持全站伪静态及前端动态缓存；
 * 支持后台在线升级；
-
 
 ##  简洁强大的标签：
 ```
@@ -37,7 +35,6 @@
 更多简单到想哭的标签请参考标签手册...
 
 ```
-
 
 ##  主要功能：
 * 支持自定义模板
@@ -115,4 +112,6 @@
 
 官方网站：https://www.pbootcms.com/
 
-码云地址：https://gitee.com/hnaoyun/PbootCMS 
+GitHub：https://github.com/hnaoyun/PbootCMS
+
+Gitee：https://gitee.com/hnaoyun/PbootCMS 

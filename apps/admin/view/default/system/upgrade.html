@@ -188,12 +188,13 @@ function down(){
 	    	  },
 	    	  success: function (response, status) {
 	    		 if(response.code==1){
+	    			 exe++;
 	    			 $('#layer-content').text(response.data);
 	    		 }else{
 	    			 layer.close(lyindex);
 	     			 layer.msg(response.data, {icon: 5}); 
 	    		 }
-	    		 exe++;
+	    		 
 	    		 if(exe==len){
 		  			layer.close(lyindex);
 		  	   	 	layer.open({
