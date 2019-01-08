@@ -11,7 +11,7 @@ return array(
     'sn' => '281BE285D7',
     
     // 内核版本
-    'core_version' => '1.5.1',
+    'core_version' => '1.5.2',
     
     // 配置模块
     'public_app' => 'home,admin,api',
@@ -79,7 +79,7 @@ return array(
     
     // 上传配置
     'upload' => array(
-        'format' => 'jpg,png,gif,xls,xlsx,doc,docx,ppt,pptx,rar,zip,pdf,txt,mp4,avi,flv,rmvb,mp3',
+        'format' => 'jpg,jpeg,png,gif,xls,xlsx,doc,docx,ppt,pptx,rar,zip,pdf,txt,mp4,avi,flv,rmvb,mp3',
         'max_width' => '1920',
         'max_height' => ''
     ),
