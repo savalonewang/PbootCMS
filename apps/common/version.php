@@ -4,7 +4,7 @@ return array(
     'app_version' => '1.3.5',
     
     // 发布时间
-    'release_time' => '20181226'
+    'release_time' => '20190108'
 
 );
  
