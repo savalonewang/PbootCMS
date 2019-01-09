@@ -85,23 +85,6 @@
 			  	</div>
 		  </div>
 	  </div>
-	  
-	  <div class="layui-tab layui-tab-brief" lay-filter="tab">
-		  <ul class="layui-tab-title">
-		    <li class="layui-this" lay-id="t1">执行数据库脚本</li>
-		  </ul>
-		  <div class="layui-tab-content">
-		  	   <div class="layui-tab-item layui-show">
-		  	   		<form action="{url./admin/Database/mod}" method="post">
-		  	   			<input type="hidden" name="formcheck" value="{$formcheck}" > 
-		  	   			<div class="layui-form-item">
-		                    <textarea name="sql" placeholder="请粘贴要执行的数据库脚本！" class="layui-textarea"></textarea>
-		                </div>
-		                <button class="layui-btn" lay-submit type="submit" name="submit" value="sql">执行</button>
-			  	   	</form>
-			  	</div>
-		  </div>
-	  </div>
 </div>
 
 {include file='common/foot.html'}

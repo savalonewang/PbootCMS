@@ -108,20 +108,6 @@ class DatabaseController extends Controller
                     error('备份失败！', - 1);
                 }
                 break;
-            case 'sql':
-                $sql = explode(';', $_POST['sql']);
-                foreach ($sql as $value) {
-                    $value = trim($value);
-                    // 不允许执行删除操作
-                    if ($value && preg_match('/(^|[\s]+)(insert|delete|update|select|create|alter)[\s]+/i', $value)) {
-                        $this->model->amd($value);
-                    } else {
-                        error('存在不允许执行的语句：' . $value);
-                    }
-                }
-                $this->log('执行数据库脚本成功！');
-                success('执行数据库脚本成功！', - 1);
-                break;
         }
     }
 
