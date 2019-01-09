@@ -76,8 +76,8 @@
         	<h3><i class="fa fa-volume-control-phone"></i>免费通话<span class="remove"><i class="fa fa-remove"></i></span></h3>
             <p>24小时免费咨询</p>
             <p>请输入您的联系电话，座机请加区号</p>
-            <form action="{pboot:form fcode=2}"  method="post">
-            	<p><input type="text" name="tel" autocomplete="off"  placeholder="请输入您的电话号码" required maxlength="30"></p>
+            <form  onsubmit="return subform(this);">
+            	<p><input type="text" name="tel" id="tel" autocomplete="off"  placeholder="请输入您的电话号码" required maxlength="30"></p>
                 <p><button type="submit">免费通话</button></p>
             </form>
         </dt>
@@ -104,6 +104,40 @@
 <script src="{pboot:sitetplpath}/bootstrap/js/bootstrap.min.js"></script>
 <script src="{pboot:sitetplpath}/js/wow.min.js"></script>
 <script src="{pboot:sitetplpath}/js/aoyun.js?v=v1.2.2"></script>
+<script>
+//ajax提交表单
+function subform(obj){
+  var url='{pboot:form fcode=2}';
+  var tel=$(obj).find("#tel").val();
+  
+  var reg = /^(1|0)[\d\-]+$/;   
+  if (!reg.test(tel)) {
+	  alert('电话号码错误！');
+	  return false;
+  }
+  
+  $.ajax({
+    type: 'POST',
+    url: url,
+    dataType: 'json',
+    data: {
+    	tel: tel
+    },
+    success: function (response, status) {
+      if(response.code){
+		 alert("您的来电已收到，我们会尽快联系您！");
+		 $(obj)[0].reset(); 
+      }else{
+    	 alert(response.data);
+      }
+    },
+    error:function(xhr,status,error){
+      alert('返回数据异常！');
+    }
+  });
+  return false;
+}
+</script>
 
 {pboot:sitestatistical}
 

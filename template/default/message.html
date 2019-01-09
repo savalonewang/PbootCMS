@@ -48,46 +48,89 @@
     {/pboot:if}
     
     <!-- 留言表单 -->
-    <form class="mb-5" action="{pboot:msgaction}"  method="post">
-		<div class="form-group row">
-		    <label for="contacts" class="col-sm-2 col-md-2 col-lg-2 col-form-label text-md-right">联系人</label>
-		    <div class="col-sm-10 col-md-8 col-lg-6">
-		    	<input type="text" name="contacts" id="contacts" class="form-control" placeholder="请输入联系人">
-		    </div>
-	    </div>
-	    
-	    <div class="form-group row">
-		    <label for="mobile" class="col-sm-2 col-md-2 col-lg-2 col-form-label text-md-right">手　机</label>
-		    <div class="col-sm-10 col-md-8 col-lg-6">
-		    	<input type="text" name="mobile" id="mobile" class="form-control" placeholder="请输入联系人">
-		    </div>
-	    </div>
-	    
-	    <div class="form-group row">
-		    <label for="content" class="col-sm-2 col-md-2 col-lg-2 col-form-label text-md-right">内　容</label>
-		    <div class="col-sm-10 col-md-8 col-lg-6">
-		    	<textarea name="content" id="content" class="form-control" placeholder="请输入联系人"></textarea>
-		    </div>
-	    </div>
-	    
-	    <div class="form-group row">
-		    <label for="checkcode" class="col-sm-2 col-md-2 col-lg-2 col-form-label text-md-right">验证码</label>
-		    <div class="col-6 col-sm-5 col-md-4 col-lg-3">
-		    	<input type="text" name="checkcode" id="checkcode" class="form-control" placeholder="请输入验证码">
-		    </div>
-		    <div class="col-6 col-sm-5 col-md-4 col-lg-3">
-		    	<img title="点击刷新" style="height:33px;" src="{pboot:checkcode}" onclick="this.src='{pboot:checkcode}?'+Math.round(Math.random()*10);" />
-		    </div>
-	    </div>
-	    
-	    <div class="form-group row">
-	    	<div class="col-sm-2 col-md-2 col-lg-2"></div>
-	    	<div class="col-sm-10 col-md-8 col-lg-6">
-	    		<button type="submit" class="btn btn-info mb-2">提交留言</button>
-	    	</div>
-	    </div>
-    </form>
-    
+    <div class="row">
+    	<div class="col-lg-3"></div>
+    	<div class="col-12 col-lg-6">
+        	<form class="my-4" onsubmit="return submsg(this);">
+                <div class="form-group">
+                    <label for="contacts">联系人</label>
+                    <div>
+                        <input type="text" name="contacts" required id="contacts" class="form-control" placeholder="请输入联系人">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="mobile">手　机</label>
+                    <div>
+                        <input type="text" name="mobile" required id="mobile" class="form-control" placeholder="请输入联系人手机">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content" >内　容</label>
+                    <div>
+                        <textarea name="content" id="content" class="form-control" placeholder="请输入留言内容"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="checkcode">验证码</label>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="text" name="checkcode" required id="checkcode" class="form-control" placeholder="请输入验证码">
+                        </div>
+                        <div class="col-6">
+                            <img title="点击刷新" style="height:33px;" src="{pboot:checkcode}" onclick="this.src='{pboot:checkcode}?'+Math.round(Math.random()*10);" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                   <button type="submit" class="btn btn-info mb-2">提交留言</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-3"></div>
+    </div> 
+
 </div>
+
+
+<script>
+
+//ajax提交留言
+function submsg(obj){
+  var url='{pboot:msgaction}';
+  var contacts=$(obj).find("#contacts").val();
+  var mobile=$(obj).find("#mobile").val();
+  var content=$(obj).find("#content").val();
+  var checkcode=$(obj).find("#checkcode").val();
+  
+  $.ajax({
+    type: 'POST',
+    url: url,
+    dataType: 'json',
+    data: {
+    	contacts: contacts,
+    	mobile: mobile,
+    	content: content,
+    	checkcode: checkcode
+    },
+    success: function (response, status) {
+      if(response.code){
+		 alert("谢谢您的反馈，我们会尽快联系您！");
+		 $(obj)[0].reset(); 
+      }else{
+    	 alert(response.data);
+      }
+    },
+    error:function(xhr,status,error){
+      alert('返回数据异常！');
+    }
+  });
+  return false;
+}
+</script>
+
  
 {include file=comm/foot.html}
