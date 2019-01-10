@@ -28,7 +28,7 @@ class ListController extends Controller
         $acode = request('acode', 'var') ?: get_default_lg();
         $scode = request('scode', 'var') ?: '';
         $num = request('num', 'int') ?: $this->config('pagesize');
-        $order = get('order');
+        $order = request('order');
         if (! preg_match('/^[\w\-,\s]+$/', $order)) {
             $order = 'a.istop DESC,a.isrecommend DESC,a.isheadline DESC,a.sorting ASC,a.date DESC,a.id DESC';
         } else {
