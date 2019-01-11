@@ -28,4 +28,14 @@ class SyslogController extends Controller
         $this->assign('syslogs', $this->model->getList());
         $this->display('system/syslog.html');
     }
+
+    // 清理日志
+    public function clear()
+    {
+        if ($this->model->clearLog()) {
+            alert_location('清空成功！', url('/admin/Syslog/index'));
+        } else {
+            alert_location('清空失败！', url('/admin/Syslog/index'));
+        }
+    }
 }

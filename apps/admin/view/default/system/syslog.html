@@ -33,6 +33,9 @@
 	                    {/foreach}
 	                </tbody>
 	            </table>
+	            {if(session('id')==1 && [$syslogs])}
+	            	<a href="{url./admin/Syslog/clear}" class="layui-btn">清空日志</a>
+	            {/if}
 	            <div class="page">{$pagebar}</div>
 	  	   </div>
 	  </div>

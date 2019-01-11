@@ -21,4 +21,10 @@ class SyslogModel extends Model
             ->page()
             ->select();
     }
+
+    // 删除全部
+    public function clearLog()
+    {
+        return parent::table('ay_syslog')->delete();
+    }
 }
