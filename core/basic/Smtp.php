@@ -402,6 +402,9 @@ class Smtp
                 }
                 // 读取服务器返回
                 $data = trim(fread($this->socket, 1024));
+                if (! mb_check_encoding($data, 'utf-8')) {
+                    $data = iconv('gbk', 'utf-8', $data);
+                }
                 if ($this->debug) {
                     echo 'response:' . $data . '<br /><br />';
                 }
@@ -410,7 +413,7 @@ class Smtp
                     if (preg_match($pattern, $data)) {
                         return true;
                     } else {
-                        $this->errorMessage = "Error:" . $data . "|**| command:";
+                        $this->errorMessage = $data;
                         return false;
                     }
                 } else {

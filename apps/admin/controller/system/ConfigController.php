@@ -91,7 +91,7 @@ class ConfigController extends Controller
                     if ($rs === true) {
                         alert_back('测试邮件发送成功！');
                     } else {
-                        alert('发送失败：' . $rs);
+                        error('发送失败：' . $rs);
                     }
                     break;
             }
