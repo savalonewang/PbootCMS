@@ -12,7 +12,13 @@ layui.use(['element','upload','laydate','form'], function(){
   element.on('tab(tab)', function(){
 	var clayid=this.getAttribute('lay-id');
 	if(clayid){
-		location.hash = 'tab='+ this.getAttribute('lay-id');
+		location.hash = 'tab='+ clayid;
+		$('.page').find('a').each(function(index,element){//避免tab翻页问题
+			var url=$(this).attr('href');
+			if(url.indexOf('tab=')==-1){
+				$(this).attr('href', url+'#tab='+ clayid);
+			}
+        });
 	}
   });
   
