@@ -63,6 +63,14 @@ $(document).ready(function (e) {
     		$(".layui-layout-admin .layui-side").hide();
     	}
     })
+    
+    //避免tab翻页问题
+    var hash = location.hash;
+    if(hash){
+    	$('.page').find('a').each(function(index,element){
+    	    $(this).attr('href', $(this).attr('href')+hash);
+        });
+    }
 
 })
 
